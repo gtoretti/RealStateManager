@@ -6,9 +6,9 @@
     <string name="menu_filter_by_grow_zone">Lọc theo vùng phát triển</string>
     <string name="my_garden_title">Vườn của tôi</string>
     <string name="plant_list_title">Danh sách cây</string>
-    <string name="profile_title" translation_description="Profile">Perfil</string>
-    <string name="patients_title" translation_description="Patients">Pacientes</string>
-    <string name="receipts_title" translation_description="Receipts">Extrato</string>
+    <string name="profile_title" translation_description="Profile">Locador</string>
+    <string name="patients_title" translation_description="Patients">Imóveis</string>
+    <string name="receipts_title" translation_description="Receipts">Financeiro</string>
     <string name="available">Cây Hiện Có</string>
     <string name="plant_details_title">Chi tiết cây</string>
     <string name="add_plant">Thêm cây</string>

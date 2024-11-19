@@ -6,9 +6,9 @@
     <string name="plant_detail_image_content_description">Изображение растения</string>
     <string name="my_garden_title">Мои сад</string>
     <string name="plant_list_title">Растения</string>
-    <string name="profile_title" translation_description="Profile">Perfil</string>
-    <string name="patients_title" translation_description="Patients">Pacientes</string>
-    <string name="receipts_title" translation_description="Receipts">Extrato</string>
+    <string name="profile_title" translation_description="Profile">Locador</string>
+    <string name="patients_title" translation_description="Patients">Imóveis</string>
+    <string name="receipts_title" translation_description="Receipts">Financeiro</string>
     <string name="available">Доступные растения</string>
     <string name="add_plant">Добавить растение</string>
     <string name="garden_empty">Ваш сад пуст</string>

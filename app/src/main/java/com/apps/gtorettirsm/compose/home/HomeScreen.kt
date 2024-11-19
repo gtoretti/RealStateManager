@@ -44,8 +44,8 @@ enum class gtorettirsmPage(
     @StringRes val titleResId: Int,
     @DrawableRes val drawableResId: Int
 ) {
-    PATIENT(R.string.patients_title, R.drawable.patient_list_24px),
-    FINANCING(R.string.receipts_title, R.drawable.receipt_long_24px),
+    PATIENT(R.string.patients_title, R.drawable.real_estate_agent_24px),
+    FINANCING(R.string.receipts_title, R.drawable.finance_24px),
     PROFILE(R.string.profile_title, R.drawable.person_24px),
 }
 

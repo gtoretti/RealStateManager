@@ -90,7 +90,7 @@ fun PatientsScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    text = "Pacientes:",
+                    text = "Imóveis:",
                 )
             }
         }
@@ -102,7 +102,7 @@ fun PatientsScreen(
 
             if (patients.isEmpty()) {
                 Text(
-                    text = "Para adicionar pacientes, clique aqui-->",
+                    text = "Para adicionar Imóveis, clique aqui-->",
                     style = TextStyle(
                         color = getRedTextColor(),
                         fontSize = 16.sp,

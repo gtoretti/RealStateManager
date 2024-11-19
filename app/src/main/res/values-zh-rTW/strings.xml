@@ -7,9 +7,9 @@
     <string name="plant_detail_image_content_description">植物圖片</string>
     <string name="my_garden_title">我的花園</string>
     <string name="plant_list_title">植物目錄</string>
-    <string name="profile_title" translation_description="Profile">Perfil</string>
-    <string name="patients_title" translation_description="Patients">Pacientes</string>
-    <string name="receipts_title" translation_description="Receipts">Extrato</string>
+    <string name="profile_title" translation_description="Profile">Locador</string>
+    <string name="patients_title" translation_description="Patients">Imóveis</string>
+    <string name="receipts_title" translation_description="Receipts">Financeiro</string>
     <string name="available">植物品種</string>
     <string name="plant_details_title">植物介紹</string>
     <string name="add_plant">添加植物</string>

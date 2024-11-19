@@ -355,55 +355,55 @@ fun PatientNewReceiptDialog(
                             onClick = {
                                 if (profile.name.isBlank() || profile.name.isEmpty()) {
                                     showToast(
-                                        "A aba Perfil está incompleta. Por favor, informe o seu nome.",
+                                        "A aba Locador está incompleta. Por favor, informe o seu nome.",
                                         context
                                     )
                                 } else
                                     if (profile.cpfCnpj.isBlank() || profile.cpfCnpj.isEmpty()) {
                                         showToast(
-                                            "A aba Perfil está incompleta. Por favor, informe o seu CPF.",
+                                            "A aba Locador está incompleta. Por favor, informe o seu CPF.",
                                             context
                                         )
                                     } else
                                         if (profile.speciality.isBlank() || profile.speciality.isEmpty()) {
                                             showToast(
-                                                "A aba Perfil está incompleta. Por favor, informe o nome da terapia.",
+                                                "A aba Locador está incompleta. Por favor, informe o nome da terapia.",
                                                 context
                                             )
                                         } else
                                             if (profile.city.isBlank() || profile.city.isEmpty()) {
                                                 showToast(
-                                                    "A aba Perfil está incompleta. Por favor, informe a cidade.",
+                                                    "A aba Locador está incompleta. Por favor, informe a cidade.",
                                                     context
                                                 )
                                             } else
                                                 if (profile.address.isBlank() || profile.address.isEmpty()) {
                                                     showToast(
-                                                        "A aba Perfil está incompleta. Por favor, informe o seu endereço comercial.",
+                                                        "A aba Locador está incompleta. Por favor, informe o seu endereço comercial.",
                                                         context
                                                     )
                                                 } else
                                                     if (profile.phoneNumber.isBlank() || profile.phoneNumber.isEmpty()) {
                                                         showToast(
-                                                            "A aba Perfil está incompleta. Por favor, informe o seu telefone comercial.",
+                                                            "A aba Locador está incompleta. Por favor, informe o seu telefone comercial.",
                                                             context
                                                         )
                                                     } else
                                                         if (profile.regionalCouncil.isBlank() || profile.regionalCouncil.isEmpty()) {
                                                             showToast(
-                                                                "A aba Perfil está incompleta. Por favor, informe o nome de seu conselho regional.",
+                                                                "A aba Locador está incompleta. Por favor, informe o nome de seu conselho regional.",
                                                                 context
                                                             )
                                                         } else
                                                             if (profile.regionalCouncilNumber.isBlank() || profile.regionalCouncilNumber.isEmpty()) {
                                                                 showToast(
-                                                                    "A aba Perfil está incompleta. Por favor, informe o número de seu conselho regional.",
+                                                                    "A aba Locador está incompleta. Por favor, informe o número de seu conselho regional.",
                                                                     context
                                                                 )
                                                             } else
                                                                 if (profile.uf.isBlank() || profile.uf.isEmpty()) {
                                                                     showToast(
-                                                                        "A aba Perfil está incompleta. Por favor, informe o estado.",
+                                                                        "A aba Locador está incompleta. Por favor, informe o estado.",
                                                                         context
                                                                     )
                                                                 } else

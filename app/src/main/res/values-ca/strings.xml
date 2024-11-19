@@ -6,9 +6,9 @@
     <string name="plant_detail_image_content_description">Imatge de la planta</string>
     <string name="my_garden_title">El meu jardí</string>
     <string name="plant_list_title">Llista de plantes</string>
-    <string name="profile_title" translation_description="Profile">Perfil</string>
-    <string name="patients_title" translation_description="Patients">Pacientes</string>
-    <string name="receipts_title" translation_description="Receipts">Extrato</string>
+    <string name="profile_title" translation_description="Profile">Locador</string>
+    <string name="patients_title" translation_description="Patients">Imóveis</string>
+    <string name="receipts_title" translation_description="Receipts">Financeiro</string>
     <string name="available">Plantes disponibles</string>
     <string name="plant_details_title">Detalls de la planta</string>
     <string name="add_plant">Afegeix una planta</string>
