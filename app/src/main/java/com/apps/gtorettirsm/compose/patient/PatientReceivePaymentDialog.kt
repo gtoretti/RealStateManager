@@ -38,7 +38,7 @@ import com.apps.gtorettirsm.compose.utils.getButtonColor
 import com.apps.gtorettirsm.compose.utils.getTextColor
 import com.apps.gtorettirsm.compose.utils.showToast
 import com.apps.gtorettirsm.compose.utils.toScreen
-import com.apps.gtorettirsm.data.Patient
+import com.apps.gtorettirsm.data.Property
 import com.apps.gtorettirsm.data.Receipt
 import com.apps.gtorettirsm.viewmodels.ReceiptPDFViewModel
 import com.apps.gtorettirsm.viewmodels.ReceiptViewModel
@@ -46,12 +46,12 @@ import java.text.SimpleDateFormat
 
 
 @Composable
-fun PatientReceivePaymentDialog(
+fun PropertyReceivePaymentDialog(
     openReceivePaymentDialog: MutableState<Boolean>,
     unpaids: List<Receipt>,
     receiptViewModel: ReceiptViewModel,
     receiptPDFViewModel: ReceiptPDFViewModel,
-    patient: Patient,
+    patient: Property,
     context: Context
 ) {
 
@@ -93,7 +93,7 @@ fun PatientReceivePaymentDialog(
 
                 ) {
                     Text(
-                        text = patient.name, style = TextStyle(
+                        text = patient.streetAddress, style = TextStyle(
                             color = getTextColor(),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,

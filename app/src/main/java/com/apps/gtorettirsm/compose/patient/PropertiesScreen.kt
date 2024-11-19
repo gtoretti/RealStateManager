@@ -38,42 +38,42 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.apps.gtorettirsm.compose.utils.getRedTextColor
 import com.apps.gtorettirsm.compose.utils.getTextColor
-import com.apps.gtorettirsm.data.Patient
-import com.apps.gtorettirsm.viewmodels.AttendanceViewModel
-import com.apps.gtorettirsm.viewmodels.PatientViewModel
+import com.apps.gtorettirsm.data.Property
+import com.apps.gtorettirsm.viewmodels.MonthlyBillingViewModel
+import com.apps.gtorettirsm.viewmodels.PropertyViewModel
 import com.apps.gtorettirsm.viewmodels.ReceiptPDFViewModel
 import com.apps.gtorettirsm.viewmodels.ReceiptViewModel
 import kotlinx.coroutines.flow.Flow
 
 @Composable
-fun PatientsScreen(
+fun PropertiesScreen(
 ) {
-    var patientViewModel: PatientViewModel = hiltViewModel()
-    var attendanceViewModel: AttendanceViewModel = hiltViewModel()
+    var patientViewModel: PropertyViewModel = hiltViewModel()
+    var monthlyBillingViewModel: MonthlyBillingViewModel = hiltViewModel()
     var receiptViewModel: ReceiptViewModel = hiltViewModel()
     var receiptPDFViewModel: ReceiptPDFViewModel = hiltViewModel()
-    val patients = patientViewModel.activePatients
-    PatientsScreen(
+    val patients = patientViewModel.activePropertys
+    PropertiesScreen(
         patientsFlow = patients,
         patientViewModel = patientViewModel,
-        attendanceViewModel = attendanceViewModel,
+        monthlyBillingViewModel = monthlyBillingViewModel,
         receiptViewModel = receiptViewModel,
         receiptPDFViewModel = receiptPDFViewModel
     )
 }
 
 @Composable
-fun PatientsScreen(
-    patientsFlow: Flow<List<Patient>>,
-    patientViewModel: PatientViewModel,
-    attendanceViewModel: AttendanceViewModel,
+fun PropertiesScreen(
+    patientsFlow: Flow<List<Property>>,
+    patientViewModel: PropertyViewModel,
+    monthlyBillingViewModel: MonthlyBillingViewModel,
     receiptViewModel: ReceiptViewModel,
     receiptPDFViewModel: ReceiptPDFViewModel
 ) {
 
-    var openPatientCreateDialog = remember { mutableStateOf(false) }
-    var openPatientDetailDialog = remember { mutableStateOf(false) }
-    var patientId = remember { mutableStateOf(0L) }
+    var openPropertyCreateDialog = remember { mutableStateOf(false) }
+    var openPropertyDetailDialog = remember { mutableStateOf(false) }
+    var propertyId = remember { mutableStateOf(0L) }
 
     val context = LocalContext.current
     val patients by patientsFlow.collectAsStateWithLifecycle(initialValue = emptyList())
@@ -115,7 +115,7 @@ fun PatientsScreen(
                 modifier = Modifier.padding(5.dp),
                 onClick =
                 {
-                    openPatientCreateDialog.value = true
+                    openPropertyCreateDialog.value = true
                 }
             ) {
                 Icon(
@@ -146,14 +146,14 @@ fun PatientsScreen(
                         .selectable(
                             selected = false,
                             onClick = {
-                                openPatientDetailDialog.value = true
-                                patientId.value = item.patientId
+                                openPropertyDetailDialog.value = true
+                                propertyId.value = item.propertyId
                             },
                             role = Role.Button
                         )
                 ) {
                     Text(
-                        text = item.name,
+                        text = item.streetAddress,
                         style = TextStyle(
                             color = getTextColor(),
                             fontSize = 18.sp,
@@ -164,8 +164,8 @@ fun PatientsScreen(
                         modifier = Modifier.padding(5.dp),
                         onClick =
                         {
-                            openPatientDetailDialog.value = true
-                            patientId.value = item.patientId
+                            openPropertyDetailDialog.value = true
+                            propertyId.value = item.propertyId
                         }
                     ) {
                     }
@@ -179,21 +179,21 @@ fun PatientsScreen(
         //AndroidViewAdView()
 
         when {
-            openPatientDetailDialog.value -> {
-                PatientDetailScreen(
-                    openPatientDetailDialog,
+            openPropertyDetailDialog.value -> {
+                PropertyDetailScreen(
+                    openPropertyDetailDialog,
                     patientViewModel,
-                    attendanceViewModel,
+                    monthlyBillingViewModel,
                     receiptViewModel,
                     receiptPDFViewModel,
-                    patientId.value,
+                    propertyId.value,
                     context
                 )
             }
         }
         when {
-            openPatientCreateDialog.value -> {
-                PatientCreateScreen(openPatientCreateDialog, patientViewModel, context)
+            openPropertyCreateDialog.value -> {
+                PropertyCreateScreen(openPropertyCreateDialog, patientViewModel, context)
             }
         }
     }

@@ -5,8 +5,8 @@ package com.apps.gtorettirsm.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.apps.gtorettirsm.data.Attendance
-import com.apps.gtorettirsm.data.AttendanceRepository
+import com.apps.gtorettirsm.data.MonthlyBilling
+import com.apps.gtorettirsm.data.MonthlyBillingRepository
 import com.apps.gtorettirsm.data.Receipt
 import com.apps.gtorettirsm.data.ReceiptPDF
 import com.apps.gtorettirsm.data.ReceiptPDFRepository
@@ -19,28 +19,28 @@ import javax.inject.Inject
 @HiltViewModel
 class ReceiptViewModel @Inject internal constructor(
     private val receiptRepository: ReceiptRepository,
-    private val attendanceRepository: AttendanceRepository,
+    private val monthlyBillingRepository: MonthlyBillingRepository,
     private val receiptPDFRepository: ReceiptPDFRepository
 ) : ViewModel() {
 
-    fun getReceipts(idPatient: Long) = receiptRepository.getReceipts(idPatient)
+    fun getReceipts(idProperty: Long) = receiptRepository.getReceipts(idProperty)
 
     fun getReceivedReceiptsByDate(start: Date, end: Date) = receiptRepository.getReceivedReceiptsByDate(start,end)
 
-    fun getUnpaidReceipts(idPatient: Long) = receiptRepository.getUnpaidReceipts(idPatient)
+    fun getUnpaidReceipts(idProperty: Long) = receiptRepository.getUnpaidReceipts(idProperty)
 
-    fun saveReceipt(receipt: Receipt, attendances: List<Attendance>, selected: List<Long>, receiptPDF: ReceiptPDF) {
+    fun saveReceipt(receipt: Receipt, monthlyBillings: List<MonthlyBilling>, selected: List<Long>, receiptPDF: ReceiptPDF) {
         viewModelScope.launch {
             var receiptId = Date().time
-            receiptRepository.saveReceipt(Receipt(receiptId,date=receipt.date,patientId=receipt.patientId,total=receipt.total,paymentDate=receipt.paymentDate,received=receipt.received))
+            receiptRepository.saveReceipt(Receipt(receiptId,date=receipt.date,propertyId=receipt.propertyId,total=receipt.total,paymentDate=receipt.paymentDate,received=receipt.received))
 
-            attendances.forEach { attendance ->
-                if (selected.contains(attendance.attendanceId)) {
-                    attendance.receiptId = receiptId
-                    attendanceRepository.saveAttendance(attendance)
+            monthlyBillings.forEach { monthlyBilling ->
+                if (selected.contains(monthlyBilling.monthlyBillingId)) {
+                    monthlyBilling.receiptId = receiptId
+                    monthlyBillingRepository.saveMonthlyBilling(monthlyBilling)
                 }
             }
-            val saveReceiptPDF = ReceiptPDF(0,receiptId,receiptPDF.header,receiptPDF.body,receiptPDF.signingName,receiptPDF.signingCouncil,receiptPDF.signingCPF,receiptPDF.footer,receiptPDF.pdfFileName)
+            val saveReceiptPDF = ReceiptPDF(0,receiptId,receiptPDF.header,receiptPDF.body,receiptPDF.signingName,receiptPDF.signingCPF,receiptPDF.footer,receiptPDF.pdfFileName)
             receiptPDFRepository.saveReceiptPDF(saveReceiptPDF)
         }
     }

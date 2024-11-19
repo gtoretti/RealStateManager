@@ -43,42 +43,42 @@ import com.apps.gtorettirsm.compose.utils.getTextColor
 import com.apps.gtorettirsm.compose.utils.screenToDouble
 import com.apps.gtorettirsm.compose.utils.showToast
 import com.apps.gtorettirsm.compose.utils.toScreen
-import com.apps.gtorettirsm.data.Attendance
-import com.apps.gtorettirsm.data.Patient
+import com.apps.gtorettirsm.data.MonthlyBilling
+import com.apps.gtorettirsm.data.Property
 import com.apps.gtorettirsm.data.Receipt
-import com.apps.gtorettirsm.viewmodels.AttendanceViewModel
-import com.apps.gtorettirsm.viewmodels.PatientViewModel
+import com.apps.gtorettirsm.viewmodels.MonthlyBillingViewModel
+import com.apps.gtorettirsm.viewmodels.PropertyViewModel
 import com.apps.gtorettirsm.viewmodels.ReceiptPDFViewModel
 import com.apps.gtorettirsm.viewmodels.ReceiptViewModel
 import kotlinx.coroutines.flow.Flow
 
 
 @Composable
-fun PatientDetailScreen(
-    openPatientDetailDialog: MutableState<Boolean>,
-    patientViewModel: PatientViewModel = hiltViewModel(),
-    attendanceViewModel: AttendanceViewModel = hiltViewModel(),
+fun PropertyDetailScreen(
+    openPropertyDetailDialog: MutableState<Boolean>,
+    patientViewModel: PropertyViewModel = hiltViewModel(),
+    monthlyBillingViewModel: MonthlyBillingViewModel = hiltViewModel(),
     receiptViewModel: ReceiptViewModel = hiltViewModel(),
     receiptPDFViewModel: ReceiptPDFViewModel = hiltViewModel(),
-    patientId: Long,
+    propertyId: Long,
     context: Context
 ) {
-    val patient = patientViewModel.getPatient(patientId)
-    val currentAttendancesFlow =
-        attendanceViewModel.getNonReceiptAttendances(patientId)
-    val currentAttendances by currentAttendancesFlow.collectAsStateWithLifecycle(initialValue = emptyList())
-    val allAttendancesFlow = attendanceViewModel.getNonReceiptAttendances(patientId)
-    val allAttendances by allAttendancesFlow.collectAsStateWithLifecycle(initialValue = emptyList())
-    val unpaidFlow = receiptViewModel.getUnpaidReceipts(patientId)
+    val patient = patientViewModel.getProperty(propertyId)
+    val currentMonthlyBillingsFlow =
+        monthlyBillingViewModel.getNonReceiptMonthlyBillings(propertyId)
+    val currentMonthlyBillings by currentMonthlyBillingsFlow.collectAsStateWithLifecycle(initialValue = emptyList())
+    val allMonthlyBillingsFlow = monthlyBillingViewModel.getNonReceiptMonthlyBillings(propertyId)
+    val allMonthlyBillings by allMonthlyBillingsFlow.collectAsStateWithLifecycle(initialValue = emptyList())
+    val unpaidFlow = receiptViewModel.getUnpaidReceipts(propertyId)
     val unpaids by unpaidFlow.collectAsStateWithLifecycle(initialValue = emptyList())
 
-    PatientDetailScreen(
-        openPatientDetailDialog = openPatientDetailDialog,
+    PropertyDetailScreen(
+        openPropertyDetailDialog = openPropertyDetailDialog,
         patientFlow = patient,
         patientViewModel = patientViewModel,
-        attendanceViewModel = attendanceViewModel,
-        currentAttendedDays = currentAttendances,
-        allAttendedDays = allAttendances,
+        monthlyBillingViewModel = monthlyBillingViewModel,
+        currentAttendedDays = currentMonthlyBillings,
+        allAttendedDays = allMonthlyBillings,
         receiptViewModel = receiptViewModel,
         receiptPDFViewModel = receiptPDFViewModel,
         unpaids = unpaids,
@@ -87,27 +87,27 @@ fun PatientDetailScreen(
 }
 
 @Composable
-fun PatientDetailScreen(
-    openPatientDetailDialog: MutableState<Boolean>,
-    patientFlow: Flow<Patient>,
-    patientViewModel: PatientViewModel,
-    attendanceViewModel: AttendanceViewModel,
-    currentAttendedDays: List<Attendance>,
-    allAttendedDays: List<Attendance>,
+fun PropertyDetailScreen(
+    openPropertyDetailDialog: MutableState<Boolean>,
+    patientFlow: Flow<Property>,
+    patientViewModel: PropertyViewModel,
+    monthlyBillingViewModel: MonthlyBillingViewModel,
+    currentAttendedDays: List<MonthlyBilling>,
+    allAttendedDays: List<MonthlyBilling>,
     receiptViewModel: ReceiptViewModel,
     receiptPDFViewModel: ReceiptPDFViewModel,
     unpaids: List<Receipt>,
     context: Context
 ) {
 
-    val openPatientDetailDatePickerDialog = remember { mutableStateOf(false) }
-    val openPatientDetailDeleteAttendanceDialog = remember { mutableStateOf(false) }
-    val openPatientReceiptsDialog = remember { mutableStateOf(false) }
+    val openPropertyDetailDatePickerDialog = remember { mutableStateOf(false) }
+    val openPropertyDetailDeleteMonthlyBillingDialog = remember { mutableStateOf(false) }
+    val openPropertyReceiptsDialog = remember { mutableStateOf(false) }
     val openReceivePaymentDialog = remember { mutableStateOf(false) }
-    val openPatientDeleteDialog = remember { mutableStateOf(false) }
+    val openPropertyDeleteDialog = remember { mutableStateOf(false) }
 
     val patient by patientFlow.collectAsStateWithLifecycle(
-        initialValue = Patient(
+        initialValue = Property(
             0,
             "",
             "",
@@ -119,17 +119,17 @@ fun PatientDetailScreen(
     var parentName by remember { mutableStateOf("") }
     var sessionPrice by remember { mutableStateOf("") }
 
-    sessionPrice = patient.sessionPrice.toScreen()
-    name = patient.name
-    parentName = patient.parentName
+    sessionPrice = patient.rentalMontlyPrice.toScreen()
+    name = patient.streetAddress
+    parentName = patient.number
 
     var attendedDaysDescr = getAttendedDaysDescr(currentAttendedDays)
 
-    if (openPatientDetailDialog.value) {
+    if (openPropertyDetailDialog.value) {
         AlertDialog(
             shape = RoundedCornerShape(10.dp),
             onDismissRequest = {
-                openPatientDetailDialog.value = false
+                openPropertyDetailDialog.value = false
             },
             modifier = Modifier
                 .width(550.dp)
@@ -226,7 +226,7 @@ fun PatientDetailScreen(
                     ) {
                         Button(
                             onClick = {
-                                openPatientDeleteDialog.value = true
+                                openPropertyDeleteDialog.value = true
                             },
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = getButtonColor()
@@ -250,16 +250,16 @@ fun PatientDetailScreen(
                                         showToast("Por favor, informe o nome do responsável pelo pagamento.",context)
                                     } else
                                         try {
-                                            patientViewModel.savePatient(
-                                                Patient(
-                                                    patientId = patient.patientId,
-                                                    name = name,
-                                                    parentName = parentName,
-                                                    sessionPrice = sessionPrice.screenToDouble(),
+                                            patientViewModel.saveProperty(
+                                                Property(
+                                                    propertyId = patient.propertyId,
+                                                    streetAddress = name,
+                                                    number = parentName,
+                                                    rentalMontlyPrice = sessionPrice.screenToDouble(),
                                                     deleted = 0
                                                 )
                                             )
-                                            openPatientDetailDialog.value = false
+                                            openPropertyDetailDialog.value = false
                                             showToast("Informações salvas com sucesso!", context)
                                         } catch (ex: NumberFormatException) {
                                             sessionPrice = ""
@@ -344,7 +344,7 @@ fun PatientDetailScreen(
                         if (currentAttendedDays.size > 0) {
                             Button(
                                 onClick = {
-                                    openPatientDetailDeleteAttendanceDialog.value = true
+                                    openPropertyDetailDeleteMonthlyBillingDialog.value = true
                                 },
                                 colors = ButtonDefaults.buttonColors(
                                     containerColor = getButtonColor()
@@ -362,7 +362,7 @@ fun PatientDetailScreen(
 
                         Button(
                             onClick = {
-                                openPatientDetailDatePickerDialog.value = true
+                                openPropertyDetailDatePickerDialog.value = true
                             },
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = getButtonColor()
@@ -452,7 +452,7 @@ fun PatientDetailScreen(
 
                     Button(
                         onClick = {
-                            openPatientDetailDialog.value = false
+                            openPropertyDetailDialog.value = false
                         },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = getButtonColor()
@@ -470,7 +470,7 @@ fun PatientDetailScreen(
                     if (currentAttendedDays.size > 0) {
                         Button(
                             onClick = {
-                                openPatientReceiptsDialog.value = true
+                                openPropertyReceiptsDialog.value = true
                             },
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = getButtonColor()
@@ -489,20 +489,20 @@ fun PatientDetailScreen(
             }
         )
         when {
-            openPatientDetailDatePickerDialog.value -> {
-                PatientDetailDatePickerDialog(
-                    openPatientDetailDatePickerDialog = openPatientDetailDatePickerDialog,
-                    attendanceViewModel = attendanceViewModel,
+            openPropertyDetailDatePickerDialog.value -> {
+                PropertyDetailDatePickerDialog(
+                    openPropertyDetailDatePickerDialog = openPropertyDetailDatePickerDialog,
+                    monthlyBillingViewModel = monthlyBillingViewModel,
                     patient = patient,
                     context = context
                 )
             }
         }
         when {
-            openPatientDetailDeleteAttendanceDialog.value -> {
-                PatientDetailDeleteAttendanceDialog(
-                    openPatientDetailDeleteServingDialog = openPatientDetailDeleteAttendanceDialog,
-                    attendanceViewModel = attendanceViewModel,
+            openPropertyDetailDeleteMonthlyBillingDialog.value -> {
+                PropertyDetailDeleteMonthlyBillingDialog(
+                    openPropertyDetailDeleteServingDialog = openPropertyDetailDeleteMonthlyBillingDialog,
+                    monthlyBillingViewModel = monthlyBillingViewModel,
                     allAttendedDays = allAttendedDays,
                     patient = patient,
                     context = context
@@ -510,9 +510,9 @@ fun PatientDetailScreen(
             }
         }
         when {
-            openPatientReceiptsDialog.value -> {
-                PatientNewReceiptDialog(
-                    openPatientReceiptsDialog = openPatientReceiptsDialog,
+            openPropertyReceiptsDialog.value -> {
+                PropertyNewReceiptDialog(
+                    openPropertyReceiptsDialog = openPropertyReceiptsDialog,
                     currentAttendedDays = currentAttendedDays,
                     patient = patient,
                     context = context
@@ -521,7 +521,7 @@ fun PatientDetailScreen(
         }
         when {
             openReceivePaymentDialog.value -> {
-                PatientReceivePaymentDialog(
+                PropertyReceivePaymentDialog(
                     openReceivePaymentDialog = openReceivePaymentDialog,
                     unpaids = unpaids,
                     receiptViewModel = receiptViewModel,
@@ -532,11 +532,11 @@ fun PatientDetailScreen(
             }
         }
         when {
-            openPatientDeleteDialog.value -> {
-                PatientDeleteDialog(
-                    openPatientDeleteDialog = openPatientDeleteDialog,
+            openPropertyDeleteDialog.value -> {
+                PropertyDeleteDialog(
+                    openPropertyDeleteDialog = openPropertyDeleteDialog,
                     patientViewModel = patientViewModel,
-                    openPatientDetailDialog = openPatientDetailDialog,
+                    openPropertyDetailDialog = openPropertyDetailDialog,
                     patient = patient,
                     context = context,
                 )

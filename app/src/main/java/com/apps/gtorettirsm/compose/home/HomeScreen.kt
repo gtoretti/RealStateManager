@@ -34,8 +34,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.apps.gtorettirsm.R
-import com.apps.gtorettirsm.compose.patient.PatientReceiptsReportScreen
-import com.apps.gtorettirsm.compose.patient.PatientsScreen
+import com.apps.gtorettirsm.compose.patient.PropertyReceiptsReportScreen
+import com.apps.gtorettirsm.compose.patient.PropertiesScreen
 import com.apps.gtorettirsm.compose.profile.ProfileScreen
 import com.apps.gtorettirsm.ui.ReceiptTheme
 import kotlinx.coroutines.launch
@@ -44,7 +44,7 @@ enum class gtorettirsmPage(
     @StringRes val titleResId: Int,
     @DrawableRes val drawableResId: Int
 ) {
-    PATIENT(R.string.patients_title, R.drawable.real_estate_agent_24px),
+    PATIENT(R.string.properties_title, R.drawable.real_estate_agent_24px),
     FINANCING(R.string.receipts_title, R.drawable.finance_24px),
     PROFILE(R.string.profile_title, R.drawable.person_24px),
 }
@@ -118,7 +118,7 @@ fun HomePagerScreen(
         ) { index ->
             when (pages[index]) {
                 gtorettirsmPage.PATIENT -> {
-                    PatientsScreen()
+                    PropertiesScreen()
                 }
 
                 gtorettirsmPage.PROFILE -> {
@@ -126,7 +126,7 @@ fun HomePagerScreen(
                 }
 
                 gtorettirsmPage.FINANCING -> {
-                    PatientReceiptsReportScreen()
+                    PropertyReceiptsReportScreen()
                 }
             }
         }

@@ -5,8 +5,8 @@ package com.apps.gtorettirsm.di
 
 import android.content.Context
 import com.apps.gtorettirsm.data.AppDatabase
-import com.apps.gtorettirsm.data.AttendanceDao
-import com.apps.gtorettirsm.data.PatientDao
+import com.apps.gtorettirsm.data.MonthlyBillingDao
+import com.apps.gtorettirsm.data.PropertyDao
 import com.apps.gtorettirsm.data.ProfileDao
 import com.apps.gtorettirsm.data.ReceiptDao
 import com.apps.gtorettirsm.data.ReceiptPDFDao
@@ -33,13 +33,13 @@ class DatabaseModule {
     }
 
     @Provides
-    fun providePatientDao(appDatabase: AppDatabase): PatientDao {
+    fun providePropertyDao(appDatabase: AppDatabase): PropertyDao {
         return appDatabase.patientDao()
     }
 
     @Provides
-    fun provideAttendanceDao(appDatabase: AppDatabase): AttendanceDao {
-        return appDatabase.attendanceDao()
+    fun provideMonthlyBillingDao(appDatabase: AppDatabase): MonthlyBillingDao {
+        return appDatabase.monthlyBillingDao()
     }
 
     @Provides

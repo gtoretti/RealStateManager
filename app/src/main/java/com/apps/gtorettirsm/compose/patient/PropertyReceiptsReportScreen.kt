@@ -37,7 +37,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.apps.gtorettirsm.compose.utils.getRedTextColor
 import com.apps.gtorettirsm.compose.utils.getTextColor
 import com.apps.gtorettirsm.compose.utils.toScreen
-import com.apps.gtorettirsm.viewmodels.PatientViewModel
+import com.apps.gtorettirsm.viewmodels.PropertyViewModel
 import com.apps.gtorettirsm.viewmodels.ReceiptPDFViewModel
 import com.apps.gtorettirsm.viewmodels.ReceiptViewModel
 import java.util.Calendar
@@ -45,21 +45,21 @@ import java.util.HashMap
 
 
 @Composable
-fun PatientReceiptsReportScreen() {
-    var patientViewModel: PatientViewModel = hiltViewModel()
+fun PropertyReceiptsReportScreen() {
+    var patientViewModel: PropertyViewModel = hiltViewModel()
     var receiptViewModel: ReceiptViewModel = hiltViewModel()
     var receiptPDFViewModel: ReceiptPDFViewModel = hiltViewModel()
     val patientsFlow = patientViewModel.patients
     val patients by patientsFlow.collectAsStateWithLifecycle(initialValue = emptyList())
     var patientsMap = HashMap<Long,String>()
     patients.forEach { item ->
-        patientsMap.put(item.patientId,item.name)
+        patientsMap.put(item.propertyId,item.streetAddress)
     }
-    PatientReceiptsReportScreen(receiptViewModel,patientsMap,receiptPDFViewModel)
+    PropertyReceiptsReportScreen(receiptViewModel,patientsMap,receiptPDFViewModel)
 }
 
 @Composable
-fun PatientReceiptsReportScreen(
+fun PropertyReceiptsReportScreen(
     receiptViewModel: ReceiptViewModel,
     patientsMap: Map<Long,String>,
     receiptPDFViewModel: ReceiptPDFViewModel
@@ -169,7 +169,7 @@ fun PatientReceiptsReportScreen(
                     ) {
 
                         Text(
-                            text = patientsMap.get(item.patientId).toString(),
+                            text = patientsMap.get(item.propertyId).toString(),
                             style = TextStyle(
                                 color = getTextColor(),
                                 fontSize = 16.sp,

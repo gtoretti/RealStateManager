@@ -8,7 +8,7 @@
     <string name="my_garden_title">Bahçem</string>
     <string name="plant_list_title">Bitki listesi</string>
     <string name="profile_title" translation_description="Profile">Locador</string>
-    <string name="patients_title" translation_description="Patients">Imóveis</string>
+    <string name="properties_title" translation_description="Propertys">Imóveis</string>
     <string name="receipts_title" translation_description="Receipts">Financeiro</string>
     <string name="available">Mevcut Bitkiler</string>
     <string name="plant_details_title">Bitki detayları</string>

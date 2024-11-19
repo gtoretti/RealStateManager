@@ -33,14 +33,14 @@ import com.apps.gtorettirsm.compose.utils.getButtonColor
 import com.apps.gtorettirsm.compose.utils.getTextColor
 import com.apps.gtorettirsm.compose.utils.screenToDouble
 import com.apps.gtorettirsm.compose.utils.showToast
-import com.apps.gtorettirsm.data.Patient
-import com.apps.gtorettirsm.viewmodels.PatientViewModel
+import com.apps.gtorettirsm.data.Property
+import com.apps.gtorettirsm.viewmodels.PropertyViewModel
 
 
 @Composable
-fun PatientCreateScreen(
-    openPatientCreateDialog: MutableState<Boolean>,
-    patientViewModel: PatientViewModel,
+fun PropertyCreateScreen(
+    openPropertyCreateDialog: MutableState<Boolean>,
+    patientViewModel: PropertyViewModel,
     context: Context
 ) {
 
@@ -48,11 +48,11 @@ fun PatientCreateScreen(
     var parentName by remember { mutableStateOf("") }
     var sessionPrice by remember { mutableStateOf("") }
 
-    if (openPatientCreateDialog.value) {
+    if (openPropertyCreateDialog.value) {
         AlertDialog(
             shape = RoundedCornerShape(10.dp),
             onDismissRequest = {
-                openPatientCreateDialog.value = false
+                openPropertyCreateDialog.value = false
             },
             modifier = Modifier
                 .width(550.dp)
@@ -152,16 +152,16 @@ fun PatientCreateScreen(
                             showToast("Por favor, informe o nome do responsável pelo pagamento.",context)
                         }else
                         try {
-                            patientViewModel.savePatient(
-                                Patient(
-                                    patientId = 0,
-                                    name = name,
-                                    parentName = parentName,
-                                    sessionPrice = sessionPrice.screenToDouble(),
+                            patientViewModel.saveProperty(
+                                Property(
+                                    propertyId = 0,
+                                    streetAddress = name,
+                                    number = parentName,
+                                    rentalMontlyPrice = sessionPrice.screenToDouble(),
                                     deleted = 0
                                 )
                             )
-                            openPatientCreateDialog.value = false
+                            openPropertyCreateDialog.value = false
                             showToast("Informações salvas com sucesso!",context)
 
                         } catch (ex: NumberFormatException) {
@@ -183,7 +183,7 @@ fun PatientCreateScreen(
             }, dismissButton = {
                 Button(
                     onClick = {
-                        openPatientCreateDialog.value = false
+                        openPropertyCreateDialog.value = false
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = getButtonColor()

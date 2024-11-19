@@ -14,14 +14,14 @@ import java.util.Date
  */
 @Dao
 interface ReceiptDao {
-    @Query("SELECT * FROM receipt where patientId = :patientId ORDER BY date DESC")
-    fun getReceipts(patientId: Long): Flow<List<Receipt>>
+    @Query("SELECT * FROM receipt where propertyId = :propertyId ORDER BY date DESC")
+    fun getReceipts(propertyId: Long): Flow<List<Receipt>>
 
     @Query("SELECT * FROM receipt where paymentDate BETWEEN :start AND :end and received = 1 ORDER BY date DESC")
     fun getReceivedReceiptsByDate(start: Date, end: Date): Flow<List<Receipt>>
 
-    @Query("SELECT * FROM receipt where patientId = :patientId and received = 0 ORDER BY date DESC")
-    fun getUnpaidReceipts(patientId: Long): Flow<List<Receipt>>
+    @Query("SELECT * FROM receipt where propertyId = :propertyId and received = 0 ORDER BY date DESC")
+    fun getUnpaidReceipts(propertyId: Long): Flow<List<Receipt>>
 
     @Upsert
     suspend fun upsert(receipt: Receipt)

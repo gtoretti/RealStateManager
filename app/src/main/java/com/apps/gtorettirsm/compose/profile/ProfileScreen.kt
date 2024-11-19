@@ -69,13 +69,10 @@ fun ProfileScreen(
     if (profiles.isNotEmpty() && !loaded) {
         name = profiles[0].name
         cpfCnpj = profiles[0].cpfCnpj
-        regionalCouncil = profiles[0].regionalCouncil
-        regionalCouncilNumber = profiles[0].regionalCouncilNumber
         address = profiles[0].address
         city = profiles[0].city
         uf = profiles[0].uf
         phoneNumber = profiles[0].phoneNumber
-        speciality = profiles[0].speciality
         loaded = true
     }
 
@@ -231,13 +228,10 @@ fun ProfileScreen(
                                 profileId = 1,
                                 name = name,
                                 cpfCnpj = cpfCnpj,
-                                regionalCouncil = regionalCouncil,
-                                regionalCouncilNumber = regionalCouncilNumber,
                                 address = address,
                                 city = city,
                                 uf = uf,
                                 phoneNumber = phoneNumber,
-                                speciality = speciality
                             )
                         )
                         showToast("Informações salvas com sucesso!", context)

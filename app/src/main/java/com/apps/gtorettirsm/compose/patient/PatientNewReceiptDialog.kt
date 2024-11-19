@@ -39,7 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.apps.gtorettirsm.compose.utils.DrawScrollableView
-import com.apps.gtorettirsm.compose.utils.filterAttendancesByMonth
+import com.apps.gtorettirsm.compose.utils.filterMonthlyBillingsByMonth
 import com.apps.gtorettirsm.compose.utils.generateReceipt
 import com.apps.gtorettirsm.compose.utils.getButtonColor
 import com.apps.gtorettirsm.compose.utils.getProfileFromFlow
@@ -47,8 +47,8 @@ import com.apps.gtorettirsm.compose.utils.getRedTextColor
 import com.apps.gtorettirsm.compose.utils.getTextColor
 import com.apps.gtorettirsm.compose.utils.showToast
 import com.apps.gtorettirsm.compose.utils.toScreen
-import com.apps.gtorettirsm.data.Attendance
-import com.apps.gtorettirsm.data.Patient
+import com.apps.gtorettirsm.data.MonthlyBilling
+import com.apps.gtorettirsm.data.Property
 import com.apps.gtorettirsm.data.Profile
 import com.apps.gtorettirsm.viewmodels.ProfileViewModel
 import com.apps.gtorettirsm.viewmodels.ReceiptPDFViewModel
@@ -58,10 +58,10 @@ import java.util.Calendar
 
 
 @Composable
-fun PatientNewReceiptDialog(
-    openPatientReceiptsDialog: MutableState<Boolean>,
-    currentAttendedDays: List<Attendance>,
-    patient: Patient,
+fun PropertyNewReceiptDialog(
+    openPropertyReceiptsDialog: MutableState<Boolean>,
+    currentAttendedDays: List<MonthlyBilling>,
+    patient: Property,
     context: Context
 ) {
     var receiptViewModel: ReceiptViewModel = hiltViewModel()
@@ -70,8 +70,8 @@ fun PatientNewReceiptDialog(
     var profiles = profileViewModel.profiles
 
     val profile = getProfileFromFlow(profiles)
-    PatientNewReceiptDialog(
-        openPatientReceiptsDialog,
+    PropertyNewReceiptDialog(
+        openPropertyReceiptsDialog,
         currentAttendedDays,
         receiptViewModel,
         profile,
@@ -85,21 +85,21 @@ val chosenMonth = mutableStateOf(Calendar.getInstance().get(Calendar.MONTH))
 val chosenYear = mutableStateOf(Calendar.getInstance().get(Calendar.YEAR))
 
 @Composable
-fun PatientNewReceiptDialog(
-    openPatientReceiptsDialog: MutableState<Boolean>,
-    currentAttendedDays: List<Attendance>,
+fun PropertyNewReceiptDialog(
+    openPropertyReceiptsDialog: MutableState<Boolean>,
+    currentAttendedDays: List<MonthlyBilling>,
     receiptViewModel: ReceiptViewModel,
     profile: Profile,
-    patient: Patient,
+    patient: Property,
     context: Context
 ) {
 
-    // month & year used as filter for listing attendances
+    // month & year used as filter for listing monthlyBillings
     var month by remember { mutableIntStateOf(Calendar.getInstance().get(Calendar.MONTH)) }
     var year by remember { mutableIntStateOf(Calendar.getInstance().get(Calendar.YEAR)) }
 
     val openNewReceiptDatePickerDialog = remember { mutableStateOf(false) }
-    var filteredByDateAttendances = filterAttendancesByMonth(currentAttendedDays, month, year)
+    var filteredByDateMonthlyBillings = filterMonthlyBillingsByMonth(currentAttendedDays, month, year)
 
 
     // receiptDate displayed and used to generate receipt
@@ -122,21 +122,21 @@ fun PatientNewReceiptDialog(
     val select = remember { mutableStateListOf(-1L) }
     if (select.contains(-1)) {
         select.remove(-1)
-        filteredByDateAttendances.forEach { attend ->
-            select.add(attend.attendanceId)
+        filteredByDateMonthlyBillings.forEach { attend ->
+            select.add(attend.monthlyBillingId)
         }
     }
 
     var receiptTotal = 0.0
-    filteredByDateAttendances.forEach { a ->
-        if (select.contains(a.attendanceId)) {
-            receiptTotal = receiptTotal + a.sessionPriceAtAttendanceTime
+    filteredByDateMonthlyBillings.forEach { a ->
+        if (select.contains(a.monthlyBillingId)) {
+            receiptTotal = receiptTotal + a.rentalMontlyPrice
         }
     }
 
-    if (openPatientReceiptsDialog.value) {
+    if (openPropertyReceiptsDialog.value) {
         AlertDialog(shape = RoundedCornerShape(10.dp), onDismissRequest = {
-            openPatientReceiptsDialog.value = false
+            openPropertyReceiptsDialog.value = false
             userChoseReceiptDate.value = false
         }, modifier = Modifier
             .width(550.dp)
@@ -158,7 +158,7 @@ fun PatientNewReceiptDialog(
 
                 ) {
                     Text(
-                        text = patient.name, style = TextStyle(
+                        text = patient.streetAddress, style = TextStyle(
                             color = getTextColor(),
 
                             fontSize = 16.sp,
@@ -180,7 +180,7 @@ fun PatientNewReceiptDialog(
                     month = MonthDropDownMenu()
                     year = YearDropDownMenu()
 
-                    if (filteredByDateAttendances.isNotEmpty()) {
+                    if (filteredByDateMonthlyBillings.isNotEmpty()) {
 
                         DrawScrollableView(
                             modifier = Modifier
@@ -214,7 +214,7 @@ fun PatientNewReceiptDialog(
                                             content = {
                                                 Column {
 
-                                                    filteredByDateAttendances.forEach { attendance ->
+                                                    filteredByDateMonthlyBillings.forEach { monthlyBilling ->
                                                         Row(
                                                             verticalAlignment = Alignment.CenterVertically,
                                                             horizontalArrangement = Arrangement.Start,
@@ -222,31 +222,31 @@ fun PatientNewReceiptDialog(
                                                                 .fillMaxWidth()
                                                                 .selectable(
                                                                     selected = (select.contains(
-                                                                        attendance.attendanceId
+                                                                        monthlyBilling.monthlyBillingId
                                                                     )),
                                                                     onClick = {
                                                                         if (select.contains(
-                                                                                attendance.attendanceId
+                                                                                monthlyBilling.monthlyBillingId
                                                                             )
                                                                         ) select.remove(
-                                                                            attendance.attendanceId
+                                                                            monthlyBilling.monthlyBillingId
                                                                         )
-                                                                        else select.add(attendance.attendanceId)
+                                                                        else select.add(monthlyBilling.monthlyBillingId)
                                                                     },
                                                                     role = Role.Checkbox
 
                                                                 )
                                                         ) {
                                                             Checkbox(checked = (select.contains(
-                                                                attendance.attendanceId
+                                                                monthlyBilling.monthlyBillingId
                                                             )),
                                                                 onCheckedChange = {
-                                                                    if (it) select.add(attendance.attendanceId)
-                                                                    else select.remove(attendance.attendanceId)
+                                                                    if (it) select.add(monthlyBilling.monthlyBillingId)
+                                                                    else select.remove(monthlyBilling.monthlyBillingId)
                                                                 })
                                                             Text(
                                                                 text = SimpleDateFormat("dd / MM / yyyy").format(
-                                                                    attendance.date
+                                                                    monthlyBilling.date
                                                                 ),
                                                                 style = TextStyle(
                                                                     color = getTextColor(),
@@ -335,7 +335,7 @@ fun PatientNewReceiptDialog(
 
                         Button(
                             onClick = {
-                                openPatientReceiptsDialog.value = false
+                                openPropertyReceiptsDialog.value = false
                                 userChoseReceiptDate.value = false
                             },
                             colors = ButtonDefaults.buttonColors(
@@ -350,7 +350,7 @@ fun PatientNewReceiptDialog(
                             )
                         }
 
-                        if (filteredByDateAttendances.isNotEmpty()) {
+                        if (filteredByDateMonthlyBillings.isNotEmpty()) {
                         Button(
                             onClick = {
                                 if (profile.name.isBlank() || profile.name.isEmpty()) {
@@ -365,12 +365,6 @@ fun PatientNewReceiptDialog(
                                             context
                                         )
                                     } else
-                                        if (profile.speciality.isBlank() || profile.speciality.isEmpty()) {
-                                            showToast(
-                                                "A aba Locador está incompleta. Por favor, informe o nome da terapia.",
-                                                context
-                                            )
-                                        } else
                                             if (profile.city.isBlank() || profile.city.isEmpty()) {
                                                 showToast(
                                                     "A aba Locador está incompleta. Por favor, informe a cidade.",
@@ -389,18 +383,6 @@ fun PatientNewReceiptDialog(
                                                             context
                                                         )
                                                     } else
-                                                        if (profile.regionalCouncil.isBlank() || profile.regionalCouncil.isEmpty()) {
-                                                            showToast(
-                                                                "A aba Locador está incompleta. Por favor, informe o nome de seu conselho regional.",
-                                                                context
-                                                            )
-                                                        } else
-                                                            if (profile.regionalCouncilNumber.isBlank() || profile.regionalCouncilNumber.isEmpty()) {
-                                                                showToast(
-                                                                    "A aba Locador está incompleta. Por favor, informe o número de seu conselho regional.",
-                                                                    context
-                                                                )
-                                                            } else
                                                                 if (profile.uf.isBlank() || profile.uf.isEmpty()) {
                                                                     showToast(
                                                                         "A aba Locador está incompleta. Por favor, informe o estado.",
@@ -417,13 +399,13 @@ fun PatientNewReceiptDialog(
                                                                         generateReceipt(
                                                                             profile,
                                                                             patient,
-                                                                            filteredByDateAttendances,
+                                                                            filteredByDateMonthlyBillings,
                                                                             select,
                                                                             receiptDate,
                                                                             context,
                                                                             receiptViewModel
                                                                         )
-                                                                        openPatientReceiptsDialog.value = false
+                                                                        openPropertyReceiptsDialog.value = false
                                                                         userChoseReceiptDate.value = false
                                                                     }
                             },
@@ -452,8 +434,8 @@ fun PatientNewReceiptDialog(
 
         when {
             openNewReceiptDatePickerDialog.value -> {
-                PatientNewReceiptDatePickerDialog(
-                    openPatientNewReceiptDatePickerDialog = openNewReceiptDatePickerDialog,
+                PropertyNewReceiptDatePickerDialog(
+                    openPropertyNewReceiptDatePickerDialog = openNewReceiptDatePickerDialog,
                     userChoseReceiptDate = userChoseReceiptDate
                 )
             }

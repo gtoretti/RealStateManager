@@ -10,11 +10,11 @@ import javax.inject.Singleton
 @Singleton
 class ReceiptRepository @Inject constructor(private val receiptDao: ReceiptDao) {
 
-    fun getReceipts(idPatient: Long) = receiptDao.getReceipts(idPatient)
+    fun getReceipts(idProperty: Long) = receiptDao.getReceipts(idProperty)
 
     fun getReceivedReceiptsByDate(start: Date, end: Date) = receiptDao.getReceivedReceiptsByDate(start, end)
 
-    fun getUnpaidReceipts(idPatient: Long) = receiptDao.getUnpaidReceipts(idPatient)
+    fun getUnpaidReceipts(idProperty: Long) = receiptDao.getUnpaidReceipts(idProperty)
 
 
     suspend fun saveReceipt(receipt: Receipt) {

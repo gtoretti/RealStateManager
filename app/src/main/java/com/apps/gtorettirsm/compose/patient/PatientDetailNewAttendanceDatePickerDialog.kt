@@ -42,32 +42,32 @@ import androidx.compose.ui.unit.sp
 import com.apps.gtorettirsm.compose.utils.getButtonColor
 import com.apps.gtorettirsm.compose.utils.getTextColor
 import com.apps.gtorettirsm.compose.utils.showToast
-import com.apps.gtorettirsm.data.Attendance
-import com.apps.gtorettirsm.data.Patient
-import com.apps.gtorettirsm.viewmodels.AttendanceViewModel
+import com.apps.gtorettirsm.data.MonthlyBilling
+import com.apps.gtorettirsm.data.Property
+import com.apps.gtorettirsm.viewmodels.MonthlyBillingViewModel
 import java.util.Calendar
 
 
 @Composable
-fun PatientDetailDatePickerDialog(
-    openPatientDetailDatePickerDialog: MutableState<Boolean>,
-    attendanceViewModel: AttendanceViewModel,
-    patient: Patient,
+fun PropertyDetailDatePickerDialog(
+    openPropertyDetailDatePickerDialog: MutableState<Boolean>,
+    monthlyBillingViewModel: MonthlyBillingViewModel,
+    patient: Property,
     context: Context
 ) {
-    PatientDetailDatePickerDialog(
-        openPatientDetailDatePickerDialog,
+    PropertyDetailDatePickerDialog(
+        openPropertyDetailDatePickerDialog,
         patient,
-        attendanceViewModel,
+        monthlyBillingViewModel,
         context
     )
 }
 
 @Composable
-fun PatientDetailDatePickerDialog(
-    openPatientDetailDatePickerDialog: MutableState<Boolean>,
-    patient: Patient,
-    viewModel: AttendanceViewModel,
+fun PropertyDetailDatePickerDialog(
+    openPropertyDetailDatePickerDialog: MutableState<Boolean>,
+    patient: Property,
+    viewModel: MonthlyBillingViewModel,
     context: Context
 ) {
 
@@ -75,11 +75,11 @@ fun PatientDetailDatePickerDialog(
     var month by remember { mutableIntStateOf(Calendar.getInstance().get(Calendar.MONTH)) }
     var year by remember { mutableIntStateOf(Calendar.getInstance().get(Calendar.YEAR)) }
 
-    if (openPatientDetailDatePickerDialog.value) {
+    if (openPropertyDetailDatePickerDialog.value) {
         AlertDialog(
             shape = RoundedCornerShape(10.dp),
             onDismissRequest = {
-                openPatientDetailDatePickerDialog.value = false
+                openPropertyDetailDatePickerDialog.value = false
             },
             modifier = Modifier
                 .width(550.dp)
@@ -103,7 +103,7 @@ fun PatientDetailDatePickerDialog(
 
                 ) {
                     Text(
-                        text = patient.name,
+                        text = patient.streetAddress,
                         style = TextStyle(
                             color = getTextColor(),
 
@@ -125,15 +125,15 @@ fun PatientDetailDatePickerDialog(
                         date.set(Calendar.MONTH, month)
                         date.set(Calendar.YEAR, year)
 
-                        viewModel.saveAttendance(
-                            Attendance(
+                        viewModel.saveMonthlyBilling(
+                            MonthlyBilling(
                                 0,
                                 date.time,
-                                patient.patientId,
-                                patient.sessionPrice, 0
+                                patient.propertyId,
+                                patient.rentalMontlyPrice, 0
                             )
                         )
-                        openPatientDetailDatePickerDialog.value = false
+                        openPropertyDetailDatePickerDialog.value = false
                         showToast("Atendimento salvo com sucesso!", context)
                     },
                     colors = ButtonDefaults.buttonColors(
@@ -151,7 +151,7 @@ fun PatientDetailDatePickerDialog(
             }, dismissButton = {
                 Button(
                     onClick = {
-                        openPatientDetailDatePickerDialog.value = false
+                        openPropertyDetailDatePickerDialog.value = false
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = getButtonColor()

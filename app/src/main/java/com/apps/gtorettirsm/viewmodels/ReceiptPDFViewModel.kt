@@ -24,7 +24,6 @@ class ReceiptPDFViewModel @Inject internal constructor(
                 pdf.header,
                 pdf.body,
                 pdf.signingName,
-                pdf.signingCouncil,
                 pdf.signingCPF,
                 pdf.footer,
                 context,

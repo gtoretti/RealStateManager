@@ -31,8 +31,8 @@ import java.util.Calendar
 
 
 @Composable
-fun PatientNewReceiptDatePickerDialog(
-    openPatientNewReceiptDatePickerDialog: MutableState<Boolean>,
+fun PropertyNewReceiptDatePickerDialog(
+    openPropertyNewReceiptDatePickerDialog: MutableState<Boolean>,
     userChoseReceiptDate: MutableState<Boolean>,
 ) {
 
@@ -42,11 +42,11 @@ fun PatientNewReceiptDatePickerDialog(
     var month by remember { mutableIntStateOf(Calendar.getInstance().get(Calendar.MONTH)) }
     var year by remember { mutableIntStateOf(Calendar.getInstance().get(Calendar.YEAR)) }
 
-    if (openPatientNewReceiptDatePickerDialog.value) {
+    if (openPropertyNewReceiptDatePickerDialog.value) {
         AlertDialog(
             shape = RoundedCornerShape(10.dp),
             onDismissRequest = {
-                openPatientNewReceiptDatePickerDialog.value = false
+                openPropertyNewReceiptDatePickerDialog.value = false
             },
             modifier = Modifier
                 .width(550.dp)
@@ -81,7 +81,7 @@ fun PatientNewReceiptDatePickerDialog(
                         chosenMonth.value = month
                         chosenYear.value = year
                         userChoseReceiptDate.value = true
-                        openPatientNewReceiptDatePickerDialog.value = false
+                        openPropertyNewReceiptDatePickerDialog.value = false
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = getButtonColor()
@@ -98,7 +98,7 @@ fun PatientNewReceiptDatePickerDialog(
             }, dismissButton = {
                 Button(
                     onClick = {
-                        openPatientNewReceiptDatePickerDialog.value = false
+                        openPropertyNewReceiptDatePickerDialog.value = false
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = getButtonColor()

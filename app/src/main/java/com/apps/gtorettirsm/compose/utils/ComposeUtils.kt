@@ -29,8 +29,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 //import com.google.android.gms.ads.AdRequest
 //import com.google.android.gms.ads.AdView
 import com.apps.gtorettirsm.compose.patient.getMonthName
-import com.apps.gtorettirsm.data.Attendance
-import com.apps.gtorettirsm.data.Patient
+import com.apps.gtorettirsm.data.MonthlyBilling
+import com.apps.gtorettirsm.data.Property
 import com.apps.gtorettirsm.data.Profile
 import com.apps.gtorettirsm.data.Receipt
 import com.apps.gtorettirsm.data.ReceiptPDF
@@ -55,7 +55,6 @@ fun showToast(text: String, context: Context) {
 fun generatePDF(header: String,
                 body: String,
                 signingName: String,
-                signingCouncil: String,
                 signingCPF: String,
                 footer: String,
                 context: Context,
@@ -98,7 +97,6 @@ fun generatePDF(header: String,
 
     canvas.drawText(signingName, 300F, 400F, headerStyle)
     canvas.drawText(signingCPF, 300F, 420F, headerStyle)
-    canvas.drawText(signingCouncil, 300F, 440F, headerStyle)
 
     canvas.drawText(footer, 50F, 800F, headerStyle)
 
@@ -127,9 +125,9 @@ fun generatePDF(header: String,
 }
 
 
-fun getAttendedDaysDescr(attendanceList: List<Attendance>): String {
+fun getAttendedDaysDescr(monthlyBillingList: List<MonthlyBilling>): String {
     var ret = ""
-    attendanceList.forEach { item ->
+    monthlyBillingList.forEach { item ->
         ret = ret + "(" + SimpleDateFormat("dd/MM").format(item.date) + ")   "
     }
     return ret
@@ -143,13 +141,10 @@ fun getProfileFromFlow(profilesFlow: Flow<List<Profile>>): Profile {
         profileId = 0,
         name = "",
         cpfCnpj = "",
-        regionalCouncil = "",
-        regionalCouncilNumber = "",
         address = "",
         city = "",
         uf = "",
         phoneNumber = "",
-        speciality = ""
     )
     if (profiles.size > 0) {
         profile = profiles.get(0)
@@ -157,8 +152,8 @@ fun getProfileFromFlow(profilesFlow: Flow<List<Profile>>): Profile {
     return profile
 }
 
-fun filterAttendancesByMonth(list: List<Attendance>, month: Int, year: Int): List<Attendance> {
-    var ret: ArrayList<Attendance> = ArrayList()
+fun filterMonthlyBillingsByMonth(list: List<MonthlyBilling>, month: Int, year: Int): List<MonthlyBilling> {
+    var ret: ArrayList<MonthlyBilling> = ArrayList()
     list.forEach { a ->
         var d = Calendar.getInstance()
         d.time = a.date
@@ -206,8 +201,8 @@ fun Double.toScreen(): String {
 
 fun generateReceipt(
     profile: Profile,
-    patient: Patient,
-    list: List<Attendance>,
+    patient: Property,
+    list: List<MonthlyBilling>,
     selected: List<Long>,
     receiptDate: Calendar,
     context: Context,
@@ -226,21 +221,21 @@ fun generateReceipt(
 
 
     var daysDescr = ""
-    var qtdAttendances = 0
+    var qtdMonthlyBillings = 0
 
     var month:Int = 0
     var year:Int = 0
-    list.forEach { attendance ->
+    list.forEach { monthlyBilling ->
 
-        if (selected.contains(attendance.attendanceId)) {
-            receiptTotalValue = receiptTotalValue + patient.sessionPrice
-            sessionValue = attendance.sessionPriceAtAttendanceTime
+        if (selected.contains(monthlyBilling.monthlyBillingId)) {
+            receiptTotalValue = receiptTotalValue + patient.rentalMontlyPrice
+            sessionValue = monthlyBilling.rentalMontlyPrice
             var attDate = Calendar.getInstance()
-            attDate.time = attendance.date
+            attDate.time = monthlyBilling.date
             daysDescr = daysDescr + attDate.get(Calendar.DAY_OF_MONTH) + " , "
             month = attDate.get(Calendar.MONTH)
             year = attDate.get(Calendar.YEAR)
-            qtdAttendances++
+            qtdMonthlyBillings++
         }
     }
 
@@ -253,36 +248,35 @@ fun generateReceipt(
 
     var sessao = "sessão"
     var dia = ""
-    if (qtdAttendances > 1) {
+    if (qtdMonthlyBillings > 1) {
         sessao = "sessões"
         dia = "s"
     }
 
     var header = profile.city + ", " + receiptDateDescr
-    var body = "Declaro, para os devidos fins, que recebi de "+patient.parentName+" a quantia de R$ " + receiptTotalValue.toBigDecimal()
+    var body = "Declaro, para os devidos fins, que recebi de "+patient.number+" a quantia de R$ " + receiptTotalValue.toBigDecimal()
     .setScale(2, RoundingMode.UP).toString()
         .replace(".", ",") + " (" + receiptTotalValue.toWords(
         "pt",
         "BR"
-    ) + " reais) referente a " + qtdAttendances + " " + sessao + " de " + profile.speciality + " para o(a) paciente " + patient.name +", no valor de R$ " + sessionValue.toBigDecimal()
+    ) + " reais) referente a " + qtdMonthlyBillings + " " + sessao + " de  para o(a) paciente " + patient.streetAddress +", no valor de R$ " + sessionValue.toBigDecimal()
         .setScale(2, RoundingMode.UP).toString().replace(
             ".",
             ","
         ) + " por sessão, realizada" + dia + " no" + dia + " dia" + dia + " " + daysDescr + "."
 
     var signingName = profile.name
-    var signingCouncil = profile.regionalCouncil + ":" + profile.regionalCouncilNumber
     var signingCPF =  "CPF:" + profile.cpfCnpj
     var footer = profile.address + ". Telefone: " + profile.phoneNumber
-    var pdfFileName = patient.name.replace(" ","_") + "_" + (receiptDate.get(Calendar.MONTH)+1) + "_" + receiptDate.get(Calendar.YEAR) + "-" + Date().time.milliseconds
+    var pdfFileName = patient.streetAddress.replace(" ","_") + "_" + (receiptDate.get(Calendar.MONTH)+1) + "_" + receiptDate.get(Calendar.YEAR) + "-" + Date().time.milliseconds
 
     //setting received date same as receiptDate just because received date is not null
-    var receipt = Receipt(0, receiptDate.time, patient.patientId, receiptTotalValue, receiptDate.time, 0)
-    var receiptPDF = ReceiptPDF(0,0,header,body,signingName,signingCouncil,signingCPF,footer,pdfFileName)
+    var receipt = Receipt(0, receiptDate.time, patient.propertyId, receiptTotalValue, receiptDate.time, 0)
+    var receiptPDF = ReceiptPDF(0,0,header,body,signingName,signingCPF,footer,pdfFileName)
 
     receiptViewModel.saveReceipt(receipt, list, selected,receiptPDF)
     showToast("Recibo registrado com sucesso! Criando arquivo PDF para assinatura...", context)
-    generatePDF(header,body,signingName, signingCouncil, signingCPF, footer, context, pdfFileName)
+    generatePDF(header,body,signingName, signingCPF, footer, context, pdfFileName)
 }
 
 

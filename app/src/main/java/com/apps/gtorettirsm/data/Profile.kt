@@ -12,14 +12,10 @@ data class Profile(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val profileId: Long,
     val name: String,
     val cpfCnpj: String,
-    val regionalCouncil: String,
-    val regionalCouncilNumber: String,
     val address: String,
     val city: String,
     val uf: String,
     val phoneNumber: String,
-    val speciality: String,
-
 ) {
 
     override fun toString() = name

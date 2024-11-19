@@ -5,31 +5,31 @@ package com.apps.gtorettirsm.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.apps.gtorettirsm.data.Attendance
-import com.apps.gtorettirsm.data.AttendanceRepository
+import com.apps.gtorettirsm.data.MonthlyBilling
+import com.apps.gtorettirsm.data.MonthlyBillingRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AttendanceViewModel @Inject internal constructor(
-    private val repository: AttendanceRepository
+class MonthlyBillingViewModel @Inject internal constructor(
+    private val repository: MonthlyBillingRepository
 ) : ViewModel() {
 
-    fun getAttendances(idPatient: Long) = repository.getAttendances(idPatient)
+    fun getMonthlyBillings(idProperty: Long) = repository.getMonthlyBillings(idProperty)
 
-    fun getNonReceiptAttendances(idPatient: Long) =
-        repository.getNonReceiptAttendances(idPatient)
+    fun getNonReceiptMonthlyBillings(idProperty: Long) =
+        repository.getNonReceiptMonthlyBillings(idProperty)
 
-    fun saveAttendance(attendance: Attendance) {
+    fun saveMonthlyBilling(monthlyBilling: MonthlyBilling) {
         viewModelScope.launch {
-            repository.saveAttendance(attendance)
+            repository.saveMonthlyBilling(monthlyBilling)
         }
     }
 
-    fun deleteAttendance(attendance: Attendance) {
+    fun deleteMonthlyBilling(monthlyBilling: MonthlyBilling) {
         viewModelScope.launch {
-            repository.deleteAttendance(attendance)
+            repository.deleteMonthlyBilling(monthlyBilling)
         }
     }
 }

@@ -12,7 +12,7 @@ import java.util.Date
 data class Receipt(
     @PrimaryKey() @ColumnInfo(name = "id") val receiptId: Long,
     val date: Date,
-    val patientId: Long,
+    val propertyId: Long,
     val total: Double,
     val paymentDate: Date,
     val received: Int

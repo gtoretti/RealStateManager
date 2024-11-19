@@ -5,22 +5,22 @@ package com.apps.gtorettirsm.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.apps.gtorettirsm.data.Patient
-import com.apps.gtorettirsm.data.PatientRepository
+import com.apps.gtorettirsm.data.Property
+import com.apps.gtorettirsm.data.PropertyRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class PatientViewModel @Inject internal constructor(
-    private val repository: PatientRepository
+class PropertyViewModel @Inject internal constructor(
+    private val repository: PropertyRepository
 ) : ViewModel() {
 
-    var patients = repository.getPatients()
+    var patients = repository.getPropertys()
 
-    var activePatients = repository.getActivePatients()
+    var activePropertys = repository.getActivePropertys()
 
-    fun getPatient(id:Long) = repository.getPatient(id)
+    fun getProperty(id:Long) = repository.getProperty(id)
 
     init {
         refreshData()
@@ -28,21 +28,21 @@ class PatientViewModel @Inject internal constructor(
 
     fun refreshData() {
         try {
-            patients = repository.getPatients()
+            patients = repository.getPropertys()
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
-    fun savePatient(patient: Patient) {
+    fun saveProperty(patient: Property) {
         viewModelScope.launch {
-            repository.savePatient(patient)
+            repository.saveProperty(patient)
         }
     }
 
-    fun deletePatient(patient: Patient) {
+    fun deleteProperty(patient: Property) {
         viewModelScope.launch {
-            repository.deletePatient(patient)
+            repository.deleteProperty(patient)
         }
     }
 }

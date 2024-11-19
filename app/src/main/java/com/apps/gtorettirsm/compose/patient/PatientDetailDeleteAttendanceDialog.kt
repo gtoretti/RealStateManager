@@ -38,28 +38,28 @@ import com.apps.gtorettirsm.compose.utils.getButtonColor
 import com.apps.gtorettirsm.compose.utils.getTextColor
 import com.apps.gtorettirsm.compose.utils.showToast
 import com.apps.gtorettirsm.compose.utils.toScreen
-import com.apps.gtorettirsm.data.Attendance
-import com.apps.gtorettirsm.data.Patient
-import com.apps.gtorettirsm.viewmodels.AttendanceViewModel
+import com.apps.gtorettirsm.data.MonthlyBilling
+import com.apps.gtorettirsm.data.Property
+import com.apps.gtorettirsm.viewmodels.MonthlyBillingViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 
 @Composable
-fun PatientDetailDeleteAttendanceDialog(
-    openPatientDetailDeleteServingDialog: MutableState<Boolean>,
-    attendanceViewModel: AttendanceViewModel,
-    allAttendedDays: List<Attendance>,
-    patient: Patient,
+fun PropertyDetailDeleteMonthlyBillingDialog(
+    openPropertyDetailDeleteServingDialog: MutableState<Boolean>,
+    monthlyBillingViewModel: MonthlyBillingViewModel,
+    allAttendedDays: List<MonthlyBilling>,
+    patient: Property,
     context: Context
 ) {
 
-    var attendanceId by remember { mutableLongStateOf(0) }
+    var monthlyBillingId by remember { mutableLongStateOf(0) }
 
-    if (openPatientDetailDeleteServingDialog.value) {
+    if (openPropertyDetailDeleteServingDialog.value) {
         AlertDialog(
             shape = RoundedCornerShape(10.dp),
             onDismissRequest = {
-                openPatientDetailDeleteServingDialog.value = false
+                openPropertyDetailDeleteServingDialog.value = false
             },
             modifier = Modifier
                 .width(550.dp)
@@ -83,7 +83,7 @@ fun PatientDetailDeleteAttendanceDialog(
 
                 ) {
                     Text(
-                        text = patient.name,
+                        text = patient.streetAddress,
                         style = TextStyle(
                             color = getTextColor(),
 
@@ -99,28 +99,28 @@ fun PatientDetailDeleteAttendanceDialog(
                             .fillMaxHeight(),
                         content = {
                             Column {
-                                allAttendedDays.forEach { attendance ->
+                                allAttendedDays.forEach { monthlyBilling ->
                                     Row(
                                         verticalAlignment = Alignment.CenterVertically,
                                         horizontalArrangement = Arrangement.SpaceBetween,
                                         modifier = Modifier
                                             .fillMaxWidth()
                                             .selectable(
-                                                selected = (attendance.attendanceId == attendanceId),
+                                                selected = (monthlyBilling.monthlyBillingId == monthlyBillingId),
                                                 onClick = {
-                                                    attendanceId = attendance.attendanceId
+                                                    monthlyBillingId = monthlyBilling.monthlyBillingId
                                                 },
                                                 role = Role.RadioButton
                                             )
                                     ) {
                                         RadioButton(
-                                            selected = (attendanceId == attendance.attendanceId),
-                                            onClick = { attendanceId = attendance.attendanceId }
+                                            selected = (monthlyBillingId == monthlyBilling.monthlyBillingId),
+                                            onClick = { monthlyBillingId = monthlyBilling.monthlyBillingId }
                                         )
                                         Text(
                                             text = SimpleDateFormat("dd / MM / yyyy").format(
-                                                attendance.date
-                                            ) + " - R$ " + attendance.sessionPriceAtAttendanceTime.toScreen()
+                                                monthlyBilling.date
+                                            ) + " - R$ " + monthlyBilling.rentalMontlyPrice.toScreen()
                                                 .replace(".", ","),
                                             style = TextStyle(
                                                 color = getTextColor(),
@@ -139,18 +139,18 @@ fun PatientDetailDeleteAttendanceDialog(
             confirmButton = {
                 Button(
                     onClick = {
-                        if (attendanceId == 0L) {
+                        if (monthlyBillingId == 0L) {
                             showToast("Por favor, selecione o atendimento.", context)
                         } else {
-                            attendanceViewModel.deleteAttendance(
-                                Attendance(
-                                    attendanceId,
+                            monthlyBillingViewModel.deleteMonthlyBilling(
+                                MonthlyBilling(
+                                    monthlyBillingId,
                                     Date(),
-                                    patient.patientId,
+                                    patient.propertyId,
                                     0.0, 0
                                 )
                             )
-                            openPatientDetailDeleteServingDialog.value = false
+                            openPropertyDetailDeleteServingDialog.value = false
                             showToast("Atendimento excluído com sucesso!", context)
                         }
                     },colors = ButtonDefaults.buttonColors(
@@ -168,7 +168,7 @@ fun PatientDetailDeleteAttendanceDialog(
             }, dismissButton = {
                 Button(
                     onClick = {
-                        openPatientDetailDeleteServingDialog.value = false
+                        openPropertyDetailDeleteServingDialog.value = false
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = getButtonColor()

@@ -25,22 +25,22 @@ import androidx.compose.ui.unit.sp
 import com.apps.gtorettirsm.compose.utils.getButtonColor
 import com.apps.gtorettirsm.compose.utils.getTextColor
 import com.apps.gtorettirsm.compose.utils.showToast
-import com.apps.gtorettirsm.data.Patient
-import com.apps.gtorettirsm.viewmodels.PatientViewModel
+import com.apps.gtorettirsm.data.Property
+import com.apps.gtorettirsm.viewmodels.PropertyViewModel
 
 @Composable
-fun PatientDeleteDialog(
-    openPatientDeleteDialog: MutableState<Boolean>,
-    openPatientDetailDialog: MutableState<Boolean>,
-    patientViewModel: PatientViewModel,
-    patient: Patient,
+fun PropertyDeleteDialog(
+    openPropertyDeleteDialog: MutableState<Boolean>,
+    openPropertyDetailDialog: MutableState<Boolean>,
+    patientViewModel: PropertyViewModel,
+    patient: Property,
     context: Context
 ) {
-    if (openPatientDeleteDialog.value) {
+    if (openPropertyDeleteDialog.value) {
         AlertDialog(
             shape = RoundedCornerShape(10.dp),
             onDismissRequest = {
-                openPatientDeleteDialog.value = false
+                openPropertyDeleteDialog.value = false
             },
             modifier = Modifier
                 .width(550.dp)
@@ -64,7 +64,7 @@ fun PatientDeleteDialog(
 
                 ) {
                     Text(
-                        text = patient.name,
+                        text = patient.streetAddress,
                         style = TextStyle(
                             color = getTextColor(),
                             fontSize = 16.sp,
@@ -77,9 +77,9 @@ fun PatientDeleteDialog(
             confirmButton = {
                 Button(
                     onClick = {
-                        patientViewModel.deletePatient(patient)
-                        openPatientDeleteDialog.value = false
-                        openPatientDetailDialog.value = false
+                        patientViewModel.deleteProperty(patient)
+                        openPropertyDeleteDialog.value = false
+                        openPropertyDetailDialog.value = false
                         showToast("Paciente excluído com sucesso!", context)
                     }, colors = ButtonDefaults.buttonColors(
                         containerColor = getButtonColor()
@@ -96,7 +96,7 @@ fun PatientDeleteDialog(
             }, dismissButton = {
                 Button(
                     onClick = {
-                        openPatientDeleteDialog.value = false
+                        openPropertyDeleteDialog.value = false
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = getButtonColor()

@@ -14,7 +14,6 @@ data class ReceiptPDF(
     val header: String,
     val body: String,
     val signingName: String,
-    val signingCouncil: String,
     val signingCPF: String,
     val footer: String,
     val pdfFileName: String,
