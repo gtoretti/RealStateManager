@@ -1,0 +1,12 @@
+<!--
+
+  -->
+
+<resources>
+
+    <!-- To see how these attributes are used, please visit https://material.io/develop/android/theming/color/ -->
+    <style name="Base.Theme.gtorettirsm" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    </style>
+
+    <style name="Theme.gtorettirsm" parent="Base.Theme.gtorettirsm"></style>
+</resources>
