@@ -54,13 +54,10 @@ fun ProfileScreen(
 ) {
     var name by remember { mutableStateOf("") }
     var cpfCnpj by remember { mutableStateOf("") }
-    var regionalCouncil by remember { mutableStateOf("") }
-    var regionalCouncilNumber by remember { mutableStateOf("") }
     var address by remember { mutableStateOf("") }
     var city by remember { mutableStateOf("") }
     var uf by remember { mutableStateOf("") }
     var phoneNumber by remember { mutableStateOf("") }
-    var speciality by remember { mutableStateOf("") }
 
     var loaded by remember { mutableStateOf(false) }
     val context = LocalContext.current
@@ -90,7 +87,7 @@ fun ProfileScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    text = "Informações do prestador no recibo:"
+                    text = "Informações do locador no recibo:"
                 )
             }
         }
@@ -101,8 +98,8 @@ fun ProfileScreen(
             value = name,
             onValueChange = { name = it },
             label = {
-                Text("Nome:")
-            }, placeholder = { Text("Informe seu nome") }
+                Text("Nome ou Razão Social:")
+            }, placeholder = { Text("Informe seu nome ou razão social.") }
         )
 
         OutlinedTextField(
@@ -111,30 +108,9 @@ fun ProfileScreen(
             value = cpfCnpj,
             onValueChange = { cpfCnpj = it },
             label = {
-                Text("CPF:")
+                Text("CPF ou CNPJ:")
             }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            placeholder = { Text("Informe seu CPF") }
-        )
-
-        OutlinedTextField(
-            modifier = Modifier
-                .fillMaxWidth(),
-            value = regionalCouncil,
-            onValueChange = { regionalCouncil = it },
-            label = {
-                Text("Sigla do conselho regional:")
-            },
-            placeholder = { Text("Informe a sigla do conselho regional. Ex: CREFITO, CRFa, etc.") }
-        )
-
-        OutlinedTextField(
-            modifier = Modifier
-                .fillMaxWidth(),
-            value = regionalCouncilNumber,
-            onValueChange = { regionalCouncilNumber = it },
-            label = {
-                Text("Número no conselho regional:")
-            }, placeholder = { Text("Informe seu número do conselho regional.") }
+            placeholder = { Text("Informe seu CPF ou  CNPJ.") }
         )
 
         OutlinedTextField(
@@ -179,17 +155,6 @@ fun ProfileScreen(
             placeholder = { Text("Informe seu telefone de contato comercial.") }
         )
 
-        OutlinedTextField(
-            modifier = Modifier
-                .fillMaxWidth(),
-            value = speciality,
-            onValueChange = { speciality = it },
-            label = {
-                Text("Nome da terapia:")
-            },
-            placeholder = { Text("Informe o nome da terapia. Ex: Fonoaudiologia, Terapia Motora, Terapia Respiratória, Terapia Ocupacional, etc.") }
-        )
-
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.End,
@@ -202,17 +167,12 @@ fun ProfileScreen(
             onClick = {
 
                 var tmpCPF =
-                    cpfCnpj.trimEnd().trimStart().replace(".", "").replace(",", "").replace("-", "")
+                    cpfCnpj.trimEnd().trimStart().replace(".", "").replace(",", "").replace("-", "").replace("/", "")
                         .replace(" ", "")
-                if (tmpCPF.length > 0 && tmpCPF.length != 11) {
-                    showToast("Por favor, verifique seu CPF.", context)
+                if (tmpCPF.length > 0 && tmpCPF.length != 11 && tmpCPF.length != 14) {
+                    showToast("Por favor, verifique seu CPF ou CNPJ.", context)
                 } else
-                    if (regionalCouncil.length > 20) {
-                        showToast("Por favor, verifique a sigla do conselho regional.", context)
-                    } else
-                        if (regionalCouncilNumber.length > 20) {
-                            showToast("Por favor, verifique o número do conselho regional.", context)
-                        } else
+
                             if (phoneNumber.length > 20) {
                                 showToast("Por favor, verifique o telefone.", context)
                             } else

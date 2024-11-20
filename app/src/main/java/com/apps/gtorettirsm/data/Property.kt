@@ -10,10 +10,9 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "property")
 data class Property(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val propertyId: Long,
-    val streetAddress: String,
-    val number: String,
+    val address: String,
     val rentalMontlyPrice: Double,
     val deleted: Int,
 ) {
-    override fun toString() = streetAddress
+    override fun toString() = address
 }

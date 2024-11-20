@@ -110,18 +110,16 @@ fun PropertyDetailScreen(
         initialValue = Property(
             0,
             "",
-            "",
             0.0,
             0
         )
     )
-    var name by remember { mutableStateOf("") }
-    var parentName by remember { mutableStateOf("") }
-    var sessionPrice by remember { mutableStateOf("") }
+    var address by remember { mutableStateOf("") }
+    var rentalMontlyPrice by remember { mutableStateOf("") }
 
-    sessionPrice = patient.rentalMontlyPrice.toScreen()
-    name = patient.streetAddress
-    parentName = patient.number
+    rentalMontlyPrice = patient.rentalMontlyPrice.toScreen()
+    address = patient.address
+
 
     var attendedDaysDescr = getAttendedDaysDescr(currentAttendedDays)
 
@@ -155,9 +153,9 @@ fun PropertyDetailScreen(
                 ) {
 
                     OutlinedTextField(
-                        value = name,
+                        value = address,
                         onValueChange = {
-                            name = it
+                            address = it
                         },
                         textStyle = TextStyle(
                             fontSize = 14.sp,
@@ -176,29 +174,9 @@ fun PropertyDetailScreen(
                     )
 
                     OutlinedTextField(
-                        value = parentName,
+                        value = rentalMontlyPrice,
                         onValueChange = {
-                            parentName = it
-                        },
-                        textStyle = TextStyle(
-                            fontSize = 14.sp,
-                            color = getTextColor(),
-                            fontWeight = FontWeight.Normal
-                        ),placeholder = {Text("Informe aqui o nome do responsável pelo pagamento do recibo.")},
-                        label = {
-                            Text(
-                                text = "Nome do Responsável",
-                                style = TextStyle(
-                                    color = getTextColor(),
-                                    fontSize = 12.sp,
-                                )
-                            )
-                        }
-                    )
-                    OutlinedTextField(
-                        value = sessionPrice,
-                        onValueChange = {
-                            sessionPrice = it
+                            rentalMontlyPrice = it
                         },
                         textStyle = TextStyle(
                             fontSize = 14.sp,
@@ -243,26 +221,22 @@ fun PropertyDetailScreen(
 
                         Button(
                             onClick = {
-                                if (name.isEmpty() || name.isBlank()) {
+                                if (address.isEmpty() || address.isBlank()) {
                                     showToast("Por favor, informe o nome do(a) paciente.", context)
                                 } else
-                                    if (parentName.isEmpty() || parentName.isBlank()) {
-                                        showToast("Por favor, informe o nome do responsável pelo pagamento.",context)
-                                    } else
                                         try {
                                             patientViewModel.saveProperty(
                                                 Property(
                                                     propertyId = patient.propertyId,
-                                                    streetAddress = name,
-                                                    number = parentName,
-                                                    rentalMontlyPrice = sessionPrice.screenToDouble(),
+                                                    address = address,
+                                                    rentalMontlyPrice = rentalMontlyPrice.screenToDouble(),
                                                     deleted = 0
                                                 )
                                             )
                                             openPropertyDetailDialog.value = false
                                             showToast("Informações salvas com sucesso!", context)
                                         } catch (ex: NumberFormatException) {
-                                            sessionPrice = ""
+                                            rentalMontlyPrice = ""
                                             showToast("Por favor, informe o valor do atendimento.", context)
                                         }
                             },

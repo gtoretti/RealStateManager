@@ -53,7 +53,7 @@ fun PropertyReceiptsReportScreen() {
     val patients by patientsFlow.collectAsStateWithLifecycle(initialValue = emptyList())
     var patientsMap = HashMap<Long,String>()
     patients.forEach { item ->
-        patientsMap.put(item.propertyId,item.streetAddress)
+        patientsMap.put(item.propertyId,item.address)
     }
     PropertyReceiptsReportScreen(receiptViewModel,patientsMap,receiptPDFViewModel)
 }

@@ -153,7 +153,7 @@ fun PropertiesScreen(
                         )
                 ) {
                     Text(
-                        text = item.streetAddress,
+                        text = item.address,
                         style = TextStyle(
                             color = getTextColor(),
                             fontSize = 18.sp,

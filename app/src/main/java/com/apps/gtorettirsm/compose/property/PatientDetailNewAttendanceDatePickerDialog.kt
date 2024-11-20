@@ -103,7 +103,7 @@ fun PropertyDetailDatePickerDialog(
 
                 ) {
                     Text(
-                        text = patient.streetAddress,
+                        text = patient.address,
                         style = TextStyle(
                             color = getTextColor(),
 

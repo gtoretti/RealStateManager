@@ -158,7 +158,7 @@ fun PropertyNewReceiptDialog(
 
                 ) {
                     Text(
-                        text = patient.streetAddress, style = TextStyle(
+                        text = patient.address, style = TextStyle(
                             color = getTextColor(),
 
                             fontSize = 16.sp,
