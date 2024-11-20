@@ -35,18 +35,6 @@ fun ReceiptAppNavHost(
 
             )
         }
-        composable(
-            route = Screen.PlantDetail.route,
-            arguments = Screen.PlantDetail.navArguments
-        ) {
-
-        }
-        composable(
-            route = Screen.Gallery.route,
-            arguments = Screen.Gallery.navArguments
-        ) {
-
-        }
     }
 }
 

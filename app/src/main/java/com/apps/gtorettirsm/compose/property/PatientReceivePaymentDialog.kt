@@ -1,7 +1,7 @@
 /*
  */
 
-package com.apps.gtorettirsm.compose.patient
+package com.apps.gtorettirsm.compose.property
 
 
 import android.content.Context

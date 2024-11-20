@@ -34,8 +34,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.apps.gtorettirsm.R
-import com.apps.gtorettirsm.compose.patient.PropertyReceiptsReportScreen
-import com.apps.gtorettirsm.compose.patient.PropertiesScreen
+import com.apps.gtorettirsm.compose.property.PropertyReceiptsReportScreen
+import com.apps.gtorettirsm.compose.property.PropertiesScreen
 import com.apps.gtorettirsm.compose.profile.ProfileScreen
 import com.apps.gtorettirsm.ui.ReceiptTheme
 import kotlinx.coroutines.launch

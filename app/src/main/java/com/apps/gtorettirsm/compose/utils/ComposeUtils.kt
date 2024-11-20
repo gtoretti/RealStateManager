@@ -28,7 +28,7 @@ import androidx.core.content.FileProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 //import com.google.android.gms.ads.AdRequest
 //import com.google.android.gms.ads.AdView
-import com.apps.gtorettirsm.compose.patient.getMonthName
+import com.apps.gtorettirsm.compose.property.getMonthName
 import com.apps.gtorettirsm.data.MonthlyBilling
 import com.apps.gtorettirsm.data.Property
 import com.apps.gtorettirsm.data.Profile
@@ -341,9 +341,9 @@ fun isDarkTheme(): Boolean {
 @Composable
 fun getTextColor(): androidx.compose.ui.graphics.Color {
     if (isDarkTheme())
-        return androidx.compose.ui.graphics.Color(0xFFC8E6C9)
+        return androidx.compose.ui.graphics.Color(0xFFC0D1DF)
     else
-        return androidx.compose.ui.graphics.Color(0xFF004D40)
+        return androidx.compose.ui.graphics.Color(0xFF002D52)
 }
 
 @Composable
@@ -357,7 +357,7 @@ fun getRedTextColor(): androidx.compose.ui.graphics.Color {
 @Composable
 fun getButtonColor(): androidx.compose.ui.graphics.Color {
     if (isDarkTheme())
-        return androidx.compose.ui.graphics.Color(0xFFAED581)
+        return androidx.compose.ui.graphics.Color(0xFF86B4DA)
     else
-        return androidx.compose.ui.graphics.Color(0xFF43A047)
+        return androidx.compose.ui.graphics.Color(0xFF4479A3)
 }
