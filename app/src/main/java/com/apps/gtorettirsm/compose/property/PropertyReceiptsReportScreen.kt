@@ -49,7 +49,7 @@ fun PropertyReceiptsReportScreen() {
     var patientViewModel: PropertyViewModel = hiltViewModel()
     var receiptViewModel: ReceiptViewModel = hiltViewModel()
     var receiptPDFViewModel: ReceiptPDFViewModel = hiltViewModel()
-    val patientsFlow = patientViewModel.patients
+    val patientsFlow = patientViewModel.properties
     val patients by patientsFlow.collectAsStateWithLifecycle(initialValue = emptyList())
     var patientsMap = HashMap<Long,String>()
     patients.forEach { item ->

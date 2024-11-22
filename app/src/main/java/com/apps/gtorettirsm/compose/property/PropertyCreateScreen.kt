@@ -319,28 +319,56 @@ fun PropertyCreateScreen(
             confirmButton = {
                 Button(
                     onClick = {
-                        //if (address.isEmpty() || address.isBlank()){
-                        //    showToast("Por favor, informe o endereço do imóvel.",context)
-                        //}else
-                        //    if (rentalMontlyPrice.isEmpty() || rentalMontlyPrice.isBlank()){
-                        //    showToast("Por favor, informe o valor mensal do aluguel.",context)
-                        //}else
-                        try {
-                            //patientViewModel.saveProperty(
-                            //    Property(
-                            //        propertyId = 0,
-                            //        streetAddress = address,
-                            //        rentalMontlyPrice = rentalMontlyPrice.screenToDouble(),
-                            //        deleted = 0
-                            //    )
-                            //)
-                            openPropertyCreateDialog.value = false
-                            showToast("Informações registradas com sucesso!",context)
+                        if (zipCode.value.isEmpty() || zipCode.value.isBlank()){
+                            showToast("Por favor, informe o CEP do imóvel.",context)
+                        }else
+                        if (streetAddress.value.isEmpty() || streetAddress.value.isBlank()){
+                            showToast("Por favor, informe o logradouro do imóvel.",context)
+                        }else
+                            if (district.value.isEmpty() || district.value.isBlank()){
+                                showToast("Por favor, informe o bairro do imóvel.",context)
+                            }else
+                            if (city.value.isEmpty() || city.value.isBlank()){
+                                showToast("Por favor, informe a cidade do imóvel.",context)
+                            }else
+                                if (state.value.isEmpty() || state.value.isBlank()){
+                                    showToast("Por favor, informe o UF do imóvel.",context)
+                                }else
+                                {
+                                    try {
+                                        propertyViewModel.saveProperty(
+                                            Property(
+                                                propertyId = 0,
+                                                streetAddress = streetAddress.value,
+                                                state = state.value,
+                                                city = city.value,
+                                                district = district.value,
+                                                number = number.value,
+                                                complement = complement.value,
+                                                zipCode = zipCode.value,
+                                                rentalMontlyPrice = 0.0,
+                                                occupied = 0,
+                                                cpflCustomerId = "",
+                                                cpflCurrentCPF = "",
+                                                sanasaCustomerId = "",
+                                                sanasaCurrentCPF = "",
+                                                iptuCartographicCode = "",
+                                                urlGDriveFolder = "",
+                                                deleted = 0)
+                                        )
+                                        openPropertyCreateDialog.value = false
+                                        streetAddress.value = ""
+                                        state.value = ""
+                                        city.value = ""
+                                        district.value = ""
+                                        number.value = ""
+                                        complement.value = ""
+                                        zipCode.value = ""
+                                        showToast("Imóvel adicionado com sucesso!",context)
+                                    } catch (ex: Exception) {
 
-                        } catch (ex: Exception) {
-                            //rentalMontlyPrice = ""
-                            //showToast("Por favor, informe o valor do atendimento.",context)
-                        }
+                                    }
+                                }
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = getButtonColor()
@@ -357,6 +385,13 @@ fun PropertyCreateScreen(
                 Button(
                     onClick = {
                         openPropertyCreateDialog.value = false
+                        streetAddress.value = ""
+                        state.value = ""
+                        city.value = ""
+                        district.value = ""
+                        number.value = ""
+                        complement.value = ""
+                        zipCode.value = ""
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = getButtonColor()
@@ -432,10 +467,12 @@ fun PropertyCreateScreen(
                                         Text(
                                             text =logradouro
                                         )
-                                        if (address.unidade.isNotEmpty())
-                                        Text(
-                                            text = address.unidade
-                                        )
+                                        if (address.unidade.isNotEmpty()){
+                                            Text(
+                                                text = address.unidade
+                                            )
+                                        }
+
                                         Text(
                                             text = address.bairro + " - " + address.localidade + " - " + address.uf
                                         )
@@ -586,6 +623,10 @@ fun fillCEPByAddress(openCEPListDialog: MutableState<Boolean>) {
     }
     )
 }
+
+//https://cdn.apicep.com/file/apicep/13084-778.json
+//https://viacep.com.br/ws/SP/Campinas/Tranquillo+Prosperi/json/
+//https://viacep.com.br/ws/13148218/json/
 
 data class Address(
     var cep: String,

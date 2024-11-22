@@ -16,9 +16,9 @@ class PropertyViewModel @Inject internal constructor(
     private val repository: PropertyRepository
 ) : ViewModel() {
 
-    var patients = repository.getPropertys()
+    var properties = repository.getProperties()
 
-    var activePropertys = repository.getActivePropertys()
+    var activeProperties = repository.getActiveProperties()
 
     fun getProperty(id:Long) = repository.getProperty(id)
 
@@ -28,7 +28,7 @@ class PropertyViewModel @Inject internal constructor(
 
     fun refreshData() {
         try {
-            patients = repository.getPropertys()
+            properties = repository.getProperties()
         } catch (e: Exception) {
             e.printStackTrace()
         }

@@ -48,14 +48,14 @@ import kotlinx.coroutines.flow.Flow
 @Composable
 fun PropertiesScreen(
 ) {
-    var patientViewModel: PropertyViewModel = hiltViewModel()
+    var propertyViewModel: PropertyViewModel = hiltViewModel()
     var monthlyBillingViewModel: MonthlyBillingViewModel = hiltViewModel()
     var receiptViewModel: ReceiptViewModel = hiltViewModel()
     var receiptPDFViewModel: ReceiptPDFViewModel = hiltViewModel()
-    val patients = patientViewModel.activePropertys
+    val properties = propertyViewModel.activeProperties
     PropertiesScreen(
-        patientsFlow = patients,
-        patientViewModel = patientViewModel,
+        propertiesFlow = properties,
+        propertyViewModel = propertyViewModel,
         monthlyBillingViewModel = monthlyBillingViewModel,
         receiptViewModel = receiptViewModel,
         receiptPDFViewModel = receiptPDFViewModel
@@ -64,8 +64,8 @@ fun PropertiesScreen(
 
 @Composable
 fun PropertiesScreen(
-    patientsFlow: Flow<List<Property>>,
-    patientViewModel: PropertyViewModel,
+    propertiesFlow: Flow<List<Property>>,
+    propertyViewModel: PropertyViewModel,
     monthlyBillingViewModel: MonthlyBillingViewModel,
     receiptViewModel: ReceiptViewModel,
     receiptPDFViewModel: ReceiptPDFViewModel
@@ -76,7 +76,7 @@ fun PropertiesScreen(
     var propertyId = remember { mutableStateOf(0L) }
 
     val context = LocalContext.current
-    val patients by patientsFlow.collectAsStateWithLifecycle(initialValue = emptyList())
+    val patients by propertiesFlow.collectAsStateWithLifecycle(initialValue = emptyList())
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -182,7 +182,7 @@ fun PropertiesScreen(
             openPropertyDetailDialog.value -> {
                 PropertyDetailScreen(
                     openPropertyDetailDialog,
-                    patientViewModel,
+                    propertyViewModel,
                     monthlyBillingViewModel,
                     receiptViewModel,
                     receiptPDFViewModel,
@@ -193,7 +193,7 @@ fun PropertiesScreen(
         }
         when {
             openPropertyCreateDialog.value -> {
-                PropertyCreateScreen(openPropertyCreateDialog, patientViewModel, context)
+                PropertyCreateScreen(openPropertyCreateDialog, propertyViewModel, context)
             }
         }
     }
