@@ -23,6 +23,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -35,7 +36,27 @@ import com.apps.gtorettirsm.compose.utils.screenToDouble
 import com.apps.gtorettirsm.compose.utils.showToast
 import com.apps.gtorettirsm.data.Property
 import com.apps.gtorettirsm.viewmodels.PropertyViewModel
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
+import org.json.JSONObject
 
+import java.io.IOException
+import java.util.Calendar
+
+
+val streetAddress = mutableStateOf("")
+val state = mutableStateOf("")
+val city = mutableStateOf("")
+val district = mutableStateOf("")
+val number = mutableStateOf("")
+val complement = mutableStateOf("")
+val zipCode = mutableStateOf("")
+val toastThis = mutableStateOf("")
 
 @Composable
 fun PropertyCreateScreen(
@@ -44,8 +65,10 @@ fun PropertyCreateScreen(
     context: Context
 ) {
 
-    var address by remember { mutableStateOf("") }
-    var rentalMontlyPrice by remember { mutableStateOf("") }
+    if (toastThis.value.isNotEmpty()){
+        showToast(toastThis.value.toString(),context)
+        toastThis.value = ""
+    }
 
     if (openPropertyCreateDialog.value) {
         AlertDialog(
@@ -55,7 +78,7 @@ fun PropertyCreateScreen(
             },
             modifier = Modifier
                 .width(550.dp)
-                .height(550.dp),
+                .height(750.dp),
 
             title = {
                 Text(
@@ -74,19 +97,61 @@ fun PropertyCreateScreen(
                     verticalArrangement = Arrangement.spacedBy(10.dp)
 
                 ) {
+
+
+
                     OutlinedTextField(
-                        value = address,
+                        value = zipCode.value,
                         onValueChange = {
-                            address = it
+                            zipCode.value = it
                         },
                         textStyle = TextStyle(
                             fontSize = 16.sp,
                             color = getTextColor(),
                             fontWeight = FontWeight.Normal
-                        ),placeholder = {Text("Endereço completo.")},
+                        ),placeholder = {Text("00000-000")},
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Number
+                        ),
                         label = {
                             Text(
-                                text = "Endereço completo",
+                                text = "CEP:",
+                                style = TextStyle(
+                                    color = getTextColor(),fontSize = 12.sp,
+                                )
+                            )
+                        }
+                    )
+
+                    Button(
+                        onClick = {
+                            fillAddressByCEP()
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = getButtonColor()
+                        ),modifier = Modifier.height(30.dp)
+                    ) {
+                        Text(
+                            text = "Preencher endereço usando CEP",
+                            style = TextStyle(
+                                fontSize = 14.sp,
+                            )
+                        )
+                    }
+
+                    OutlinedTextField(
+                        value = streetAddress.value,
+                        onValueChange = {
+                            streetAddress.value = it
+                        },
+                        textStyle = TextStyle(
+                            fontSize = 16.sp,
+                            color = getTextColor(),
+                            fontWeight = FontWeight.Normal
+                        ),placeholder = {Text("Nome do Logradouro")},
+                        label = {
+                            Text(
+                                text = "Logradouro:",
                                 style = TextStyle(
                                     color = getTextColor(),fontSize = 12.sp,
                                 )
@@ -95,9 +160,49 @@ fun PropertyCreateScreen(
                     )
 
                     OutlinedTextField(
-                        value = rentalMontlyPrice,
+                        value = district.value,
                         onValueChange = {
-                            rentalMontlyPrice = it
+                            district.value = it
+                        },
+                        textStyle = TextStyle(
+                            fontSize = 16.sp,
+                            color = getTextColor(),
+                            fontWeight = FontWeight.Normal
+                        ),placeholder = {Text("Nome do Bairro")},
+                        label = {
+                            Text(
+                                text = "Bairro:",
+                                style = TextStyle(
+                                    color = getTextColor(),fontSize = 12.sp,
+                                )
+                            )
+                        }
+                    )
+
+                    OutlinedTextField(
+                        value = city.value,
+                        onValueChange = {
+                            city.value = it
+                        },
+                        textStyle = TextStyle(
+                            fontSize = 16.sp,
+                            color = getTextColor(),
+                            fontWeight = FontWeight.Normal
+                        ),placeholder = {Text("Nome da Cidade")},
+                        label = {
+                            Text(
+                                text = "Cidade:",
+                                style = TextStyle(
+                                    color = getTextColor(),fontSize = 12.sp,
+                                )
+                            )
+                        }
+                    )
+
+                    OutlinedTextField(
+                        value = state.value,
+                        onValueChange = {
+                            state.value = it
                         },
                         textStyle = TextStyle(
                             fontSize = 16.sp,
@@ -106,44 +211,110 @@ fun PropertyCreateScreen(
                         ),
                         label = {
                             Text(
-                                text = "Valor mensal do aluguel",
+                                text = "UF:",
                                 style = TextStyle(
                                     color = getTextColor(),fontSize = 12.sp
                                 )
                             )
                         },
-                        placeholder = {Text("Informe aqui o valor mensal do aluguel.")},
+                        placeholder = {Text("UF (exemplo: SP).")},
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Number
+                        )
+                    )
+
+                    Button(
+                        onClick = {
+                            fillCEPByAddress()
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = getButtonColor()
+                        ),modifier = Modifier.height(30.dp)
+                    ) {
+                        Text(
+                            text = "Procurar CEP usando endereço",
+                            style = TextStyle(
+                                fontSize = 14.sp,
+                            )
+                        )
+                    }
+
+                    OutlinedTextField(
+                        value = number.value,
+                        onValueChange = {
+                            number.value = it
+                        },
+                        textStyle = TextStyle(
+                            fontSize = 16.sp,
+                            color = getTextColor(),
+                            fontWeight = FontWeight.Normal
+                        ),
+                        label = {
+                            Text(
+                                text = "Número:",
+                                style = TextStyle(
+                                    color = getTextColor(),fontSize = 12.sp
+                                )
+                            )
+                        },
+                        placeholder = {Text("Número.")},
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Number
+                        )
+                    )
+
+                    OutlinedTextField(
+                        value = complement.value,
+                        onValueChange = {
+                            complement.value = it
+                        },
+                        textStyle = TextStyle(
+                            fontSize = 16.sp,
+                            color = getTextColor(),
+                            fontWeight = FontWeight.Normal
+                        ),
+                        label = {
+                            Text(
+                                text = "Complemento:",
+                                style = TextStyle(
+                                    color = getTextColor(),fontSize = 12.sp
+                                )
+                            )
+                        },
+                        placeholder = {Text("Complemento.")},
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Decimal
                         )
                     )
+
+
                 }
 
             },
             confirmButton = {
                 Button(
                     onClick = {
-                        if (address.isEmpty() || address.isBlank()){
-                            showToast("Por favor, informe o endereço do imóvel.",context)
-                        }else
-                            if (rentalMontlyPrice.isEmpty() || rentalMontlyPrice.isBlank()){
-                            showToast("Por favor, informe o valor mensal do aluguel.",context)
-                        }else
+                        //if (address.isEmpty() || address.isBlank()){
+                        //    showToast("Por favor, informe o endereço do imóvel.",context)
+                        //}else
+                        //    if (rentalMontlyPrice.isEmpty() || rentalMontlyPrice.isBlank()){
+                        //    showToast("Por favor, informe o valor mensal do aluguel.",context)
+                        //}else
                         try {
-                            patientViewModel.saveProperty(
-                                Property(
-                                    propertyId = 0,
-                                    address = address,
-                                    rentalMontlyPrice = rentalMontlyPrice.screenToDouble(),
-                                    deleted = 0
-                                )
-                            )
+                            //patientViewModel.saveProperty(
+                            //    Property(
+                            //        propertyId = 0,
+                            //        streetAddress = address,
+                            //        rentalMontlyPrice = rentalMontlyPrice.screenToDouble(),
+                            //        deleted = 0
+                            //    )
+                            //)
                             openPropertyCreateDialog.value = false
                             showToast("Informações salvas com sucesso!",context)
 
-                        } catch (ex: NumberFormatException) {
-                            rentalMontlyPrice = ""
-                            showToast("Por favor, informe o valor do atendimento.",context)
+                        } catch (ex: Exception) {
+                            //rentalMontlyPrice = ""
+                            //showToast("Por favor, informe o valor do atendimento.",context)
                         }
                     },
                     colors = ButtonDefaults.buttonColors(
@@ -178,3 +349,109 @@ fun PropertyCreateScreen(
     }
 }
 
+
+fun fillAddressByCEP() {
+
+    var request = Request.Builder()
+        .url("https://viacep.com.br/ws/"+ zipCode.value.trimStart()
+            .trimEnd().replace("-","").replace(" ","")
+            .replace(",","").replace(".","") +"/json/")
+        .build()
+
+    val client = OkHttpClient()
+
+    client.newCall(request).enqueue(object : Callback {
+        override fun onFailure(call: Call, e: IOException) {}
+        override fun onResponse(call: Call, response: Response) {
+
+            try {
+                val jsonObj = JSONObject(response.body?.string())
+                if (jsonObj.has("erro")){
+                    streetAddress.value = ""
+                    state.value = ""
+                    city.value = ""
+                    district.value = ""
+                    zipCode.value = ""
+                    toastThis.value = "CEP não encontrado."
+                }else {
+                    streetAddress.value = jsonObj.get("logradouro").toString()
+                    state.value = jsonObj.get("uf").toString()
+                    city.value = jsonObj.get("localidade").toString()
+                    district.value = jsonObj.get("bairro").toString()
+                    zipCode.value = jsonObj.get("cep").toString()
+                    toastThis.value = "CEP encontrado com sucesso."
+                }
+            }catch (e: Exception){
+                streetAddress.value = ""
+                state.value = ""
+                city.value = ""
+                district.value = ""
+                zipCode.value = ""
+                toastThis.value = "CEP não encontrado."
+            }
+        }
+    }
+    )
+}
+
+fun fillCEPByAddress() {
+
+    var request = Request.Builder()
+        .url("https://viacep.com.br/ws/SP/Paulinia/Alexandre+Cazelatto/json/")
+        .build()
+
+    val client = OkHttpClient()
+
+    client.newCall(request).enqueue(object : Callback {
+        override fun onFailure(call: Call, e: IOException) {}
+        override fun onResponse(call: Call, response: Response) {
+
+            try {
+
+                val json = response.body?.string()
+                val typeToken = object : TypeToken<List<Address>>() {}.type
+                val adresses = Gson().fromJson<List<Address>>(json, typeToken)
+
+                println("adresses.size "+adresses.size)
+println(adresses)
+
+                if (adresses.isEmpty()){
+                    streetAddress.value = ""
+                    state.value = ""
+                    city.value = ""
+                    district.value = ""
+                    zipCode.value = ""
+                    toastThis.value = "Endereço não encontrado."
+                }else
+                if (adresses.size==1) {
+                    streetAddress.value = adresses.get(0).logradouro
+                    state.value = adresses.get(0).uf
+                    city.value = adresses.get(0).localidade
+                    district.value = adresses.get(0).bairro
+                    zipCode.value = adresses.get(0).cep
+                    toastThis.value = "Endereço encontrado com sucesso."
+                }else{
+                    toastThis.value = "Vários endereços encontrados."
+                }
+            }catch (e: Exception){
+                e.printStackTrace()
+                streetAddress.value = ""
+                state.value = ""
+                city.value = ""
+                district.value = ""
+                zipCode.value = ""
+                toastThis.value = "Endereço não encontrado."
+            }
+        }
+    }
+    )
+}
+
+data class Address(
+    var cep: String,
+    var logradouro: String,
+    var bairro: String,
+    var localidade: String,
+    var uf: String,
+ ) {
+}

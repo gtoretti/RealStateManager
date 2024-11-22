@@ -259,7 +259,7 @@ fun generateReceipt(
         .replace(".", ",") + " (" + receiptTotalValue.toWords(
         "pt",
         "BR"
-    ) + " reais) referente a " + qtdMonthlyBillings + " " + sessao + " de  para o(a) paciente " + patient.address +", no valor de R$ " + sessionValue.toBigDecimal()
+    ) + " reais) referente a " + qtdMonthlyBillings + " " + sessao + " de  para o(a) paciente " + patient.streetAddress +", no valor de R$ " + sessionValue.toBigDecimal()
         .setScale(2, RoundingMode.UP).toString().replace(
             ".",
             ","
@@ -268,7 +268,7 @@ fun generateReceipt(
     var signingName = profile.name
     var signingCPF =  "CPF:" + profile.cpfCnpj
     var footer = profile.address + ". Telefone: " + profile.phoneNumber
-    var pdfFileName = patient.address.replace(" ","_") + "_" + (receiptDate.get(Calendar.MONTH)+1) + "_" + receiptDate.get(Calendar.YEAR) + "-" + Date().time.milliseconds
+    var pdfFileName = patient.streetAddress.replace(" ","_") + "_" + (receiptDate.get(Calendar.MONTH)+1) + "_" + receiptDate.get(Calendar.YEAR) + "-" + Date().time.milliseconds
 
     //setting received date same as receiptDate just because received date is not null
     var receipt = Receipt(0, receiptDate.time, patient.propertyId, receiptTotalValue, receiptDate.time, 0)

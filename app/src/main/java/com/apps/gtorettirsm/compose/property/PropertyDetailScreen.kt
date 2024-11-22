@@ -106,19 +106,19 @@ fun PropertyDetailScreen(
     val openReceivePaymentDialog = remember { mutableStateOf(false) }
     val openPropertyDeleteDialog = remember { mutableStateOf(false) }
 
-    val patient by patientFlow.collectAsStateWithLifecycle(
-        initialValue = Property(
-            0,
-            "",
-            0.0,
-            0
-        )
-    )
+    //val patient by patientFlow.collectAsStateWithLifecycle(
+    //    initialValue = Property(
+    //        0,
+    //        "",
+    //        0.0,
+    //        0
+    //    )
+    //)
     var address by remember { mutableStateOf("") }
     var rentalMontlyPrice by remember { mutableStateOf("") }
 
-    rentalMontlyPrice = patient.rentalMontlyPrice.toScreen()
-    address = patient.address
+    rentalMontlyPrice = ""//patient.rentalMontlyPrice.toScreen()
+    address = ""//patient.streetAddress
 
 
     var attendedDaysDescr = getAttendedDaysDescr(currentAttendedDays)
@@ -135,7 +135,7 @@ fun PropertyDetailScreen(
 
             title = {
                 Text(
-                    text = "Paciente:",
+                    text = "Informações do Imóvel:",
                     style = TextStyle(
                         color = getTextColor(),
                         fontSize = 18.sp,
@@ -161,10 +161,10 @@ fun PropertyDetailScreen(
                             fontSize = 14.sp,
                             color = getTextColor(),
                             fontWeight = FontWeight.Normal
-                        ),placeholder = {Text("Informe aqui o nome do(a) paciente.")},
+                        ),placeholder = {Text("Endereço completo.")},
                         label = {
                             Text(
-                                text = "Nome",
+                                text = "Endereço completo",
                                 style = TextStyle(
                                     color = getTextColor(),
                                     fontSize = 12.sp,
@@ -183,10 +183,10 @@ fun PropertyDetailScreen(
                             color = getTextColor(),
                             fontWeight = FontWeight.Normal
                         ),
-                        placeholder = {Text("Informe aqui o valor de cada atendimento.")},
+                        placeholder = {Text("Valor mensal do aluguel.")},
                         label = {
                             Text(
-                                text = "Valor do Atendimento",
+                                text = "Valor mensal do aluguel",
                                 style = TextStyle(
                                     color = getTextColor(),
                                     fontSize = 12.sp,
@@ -225,14 +225,14 @@ fun PropertyDetailScreen(
                                     showToast("Por favor, informe o nome do(a) paciente.", context)
                                 } else
                                         try {
-                                            patientViewModel.saveProperty(
-                                                Property(
-                                                    propertyId = patient.propertyId,
-                                                    address = address,
-                                                    rentalMontlyPrice = rentalMontlyPrice.screenToDouble(),
-                                                    deleted = 0
-                                                )
-                                            )
+                                            //patientViewModel.saveProperty(
+                                            //    Property(
+                                            //        propertyId = patient.propertyId,
+                                            //        address = address,
+                                            //        rentalMontlyPrice = rentalMontlyPrice.screenToDouble(),
+                                            //        deleted = 0
+                                            //    )
+                                            //)
                                             openPropertyDetailDialog.value = false
                                             showToast("Informações salvas com sucesso!", context)
                                         } catch (ex: NumberFormatException) {
@@ -266,7 +266,7 @@ fun PropertyDetailScreen(
 
 
                     Text(
-                        text = "Atendimentos realizados:",
+                        text = "Manutenções realizadas:",
                         style = TextStyle(
                             color = getTextColor(),
                             fontSize = 16.sp,
@@ -356,7 +356,7 @@ fun PropertyDetailScreen(
                     HorizontalDivider(thickness = 2.dp)
 
                     Text(
-                        text = "Recibos do paciente:",
+                        text = "Recibos de cobrança para o locatário:",
                         style = TextStyle(
                             color = getTextColor(),
                             fontSize = 16.sp,
@@ -464,56 +464,56 @@ fun PropertyDetailScreen(
         )
         when {
             openPropertyDetailDatePickerDialog.value -> {
-                PropertyDetailDatePickerDialog(
-                    openPropertyDetailDatePickerDialog = openPropertyDetailDatePickerDialog,
-                    monthlyBillingViewModel = monthlyBillingViewModel,
-                    patient = patient,
-                    context = context
-                )
+                //PropertyDetailDatePickerDialog(
+                //    openPropertyDetailDatePickerDialog = openPropertyDetailDatePickerDialog,
+                //    monthlyBillingViewModel = monthlyBillingViewModel,
+                //    patient = patient,
+                //    context = context
+               // )
             }
         }
         when {
             openPropertyDetailDeleteMonthlyBillingDialog.value -> {
-                PropertyDetailDeleteMonthlyBillingDialog(
-                    openPropertyDetailDeleteServingDialog = openPropertyDetailDeleteMonthlyBillingDialog,
-                    monthlyBillingViewModel = monthlyBillingViewModel,
-                    allAttendedDays = allAttendedDays,
-                    patient = patient,
-                    context = context
-                )
+                //PropertyDetailDeleteMonthlyBillingDialog(
+                //    openPropertyDetailDeleteServingDialog = openPropertyDetailDeleteMonthlyBillingDialog,
+                //    monthlyBillingViewModel = monthlyBillingViewModel,
+                //    allAttendedDays = allAttendedDays,
+                //    patient = patient,
+                //    context = context
+                //)
             }
         }
         when {
             openPropertyReceiptsDialog.value -> {
-                PropertyNewReceiptDialog(
-                    openPropertyReceiptsDialog = openPropertyReceiptsDialog,
-                    currentAttendedDays = currentAttendedDays,
-                    patient = patient,
-                    context = context
-                )
+                //PropertyNewReceiptDialog(
+                //    openPropertyReceiptsDialog = openPropertyReceiptsDialog,
+                //    currentAttendedDays = currentAttendedDays,
+                //    patient = patient,
+                //    context = context
+               // )
             }
         }
         when {
             openReceivePaymentDialog.value -> {
-                PropertyReceivePaymentDialog(
-                    openReceivePaymentDialog = openReceivePaymentDialog,
-                    unpaids = unpaids,
-                    receiptViewModel = receiptViewModel,
-                    receiptPDFViewModel = receiptPDFViewModel,
-                    patient = patient,
-                    context = context,
-                )
+                //PropertyReceivePaymentDialog(
+                //    openReceivePaymentDialog = openReceivePaymentDialog,
+                //    unpaids = unpaids,
+                //    receiptViewModel = receiptViewModel,
+                //    receiptPDFViewModel = receiptPDFViewModel,
+                //    patient = patient,
+                //    context = context,
+               // )
             }
         }
         when {
             openPropertyDeleteDialog.value -> {
-                PropertyDeleteDialog(
-                    openPropertyDeleteDialog = openPropertyDeleteDialog,
-                    patientViewModel = patientViewModel,
-                    openPropertyDetailDialog = openPropertyDetailDialog,
-                    patient = patient,
-                    context = context,
-                )
+                //PropertyDeleteDialog(
+                //    openPropertyDeleteDialog = openPropertyDeleteDialog,
+                //    patientViewModel = patientViewModel,
+                //    openPropertyDetailDialog = openPropertyDetailDialog,
+                //    patient = patient,
+                //    context = context,
+               // )
             }
         }
     }

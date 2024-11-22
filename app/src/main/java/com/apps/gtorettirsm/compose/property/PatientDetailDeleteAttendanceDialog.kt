@@ -83,7 +83,7 @@ fun PropertyDetailDeleteMonthlyBillingDialog(
 
                 ) {
                     Text(
-                        text = patient.address,
+                        text = patient.streetAddress,
                         style = TextStyle(
                             color = getTextColor(),
 

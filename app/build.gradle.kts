@@ -92,6 +92,7 @@ androidComponents {
 }
 
 dependencies {
+  implementation(libs.okhttp)
   ksp(libs.androidx.room.compiler)
   ksp(libs.hilt.android.compiler)
   implementation(libs.androidx.core.ktx)
@@ -111,6 +112,7 @@ dependencies {
   implementation(libs.hilt.android)
   implementation(libs.hilt.navigation.compose)
   implementation(libs.androidx.profileinstaller)
+
 
   // Compose
   implementation(platform(libs.androidx.compose.bom))

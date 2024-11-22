@@ -13,10 +13,10 @@ import kotlinx.coroutines.flow.Flow
  */
 @Dao
 interface PropertyDao {
-    @Query("SELECT * FROM property ORDER BY address")
+    @Query("SELECT * FROM property ORDER BY streetAddress")
     fun getProperties(): Flow<List<Property>>
 
-    @Query("SELECT * FROM property where deleted = 0 ORDER BY address")
+    @Query("SELECT * FROM property where deleted = 0 ORDER BY streetAddress")
     fun getActiveProperties(): Flow<List<Property>>
 
     @Query("SELECT * FROM property where id = :id")

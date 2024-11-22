@@ -93,7 +93,7 @@ fun PropertyReceivePaymentDialog(
 
                 ) {
                     Text(
-                        text = patient.address, style = TextStyle(
+                        text = patient.streetAddress, style = TextStyle(
                             color = getTextColor(),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,

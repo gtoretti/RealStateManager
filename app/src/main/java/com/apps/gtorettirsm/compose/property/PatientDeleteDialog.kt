@@ -64,7 +64,7 @@ fun PropertyDeleteDialog(
 
                 ) {
                     Text(
-                        text = patient.address,
+                        text = patient.streetAddress,
                         style = TextStyle(
                             color = getTextColor(),
                             fontSize = 16.sp,
