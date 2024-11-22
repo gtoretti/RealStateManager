@@ -115,7 +115,6 @@ dependencies {
 
 
   // Compose
-  implementation(platform(libs.androidx.compose.bom))
   implementation(libs.androidx.activity.compose)
   implementation(libs.androidx.constraintlayout.compose)
   implementation(libs.androidx.compose.runtime)
@@ -131,6 +130,8 @@ dependencies {
   implementation(libs.glide)
   implementation(libs.accompanist.systemuicontroller)
   debugImplementation(libs.androidx.compose.ui.tooling)
+
+
 
   // Testing dependencies
   debugImplementation(libs.androidx.monitor)

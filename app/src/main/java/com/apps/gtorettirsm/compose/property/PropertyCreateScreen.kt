@@ -6,30 +6,40 @@ package com.apps.gtorettirsm.compose.property
 import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.apps.gtorettirsm.compose.utils.DrawScrollableView
 import com.apps.gtorettirsm.compose.utils.getButtonColor
 import com.apps.gtorettirsm.compose.utils.getTextColor
 import com.apps.gtorettirsm.compose.utils.screenToDouble
@@ -46,6 +56,7 @@ import okhttp3.Response
 import org.json.JSONObject
 
 import java.io.IOException
+import java.text.SimpleDateFormat
 import java.util.Calendar
 
 
@@ -57,17 +68,23 @@ val number = mutableStateOf("")
 val complement = mutableStateOf("")
 val zipCode = mutableStateOf("")
 val toastThis = mutableStateOf("")
+val adresses = mutableStateListOf(Address("","","","","",  "",""))
 
 @Composable
 fun PropertyCreateScreen(
     openPropertyCreateDialog: MutableState<Boolean>,
-    patientViewModel: PropertyViewModel,
+    propertyViewModel: PropertyViewModel,
     context: Context
 ) {
 
     if (toastThis.value.isNotEmpty()){
         showToast(toastThis.value.toString(),context)
         toastThis.value = ""
+    }
+
+    var openCEPListDialog = remember { mutableStateOf(false) }
+    if (adresses.size==1 && adresses.get(0).cep.isEmpty()) {
+        adresses.removeAll(adresses.toList())
     }
 
     if (openPropertyCreateDialog.value) {
@@ -98,8 +115,6 @@ fun PropertyCreateScreen(
 
                 ) {
 
-
-
                     OutlinedTextField(
                         value = zipCode.value,
                         onValueChange = {
@@ -125,7 +140,11 @@ fun PropertyCreateScreen(
 
                     Button(
                         onClick = {
-                            fillAddressByCEP()
+                            if (zipCode.value.isEmpty()){
+                                toastThis.value= "Por favor, informe o CEP."
+                            }else{
+                                fillAddressByCEP()
+                            }
                         },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = getButtonColor()
@@ -218,14 +237,23 @@ fun PropertyCreateScreen(
                             )
                         },
                         placeholder = {Text("UF (exemplo: SP).")},
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Number
-                        )
                     )
 
                     Button(
                         onClick = {
-                            fillCEPByAddress()
+
+                            if (streetAddress.value.isEmpty()){
+                                toastThis.value= "Por favor, informe o logradouro."
+                            }else
+                                if (city.value.isEmpty()){
+                                    toastThis.value= "Por favor, informe a cidade."
+                                }else
+                                if (state.value.isEmpty()){
+                                    toastThis.value= "Por favor, informe o UF."
+                                }else
+                            {
+                                fillCEPByAddress(openCEPListDialog)
+                            }
                         },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = getButtonColor()
@@ -282,9 +310,6 @@ fun PropertyCreateScreen(
                             )
                         },
                         placeholder = {Text("Complemento.")},
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Decimal
-                        )
                     )
 
 
@@ -310,7 +335,7 @@ fun PropertyCreateScreen(
                             //    )
                             //)
                             openPropertyCreateDialog.value = false
-                            showToast("Informações salvas com sucesso!",context)
+                            showToast("Informações registradas com sucesso!",context)
 
                         } catch (ex: Exception) {
                             //rentalMontlyPrice = ""
@@ -347,10 +372,135 @@ fun PropertyCreateScreen(
             }
         )
     }
+
+
+    if (openCEPListDialog.value) {
+
+        AlertDialog(
+            shape = RoundedCornerShape(10.dp),
+            onDismissRequest = {
+                openCEPListDialog.value = false
+            },
+            modifier = Modifier
+                .width(550.dp)
+                .height(750.dp),
+
+            title = {
+                Text(
+                    text = "CEPs encontrados:",
+                    style = TextStyle(
+                        color = getTextColor(),
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        fontFamily = FontFamily.SansSerif,
+                    )
+                )
+            },
+            text = {
+
+                Column(
+                    horizontalAlignment = Alignment.Start,
+                    modifier = Modifier
+                        .height(700.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+
+                    DrawScrollableView(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxHeight(),
+                        content = {
+                            Column {
+
+                                adresses.forEach { address ->
+                                    Column(
+                                        horizontalAlignment = Alignment.Start,
+                                        verticalArrangement = Arrangement.spacedBy(2.dp)
+
+                                    ) {
+                                        var logradouro = address.logradouro
+                                        if (address.complemento.isNotEmpty())
+                                            logradouro = logradouro + " - " + address.complemento
+                                        Text(
+                                            text = address.cep + ": ", style = TextStyle(
+
+                                                fontWeight = FontWeight.Bold,
+                                                fontFamily = FontFamily.SansSerif,
+                                                )
+                                            )
+
+                                        Text(
+                                            text =logradouro
+                                        )
+                                        if (address.unidade.isNotEmpty())
+                                        Text(
+                                            text = address.unidade
+                                        )
+                                        Text(
+                                            text = address.bairro + " - " + address.localidade + " - " + address.uf
+                                        )
+
+                                        Button(
+                                            onClick = {
+
+                                                streetAddress.value = address.logradouro
+                                                state.value = address.uf
+                                                city.value = address.localidade
+                                                district.value = address.bairro
+                                                zipCode.value = address.cep
+
+                                                openCEPListDialog.value = false
+                                            },
+                                            colors = ButtonDefaults.buttonColors(
+                                                containerColor = getButtonColor()
+                                            ),modifier = Modifier.height(30.dp)
+                                        ) {
+                                            Text(
+                                                text = "Confirmar",
+                                                style = TextStyle(
+                                                    fontSize = 12.sp,
+                                                )
+                                            )
+                                        }
+                                        HorizontalDivider(thickness = 2.dp)
+
+                                    }
+
+                                }
+                            }
+                        }
+                    )
+                }
+
+            },
+            confirmButton = {
+
+
+            }, dismissButton = {
+                Button(
+                    onClick = {
+                        openCEPListDialog.value = false
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = getButtonColor()
+                    ),modifier = Modifier.height(30.dp)
+                ) {
+                    Text(
+                        text = "Cancelar",
+                        style = TextStyle(
+                            fontSize = 14.sp,
+                        )
+                    )
+                }
+            }
+        )
+
+    }
 }
 
-
 fun fillAddressByCEP() {
+
+    toastThis.value = "Pesquisando CEP. Por favor aguarde."
 
     var request = Request.Builder()
         .url("https://viacep.com.br/ws/"+ zipCode.value.trimStart()
@@ -367,12 +517,7 @@ fun fillAddressByCEP() {
             try {
                 val jsonObj = JSONObject(response.body?.string())
                 if (jsonObj.has("erro")){
-                    streetAddress.value = ""
-                    state.value = ""
-                    city.value = ""
-                    district.value = ""
-                    zipCode.value = ""
-                    toastThis.value = "CEP não encontrado."
+                    toastThis.value = "Endereço não encontrado."
                 }else {
                     streetAddress.value = jsonObj.get("logradouro").toString()
                     state.value = jsonObj.get("uf").toString()
@@ -382,22 +527,25 @@ fun fillAddressByCEP() {
                     toastThis.value = "CEP encontrado com sucesso."
                 }
             }catch (e: Exception){
-                streetAddress.value = ""
-                state.value = ""
-                city.value = ""
-                district.value = ""
-                zipCode.value = ""
-                toastThis.value = "CEP não encontrado."
+                toastThis.value = "Endereço não encontrado."
             }
         }
     }
     )
 }
 
-fun fillCEPByAddress() {
+fun fillCEPByAddress(openCEPListDialog: MutableState<Boolean>) {
+
+    toastThis.value = "Pesquisando CEP. Por favor aguarde."
+
+    var url = "https://viacep.com.br/ws/"+
+            state.value + "/" +
+            city.value + "/" +
+            streetAddress.value.trimStart().trimEnd().replace(" ","+") + "/" +
+            "json/"
 
     var request = Request.Builder()
-        .url("https://viacep.com.br/ws/SP/Paulinia/Alexandre+Cazelatto/json/")
+        .url(url)
         .build()
 
     val client = OkHttpClient()
@@ -410,18 +558,15 @@ fun fillCEPByAddress() {
 
                 val json = response.body?.string()
                 val typeToken = object : TypeToken<List<Address>>() {}.type
-                val adresses = Gson().fromJson<List<Address>>(json, typeToken)
 
-                println("adresses.size "+adresses.size)
-println(adresses)
+                val newAdresses = Gson().fromJson<List<Address>>(json, typeToken)
+                adresses.removeAll(adresses.toList())
+                newAdresses.forEach { attend ->
+                    adresses.add(attend)
+                }
 
                 if (adresses.isEmpty()){
-                    streetAddress.value = ""
-                    state.value = ""
-                    city.value = ""
-                    district.value = ""
-                    zipCode.value = ""
-                    toastThis.value = "Endereço não encontrado."
+                    toastThis.value = "CEP não encontrado."
                 }else
                 if (adresses.size==1) {
                     streetAddress.value = adresses.get(0).logradouro
@@ -429,18 +574,13 @@ println(adresses)
                     city.value = adresses.get(0).localidade
                     district.value = adresses.get(0).bairro
                     zipCode.value = adresses.get(0).cep
-                    toastThis.value = "Endereço encontrado com sucesso."
+                    toastThis.value = "CEP encontrado com sucesso."
                 }else{
-                    toastThis.value = "Vários endereços encontrados."
+                    openCEPListDialog.value = true
                 }
             }catch (e: Exception){
                 e.printStackTrace()
-                streetAddress.value = ""
-                state.value = ""
-                city.value = ""
-                district.value = ""
-                zipCode.value = ""
-                toastThis.value = "Endereço não encontrado."
+                toastThis.value = "CEP não encontrado."
             }
         }
     }
@@ -453,5 +593,8 @@ data class Address(
     var bairro: String,
     var localidade: String,
     var uf: String,
+    var complemento: String,
+    var unidade: String,
  ) {
 }
+
