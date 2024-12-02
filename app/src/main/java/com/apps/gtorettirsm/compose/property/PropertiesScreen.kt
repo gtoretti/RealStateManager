@@ -32,6 +32,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -76,7 +77,7 @@ fun PropertiesScreen(
     var propertyId = remember { mutableStateOf(0L) }
 
     val context = LocalContext.current
-    val patients by propertiesFlow.collectAsStateWithLifecycle(initialValue = emptyList())
+    val properties by propertiesFlow.collectAsStateWithLifecycle(initialValue = emptyList())
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -100,7 +101,7 @@ fun PropertiesScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
 
-            if (patients.isEmpty()) {
+            if (properties.isEmpty()) {
                 Text(
                     text = "Para adicionar Imóveis, clique aqui-->",
                     style = TextStyle(
@@ -120,7 +121,7 @@ fun PropertiesScreen(
             ) {
                 Icon(
                     imageVector = Icons.Filled.AddCircle,
-                    contentDescription = "Adicionar Paciente",
+                    contentDescription = "Adicionar Imóvel",
                     tint = getTextColor(),
                     modifier = Modifier
                         .padding(end = 12.dp)
@@ -136,7 +137,7 @@ fun PropertiesScreen(
         ) {
 
 
-            patients.forEach { item ->
+            properties.forEach { item ->
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -152,25 +153,47 @@ fun PropertiesScreen(
                             role = Role.Button
                         )
                 ) {
-                    Text(
-                        text = item.streetAddress,
-                        style = TextStyle(
-                            color = getTextColor(),
-                            fontSize = 18.sp,
-                            fontFamily = FontFamily.SansSerif,
-                        )
-                    )
-                    TextButton(
-                        modifier = Modifier.padding(5.dp),
-                        onClick =
-                        {
-                            openPropertyDetailDialog.value = true
-                            propertyId.value = item.propertyId
-                        }
+
+
+                    Column(
+                        horizontalAlignment = Alignment.Start,
+                        verticalArrangement = Arrangement.spacedBy(2.dp)
+
                     ) {
+
+                        var streetAddress = item.streetAddress + ", " + item.number
+                        if (item.complement.isNotEmpty())
+                            streetAddress = streetAddress + " - " + item.complement
+
+                        Text(
+                            text = streetAddress
+                        )
+
+                        Text(
+                            text = item.district
+                        )
+                        Text(
+                            text = item.city + " - " + item.state
+                        )
+                        Text(
+                            text = "CEP: "+item.zipCode , style = TextStyle(
+
+                                fontWeight = FontWeight.Bold,
+                                fontFamily = FontFamily.SansSerif,
+                            )
+                        )
+                        TextButton(
+                            modifier = Modifier.padding(5.dp),
+                            onClick =
+                            {
+                                openPropertyDetailDialog.value = true
+                                propertyId.value = item.propertyId
+                            }
+                        ) {
+                        }
+                        HorizontalDivider(thickness = 1.dp)
                     }
                 }
-                HorizontalDivider(thickness = 2.dp)
             }
 
 
@@ -193,7 +216,7 @@ fun PropertiesScreen(
         }
         when {
             openPropertyCreateDialog.value -> {
-                PropertyCreateScreen(openPropertyCreateDialog, propertyViewModel, context)
+                PropertyCreateScreen(openPropertyCreateDialog, propertyViewModel, context, Property(0L,"", "", "", "", "", "", "", 0.0,0,"", "", "", "", "", "" , 0))
             }
         }
     }

@@ -6,33 +6,25 @@ package com.apps.gtorettirsm.compose.property
 import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -42,7 +34,6 @@ import androidx.compose.ui.unit.sp
 import com.apps.gtorettirsm.compose.utils.DrawScrollableView
 import com.apps.gtorettirsm.compose.utils.getButtonColor
 import com.apps.gtorettirsm.compose.utils.getTextColor
-import com.apps.gtorettirsm.compose.utils.screenToDouble
 import com.apps.gtorettirsm.compose.utils.showToast
 import com.apps.gtorettirsm.data.Property
 import com.apps.gtorettirsm.viewmodels.PropertyViewModel
@@ -56,8 +47,6 @@ import okhttp3.Response
 import org.json.JSONObject
 
 import java.io.IOException
-import java.text.SimpleDateFormat
-import java.util.Calendar
 
 
 val streetAddress = mutableStateOf("")
@@ -69,13 +58,26 @@ val complement = mutableStateOf("")
 val zipCode = mutableStateOf("")
 val toastThis = mutableStateOf("")
 val adresses = mutableStateListOf(Address("","","","","",  "",""))
+val loadProperty = mutableStateOf("true")
 
 @Composable
 fun PropertyCreateScreen(
     openPropertyCreateDialog: MutableState<Boolean>,
     propertyViewModel: PropertyViewModel,
-    context: Context
+    context: Context,
+    property: Property
 ) {
+
+    if (property.propertyId!=0L && loadProperty.value.equals("true")){
+        streetAddress.value = property.streetAddress
+        state.value = property.state
+        city.value = property.city
+        district.value = property.district
+        number.value = property.number
+        complement.value = property.complement
+        zipCode.value = property.zipCode
+        loadProperty.value="false"
+    }
 
     if (toastThis.value.isNotEmpty()){
         showToast(toastThis.value.toString(),context)
@@ -98,8 +100,12 @@ fun PropertyCreateScreen(
                 .height(750.dp),
 
             title = {
+                var text = "Adicionar imóvel:"
+                if (property.propertyId!=0L ){
+                    text = "Alterar Endereço do Imóvel:"
+                }
                 Text(
-                    text = "Adicionar imóvel:",
+                    text = text,
                     style = TextStyle(
                         color = getTextColor(),
                         fontSize = 20.sp,
@@ -338,7 +344,7 @@ fun PropertyCreateScreen(
                                     try {
                                         propertyViewModel.saveProperty(
                                             Property(
-                                                propertyId = 0,
+                                                propertyId = property.propertyId,
                                                 streetAddress = streetAddress.value,
                                                 state = state.value,
                                                 city = city.value,
@@ -346,14 +352,14 @@ fun PropertyCreateScreen(
                                                 number = number.value,
                                                 complement = complement.value,
                                                 zipCode = zipCode.value,
-                                                rentalMontlyPrice = 0.0,
-                                                occupied = 0,
-                                                cpflCustomerId = "",
-                                                cpflCurrentCPF = "",
-                                                sanasaCustomerId = "",
-                                                sanasaCurrentCPF = "",
-                                                iptuCartographicCode = "",
-                                                urlGDriveFolder = "",
+                                                rentalMonthlyPrice = property.rentalMonthlyPrice,
+                                                occupied = property.occupied,
+                                                cpflCustomerId = property.cpflCustomerId,
+                                                cpflCurrentCPF = property.cpflCurrentCPF,
+                                                sanasaCustomerId = property.sanasaCustomerId,
+                                                sanasaCurrentCPF = property.sanasaCurrentCPF,
+                                                iptuCartographicCode = property.iptuCartographicCode,
+                                                urlGDriveFolder = property.urlGDriveFolder,
                                                 deleted = 0)
                                         )
                                         openPropertyCreateDialog.value = false
@@ -364,7 +370,13 @@ fun PropertyCreateScreen(
                                         number.value = ""
                                         complement.value = ""
                                         zipCode.value = ""
-                                        showToast("Imóvel adicionado com sucesso!",context)
+                                        loadProperty.value="true"
+                                        if (property.propertyId==0L){
+                                            showToast("Imóvel adicionado com sucesso!",context)
+                                        }else{
+                                            showToast("Endereço alterado com sucesso!",context)
+                                        }
+
                                     } catch (ex: Exception) {
 
                                     }
@@ -392,6 +404,7 @@ fun PropertyCreateScreen(
                         number.value = ""
                         complement.value = ""
                         zipCode.value = ""
+                        loadProperty.value="true"
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = getButtonColor()

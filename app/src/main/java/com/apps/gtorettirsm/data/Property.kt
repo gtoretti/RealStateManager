@@ -17,7 +17,7 @@ data class Property(
     val number: String,
     val complement: String,
     val zipCode: String,
-    val rentalMontlyPrice: Double,
+    val rentalMonthlyPrice: Double,
     val occupied: Int,
     val cpflCustomerId: String,
     val cpflCurrentCPF: String,

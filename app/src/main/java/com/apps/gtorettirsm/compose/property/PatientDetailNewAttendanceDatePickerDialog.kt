@@ -130,7 +130,7 @@ fun PropertyDetailDatePickerDialog(
                                 0,
                                 date.time,
                                 patient.propertyId,
-                                patient.rentalMontlyPrice, 0
+                                patient.rentalMonthlyPrice, 0
                             )
                         )
                         openPropertyDetailDatePickerDialog.value = false

@@ -13,6 +13,6 @@ data class MonthlyBilling(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val monthlyBillingId: Long,
     val date: Date,
     val propertyId: Long,
-    val rentalMontlyPrice: Double,
+    val rentalMonthlyPrice: Double,
     var receiptId: Long,
 )

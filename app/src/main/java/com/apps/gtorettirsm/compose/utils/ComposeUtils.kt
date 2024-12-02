@@ -228,8 +228,8 @@ fun generateReceipt(
     list.forEach { monthlyBilling ->
 
         if (selected.contains(monthlyBilling.monthlyBillingId)) {
-            receiptTotalValue = receiptTotalValue + patient.rentalMontlyPrice
-            sessionValue = monthlyBilling.rentalMontlyPrice
+            receiptTotalValue = receiptTotalValue + patient.rentalMonthlyPrice
+            sessionValue = monthlyBilling.rentalMonthlyPrice
             var attDate = Calendar.getInstance()
             attDate.time = monthlyBilling.date
             daysDescr = daysDescr + attDate.get(Calendar.DAY_OF_MONTH) + " , "

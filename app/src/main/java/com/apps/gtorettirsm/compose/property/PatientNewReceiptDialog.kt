@@ -130,7 +130,7 @@ fun PropertyNewReceiptDialog(
     var receiptTotal = 0.0
     filteredByDateMonthlyBillings.forEach { a ->
         if (select.contains(a.monthlyBillingId)) {
-            receiptTotal = receiptTotal + a.rentalMontlyPrice
+            receiptTotal = receiptTotal + a.rentalMonthlyPrice
         }
     }
 

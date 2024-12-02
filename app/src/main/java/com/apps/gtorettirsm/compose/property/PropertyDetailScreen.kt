@@ -40,9 +40,7 @@ import com.apps.gtorettirsm.compose.utils.DrawScrollableView
 import com.apps.gtorettirsm.compose.utils.getAttendedDaysDescr
 import com.apps.gtorettirsm.compose.utils.getButtonColor
 import com.apps.gtorettirsm.compose.utils.getTextColor
-import com.apps.gtorettirsm.compose.utils.screenToDouble
 import com.apps.gtorettirsm.compose.utils.showToast
-import com.apps.gtorettirsm.compose.utils.toScreen
 import com.apps.gtorettirsm.data.MonthlyBilling
 import com.apps.gtorettirsm.data.Property
 import com.apps.gtorettirsm.data.Receipt
@@ -56,14 +54,14 @@ import kotlinx.coroutines.flow.Flow
 @Composable
 fun PropertyDetailScreen(
     openPropertyDetailDialog: MutableState<Boolean>,
-    patientViewModel: PropertyViewModel = hiltViewModel(),
+    propertyViewModel: PropertyViewModel = hiltViewModel(),
     monthlyBillingViewModel: MonthlyBillingViewModel = hiltViewModel(),
     receiptViewModel: ReceiptViewModel = hiltViewModel(),
     receiptPDFViewModel: ReceiptPDFViewModel = hiltViewModel(),
     propertyId: Long,
     context: Context
 ) {
-    val patient = patientViewModel.getProperty(propertyId)
+    val property = propertyViewModel.getProperty(propertyId)
     val currentMonthlyBillingsFlow =
         monthlyBillingViewModel.getNonReceiptMonthlyBillings(propertyId)
     val currentMonthlyBillings by currentMonthlyBillingsFlow.collectAsStateWithLifecycle(initialValue = emptyList())
@@ -74,8 +72,8 @@ fun PropertyDetailScreen(
 
     PropertyDetailScreen(
         openPropertyDetailDialog = openPropertyDetailDialog,
-        patientFlow = patient,
-        patientViewModel = patientViewModel,
+        propertyFlow = property,
+        propertyViewModel = propertyViewModel,
         monthlyBillingViewModel = monthlyBillingViewModel,
         currentAttendedDays = currentMonthlyBillings,
         allAttendedDays = allMonthlyBillings,
@@ -89,8 +87,8 @@ fun PropertyDetailScreen(
 @Composable
 fun PropertyDetailScreen(
     openPropertyDetailDialog: MutableState<Boolean>,
-    patientFlow: Flow<Property>,
-    patientViewModel: PropertyViewModel,
+    propertyFlow: Flow<Property>,
+    propertyViewModel: PropertyViewModel,
     monthlyBillingViewModel: MonthlyBillingViewModel,
     currentAttendedDays: List<MonthlyBilling>,
     allAttendedDays: List<MonthlyBilling>,
@@ -105,21 +103,12 @@ fun PropertyDetailScreen(
     val openPropertyReceiptsDialog = remember { mutableStateOf(false) }
     val openReceivePaymentDialog = remember { mutableStateOf(false) }
     val openPropertyDeleteDialog = remember { mutableStateOf(false) }
+    var openPropertyChangeAddressDialog = remember { mutableStateOf(false) }
 
-    //val patient by patientFlow.collectAsStateWithLifecycle(
-    //    initialValue = Property(
-    //        0,
-    //        "",
-    //        0.0,
-    //        0
-    //    )
-    //)
-    var address by remember { mutableStateOf("") }
+    val property by propertyFlow.collectAsStateWithLifecycle(
+        initialValue = Property(0,"", "", "", "", "", "", "", 0.0,0,"", "", "", "", "", "" , 0)
+    )
     var rentalMontlyPrice by remember { mutableStateOf("") }
-
-    rentalMontlyPrice = ""//patient.rentalMontlyPrice.toScreen()
-    address = ""//patient.streetAddress
-
 
     var attendedDaysDescr = getAttendedDaysDescr(currentAttendedDays)
 
@@ -152,26 +141,68 @@ fun PropertyDetailScreen(
 
                 ) {
 
-                    OutlinedTextField(
-                        value = address,
-                        onValueChange = {
-                            address = it
-                        },
-                        textStyle = TextStyle(
-                            fontSize = 14.sp,
-                            color = getTextColor(),
-                            fontWeight = FontWeight.Normal
-                        ),placeholder = {Text("Endereço completo.")},
-                        label = {
-                            Text(
-                                text = "Endereço completo",
-                                style = TextStyle(
-                                    color = getTextColor(),
-                                    fontSize = 12.sp,
-                                )
-                            )
-                        }
+                    var streetAddress = property.streetAddress  + ", " + property.number
+                    if (property.complement.isNotEmpty())
+                        streetAddress = streetAddress + " - " + property.complement
+
+                    Text(
+                        text = streetAddress
                     )
+
+                    Text(
+                        text = property.district
+                    )
+                    Text(
+                        text = property.city + " - " + property.state
+                    )
+                    Text(
+                        text = "CEP: "+property.zipCode , style = TextStyle(
+
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = FontFamily.SansSerif,
+                        )
+                    )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                    Button(
+                        onClick = {
+                            openPropertyDeleteDialog.value = true
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = getButtonColor()
+                        ),
+                        modifier = Modifier.height(30.dp)
+                    ) {
+                        Text(
+                            text = "Excluir",
+                            style = TextStyle(
+                                fontSize = 14.sp,
+                            )
+                        )
+                    }
+
+                    Button(
+                        onClick = {
+                            openPropertyChangeAddressDialog.value = true
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = getButtonColor()
+                        ),
+                        modifier = Modifier.height(30.dp)
+                    ) {
+                        Text(
+                            text = "Alterar Endereço",
+                            style = TextStyle(
+                                fontSize = 14.sp,
+                            )
+                        )
+                    }
+                    }
+
+                    HorizontalDivider(thickness = 1.dp)
 
                     OutlinedTextField(
                         value = rentalMontlyPrice,
@@ -221,7 +252,7 @@ fun PropertyDetailScreen(
 
                         Button(
                             onClick = {
-                                if (address.isEmpty() || address.isBlank()) {
+                                if (false) {
                                     showToast("Por favor, informe o nome do(a) paciente.", context)
                                 } else
                                         try {
@@ -514,6 +545,11 @@ fun PropertyDetailScreen(
                 //    patient = patient,
                 //    context = context,
                // )
+            }
+        }
+        when {
+            openPropertyChangeAddressDialog.value -> {
+                PropertyCreateScreen(openPropertyChangeAddressDialog, propertyViewModel, context, property)
             }
         }
     }
