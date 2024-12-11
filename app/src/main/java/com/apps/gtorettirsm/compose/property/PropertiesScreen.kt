@@ -182,15 +182,6 @@ fun PropertiesScreen(
                                 fontFamily = FontFamily.SansSerif,
                             )
                         )
-                        TextButton(
-                            modifier = Modifier.padding(5.dp),
-                            onClick =
-                            {
-                                openPropertyDetailDialog.value = true
-                                propertyId.value = item.propertyId
-                            }
-                        ) {
-                        }
                         HorizontalDivider(thickness = 1.dp)
                     }
                 }

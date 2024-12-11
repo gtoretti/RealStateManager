@@ -203,101 +203,8 @@ fun PropertyDetailScreen(
                     }
 
                     HorizontalDivider(thickness = 1.dp)
-
-                    OutlinedTextField(
-                        value = rentalMontlyPrice,
-                        onValueChange = {
-                            rentalMontlyPrice = it
-                        },
-                        textStyle = TextStyle(
-                            fontSize = 14.sp,
-                            color = getTextColor(),
-                            fontWeight = FontWeight.Normal
-                        ),
-                        placeholder = {Text("Valor mensal do aluguel.")},
-                        label = {
-                            Text(
-                                text = "Valor mensal do aluguel",
-                                style = TextStyle(
-                                    color = getTextColor(),
-                                    fontSize = 12.sp,
-                                )
-                            )
-                        }, keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Decimal
-                        )
-                    )
-
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Button(
-                            onClick = {
-                                openPropertyDeleteDialog.value = true
-                            },
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = getButtonColor()
-                            ),
-                            modifier = Modifier.height(30.dp)
-                        ) {
-                            Text(
-                                text = "Excluir",
-                                style = TextStyle(
-                                    fontSize = 14.sp,
-                                )
-                            )
-                        }
-
-                        Button(
-                            onClick = {
-                                if (false) {
-                                    showToast("Por favor, informe o nome do(a) paciente.", context)
-                                } else
-                                        try {
-                                            //patientViewModel.saveProperty(
-                                            //    Property(
-                                            //        propertyId = patient.propertyId,
-                                            //        address = address,
-                                            //        rentalMontlyPrice = rentalMontlyPrice.screenToDouble(),
-                                            //        deleted = 0
-                                            //    )
-                                            //)
-                                            openPropertyDetailDialog.value = false
-                                            showToast("Informações salvas com sucesso!", context)
-                                        } catch (ex: NumberFormatException) {
-                                            rentalMontlyPrice = ""
-                                            showToast("Por favor, informe o valor do atendimento.", context)
-                                        }
-                            },
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = getButtonColor()
-                            ),
-                            modifier = Modifier.height(30.dp)
-                        ) {
-                            Text(
-                                text = "Salvar",
-                                style = TextStyle(
-                                    fontSize = 14.sp,
-                                )
-                            )
-                        }
-                    }
-
-                    HorizontalDivider(thickness = 2.dp)
-
-                    //scroll
-                    DrawScrollableView(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .fillMaxHeight(),
-                        content = {
-                            Column {
-
-
                     Text(
-                        text = "Manutenções realizadas:",
+                        text = "Documentos do Imóvel no GDrive:",
                         style = TextStyle(
                             color = getTextColor(),
                             fontSize = 16.sp,
@@ -305,69 +212,14 @@ fun PropertyDetailScreen(
                         )
                     )
 
-                    Text(
-                        text = "Atendimentos a serem cobrados no próximo recibo: " + currentAttendedDays.size,
-                        modifier = Modifier.padding(5.dp),
-                        style = TextStyle(
-                            color = getTextColor(),
-                            fontSize = 16.sp,
-                        )
-                    )
-                    if (currentAttendedDays.size > 0) {
-                        Text(
-                            text = "Dias dos atendimentos: (dia/mês)",
-                            modifier = Modifier.padding(5.dp),
-                            style = TextStyle(
-                                color = getTextColor(),
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.Bold,
-                            )
-                        )
-                    }
-
-
-
-
-                                Column {
-                                    Text(
-                                        text = attendedDaysDescr,
-                                        modifier = Modifier.padding(5.dp),
-                                        style = TextStyle(
-                                            color = getTextColor(),
-                                            fontSize = 16.sp,
-                                        )
-                                    )
-                                }
-
-
-
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        if (currentAttendedDays.size > 0) {
-                            Button(
-                                onClick = {
-                                    openPropertyDetailDeleteMonthlyBillingDialog.value = true
-                                },
-                                colors = ButtonDefaults.buttonColors(
-                                    containerColor = getButtonColor()
-                                ),
-                                modifier = Modifier.height(30.dp)
-                            ) {
-                                Text(
-                                    text = "Excluir",
-                                    style = TextStyle(
-                                        fontSize = 14.sp,
-                                    )
-                                )
-                            }
-                        }
-
                         Button(
                             onClick = {
-                                openPropertyDetailDatePickerDialog.value = true
+
                             },
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = getButtonColor()
@@ -375,19 +227,36 @@ fun PropertyDetailScreen(
                             modifier = Modifier.height(30.dp)
                         ) {
                             Text(
-                                text = "Adicionar",
+                                text = "Configurar Pasta",
                                 style = TextStyle(
                                     fontSize = 14.sp,
                                 )
                             )
                         }
 
+                        Button(
+                            onClick = {
+
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = getButtonColor()
+                            ),
+                            modifier = Modifier.height(30.dp)
+                        ) {
+                            Text(
+                                text = "Abrir Pasta",
+                                style = TextStyle(
+                                    fontSize = 14.sp,
+                                )
+                            )
+                        }
                     }
 
-                    HorizontalDivider(thickness = 2.dp)
+                    HorizontalDivider(thickness = 1.dp)
+
 
                     Text(
-                        text = "Recibos de cobrança para o locatário:",
+                        text = "Fluxo de Caixa:",
                         style = TextStyle(
                             color = getTextColor(),
                             fontSize = 16.sp,
@@ -395,54 +264,135 @@ fun PropertyDetailScreen(
                         )
                     )
 
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Button(
+                            onClick = {
+
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = getButtonColor()
+                            ),
+                            modifier = Modifier.height(30.dp)
+                        ) {
+                            Text(
+                                text = "Gastos",
+                                style = TextStyle(
+                                    fontSize = 14.sp,
+                                )
+                            )
+                        }
+
+                        Button(
+                            onClick = {
+
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = getButtonColor()
+                            ),
+                            modifier = Modifier.height(30.dp)
+                        ) {
+                            Text(
+                                text = "Receitas",
+                                style = TextStyle(
+                                    fontSize = 14.sp,
+                                )
+                            )
+                        }
+                    }
+
+                    HorizontalDivider(thickness = 1.dp)
+
                     Text(
-                        text = "Recibos aguardando pagamento: " + unpaids.size,
-                        modifier = Modifier.padding(5.dp),
+                        text = "Instalações Contratadas:",
                         style = TextStyle(
                             color = getTextColor(),
                             fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
                         )
                     )
-
-
-
-
 
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier.fillMaxWidth()
                     ) {
+                        Button(
+                            onClick = {
 
-                        if (unpaids.size > 0) {
-                            Button(
-                                onClick = {
-                                    openReceivePaymentDialog.value = true
-                                },
-                                colors = ButtonDefaults.buttonColors(
-                                    containerColor = getButtonColor()
-                                ),
-                                modifier = Modifier.height(33.dp)
-                            ) {
-                                Text(
-                                    text = "Receber Pagamento / Gerar PDF",
-                                    style = TextStyle(
-                                        fontSize = 14.sp,
-                                    )
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = getButtonColor()
+                            ),
+                            modifier = Modifier.height(30.dp)
+                        ) {
+                            Text(
+                                text = "CPFL",
+                                style = TextStyle(
+                                    fontSize = 14.sp,
                                 )
-                            }
+                            )
                         }
+
+                        Button(
+                            onClick = {
+
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = getButtonColor()
+                            ),
+                            modifier = Modifier.height(30.dp)
+                        ) {
+                            Text(
+                                text = "Sanasa",
+                                style = TextStyle(
+                                    fontSize = 14.sp,
+                                )
+                            )
+                        }
+                    }
+
+                    HorizontalDivider(thickness = 1.dp)
+
+                    Text(
+                        text = "Impostos:",
+                        style = TextStyle(
+                            color = getTextColor(),
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                        )
+                    )
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Button(
+                            onClick = {
+
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = getButtonColor()
+                            ),
+                            modifier = Modifier.height(30.dp)
+                        ) {
+                            Text(
+                                text = "IPTU",
+                                style = TextStyle(
+                                    fontSize = 14.sp,
+                                )
+                            )
+                        }
+
+
 
                     }
 
-
-
-
-                    }})
-
-
-
-
+                    HorizontalDivider(thickness = 1.dp)
 
                 }
             },
@@ -472,24 +422,6 @@ fun PropertyDetailScreen(
                         )
                     }
 
-                    if (currentAttendedDays.size > 0) {
-                        Button(
-                            onClick = {
-                                openPropertyReceiptsDialog.value = true
-                            },
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = getButtonColor()
-                            ),
-                            modifier = Modifier.height(30.dp)
-                        ) {
-                            Text(
-                                text = "Criar recibo",
-                                style = TextStyle(
-                                    fontSize = 14.sp,
-                                )
-                            )
-                        }
-                    }
                 }
             }
         )
@@ -554,3 +486,4 @@ fun PropertyDetailScreen(
         }
     }
 }
+
