@@ -169,6 +169,44 @@ fun PropertyDetailScreen(
                         )
                     }
                     }
+                    HorizontalDivider(thickness = 1.dp)
+
+                    Text(
+                        text = "Imobiliária:",
+                        style = TextStyle(
+                            color = getTextColor(),
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                        )
+                    )
+
+                    Text(
+                        text = "nome"
+                    )
+
+                    Text(
+                        text = "telefone"
+                    )
+                    Text(
+                        text = "email"
+                    )
+
+                    Button(
+                        onClick = {
+
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = getButtonColor()
+                        ),
+                        modifier = Modifier.height(30.dp)
+                    ) {
+                        Text(
+                            text = "Alterar Imobiliária",
+                            style = TextStyle(
+                                fontSize = 14.sp,
+                            )
+                        )
+                    }
 
                     HorizontalDivider(thickness = 1.dp)
                     Text(
