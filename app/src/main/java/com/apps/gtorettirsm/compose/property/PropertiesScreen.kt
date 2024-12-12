@@ -50,16 +50,10 @@ import kotlinx.coroutines.flow.Flow
 fun PropertiesScreen(
 ) {
     var propertyViewModel: PropertyViewModel = hiltViewModel()
-    var monthlyBillingViewModel: MonthlyBillingViewModel = hiltViewModel()
-    var receiptViewModel: ReceiptViewModel = hiltViewModel()
-    var receiptPDFViewModel: ReceiptPDFViewModel = hiltViewModel()
     val properties = propertyViewModel.activeProperties
     PropertiesScreen(
         propertiesFlow = properties,
         propertyViewModel = propertyViewModel,
-        monthlyBillingViewModel = monthlyBillingViewModel,
-        receiptViewModel = receiptViewModel,
-        receiptPDFViewModel = receiptPDFViewModel
     )
 }
 
@@ -67,9 +61,6 @@ fun PropertiesScreen(
 fun PropertiesScreen(
     propertiesFlow: Flow<List<Property>>,
     propertyViewModel: PropertyViewModel,
-    monthlyBillingViewModel: MonthlyBillingViewModel,
-    receiptViewModel: ReceiptViewModel,
-    receiptPDFViewModel: ReceiptPDFViewModel
 ) {
 
     var openPropertyCreateDialog = remember { mutableStateOf(false) }
@@ -197,9 +188,6 @@ fun PropertiesScreen(
                 PropertyDetailScreen(
                     openPropertyDetailDialog,
                     propertyViewModel,
-                    monthlyBillingViewModel,
-                    receiptViewModel,
-                    receiptPDFViewModel,
                     propertyId.value,
                     context
                 )

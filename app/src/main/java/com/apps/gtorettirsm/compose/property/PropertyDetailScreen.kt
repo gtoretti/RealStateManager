@@ -4,21 +4,19 @@
 package com.apps.gtorettirsm.compose.property
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -31,12 +29,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.ActivityCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.apps.gtorettirsm.compose.utils.DrawScrollableView
 import com.apps.gtorettirsm.compose.utils.getAttendedDaysDescr
 import com.apps.gtorettirsm.compose.utils.getButtonColor
 import com.apps.gtorettirsm.compose.utils.getTextColor
@@ -55,31 +52,15 @@ import kotlinx.coroutines.flow.Flow
 fun PropertyDetailScreen(
     openPropertyDetailDialog: MutableState<Boolean>,
     propertyViewModel: PropertyViewModel = hiltViewModel(),
-    monthlyBillingViewModel: MonthlyBillingViewModel = hiltViewModel(),
-    receiptViewModel: ReceiptViewModel = hiltViewModel(),
-    receiptPDFViewModel: ReceiptPDFViewModel = hiltViewModel(),
     propertyId: Long,
     context: Context
 ) {
     val property = propertyViewModel.getProperty(propertyId)
-    val currentMonthlyBillingsFlow =
-        monthlyBillingViewModel.getNonReceiptMonthlyBillings(propertyId)
-    val currentMonthlyBillings by currentMonthlyBillingsFlow.collectAsStateWithLifecycle(initialValue = emptyList())
-    val allMonthlyBillingsFlow = monthlyBillingViewModel.getNonReceiptMonthlyBillings(propertyId)
-    val allMonthlyBillings by allMonthlyBillingsFlow.collectAsStateWithLifecycle(initialValue = emptyList())
-    val unpaidFlow = receiptViewModel.getUnpaidReceipts(propertyId)
-    val unpaids by unpaidFlow.collectAsStateWithLifecycle(initialValue = emptyList())
 
     PropertyDetailScreen(
         openPropertyDetailDialog = openPropertyDetailDialog,
         propertyFlow = property,
         propertyViewModel = propertyViewModel,
-        monthlyBillingViewModel = monthlyBillingViewModel,
-        currentAttendedDays = currentMonthlyBillings,
-        allAttendedDays = allMonthlyBillings,
-        receiptViewModel = receiptViewModel,
-        receiptPDFViewModel = receiptPDFViewModel,
-        unpaids = unpaids,
         context = context
     )
 }
@@ -89,28 +70,15 @@ fun PropertyDetailScreen(
     openPropertyDetailDialog: MutableState<Boolean>,
     propertyFlow: Flow<Property>,
     propertyViewModel: PropertyViewModel,
-    monthlyBillingViewModel: MonthlyBillingViewModel,
-    currentAttendedDays: List<MonthlyBilling>,
-    allAttendedDays: List<MonthlyBilling>,
-    receiptViewModel: ReceiptViewModel,
-    receiptPDFViewModel: ReceiptPDFViewModel,
-    unpaids: List<Receipt>,
     context: Context
 ) {
 
-    val openPropertyDetailDatePickerDialog = remember { mutableStateOf(false) }
-    val openPropertyDetailDeleteMonthlyBillingDialog = remember { mutableStateOf(false) }
-    val openPropertyReceiptsDialog = remember { mutableStateOf(false) }
-    val openReceivePaymentDialog = remember { mutableStateOf(false) }
     val openPropertyDeleteDialog = remember { mutableStateOf(false) }
     var openPropertyChangeAddressDialog = remember { mutableStateOf(false) }
 
     val property by propertyFlow.collectAsStateWithLifecycle(
         initialValue = Property(0,"", "", "", "", "", "", "", 0.0,0,"", "", "", "", "", "" , 0)
     )
-    var rentalMontlyPrice by remember { mutableStateOf("") }
-
-    var attendedDaysDescr = getAttendedDaysDescr(currentAttendedDays)
 
     if (openPropertyDetailDialog.value) {
         AlertDialog(
@@ -236,7 +204,7 @@ fun PropertyDetailScreen(
 
                         Button(
                             onClick = {
-
+                                openGDriveFolder(context,property.urlGDriveFolder)
                             },
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = getButtonColor()
@@ -426,57 +394,14 @@ fun PropertyDetailScreen(
             }
         )
         when {
-            openPropertyDetailDatePickerDialog.value -> {
-                //PropertyDetailDatePickerDialog(
-                //    openPropertyDetailDatePickerDialog = openPropertyDetailDatePickerDialog,
-                //    monthlyBillingViewModel = monthlyBillingViewModel,
-                //    patient = patient,
-                //    context = context
-               // )
-            }
-        }
-        when {
-            openPropertyDetailDeleteMonthlyBillingDialog.value -> {
-                //PropertyDetailDeleteMonthlyBillingDialog(
-                //    openPropertyDetailDeleteServingDialog = openPropertyDetailDeleteMonthlyBillingDialog,
-                //    monthlyBillingViewModel = monthlyBillingViewModel,
-                //    allAttendedDays = allAttendedDays,
-                //    patient = patient,
-                //    context = context
-                //)
-            }
-        }
-        when {
-            openPropertyReceiptsDialog.value -> {
-                //PropertyNewReceiptDialog(
-                //    openPropertyReceiptsDialog = openPropertyReceiptsDialog,
-                //    currentAttendedDays = currentAttendedDays,
-                //    patient = patient,
-                //    context = context
-               // )
-            }
-        }
-        when {
-            openReceivePaymentDialog.value -> {
-                //PropertyReceivePaymentDialog(
-                //    openReceivePaymentDialog = openReceivePaymentDialog,
-                //    unpaids = unpaids,
-                //    receiptViewModel = receiptViewModel,
-                //    receiptPDFViewModel = receiptPDFViewModel,
-                //    patient = patient,
-                //    context = context,
-               // )
-            }
-        }
-        when {
             openPropertyDeleteDialog.value -> {
-                //PropertyDeleteDialog(
-                //    openPropertyDeleteDialog = openPropertyDeleteDialog,
-                //    patientViewModel = patientViewModel,
-                //    openPropertyDetailDialog = openPropertyDetailDialog,
-                //    patient = patient,
-                //    context = context,
-               // )
+                PropertyDeleteDialog(
+                    openPropertyDeleteDialog = openPropertyDeleteDialog,
+                    propertyViewModel = propertyViewModel,
+                    openPropertyDetailDialog = openPropertyDetailDialog,
+                    property = property,
+                    context = context,
+               )
             }
         }
         when {
@@ -487,3 +412,12 @@ fun PropertyDetailScreen(
     }
 }
 
+fun openGDriveFolder(context: Context, urlGDriveFolder: String){
+    var url = urlGDriveFolder;
+    if (url.isEmpty()){
+        url = "https://drive.google.com/drive/my-drive"
+        showToast("A pasta do imóvel não está configurada. Abrindo Meu Drive.",context)
+    }
+   val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+    context.startActivity(browserIntent)
+}

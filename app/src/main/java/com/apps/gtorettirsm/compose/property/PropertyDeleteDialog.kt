@@ -6,7 +6,6 @@ package com.apps.gtorettirsm.compose.property
 import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -16,6 +15,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -32,8 +32,8 @@ import com.apps.gtorettirsm.viewmodels.PropertyViewModel
 fun PropertyDeleteDialog(
     openPropertyDeleteDialog: MutableState<Boolean>,
     openPropertyDetailDialog: MutableState<Boolean>,
-    patientViewModel: PropertyViewModel,
-    patient: Property,
+    propertyViewModel: PropertyViewModel,
+    property: Property,
     context: Context
 ) {
     if (openPropertyDeleteDialog.value) {
@@ -48,7 +48,7 @@ fun PropertyDeleteDialog(
 
             title = {
                 Text(
-                    text = "Excluir paciente:",
+                    text = "Excluir Imóvel:",
                     style = TextStyle(
                         color = getTextColor(),
                         fontSize = 20.sp,
@@ -59,28 +59,42 @@ fun PropertyDeleteDialog(
             },
             text = {
                 Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                    horizontalAlignment = Alignment.Start,
+                    verticalArrangement = Arrangement.spacedBy(2.dp)
 
                 ) {
+
+                    var streetAddress = property.streetAddress + ", " + property.number
+                    if (property.complement.isNotEmpty())
+                        streetAddress = streetAddress + " - " + property.complement
+
                     Text(
-                        text = patient.streetAddress,
-                        style = TextStyle(
-                            color = getTextColor(),
-                            fontSize = 16.sp,
+                        text = streetAddress
+                    )
+
+                    Text(
+                        text = property.district
+                    )
+                    Text(
+                        text = property.city + " - " + property.state
+                    )
+                    Text(
+                        text = "CEP: "+property.zipCode , style = TextStyle(
+
                             fontWeight = FontWeight.Bold,
                             fontFamily = FontFamily.SansSerif,
                         )
                     )
+
                 }
             },
             confirmButton = {
                 Button(
                     onClick = {
-                        patientViewModel.deleteProperty(patient)
+                        propertyViewModel.deleteProperty(property)
                         openPropertyDeleteDialog.value = false
                         openPropertyDetailDialog.value = false
-                        showToast("Paciente excluído com sucesso!", context)
+                        showToast("Imóvel excluído com sucesso!", context)
                     }, colors = ButtonDefaults.buttonColors(
                         containerColor = getButtonColor()
                     ),modifier = Modifier.height(30.dp)

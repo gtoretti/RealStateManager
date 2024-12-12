@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -115,11 +116,19 @@ fun PropertyCreateScreen(
                 )
             },
             text = {
+
+                DrawScrollableView(
+                    modifier = Modifier.padding(horizontal = 10.dp),
+                    content = {
                 Column(
-                    modifier = Modifier.fillMaxWidth(),
+
+                    modifier = Modifier.padding(horizontal = 10.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp)
 
                 ) {
+
+
+
 
                     OutlinedTextField(
                         value = zipCode.value,
@@ -157,7 +166,7 @@ fun PropertyCreateScreen(
                         ),modifier = Modifier.height(30.dp)
                     ) {
                         Text(
-                            text = "Preencher endereço usando CEP",
+                            text = "Preencher endereço por CEP",
                             style = TextStyle(
                                 fontSize = 14.sp,
                             )
@@ -266,7 +275,7 @@ fun PropertyCreateScreen(
                         ),modifier = Modifier.height(30.dp)
                     ) {
                         Text(
-                            text = "Procurar CEP usando endereço",
+                            text = "Procurar CEP por endereço",
                             style = TextStyle(
                                 fontSize = 14.sp,
                             )
@@ -318,8 +327,8 @@ fun PropertyCreateScreen(
                         placeholder = {Text("Complemento.")},
                     )
 
-
-                }
+                    }
+                })
 
             },
             confirmButton = {
