@@ -77,7 +77,7 @@ fun PropertyDetailScreen(
     var openPropertyChangeAddressDialog = remember { mutableStateOf(false) }
 
     val property by propertyFlow.collectAsStateWithLifecycle(
-        initialValue = Property(0,"", "", "", "", "", "", "", 0.0,0,"", "", "", "", "", "" , 0)
+        initialValue = Property(0,"", "", "", "", "", "", "", 0.0,0,"", "", "", "", "", "" , 0, 0)
     )
 
     if (openPropertyDetailDialog.value) {

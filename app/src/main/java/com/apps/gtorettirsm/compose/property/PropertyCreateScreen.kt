@@ -369,7 +369,8 @@ fun PropertyCreateScreen(
                                                 sanasaCurrentCPF = property.sanasaCurrentCPF,
                                                 iptuCartographicCode = property.iptuCartographicCode,
                                                 urlGDriveFolder = property.urlGDriveFolder,
-                                                deleted = 0)
+                                                deleted = 0,
+                                                contractManagerId = property.contractManagerId)
                                         )
                                         openPropertyCreateDialog.value = false
                                         streetAddress.value = ""

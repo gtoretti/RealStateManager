@@ -26,6 +26,7 @@ data class Property(
     val iptuCartographicCode: String,
     val urlGDriveFolder: String,
     val deleted: Int,
+    val contractManagerId: Long
 ) {
     override fun toString() = streetAddress
 }
