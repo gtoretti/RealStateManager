@@ -120,7 +120,7 @@ fun PropertyDetailDeleteMonthlyBillingDialog(
                                         Text(
                                             text = SimpleDateFormat("dd / MM / yyyy").format(
                                                 monthlyBilling.date
-                                            ) + " - R$ " + monthlyBilling.rentalMonthlyPrice.toScreen()
+                                            ) + " - R$ " + monthlyBilling.totalValue.toScreen()
                                                 .replace(".", ","),
                                             style = TextStyle(
                                                 color = getTextColor(),
@@ -147,7 +147,7 @@ fun PropertyDetailDeleteMonthlyBillingDialog(
                                     monthlyBillingId,
                                     Date(),
                                     patient.propertyId,
-                                    0.0, 0
+                                    0.0, 0, ""
                                 )
                             )
                             openPropertyDetailDeleteServingDialog.value = false

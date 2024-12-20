@@ -52,6 +52,7 @@ import kotlinx.coroutines.flow.Flow
 fun PropertyDetailScreen(
     openPropertyDetailDialog: MutableState<Boolean>,
     propertyViewModel: PropertyViewModel = hiltViewModel(),
+    receiptViewModel: ReceiptViewModel = hiltViewModel(),
     propertyId: Long,
     context: Context
 ) {
@@ -61,6 +62,8 @@ fun PropertyDetailScreen(
         openPropertyDetailDialog = openPropertyDetailDialog,
         propertyFlow = property,
         propertyViewModel = propertyViewModel,
+        receiptViewModel = receiptViewModel,
+        propertyId = propertyId,
         context = context
     )
 }
@@ -70,15 +73,26 @@ fun PropertyDetailScreen(
     openPropertyDetailDialog: MutableState<Boolean>,
     propertyFlow: Flow<Property>,
     propertyViewModel: PropertyViewModel,
+    receiptViewModel: ReceiptViewModel,
+    propertyId: Long,
     context: Context
 ) {
 
     val openPropertyDeleteDialog = remember { mutableStateOf(false) }
-    var openPropertyChangeAddressDialog = remember { mutableStateOf(false) }
+    val openPropertyChangeAddressDialog = remember { mutableStateOf(false) }
+    val openReceivePaymentDialog = remember { mutableStateOf(false) }
+    val openPropertyExpensesDialog = remember { mutableStateOf(false) }
+
+
 
     val property by propertyFlow.collectAsStateWithLifecycle(
         initialValue = Property(0,"", "", "", "", "", "", "", 0.0,0,"", "", "", "", "", "" , 0, 0)
     )
+
+
+    val unpaidFlow = receiptViewModel.getUnpaidReceipts(propertyId)
+    val unpaids by unpaidFlow.collectAsStateWithLifecycle(initialValue = emptyList())
+
 
     if (openPropertyDetailDialog.value) {
         AlertDialog(
@@ -277,7 +291,7 @@ fun PropertyDetailScreen(
                     ) {
                         Button(
                             onClick = {
-
+                                openPropertyExpensesDialog.value = true
                             },
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = getButtonColor()
@@ -294,7 +308,7 @@ fun PropertyDetailScreen(
 
                         Button(
                             onClick = {
-
+                                openReceivePaymentDialog.value = true
                             },
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = getButtonColor()
@@ -445,6 +459,30 @@ fun PropertyDetailScreen(
         when {
             openPropertyChangeAddressDialog.value -> {
                 PropertyCreateScreen(openPropertyChangeAddressDialog, propertyViewModel, context, property)
+            }
+        }
+        when {
+            openReceivePaymentDialog.value -> {
+                PropertyReceivePaymentDialog(
+                    openReceivePaymentDialog = openReceivePaymentDialog,
+                    unpaids = unpaids,
+                    receiptViewModel = hiltViewModel(),
+                    receiptPDFViewModel = hiltViewModel(),
+                    property = property,
+                    context = context
+                )
+            }
+        }
+        when {
+            openPropertyExpensesDialog.value -> {
+                PropertyExpensesDialog(
+                    openPropertyExpensesDialog = openPropertyExpensesDialog,
+                    unpaids = unpaids,
+                    receiptViewModel = hiltViewModel(),
+                    receiptPDFViewModel = hiltViewModel(),
+                    property = property,
+                    context = context
+                )
             }
         }
     }
