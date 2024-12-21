@@ -82,6 +82,7 @@ fun PropertyDetailScreen(
     val openPropertyChangeAddressDialog = remember { mutableStateOf(false) }
     val openReceivePaymentDialog = remember { mutableStateOf(false) }
     val openPropertyExpensesDialog = remember { mutableStateOf(false) }
+    val openPropertyCurrentContractDialog = remember { mutableStateOf(false) }
 
 
 
@@ -195,14 +196,13 @@ fun PropertyDetailScreen(
                     )
 
                     Text(
-                        text = "nome"
-                    )
-
-                    Text(
-                        text = "telefone"
+                        text = "Nome:"
                     )
                     Text(
-                        text = "email"
+                        text = "Telefone:"
+                    )
+                    Text(
+                        text = "E-mail:"
                     )
 
                     Button(
@@ -223,6 +223,67 @@ fun PropertyDetailScreen(
                     }
 
                     HorizontalDivider(thickness = 1.dp)
+
+                    Text(
+                        text = "Informações do Contrato:",
+                        style = TextStyle(
+                            color = getTextColor(),
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                        )
+                    )
+
+                    Text(
+                        text = "Data de Início:"
+                    )
+
+                    Text(
+                        text = "Data de Término:"
+                    )
+                    Text(
+                        text = "Valor Atual de Aluguel:"
+                    )
+                    Text(
+                        text = "Nome do Inquilino:"
+                    )
+                    Text(
+                        text = "Telefone:"
+                    )
+                    Text(
+                        text = "e-mail:"
+                    )
+                    Text(
+                        text = "Dia de Pagamento:"
+                    )
+
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Button(
+                            onClick = {
+                                openPropertyCurrentContractDialog.value=true
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = getButtonColor()
+                            ),
+                            modifier = Modifier.height(30.dp)
+                        ) {
+                            Text(
+                                text = "Alterar Informações do Contrato",
+                                style = TextStyle(
+                                    fontSize = 14.sp,
+                                )
+                            )
+                        }
+                    }
+
+                    HorizontalDivider(thickness = 1.dp)
+
+
+
                     Text(
                         text = "Documentos do Imóvel no GDrive:",
                         style = TextStyle(
@@ -247,7 +308,7 @@ fun PropertyDetailScreen(
                             modifier = Modifier.height(30.dp)
                         ) {
                             Text(
-                                text = "Configurar Pasta",
+                                text = "Configurar URL",
                                 style = TextStyle(
                                     fontSize = 14.sp,
                                 )
@@ -264,7 +325,7 @@ fun PropertyDetailScreen(
                             modifier = Modifier.height(30.dp)
                         ) {
                             Text(
-                                text = "Abrir Pasta",
+                                text = "Abrir URL",
                                 style = TextStyle(
                                     fontSize = 14.sp,
                                 )
@@ -485,6 +546,16 @@ fun PropertyDetailScreen(
                 )
             }
         }
+        when {
+            openPropertyCurrentContractDialog.value -> {
+                PropertyCurrentContractDialog(
+                    openPropertyCurrentContractDialog = openPropertyCurrentContractDialog,
+                    context = context
+                )
+            }
+        }
+
+
     }
 }
 
