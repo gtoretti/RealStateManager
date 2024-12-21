@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material3.AlertDialog
@@ -24,19 +25,23 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.apps.gtorettirsm.compose.utils.DrawScrollableView
@@ -53,42 +58,24 @@ import java.text.SimpleDateFormat
 
 
 @Composable
-fun PropertyExpensesDialog(
-    openPropertyExpensesDialog: MutableState<Boolean>,
-    unpaids: List<Receipt>,
-    receiptViewModel: ReceiptViewModel,
-    receiptPDFViewModel: ReceiptPDFViewModel,
-    property: Property,
+fun PropertyExpensesCreateDialog(
+    openPropertyExpensesCreateDialog: MutableState<Boolean>,
     context: Context
 ) {
 
-    val openPropertyExpensesCreateDialog = remember { mutableStateOf(false) }
+    var expenseValue by remember { mutableStateOf("") }
+    var expenseDescription by remember { mutableStateOf("") }
 
-    val select = remember { mutableStateListOf(-1L) }
-    if (select.contains(-1)) {
-        select.remove(-1)
-        unpaids.forEach { receipt ->
-            select.add(receipt.receiptId)
-        }
-    }
-
-    var receiptsTotal = 0.0
-    unpaids.forEach { r ->
-        if (select.contains(r.receiptId)) {
-            receiptsTotal = receiptsTotal + r.total
-        }
-    }
-
-    if (openPropertyExpensesDialog.value) {
+    if (openPropertyExpensesCreateDialog.value) {
         AlertDialog(shape = RoundedCornerShape(10.dp), onDismissRequest = {
-            openPropertyExpensesDialog.value = false
+            openPropertyExpensesCreateDialog.value = false
         }, modifier = Modifier
             .width(550.dp)
             .height(800.dp),
 
             title = {
                 Text(
-                    text = "Gastos do Imóvel:", style = TextStyle(
+                    text = "Adicionar Gasto:", style = TextStyle(
                         color = getTextColor(),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
@@ -97,68 +84,52 @@ fun PropertyExpensesDialog(
                 )
             }, text = {
                 Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(2.dp)
-
+                    modifier = Modifier.padding(horizontal = 10.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    var streetAddress = property.streetAddress  + ", " + property.number
-                    if (property.complement.isNotEmpty())
-                        streetAddress = streetAddress + " - " + property.complement
 
-                    Text(
-                        text = streetAddress
-                    )
-
-                    Text(
-                        text = property.district
-                    )
-                    Text(
-                        text = property.city + " - " + property.state
-                    )
-                    Text(
-                        text = "CEP: "+property.zipCode , style = TextStyle(
-
-                            fontWeight = FontWeight.Bold,
-                            fontFamily = FontFamily.SansSerif,
-                        )
-                    )
-
-                    HorizontalDivider(thickness = 2.dp)
-
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(
-                            text = "Para adicionar, clique aqui->",
-                            style = TextStyle(
-                                color = getRedTextColor(),
-                                fontSize = 16.sp,
-                                fontFamily = FontFamily.SansSerif,
-                            )
-                        )
-
-                        TextButton(
-                            modifier = Modifier.padding(5.dp),
-                            onClick =
-                            {
-                                openPropertyExpensesCreateDialog.value = true
-                            }
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.AddCircle,
-                                contentDescription = "Adicionar Gasto",
-                                tint = getTextColor(),
-                                modifier = Modifier
-                                    .padding(end = 12.dp)
-                                    .size(24.dp)
+                    OutlinedTextField(
+                        value = expenseValue,
+                        onValueChange = {
+                            expenseValue = it
+                        },
+                        textStyle = TextStyle(
+                            fontSize = 16.sp,
+                            color = getTextColor(),
+                            fontWeight = FontWeight.Normal
+                        ),placeholder = {Text("00.000,00")},
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Decimal
+                        ),
+                        label = {
+                            Text(
+                                text = "Valor do gasto:",
+                                style = TextStyle(
+                                    color = getTextColor(),fontSize = 12.sp,
+                                )
                             )
                         }
-                    }
+                    )
 
-
-                    HorizontalDivider(thickness = 2.dp)
-
+                    OutlinedTextField(
+                        value = expenseDescription,
+                        onValueChange = {
+                            expenseDescription = it
+                        },
+                        textStyle = TextStyle(
+                            fontSize = 16.sp,
+                            color = getTextColor(),
+                            fontWeight = FontWeight.Normal
+                        ),placeholder = {Text("Exemplos: reforma de telhado; impostos; conta de água...")},
+                          label = {
+                            Text(
+                                text = "Descrição do gasto:",
+                                style = TextStyle(
+                                    color = getTextColor(),fontSize = 12.sp,
+                                )
+                            )
+                        }
+                    )
 
                 }
 
@@ -171,7 +142,7 @@ fun PropertyExpensesDialog(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Button(onClick = {
-                        openPropertyExpensesDialog.value = false
+                        openPropertyExpensesCreateDialog.value = false
                     },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = getButtonColor()
@@ -186,15 +157,6 @@ fun PropertyExpensesDialog(
                 }
             }
         )
-
-        when {
-            openPropertyExpensesCreateDialog.value -> {
-                PropertyExpensesCreateDialog(
-                    openPropertyExpensesCreateDialog = openPropertyExpensesCreateDialog,
-                    context = context,
-                )
-            }
-        }
     }
 }
 

@@ -14,5 +14,6 @@ data class Expense(
     val date: Date,
     val propertyId: Long,
     val value: Double,
+    val description: String,
     var providerId: Long,
 )
