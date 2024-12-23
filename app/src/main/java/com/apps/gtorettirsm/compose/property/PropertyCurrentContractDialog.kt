@@ -14,9 +14,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material3.AlertDialog
@@ -55,6 +57,7 @@ import com.apps.gtorettirsm.data.Receipt
 import com.apps.gtorettirsm.viewmodels.ReceiptPDFViewModel
 import com.apps.gtorettirsm.viewmodels.ReceiptViewModel
 import java.text.SimpleDateFormat
+import java.util.Date
 
 
 @Composable
@@ -63,7 +66,19 @@ fun PropertyCurrentContractDialog(
     context: Context
 ) {
 
+    var startDate by remember { mutableStateOf("") }
     var monthlyBillingValue by remember { mutableStateOf("") }
+    var months by remember { mutableStateOf("") }
+    var valueAdjustmentIndexName by remember { mutableStateOf("") }
+    var renterName by remember { mutableStateOf("") }
+    var renterCPF by remember { mutableStateOf("") }
+    var renterPhone by remember { mutableStateOf("") }
+    var renterEmail by remember { mutableStateOf("") }
+    var guarantorName by remember { mutableStateOf("") }
+    var guarantorCPF by remember { mutableStateOf("") }
+    var guarantorPhone by remember { mutableStateOf("") }
+    var guarantorEmail by remember { mutableStateOf("") }
+    var paymentDate by remember { mutableStateOf("") }
 
 
     if (openPropertyCurrentContractDialog.value) {
@@ -75,7 +90,7 @@ fun PropertyCurrentContractDialog(
 
             title = {
                 Text(
-                    text = "Adicionar Receita:", style = TextStyle(
+                    text = "Contrato Atual:", style = TextStyle(
                         color = getTextColor(),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
@@ -83,37 +98,302 @@ fun PropertyCurrentContractDialog(
                     )
                 )
             }, text = {
-                Column(
+
+                DrawScrollableView(
                     modifier = Modifier.padding(horizontal = 10.dp),
-                    verticalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
+                    content = {
 
-                    OutlinedTextField(
-                        value = monthlyBillingValue,
-                        onValueChange = {
-                            monthlyBillingValue = it
-                        },
-                        textStyle = TextStyle(
-                            fontSize = 16.sp,
-                            color = getTextColor(),
-                            fontWeight = FontWeight.Normal
-                        ),placeholder = {Text("00.000,00")},
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Decimal
-                        ),
-                        label = {
-                            Text(
-                                text = "Valor recebido:",
-                                style = TextStyle(
-                                    color = getTextColor(),fontSize = 12.sp,
-                                )
+                        Column(
+                            modifier = Modifier.padding(horizontal = 10.dp),
+                            verticalArrangement = Arrangement.spacedBy(10.dp)
+                        ) {
+
+
+                            OutlinedTextField(
+                                value = monthlyBillingValue,
+                                onValueChange = {
+                                    monthlyBillingValue = it
+                                },
+                                textStyle = TextStyle(
+                                    fontSize = 16.sp,
+                                    color = getTextColor(),
+                                    fontWeight = FontWeight.Normal
+                                ), placeholder = { Text("00.000,00") },
+                                keyboardOptions = KeyboardOptions(
+                                    keyboardType = KeyboardType.Decimal
+                                ),
+                                label = {
+                                    Text(
+                                        text = "Valor Atual de Aluguel Mensal:",
+                                        style = TextStyle(
+                                            color = getTextColor(), fontSize = 12.sp,
+                                        )
+                                    )
+                                }
                             )
+
+                            OutlinedTextField(
+                                value = renterName,
+                                onValueChange = {
+                                    renterName = it
+                                },
+                                textStyle = TextStyle(
+                                    fontSize = 16.sp,
+                                    color = getTextColor(),
+                                    fontWeight = FontWeight.Normal
+                                ),
+
+                                label = {
+                                    Text(
+                                        text = "Nome do Inquilino:",
+                                        style = TextStyle(
+                                            color = getTextColor(), fontSize = 12.sp,
+                                        )
+                                    )
+                                }
+                            )
+
+                            OutlinedTextField(
+                                value = renterCPF,
+                                onValueChange = {
+                                    renterCPF = it
+                                },
+                                textStyle = TextStyle(
+                                    fontSize = 16.sp,
+                                    color = getTextColor(),
+                                    fontWeight = FontWeight.Normal
+                                ),
+
+                                label = {
+                                    Text(
+                                        text = "CPF/CNPJ do Inquilino:",
+                                        style = TextStyle(
+                                            color = getTextColor(), fontSize = 12.sp,
+                                        )
+                                    )
+                                }
+                            )
+
+
+
+                            OutlinedTextField(
+                                value = renterPhone,
+                                onValueChange = {
+                                    renterPhone = it
+                                },
+                                textStyle = TextStyle(
+                                    fontSize = 16.sp,
+                                    color = getTextColor(),
+                                    fontWeight = FontWeight.Normal
+                                ),
+
+                                label = {
+                                    Text(
+                                        text = "Telefone do Inquilino:",
+                                        style = TextStyle(
+                                            color = getTextColor(), fontSize = 12.sp,
+                                        )
+                                    )
+                                }
+                            )
+
+                            OutlinedTextField(
+                                value = renterEmail,
+                                onValueChange = {
+                                    renterEmail = it
+                                },
+                                textStyle = TextStyle(
+                                    fontSize = 16.sp,
+                                    color = getTextColor(),
+                                    fontWeight = FontWeight.Normal
+                                ),
+
+                                label = {
+                                    Text(
+                                        text = "E-mail do Inquilino:",
+                                        style = TextStyle(
+                                            color = getTextColor(), fontSize = 12.sp,
+                                        )
+                                    )
+                                }
+                            )
+
+                            OutlinedTextField(
+                                value = guarantorName,
+                                onValueChange = {
+                                    guarantorName = it
+                                },
+                                textStyle = TextStyle(
+                                    fontSize = 16.sp,
+                                    color = getTextColor(),
+                                    fontWeight = FontWeight.Normal
+                                ),
+
+                                label = {
+                                    Text(
+                                        text = "Nome do Fiador:",
+                                        style = TextStyle(
+                                            color = getTextColor(), fontSize = 12.sp,
+                                        )
+                                    )
+                                }
+                            )
+
+                            OutlinedTextField(
+                                value = guarantorCPF,
+                                onValueChange = {
+                                    guarantorCPF = it
+                                },
+                                textStyle = TextStyle(
+                                    fontSize = 16.sp,
+                                    color = getTextColor(),
+                                    fontWeight = FontWeight.Normal
+                                ),
+
+                                label = {
+                                    Text(
+                                        text = "CPF/CNPJ do Fiador:",
+                                        style = TextStyle(
+                                            color = getTextColor(), fontSize = 12.sp,
+                                        )
+                                    )
+                                }
+                            )
+
+
+
+                            OutlinedTextField(
+                                value = guarantorPhone,
+                                onValueChange = {
+                                    guarantorPhone = it
+                                },
+                                textStyle = TextStyle(
+                                    fontSize = 16.sp,
+                                    color = getTextColor(),
+                                    fontWeight = FontWeight.Normal
+                                ),
+
+                                label = {
+                                    Text(
+                                        text = "Telefone do Fiador:",
+                                        style = TextStyle(
+                                            color = getTextColor(), fontSize = 12.sp,
+                                        )
+                                    )
+                                }
+                            )
+
+                            OutlinedTextField(
+                                value = guarantorEmail,
+                                onValueChange = {
+                                    guarantorEmail = it
+                                },
+                                textStyle = TextStyle(
+                                    fontSize = 16.sp,
+                                    color = getTextColor(),
+                                    fontWeight = FontWeight.Normal
+                                ),
+
+                                label = {
+                                    Text(
+                                        text = "E-mail do Fiador:",
+                                        style = TextStyle(
+                                            color = getTextColor(), fontSize = 12.sp,
+                                        )
+                                    )
+                                }
+                            )
+
+
+                            OutlinedTextField(
+                                value = paymentDate,
+                                onValueChange = {
+                                    paymentDate = it
+                                },
+                                textStyle = TextStyle(
+                                    fontSize = 16.sp,
+                                    color = getTextColor(),
+                                    fontWeight = FontWeight.Normal
+                                ),
+
+                                label = {
+                                    Text(
+                                        text = "Dia de Vencimento no Mês:",
+                                        style = TextStyle(
+                                            color = getTextColor(), fontSize = 12.sp,
+                                        )
+                                    )
+                                }
+                            )
+
+
+                            OutlinedTextField(
+                                value = startDate,
+                                onValueChange = {
+                                    startDate = it
+                                },
+                                textStyle = TextStyle(
+                                    fontSize = 16.sp,
+                                    color = getTextColor(),
+                                    fontWeight = FontWeight.Normal
+                                ),
+
+                                label = {
+                                    Text(
+                                        text = "Data de Ínicio:",
+                                        style = TextStyle(
+                                            color = getTextColor(), fontSize = 12.sp,
+                                        )
+                                    )
+                                }
+                            )
+
+                            OutlinedTextField(
+                                value = months,
+                                onValueChange = {
+                                    months = it
+                                },
+                                textStyle = TextStyle(
+                                    fontSize = 16.sp,
+                                    color = getTextColor(),
+                                    fontWeight = FontWeight.Normal
+                                ),
+
+                                label = {
+                                    Text(
+                                        text = "Período do Contrato em meses:",
+                                        style = TextStyle(
+                                            color = getTextColor(), fontSize = 12.sp,
+                                        )
+                                    )
+                                }
+                            )
+
+                            OutlinedTextField(
+                                value = valueAdjustmentIndexName,
+                                onValueChange = {
+                                    valueAdjustmentIndexName = it
+                                },
+                                textStyle = TextStyle(
+                                    fontSize = 16.sp,
+                                    color = getTextColor(),
+                                    fontWeight = FontWeight.Normal
+                                ),
+
+                                label = {
+                                    Text(
+                                        text = "Índice de reajuste anual:",
+                                        style = TextStyle(
+                                            color = getTextColor(), fontSize = 12.sp,
+                                        )
+                                    )
+                                }
+                            )
+
+
                         }
-                    )
 
-
-
-                }
+                    })
 
             }, confirmButton = {
 
