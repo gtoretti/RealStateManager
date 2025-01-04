@@ -9,8 +9,10 @@ import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
@@ -34,6 +36,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.apps.gtorettirsm.compose.utils.DrawScrollableView
 import com.apps.gtorettirsm.compose.utils.getAttendedDaysDescr
 import com.apps.gtorettirsm.compose.utils.getButtonColor
 import com.apps.gtorettirsm.compose.utils.getTextColor
@@ -118,364 +121,542 @@ fun PropertyDetailScreen(
             },
             text = {
 
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(2.dp)
-
-                ) {
-
-                    var streetAddress = property.streetAddress  + ", " + property.number
-                    if (property.complement.isNotEmpty())
-                        streetAddress = streetAddress + " - " + property.complement
-
-                    Text(
-                        text = streetAddress
-                    )
-
-                    Text(
-                        text = property.district
-                    )
-                    Text(
-                        text = property.city + " - " + property.state
-                    )
-                    Text(
-                        text = "CEP: "+property.zipCode , style = TextStyle(
-
-                            fontWeight = FontWeight.Bold,
-                            fontFamily = FontFamily.SansSerif,
-                        )
-                    )
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                    Button(
-                        onClick = {
-                            openPropertyDeleteDialog.value = true
-                        },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = getButtonColor()
-                        ),
-                        modifier = Modifier.height(30.dp)
-                    ) {
-                        Text(
-                            text = "Excluir",
-                            style = TextStyle(
-                                fontSize = 14.sp,
-                            )
-                        )
-                    }
-
-                    Button(
-                        onClick = {
-                            openPropertyChangeAddressDialog.value = true
-                        },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = getButtonColor()
-                        ),
-                        modifier = Modifier.height(30.dp)
-                    ) {
-                        Text(
-                            text = "Alterar Endereço",
-                            style = TextStyle(
-                                fontSize = 14.sp,
-                            )
-                        )
-                    }
-                    }
-                    HorizontalDivider(thickness = 1.dp)
-
-                    Text(
-                        text = "Imobiliária:",
-                        style = TextStyle(
-                            color = getTextColor(),
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold,
-                        )
-                    )
-
-                    Text(
-                        text = "Nome:"
-                    )
-                    Text(
-                        text = "Telefone:"
-                    )
-                    Text(
-                        text = "E-mail:"
-                    )
-
-                    Button(
-                        onClick = {
-
-                        },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = getButtonColor()
-                        ),
-                        modifier = Modifier.height(30.dp)
-                    ) {
-                        Text(
-                            text = "Alterar Imobiliária",
-                            style = TextStyle(
-                                fontSize = 14.sp,
-                            )
-                        )
-                    }
-
-                    HorizontalDivider(thickness = 1.dp)
-
-                    Text(
-                        text = "Informações do Contrato:",
-                        style = TextStyle(
-                            color = getTextColor(),
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold,
-                        )
-                    )
-
-                    Text(
-                        text = "Data de Início:"
-                    )
-
-                    Text(
-                        text = "Data de Término:"
-                    )
-                    Text(
-                        text = "Valor Atual de Aluguel:"
-                    )
-                    Text(
-                        text = "Nome do Inquilino:"
-                    )
-                    Text(
-                        text = "Telefone:"
-                    )
-                    Text(
-                        text = "e-mail:"
-                    )
-                    Text(
-                        text = "Dia de Pagamento:"
-                    )
+                DrawScrollableView(
+                    modifier = Modifier.padding(horizontal = 10.dp),
+                    content = {
 
 
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Button(
-                            onClick = {
-                                openPropertyCurrentContractDialog.value=true
-                            },
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = getButtonColor()
-                            ),
-                            modifier = Modifier.height(30.dp)
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalArrangement = Arrangement.spacedBy(2.dp)
+
                         ) {
+
                             Text(
-                                text = "Alterar Informações do Contrato",
+                                text = "Endereço:",
                                 style = TextStyle(
-                                    fontSize = 14.sp,
+                                    color = getTextColor(),
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.Bold,
                                 )
                             )
-                        }
-                    }
 
-                    HorizontalDivider(thickness = 1.dp)
+                            var streetAddress = property.streetAddress + ", " + property.number
+                            if (property.complement.isNotEmpty())
+                                streetAddress = streetAddress + " - " + property.complement
 
-
-
-                    Text(
-                        text = "Documentos do Imóvel no GDrive:",
-                        style = TextStyle(
-                            color = getTextColor(),
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold,
-                        )
-                    )
-
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Button(
-                            onClick = {
-
-                            },
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = getButtonColor()
-                            ),
-                            modifier = Modifier.height(30.dp)
-                        ) {
                             Text(
-                                text = "Configurar URL",
-                                style = TextStyle(
-                                    fontSize = 14.sp,
+                                text = streetAddress
+                            )
+
+                            Text(
+                                text = property.district
+                            )
+                            Text(
+                                text = property.city + " - " + property.state
+                            )
+                            Text(
+                                text = "CEP: " + property.zipCode, style = TextStyle(
+
+                                    fontWeight = FontWeight.Bold,
+                                    fontFamily = FontFamily.SansSerif,
                                 )
                             )
-                        }
 
-                        Button(
-                            onClick = {
-                                openGDriveFolder(context,property.urlGDriveFolder)
-                            },
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = getButtonColor()
-                            ),
-                            modifier = Modifier.height(30.dp)
-                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.End,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Spacer(modifier = Modifier.height(20.dp))
+                            }
+
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Button(
+                                    onClick = {
+                                        openPropertyDeleteDialog.value = true
+                                    },
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = getButtonColor()
+                                    ),
+                                    modifier = Modifier.height(30.dp)
+                                ) {
+                                    Text(
+                                        text = "Alterar Endereço",
+                                        style = TextStyle(
+                                            fontSize = 14.sp,
+                                        )
+                                    )
+                                }
+
+                            }
+                            Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center,
+                            modifier = Modifier.fillMaxWidth()
+                            ) {
+
+
+                                Button(
+                                    onClick = {
+                                        openPropertyChangeAddressDialog.value = true
+                                    },
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = getButtonColor()
+                                    ),
+                                    modifier = Modifier.height(30.dp)
+                                ) {
+                                    Text(
+                                        text = "Excluir Imóvel",
+                                        style = TextStyle(
+                                            fontSize = 14.sp,
+                                        )
+                                    )
+                                }
+                            }
+
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.End,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Spacer(modifier = Modifier.height(20.dp))
+                            }
+
+                            HorizontalDivider(thickness = 1.dp)
+
                             Text(
-                                text = "Abrir URL",
+                                text = "Imobiliária:",
                                 style = TextStyle(
-                                    fontSize = 14.sp,
+                                    color = getTextColor(),
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.Bold,
                                 )
                             )
-                        }
-                    }
 
-                    HorizontalDivider(thickness = 1.dp)
-
-
-                    Text(
-                        text = "Fluxo de Caixa:",
-                        style = TextStyle(
-                            color = getTextColor(),
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold,
-                        )
-                    )
-
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Button(
-                            onClick = {
-                                openPropertyExpensesDialog.value = true
-                            },
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = getButtonColor()
-                            ),
-                            modifier = Modifier.height(30.dp)
-                        ) {
                             Text(
-                                text = "Gastos",
+                                text = "Nome:"
+                            )
+                            Text(
+                                text = "Telefone:"
+                            )
+                            Text(
+                                text = "E-mail:"
+                            )
+
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.End,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Spacer(modifier = Modifier.height(20.dp))
+                            }
+
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Button(
+                                    onClick = {
+
+                                    },
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = getButtonColor()
+                                    ),
+                                    modifier = Modifier.height(30.dp)
+                                ) {
+                                    Text(
+                                        text = "Alterar Imobiliária",
+                                        style = TextStyle(
+                                            fontSize = 14.sp,
+                                        )
+                                    )
+                                }
+                            }
+
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.End,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Spacer(modifier = Modifier.height(20.dp))
+                            }
+
+                            HorizontalDivider(thickness = 1.dp)
+
+                            Text(
+                                text = "Informações do Contrato:",
                                 style = TextStyle(
-                                    fontSize = 14.sp,
+                                    color = getTextColor(),
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.Bold,
                                 )
                             )
-                        }
 
-                        Button(
-                            onClick = {
-                                openReceivePaymentDialog.value = true
-                            },
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = getButtonColor()
-                            ),
-                            modifier = Modifier.height(30.dp)
-                        ) {
                             Text(
-                                text = "Receitas",
+                                text = "Valor Atual de Aluguel Mensal:"
+                            )
+                            Text(
+                                text = "Dia de Pagamento no Mês:"
+                            )
+                            Text(
+                                text = "Índice de Reajuste Anual:"
+                            )
+                            Text(
+                                text = "Data de Início:"
+                            )
+                            Text(
+                                text = "Período do Contrato em meses:"
+                            )
+                            Text(
+                                text = "Data de Término:"
+                            )
+                            Text(
+                                text = "Nome do Inquilino:"
+                            )
+                            Text(
+                                text = "CPF/CNPJ do Inquilino:"
+                            )
+                            Text(
+                                text = "Telefone do Inquilino:"
+                            )
+                            Text(
+                                text = "E-mail do Inquilino:"
+                            )
+                            Text(
+                                text = "Nome do Fiador:"
+                            )
+                            Text(
+                                text = "CPF/CNPJ do Fiador:"
+                            )
+                            Text(
+                                text = "Telefone do Fiador:"
+                            )
+                            Text(
+                                text = "E-mail do Fiador:"
+                            )
+
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.End,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Spacer(modifier = Modifier.height(20.dp))
+                            }
+
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Button(
+                                    onClick = {
+                                        openPropertyCurrentContractDialog.value = true
+                                    },
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = getButtonColor()
+                                    ),
+                                    modifier = Modifier.height(30.dp)
+                                ) {
+                                    Text(
+                                        text = "Alterar Informações do Contrato",
+                                        style = TextStyle(
+                                            fontSize = 14.sp,
+                                        )
+                                    )
+                                }
+                            }
+
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.End,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Spacer(modifier = Modifier.height(20.dp))
+                            }
+
+                            HorizontalDivider(thickness = 1.dp)
+
+
+
+                            Text(
+                                text = "Documentos do Imóvel no GDrive:",
                                 style = TextStyle(
-                                    fontSize = 14.sp,
+                                    color = getTextColor(),
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.Bold,
                                 )
                             )
-                        }
-                    }
 
-                    HorizontalDivider(thickness = 1.dp)
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.End,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Spacer(modifier = Modifier.height(20.dp))
+                            }
 
-                    Text(
-                        text = "Instalações Contratadas:",
-                        style = TextStyle(
-                            color = getTextColor(),
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold,
-                        )
-                    )
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Button(
+                                    onClick = {
+                                        openGDriveFolder(context, property.urlGDriveFolder)
+                                    },
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = getButtonColor()
+                                    ),
+                                    modifier = Modifier.height(30.dp)
+                                ) {
+                                    Text(
+                                        text = "Abrir URL",
+                                        style = TextStyle(
+                                            fontSize = 14.sp,
+                                        )
+                                    )
+                                }
+                                }
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
 
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Button(
-                            onClick = {
+                                Button(
+                                    onClick = {
 
-                            },
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = getButtonColor()
-                            ),
-                            modifier = Modifier.height(30.dp)
-                        ) {
+                                    },
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = getButtonColor()
+                                    ),
+                                    modifier = Modifier.height(30.dp)
+                                ) {
+                                    Text(
+                                        text = "Configurar URL",
+                                        style = TextStyle(
+                                            fontSize = 14.sp,
+                                        )
+                                    )
+                                }
+                            }
+
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.End,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Spacer(modifier = Modifier.height(20.dp))
+                            }
+
+                            HorizontalDivider(thickness = 1.dp)
+
+
                             Text(
-                                text = "CPFL",
+                                text = "Fluxo de Caixa:",
                                 style = TextStyle(
-                                    fontSize = 14.sp,
+                                    color = getTextColor(),
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.Bold,
                                 )
                             )
-                        }
 
-                        Button(
-                            onClick = {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.End,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Spacer(modifier = Modifier.height(20.dp))
+                            }
 
-                            },
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = getButtonColor()
-                            ),
-                            modifier = Modifier.height(30.dp)
-                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Button(
+                                    onClick = {
+                                        openPropertyExpensesDialog.value = true
+                                    },
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = getButtonColor()
+                                    ),
+                                    modifier = Modifier.height(30.dp)
+                                ) {
+                                    Text(
+                                        text = "Gastos",
+                                        style = TextStyle(
+                                            fontSize = 14.sp,
+                                        )
+                                    )
+                                }
+
+                                }
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+
+                                Button(
+                                    onClick = {
+                                        openReceivePaymentDialog.value = true
+                                    },
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = getButtonColor()
+                                    ),
+                                    modifier = Modifier.height(30.dp)
+                                ) {
+                                    Text(
+                                        text = "Receitas",
+                                        style = TextStyle(
+                                            fontSize = 14.sp,
+                                        )
+                                    )
+                                }
+                            }
+
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.End,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Spacer(modifier = Modifier.height(20.dp))
+                            }
+
+                            HorizontalDivider(thickness = 1.dp)
+
                             Text(
-                                text = "Sanasa",
+                                text = "Instalações Contratadas:",
                                 style = TextStyle(
-                                    fontSize = 14.sp,
+                                    color = getTextColor(),
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.Bold,
                                 )
                             )
-                        }
-                    }
 
-                    HorizontalDivider(thickness = 1.dp)
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.End,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Spacer(modifier = Modifier.height(20.dp))
+                            }
 
-                    Text(
-                        text = "Impostos:",
-                        style = TextStyle(
-                            color = getTextColor(),
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold,
-                        )
-                    )
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Button(
+                                    onClick = {
 
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Button(
-                            onClick = {
+                                    },
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = getButtonColor()
+                                    ),
+                                    modifier = Modifier.height(30.dp)
+                                ) {
+                                    Text(
+                                        text = "Energia Elétrica",
+                                        style = TextStyle(
+                                            fontSize = 14.sp,
+                                        )
+                                    )
+                                }
 
-                            },
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = getButtonColor()
-                            ),
-                            modifier = Modifier.height(30.dp)
-                        ) {
+                                }
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Button(
+                                    onClick = {
+
+                                    },
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = getButtonColor()
+                                    ),
+                                    modifier = Modifier.height(30.dp)
+                                ) {
+                                    Text(
+                                        text = "Água e Esgoto",
+                                        style = TextStyle(
+                                            fontSize = 14.sp,
+                                        )
+                                    )
+                                }
+                            }
+
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.End,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Spacer(modifier = Modifier.height(20.dp))
+                            }
+
+                            HorizontalDivider(thickness = 1.dp)
+
                             Text(
-                                text = "IPTU",
+                                text = "Impostos:",
                                 style = TextStyle(
-                                    fontSize = 14.sp,
+                                    color = getTextColor(),
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.Bold,
                                 )
                             )
+
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.End,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Spacer(modifier = Modifier.height(20.dp))
+                            }
+
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Button(
+                                    onClick = {
+
+                                    },
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = getButtonColor()
+                                    ),
+                                    modifier = Modifier.height(30.dp)
+                                ) {
+                                    Text(
+                                        text = "IPTU",
+                                        style = TextStyle(
+                                            fontSize = 14.sp,
+                                        )
+                                    )
+                                }
+                            }
+
+
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.End,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Spacer(modifier = Modifier.height(20.dp))
+                            }
+
                         }
 
-
-
-                    }
-
-                    HorizontalDivider(thickness = 1.dp)
-
-                }
+                    })
             },
             confirmButton = {
 

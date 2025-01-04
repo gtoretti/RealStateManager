@@ -318,7 +318,7 @@ fun PropertyCurrentContractDialog(
 
                                 label = {
                                     Text(
-                                        text = "Dia de Vencimento no Mês:",
+                                        text = "Dia de Pagamento no Mês:",
                                         style = TextStyle(
                                             color = getTextColor(), fontSize = 12.sp,
                                         )
@@ -403,6 +403,21 @@ fun PropertyCurrentContractDialog(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier.fillMaxWidth()
                 ) {
+
+                    Button(onClick = {
+                        openPropertyCurrentContractDialog.value = false
+                    },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = getButtonColor()
+                        ),modifier = Modifier.height(30.dp)
+                    ) {
+                        Text(
+                            text = "Salvar", style = TextStyle(
+                                fontSize = 14.sp,
+                            )
+                        )
+                    }
+
                     Button(onClick = {
                         openPropertyCurrentContractDialog.value = false
                     },
