@@ -368,9 +368,35 @@ fun PropertyCreateScreen(
                                                 sanasaCustomerId = property.sanasaCustomerId,
                                                 sanasaCurrentCPF = property.sanasaCurrentCPF,
                                                 iptuCartographicCode = property.iptuCartographicCode,
+                                                realEstateRegistration = property.realEstateRegistration,
+                                                totalMunicipalTaxes = property.totalMunicipalTaxes,
+
                                                 urlGDriveFolder = property.urlGDriveFolder,
                                                 deleted = 0,
-                                                contractManagerId = property.contractManagerId)
+
+                                                contractManagerName= property.contractManagerName,
+                                                contractManagerCnpj= property.contractManagerCnpj,
+                                                contractManagerAddress= property.contractManagerAddress,
+                                                contractManagerUrl = property.contractManagerUrl,
+                                                contractManagerPhoneNumber= property.contractManagerPhoneNumber,
+                                                contractManagerEmail= property.contractManagerEmail,
+
+                                                contractStartDate= property.contractStartDate,
+                                                contractEndedDate= property.contractEndedDate,
+                                                contractMonths= property.contractMonths,
+                                                contractValueAdjustmentIndexName= property.contractValueAdjustmentIndexName,
+                                                contractMonthlyBillingValue= property.contractMonthlyBillingValue,
+                                                contractRenterName= property.contractRenterName,
+                                                contractRenterCPF= property.contractRenterCPF,
+                                                contractRenterPhone= property.contractRenterPhone,
+                                                contractRenterEmail= property.contractRenterEmail,
+                                                contractGuarantorName= property.contractGuarantorName,
+                                                contractGuarantorCPF= property.contractGuarantorCPF,
+                                                contractGuarantorPhone= property.contractGuarantorPhone,
+                                                contractGuarantorEmail= property.contractGuarantorEmail,
+                                                contractPaymentDate= property.contractPaymentDate
+
+                                                )
                                         )
                                         openPropertyCreateDialog.value = false
                                         streetAddress.value = ""

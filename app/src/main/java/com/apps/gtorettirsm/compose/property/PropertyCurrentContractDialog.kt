@@ -404,7 +404,8 @@ fun PropertyCurrentContractDialog(
                     modifier = Modifier.fillMaxWidth()
                 ) {
 
-                    Button(onClick = {
+                    Button(
+                        onClick = {
                         openPropertyCurrentContractDialog.value = false
                     },
                         colors = ButtonDefaults.buttonColors(

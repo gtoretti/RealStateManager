@@ -45,6 +45,7 @@ import com.apps.gtorettirsm.viewmodels.PropertyViewModel
 import com.apps.gtorettirsm.viewmodels.ReceiptPDFViewModel
 import com.apps.gtorettirsm.viewmodels.ReceiptViewModel
 import kotlinx.coroutines.flow.Flow
+import java.util.Date
 
 @Composable
 fun PropertiesScreen(
@@ -200,7 +201,7 @@ fun PropertiesScreen(
         }
         when {
             openPropertyCreateDialog.value -> {
-                PropertyCreateScreen(openPropertyCreateDialog, propertyViewModel, context, Property(0L,"", "", "", "", "", "", "", 0.0,0,"", "", "", "", "", "" , 0, 0))
+                PropertyCreateScreen(openPropertyCreateDialog, propertyViewModel, context, Property(0L,"", "", "", "", "", "", "", 0.0,0,"", "", "", "", "", "", 0.0, "" , 0, "", "", "", "", "", "",  Date(0), Date(0), 0, "", 0.0, "", "", "", "", "", "", "", "", 0))
             }
         }
     }
