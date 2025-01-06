@@ -304,13 +304,13 @@ fun PropertyDetailScreen(
                                 )
                             )
                             Text(
-                                text = "Empresa Fornecedora:"
+                                text = "Empresa Fornecedora: " + property.cpflName
                             )
                             Text(
-                                text = "CPF do Titular:"
+                                text = "CPF do Titular: " + property.cpflCurrentCPF
                             )
                             Text(
-                                text = "Identificação do Consumidor/Instalação:"
+                                text = "Identificação do Consumidor/Instalação: " + property.cpflCustomerId
                             )
 
                             Row(
@@ -330,13 +330,13 @@ fun PropertyDetailScreen(
                                 )
                             )
                             Text(
-                                text = "Empresa Fornecedora:"
+                                text = "Empresa Fornecedora: " + property.sanasaName
                             )
                             Text(
-                                text = "CPF do Titular:"
+                                text = "CPF do Titular: " + property.sanasaCurrentCPF
                             )
                             Text(
-                                text = "Identificação do Consumidor/Instalação:"
+                                text = "Identificação do Consumidor/Instalação: " + property.sanasaCustomerId
                             )
 
                             Row(
@@ -390,16 +390,16 @@ fun PropertyDetailScreen(
                             )
 
                             Text(
-                                text = "Nome:"
+                                text = "Nome: " + property.contractManagerName
                             )
                             Text(
-                                text = "Telefone:"
+                                text = "Telefone: " + property.contractManagerPhoneNumber
                             )
                             Text(
-                                text = "E-mail:"
+                                text = "E-mail: "  + property.contractManagerEmail
                             )
                             Text(
-                                text = "Site:"
+                                text = "Site: " + property.contractManagerUrl
                             )
 
                             Row(

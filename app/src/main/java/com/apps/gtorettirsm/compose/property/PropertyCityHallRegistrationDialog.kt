@@ -228,7 +228,7 @@ fun PropertyCityHallRegistrationDialog(
                         realEstateRegistration = ""
                         iptuCartographicCode = ""
                         openPropertyCityHallRegistrationDialog.value = false
-                        showToast("Registro Municipal alterado com sucesso!",context)
+                        showToast("Registro Municipal atualizado com sucesso!",context)
 
                     },
                         colors = ButtonDefaults.buttonColors(

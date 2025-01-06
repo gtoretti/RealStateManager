@@ -77,6 +77,17 @@ fun PropertyContractedInstallationsDialog(
     var sanasaCustomerId by remember { mutableStateOf("") }
     var sanasaName by remember { mutableStateOf("") }
 
+    var loaded by remember { mutableStateOf(false) }
+    if (!loaded) {
+        cpflCurrentCPF = property.cpflCurrentCPF
+        cpflCustomerId = property.cpflCustomerId
+        cpflName = property.cpflName
+        sanasaCurrentCPF = property.sanasaCurrentCPF
+        sanasaCustomerId = property.sanasaCustomerId
+        sanasaName = property.sanasaName
+        loaded = true
+    }
+
     if (openPropertyContractedInstallationsDialog.value) {
         AlertDialog(shape = RoundedCornerShape(10.dp), onDismissRequest = {
             openPropertyContractedInstallationsDialog.value = false
@@ -272,6 +283,13 @@ fun PropertyContractedInstallationsDialog(
 
                     Button(
                         onClick = {
+
+                            cpflCurrentCPF=""
+                            cpflCustomerId=""
+                            cpflName=""
+                            sanasaCurrentCPF=""
+                            sanasaCustomerId=""
+                            sanasaName=""
                             openPropertyContractedInstallationsDialog.value = false
                     },
                         colors = ButtonDefaults.buttonColors(
@@ -286,7 +304,61 @@ fun PropertyContractedInstallationsDialog(
                     }
 
                     Button(onClick = {
+
+
+                        propertyViewModel.saveProperty(
+                            Property(
+                                propertyId = property.propertyId,
+                                streetAddress = property.streetAddress,
+                                state = property.state,
+                                city = property.city,
+                                district = property.district,
+                                number = property.number,
+                                complement = property.complement,
+                                zipCode = property.zipCode,
+                                rentalMonthlyPrice = property.rentalMonthlyPrice,
+                                occupied = property.occupied,
+                                cpflName = cpflName,
+                                cpflCustomerId = cpflCustomerId,
+                                cpflCurrentCPF = cpflCurrentCPF,
+                                sanasaName = sanasaName,
+                                sanasaCustomerId = sanasaCustomerId,
+                                sanasaCurrentCPF = sanasaCurrentCPF,
+                                iptuCartographicCode = property.iptuCartographicCode,
+                                realEstateRegistration = property.realEstateRegistration,
+                                totalMunicipalTaxes = property.totalMunicipalTaxes,
+                                urlGDriveFolder = property.urlGDriveFolder,
+                                deleted = 0,
+                                contractManagerName= property.contractManagerName,
+                                contractManagerUrl = property.contractManagerUrl,
+                                contractManagerPhoneNumber= property.contractManagerPhoneNumber,
+                                contractManagerEmail= property.contractManagerEmail,
+                                contractStartDate= property.contractStartDate,
+                                contractEndedDate= property.contractEndedDate,
+                                contractMonths= property.contractMonths,
+                                contractValueAdjustmentIndexName= property.contractValueAdjustmentIndexName,
+                                contractMonthlyBillingValue= property.contractMonthlyBillingValue,
+                                contractRenterName= property.contractRenterName,
+                                contractRenterCPF= property.contractRenterCPF,
+                                contractRenterPhone= property.contractRenterPhone,
+                                contractRenterEmail= property.contractRenterEmail,
+                                contractGuarantorName= property.contractGuarantorName,
+                                contractGuarantorCPF= property.contractGuarantorCPF,
+                                contractGuarantorPhone= property.contractGuarantorPhone,
+                                contractGuarantorEmail= property.contractGuarantorEmail,
+                                contractPaymentDate= property.contractPaymentDate
+                            ))
+
+
+
+                        cpflCurrentCPF=""
+                        cpflCustomerId=""
+                        cpflName=""
+                        sanasaCurrentCPF=""
+                        sanasaCustomerId=""
+                        sanasaName=""
                         openPropertyContractedInstallationsDialog.value = false
+                        showToast("Instalações atualizadas com sucesso!",context)
                     },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = getButtonColor()
