@@ -375,8 +375,6 @@ fun PropertyCreateScreen(
                                                 deleted = 0,
 
                                                 contractManagerName= property.contractManagerName,
-                                                contractManagerCnpj= property.contractManagerCnpj,
-                                                contractManagerAddress= property.contractManagerAddress,
                                                 contractManagerUrl = property.contractManagerUrl,
                                                 contractManagerPhoneNumber= property.contractManagerPhoneNumber,
                                                 contractManagerEmail= property.contractManagerEmail,

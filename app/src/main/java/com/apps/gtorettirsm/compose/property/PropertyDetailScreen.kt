@@ -87,11 +87,15 @@ fun PropertyDetailScreen(
     val openReceivePaymentDialog = remember { mutableStateOf(false) }
     val openPropertyExpensesDialog = remember { mutableStateOf(false) }
     val openPropertyCurrentContractDialog = remember { mutableStateOf(false) }
+    val openPropertyCityHallRegistrationDialog = remember { mutableStateOf(false) }
+    val openPropertyContractManagerDialog = remember { mutableStateOf(false) }
+    val openPropertyContractedInstallationsDialog = remember { mutableStateOf(false) }
+
 
 
 
     val property by propertyFlow.collectAsStateWithLifecycle(
-        initialValue = Property(0L,"", "", "", "", "", "", "", 0.0,0,"", "", "", "", "", "", 0.0, "" , 0, "", "", "", "", "", "",  Date(0), Date(0), 0, "", 0.0, "", "", "", "", "", "", "", "", 0)
+        initialValue = Property(0L,"", "", "", "", "", "", "", 0.0,0,"", "", "", "", "", "", 0.0, "" , 0,  "", "", "", "",  Date(0), Date(0), 0, "", 0.0, "", "", "", "", "", "", "", "", 0)
     )
 
 
@@ -245,9 +249,6 @@ fun PropertyDetailScreen(
                             Text(
                                 text = "Código Cartográfico:"
                             )
-                            Text(
-                                text = "Gastos Anuais com Impostos e Taxas (IPTU):"
-                            )
 
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
@@ -265,7 +266,7 @@ fun PropertyDetailScreen(
 
                                 Button(
                                     onClick = {
-                                        openReceivePaymentDialog.value = true
+                                        openPropertyCityHallRegistrationDialog.value = true
                                     },
                                     colors = ButtonDefaults.buttonColors(
                                         containerColor = getButtonColor()
@@ -273,7 +274,7 @@ fun PropertyDetailScreen(
                                     modifier = Modifier.height(30.dp)
                                 ) {
                                     Text(
-                                        text = "Alterar Informações",
+                                        text = "Alterar Registro Municipal",
                                         style = TextStyle(
                                             fontSize = 14.sp,
                                         )
@@ -288,11 +289,11 @@ fun PropertyDetailScreen(
                             ) {
                                 Spacer(modifier = Modifier.height(20.dp))
                             }
+
                             HorizontalDivider(thickness = 1.dp)
 
-
                             Text(
-                                text = "Fluxo de Caixa de Aluguel:",
+                                text = "Instalações Contratadas:",
                                 style = TextStyle(
                                     color = getTextColor(),
                                     fontSize = 16.sp,
@@ -308,38 +309,66 @@ fun PropertyDetailScreen(
                                 Spacer(modifier = Modifier.height(20.dp))
                             }
 
+                            Text(
+                                text = "Energia Elétrica:",
+                                style = TextStyle(
+                                    color = getTextColor(),
+                                    fontSize = 14.sp,
+                                    fontWeight = FontWeight.Bold,
+                                )
+                            )
+                            Text(
+                                text = "Empresa Fornecedora:"
+                            )
+                            Text(
+                                text = "CPF do Titular:"
+                            )
+                            Text(
+                                text = "Identificação do Consumidor/Instalação:"
+                            )
+
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.Center,
+                                horizontalArrangement = Arrangement.End,
                                 modifier = Modifier.fillMaxWidth()
                             ) {
-                                Button(
-                                    onClick = {
-                                        openPropertyExpensesDialog.value = true
-                                    },
-                                    colors = ButtonDefaults.buttonColors(
-                                        containerColor = getButtonColor()
-                                    ),
-                                    modifier = Modifier.height(30.dp)
-                                ) {
-                                    Text(
-                                        text = "Gastos",
-                                        style = TextStyle(
-                                            fontSize = 14.sp,
-                                        )
-                                    )
-                                }
-
+                                Spacer(modifier = Modifier.height(10.dp))
                             }
+
+                            Text(
+                                text = "Água e Esgoto:",
+                                style = TextStyle(
+                                    color = getTextColor(),
+                                    fontSize = 14.sp,
+                                    fontWeight = FontWeight.Bold,
+                                )
+                            )
+                            Text(
+                                text = "Empresa Fornecedora:"
+                            )
+                            Text(
+                                text = "CPF do Titular:"
+                            )
+                            Text(
+                                text = "Identificação do Consumidor/Instalação:"
+                            )
+
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.End,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Spacer(modifier = Modifier.height(20.dp))
+                            }
+
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.Center,
                                 modifier = Modifier.fillMaxWidth()
                             ) {
-
                                 Button(
                                     onClick = {
-                                        openReceivePaymentDialog.value = true
+                                        openPropertyContractedInstallationsDialog.value=true
                                     },
                                     colors = ButtonDefaults.buttonColors(
                                         containerColor = getButtonColor()
@@ -347,7 +376,7 @@ fun PropertyDetailScreen(
                                     modifier = Modifier.height(30.dp)
                                 ) {
                                     Text(
-                                        text = "Receitas",
+                                        text = "Alterar Instalações",
                                         style = TextStyle(
                                             fontSize = 14.sp,
                                         )
@@ -362,8 +391,6 @@ fun PropertyDetailScreen(
                             ) {
                                 Spacer(modifier = Modifier.height(20.dp))
                             }
-
-
 
                             HorizontalDivider(thickness = 1.dp)
 
@@ -404,7 +431,7 @@ fun PropertyDetailScreen(
                             ) {
                                 Button(
                                     onClick = {
-
+                                        openPropertyContractManagerDialog.value = true
                                     },
                                     colors = ButtonDefaults.buttonColors(
                                         containerColor = getButtonColor()
@@ -507,7 +534,7 @@ fun PropertyDetailScreen(
                                     modifier = Modifier.height(30.dp)
                                 ) {
                                     Text(
-                                        text = "Alterar Informações do Contrato",
+                                        text = "Alterar Contrato",
                                         style = TextStyle(
                                             fontSize = 14.sp,
                                         )
@@ -599,108 +626,8 @@ fun PropertyDetailScreen(
                             }
 
 
-                            HorizontalDivider(thickness = 1.dp)
-
-                            Text(
-                                text = "Instalações Contratadas:",
-                                style = TextStyle(
-                                    color = getTextColor(),
-                                    fontSize = 16.sp,
-                                    fontWeight = FontWeight.Bold,
-                                )
-                            )
-
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.End,
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Spacer(modifier = Modifier.height(20.dp))
-                            }
-
-                            Text(
-                                text = "Energia Elétrica:",
-                                style = TextStyle(
-                                    color = getTextColor(),
-                                    fontSize = 14.sp,
-                                    fontWeight = FontWeight.Bold,
-                                )
-                            )
-                            Text(
-                                text = "Empresa Fornecedora:"
-                            )
-                            Text(
-                                text = "CPF do Titular:"
-                            )
-                            Text(
-                                text = "Código do Consumidor/Instalação:"
-                            )
-
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.End,
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Spacer(modifier = Modifier.height(10.dp))
-                            }
-
-                            Text(
-                                text = "Água e Esgoto:",
-                                style = TextStyle(
-                                    color = getTextColor(),
-                                    fontSize = 14.sp,
-                                    fontWeight = FontWeight.Bold,
-                                )
-                            )
-                            Text(
-                                text = "Empresa Fornecedora:"
-                            )
-                            Text(
-                                text = "CPF do Titular:"
-                            )
-                            Text(
-                                text = "Código do Consumidor/Instalação:"
-                            )
-
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.End,
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Spacer(modifier = Modifier.height(20.dp))
-                            }
-
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.Center,
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Button(
-                                    onClick = {
-
-                                    },
-                                    colors = ButtonDefaults.buttonColors(
-                                        containerColor = getButtonColor()
-                                    ),
-                                    modifier = Modifier.height(30.dp)
-                                ) {
-                                    Text(
-                                        text = "Alterar Instalações",
-                                        style = TextStyle(
-                                            fontSize = 14.sp,
-                                        )
-                                    )
-                                }
-                            }
 
 
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.End,
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Spacer(modifier = Modifier.height(20.dp))
-                            }
 
 
                             HorizontalDivider(thickness = 1.dp)
@@ -801,6 +728,30 @@ fun PropertyDetailScreen(
             openPropertyCurrentContractDialog.value -> {
                 PropertyCurrentContractDialog(
                     openPropertyCurrentContractDialog = openPropertyCurrentContractDialog,
+                    context = context
+                )
+            }
+        }
+        when {
+            openPropertyCityHallRegistrationDialog.value -> {
+                PropertyCityHallRegistrationDialog(
+                    openPropertyCityHallRegistrationDialog = openPropertyCityHallRegistrationDialog,
+                    context = context
+                )
+            }
+        }
+        when {
+            openPropertyContractManagerDialog.value -> {
+                PropertyContractManagerDialog(
+                    openPropertyContractManagerDialog = openPropertyContractManagerDialog,
+                    context = context
+                )
+            }
+        }
+        when {
+            openPropertyContractedInstallationsDialog.value -> {
+                PropertyContractedInstallationsDialog(
+                    openPropertyContractedInstallationsDialog = openPropertyContractedInstallationsDialog,
                     context = context
                 )
             }

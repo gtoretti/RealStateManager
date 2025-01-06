@@ -33,8 +33,6 @@ data class Property(
     val deleted: Int,
 
     val contractManagerName: String,
-    val contractManagerCnpj: String,
-    val contractManagerAddress: String,
     val contractManagerUrl: String,
     val contractManagerPhoneNumber: String,
     val contractManagerEmail: String,
