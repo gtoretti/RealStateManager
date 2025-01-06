@@ -6,6 +6,7 @@ package com.apps.gtorettirsm.compose.property
 import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -332,125 +333,140 @@ fun PropertyCreateScreen(
 
             },
             confirmButton = {
-                Button(
-                    onClick = {
-                        if (zipCode.value.isEmpty() || zipCode.value.isBlank()){
-                            showToast("Por favor, informe o CEP do imóvel.",context)
-                        }else
-                        if (streetAddress.value.isEmpty() || streetAddress.value.isBlank()){
-                            showToast("Por favor, informe o logradouro do imóvel.",context)
-                        }else
-                            if (district.value.isEmpty() || district.value.isBlank()){
-                                showToast("Por favor, informe o bairro do imóvel.",context)
-                            }else
-                            if (city.value.isEmpty() || city.value.isBlank()){
-                                showToast("Por favor, informe a cidade do imóvel.",context)
-                            }else
-                                if (state.value.isEmpty() || state.value.isBlank()){
-                                    showToast("Por favor, informe o UF do imóvel.",context)
-                                }else
-                                {
-                                    try {
-                                        propertyViewModel.saveProperty(
-                                            Property(
-                                                propertyId = property.propertyId,
-                                                streetAddress = streetAddress.value,
-                                                state = state.value,
-                                                city = city.value,
-                                                district = district.value,
-                                                number = number.value,
-                                                complement = complement.value,
-                                                zipCode = zipCode.value,
-                                                rentalMonthlyPrice = property.rentalMonthlyPrice,
-                                                occupied = property.occupied,
-                                                cpflCustomerId = property.cpflCustomerId,
-                                                cpflCurrentCPF = property.cpflCurrentCPF,
-                                                sanasaCustomerId = property.sanasaCustomerId,
-                                                sanasaCurrentCPF = property.sanasaCurrentCPF,
-                                                iptuCartographicCode = property.iptuCartographicCode,
-                                                realEstateRegistration = property.realEstateRegistration,
-                                                totalMunicipalTaxes = property.totalMunicipalTaxes,
 
-                                                urlGDriveFolder = property.urlGDriveFolder,
-                                                deleted = 0,
-
-                                                contractManagerName= property.contractManagerName,
-                                                contractManagerUrl = property.contractManagerUrl,
-                                                contractManagerPhoneNumber= property.contractManagerPhoneNumber,
-                                                contractManagerEmail= property.contractManagerEmail,
-
-                                                contractStartDate= property.contractStartDate,
-                                                contractEndedDate= property.contractEndedDate,
-                                                contractMonths= property.contractMonths,
-                                                contractValueAdjustmentIndexName= property.contractValueAdjustmentIndexName,
-                                                contractMonthlyBillingValue= property.contractMonthlyBillingValue,
-                                                contractRenterName= property.contractRenterName,
-                                                contractRenterCPF= property.contractRenterCPF,
-                                                contractRenterPhone= property.contractRenterPhone,
-                                                contractRenterEmail= property.contractRenterEmail,
-                                                contractGuarantorName= property.contractGuarantorName,
-                                                contractGuarantorCPF= property.contractGuarantorCPF,
-                                                contractGuarantorPhone= property.contractGuarantorPhone,
-                                                contractGuarantorEmail= property.contractGuarantorEmail,
-                                                contractPaymentDate= property.contractPaymentDate
-
-                                                )
-                                        )
-                                        openPropertyCreateDialog.value = false
-                                        streetAddress.value = ""
-                                        state.value = ""
-                                        city.value = ""
-                                        district.value = ""
-                                        number.value = ""
-                                        complement.value = ""
-                                        zipCode.value = ""
-                                        loadProperty.value="true"
-                                        if (property.propertyId==0L){
-                                            showToast("Imóvel adicionado com sucesso!",context)
-                                        }else{
-                                            showToast("Endereço alterado com sucesso!",context)
-                                        }
-
-                                    } catch (ex: Exception) {
-
-                                    }
-                                }
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = getButtonColor()
-                    ),modifier = Modifier.height(30.dp)
-                ) {
-                    Text(
-                        text = "Salvar",
-                        style = TextStyle(
-                            fontSize = 14.sp,
-                        )
-                    )
-                }
             }, dismissButton = {
-                Button(
-                    onClick = {
-                        openPropertyCreateDialog.value = false
-                        streetAddress.value = ""
-                        state.value = ""
-                        city.value = ""
-                        district.value = ""
-                        number.value = ""
-                        complement.value = ""
-                        zipCode.value = ""
-                        loadProperty.value="true"
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = getButtonColor()
-                    ),modifier = Modifier.height(30.dp)
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(
-                        text = "Cancelar",
-                        style = TextStyle(
-                            fontSize = 14.sp,
+
+                    Button(
+                        onClick = {
+                            openPropertyCreateDialog.value = false
+                            streetAddress.value = ""
+                            state.value = ""
+                            city.value = ""
+                            district.value = ""
+                            number.value = ""
+                            complement.value = ""
+                            zipCode.value = ""
+                            loadProperty.value="true"
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = getButtonColor()
+                        ),modifier = Modifier.height(30.dp)
+                    ) {
+                        Text(
+                            text = "Cancelar",
+                            style = TextStyle(
+                                fontSize = 14.sp,
+                            )
                         )
-                    )
+                    }
+
+
+                    Button(
+                        onClick = {
+                            if (zipCode.value.isEmpty() || zipCode.value.isBlank()){
+                                showToast("Por favor, informe o CEP do imóvel.",context)
+                            }else
+                                if (streetAddress.value.isEmpty() || streetAddress.value.isBlank()){
+                                    showToast("Por favor, informe o logradouro do imóvel.",context)
+                                }else
+                                    if (district.value.isEmpty() || district.value.isBlank()){
+                                        showToast("Por favor, informe o bairro do imóvel.",context)
+                                    }else
+                                        if (city.value.isEmpty() || city.value.isBlank()){
+                                            showToast("Por favor, informe a cidade do imóvel.",context)
+                                        }else
+                                            if (state.value.isEmpty() || state.value.isBlank()){
+                                                showToast("Por favor, informe o UF do imóvel.",context)
+                                            }else
+                                            {
+                                                try {
+                                                    propertyViewModel.saveProperty(
+                                                        Property(
+                                                            propertyId = property.propertyId,
+                                                            streetAddress = streetAddress.value,
+                                                            state = state.value,
+                                                            city = city.value,
+                                                            district = district.value,
+                                                            number = number.value,
+                                                            complement = complement.value,
+                                                            zipCode = zipCode.value,
+                                                            rentalMonthlyPrice = property.rentalMonthlyPrice,
+                                                            occupied = property.occupied,
+                                                            cpflName = property.cpflName,
+                                                            cpflCustomerId = property.cpflCustomerId,
+                                                            cpflCurrentCPF = property.cpflCurrentCPF,
+                                                            sanasaName = property.sanasaName,
+                                                            sanasaCustomerId = property.sanasaCustomerId,
+                                                            sanasaCurrentCPF = property.sanasaCurrentCPF,
+                                                            iptuCartographicCode = property.iptuCartographicCode,
+                                                            realEstateRegistration = property.realEstateRegistration,
+                                                            totalMunicipalTaxes = property.totalMunicipalTaxes,
+
+                                                            urlGDriveFolder = property.urlGDriveFolder,
+                                                            deleted = 0,
+
+                                                            contractManagerName= property.contractManagerName,
+                                                            contractManagerUrl = property.contractManagerUrl,
+                                                            contractManagerPhoneNumber= property.contractManagerPhoneNumber,
+                                                            contractManagerEmail= property.contractManagerEmail,
+
+                                                            contractStartDate= property.contractStartDate,
+                                                            contractEndedDate= property.contractEndedDate,
+                                                            contractMonths= property.contractMonths,
+                                                            contractValueAdjustmentIndexName= property.contractValueAdjustmentIndexName,
+                                                            contractMonthlyBillingValue= property.contractMonthlyBillingValue,
+                                                            contractRenterName= property.contractRenterName,
+                                                            contractRenterCPF= property.contractRenterCPF,
+                                                            contractRenterPhone= property.contractRenterPhone,
+                                                            contractRenterEmail= property.contractRenterEmail,
+                                                            contractGuarantorName= property.contractGuarantorName,
+                                                            contractGuarantorCPF= property.contractGuarantorCPF,
+                                                            contractGuarantorPhone= property.contractGuarantorPhone,
+                                                            contractGuarantorEmail= property.contractGuarantorEmail,
+                                                            contractPaymentDate= property.contractPaymentDate
+
+                                                        )
+                                                    )
+                                                    openPropertyCreateDialog.value = false
+                                                    streetAddress.value = ""
+                                                    state.value = ""
+                                                    city.value = ""
+                                                    district.value = ""
+                                                    number.value = ""
+                                                    complement.value = ""
+                                                    zipCode.value = ""
+                                                    loadProperty.value="true"
+                                                    if (property.propertyId==0L){
+                                                        showToast("Imóvel adicionado com sucesso!",context)
+                                                    }else{
+                                                        showToast("Endereço alterado com sucesso!",context)
+                                                    }
+
+                                                } catch (ex: Exception) {
+
+                                                }
+                                            }
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = getButtonColor()
+                        ),modifier = Modifier.height(30.dp)
+                    ) {
+                        Text(
+                            text = "Salvar",
+                            style = TextStyle(
+                                fontSize = 14.sp,
+                            )
+                        )
+                    }
+
                 }
+
             }
         )
     }
@@ -524,28 +540,36 @@ fun PropertyCreateScreen(
                                             text = address.bairro + " - " + address.localidade + " - " + address.uf
                                         )
 
-                                        Button(
-                                            onClick = {
-
-                                                streetAddress.value = address.logradouro
-                                                state.value = address.uf
-                                                city.value = address.localidade
-                                                district.value = address.bairro
-                                                zipCode.value = address.cep
-
-                                                openCEPListDialog.value = false
-                                            },
-                                            colors = ButtonDefaults.buttonColors(
-                                                containerColor = getButtonColor()
-                                            ),modifier = Modifier.height(30.dp)
+                                        Row(
+                                            verticalAlignment = Alignment.CenterVertically,
+                                            horizontalArrangement = Arrangement.End,
+                                            modifier = Modifier.fillMaxWidth()
                                         ) {
-                                            Text(
-                                                text = "Confirmar",
-                                                style = TextStyle(
-                                                    fontSize = 12.sp,
+                                            Button(
+                                                onClick = {
+
+                                                    streetAddress.value = address.logradouro
+                                                    state.value = address.uf
+                                                    city.value = address.localidade
+                                                    district.value = address.bairro
+                                                    zipCode.value = address.cep
+
+                                                    openCEPListDialog.value = false
+                                                },
+                                                colors = ButtonDefaults.buttonColors(
+                                                    containerColor = getButtonColor()
+                                                ),modifier = Modifier.height(30.dp)
+                                            ) {
+                                                Text(
+                                                    text = "Selecionar",
+                                                    style = TextStyle(
+                                                        fontSize = 12.sp,
+                                                    )
                                                 )
-                                            )
+                                            }
                                         }
+
+
                                         HorizontalDivider(thickness = 2.dp)
 
                                     }
@@ -561,21 +585,30 @@ fun PropertyCreateScreen(
 
 
             }, dismissButton = {
-                Button(
-                    onClick = {
-                        openCEPListDialog.value = false
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = getButtonColor()
-                    ),modifier = Modifier.height(30.dp)
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(
-                        text = "Cancelar",
-                        style = TextStyle(
-                            fontSize = 14.sp,
+                    Button(
+                        onClick = {
+                            openCEPListDialog.value = false
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = getButtonColor()
+                        ),modifier = Modifier.height(30.dp)
+                    ) {
+                        Text(
+                            text = "Cancelar",
+                            style = TextStyle(
+                                fontSize = 14.sp,
+                            )
                         )
-                    )
+                    }
                 }
+
+
             }
         )
 

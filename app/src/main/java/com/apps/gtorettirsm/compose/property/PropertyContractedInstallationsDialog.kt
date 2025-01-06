@@ -8,6 +8,7 @@ import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -54,6 +55,7 @@ import com.apps.gtorettirsm.compose.utils.showToast
 import com.apps.gtorettirsm.compose.utils.toScreen
 import com.apps.gtorettirsm.data.Property
 import com.apps.gtorettirsm.data.Receipt
+import com.apps.gtorettirsm.viewmodels.PropertyViewModel
 import com.apps.gtorettirsm.viewmodels.ReceiptPDFViewModel
 import com.apps.gtorettirsm.viewmodels.ReceiptViewModel
 import java.text.SimpleDateFormat
@@ -63,7 +65,9 @@ import java.util.Date
 @Composable
 fun PropertyContractedInstallationsDialog(
     openPropertyContractedInstallationsDialog: MutableState<Boolean>,
-    context: Context
+    propertyViewModel: PropertyViewModel,
+    context: Context,
+    property: Property
 ) {
 
     var cpflCurrentCPF by remember { mutableStateOf("") }
@@ -78,7 +82,7 @@ fun PropertyContractedInstallationsDialog(
             openPropertyContractedInstallationsDialog.value = false
         }, modifier = Modifier
             .width(550.dp)
-            .height(800.dp),
+            .height(700.dp),
 
             title = {
                 Text(
@@ -173,6 +177,13 @@ fun PropertyContractedInstallationsDialog(
                                 }
                             )
 
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.End,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Spacer(modifier = Modifier.height(20.dp))
+                            }
 
                             Text(
                                 text = "Água e Esgoto:", style = TextStyle(
@@ -268,7 +279,7 @@ fun PropertyContractedInstallationsDialog(
                         ),modifier = Modifier.height(30.dp)
                     ) {
                         Text(
-                            text = "Salvar", style = TextStyle(
+                            text = "Cancelar", style = TextStyle(
                                 fontSize = 14.sp,
                             )
                         )
@@ -282,7 +293,7 @@ fun PropertyContractedInstallationsDialog(
                         ),modifier = Modifier.height(30.dp)
                     ) {
                         Text(
-                            text = "Cancelar", style = TextStyle(
+                            text = "Salvar", style = TextStyle(
                                 fontSize = 14.sp,
                             )
                         )

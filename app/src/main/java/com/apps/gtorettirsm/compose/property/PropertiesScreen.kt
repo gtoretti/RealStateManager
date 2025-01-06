@@ -193,7 +193,6 @@ fun PropertiesScreen(
                 PropertyDetailScreen(
                     openPropertyDetailDialog,
                     propertyViewModel,
-                    receiptViewModel,
                     propertyId.value,
                     context
                 )
@@ -201,7 +200,7 @@ fun PropertiesScreen(
         }
         when {
             openPropertyCreateDialog.value -> {
-                PropertyCreateScreen(openPropertyCreateDialog, propertyViewModel, context, Property(0L,"", "", "", "", "", "", "", 0.0,0,"", "", "", "", "", "", 0.0, "" , 0,  "", "", "", "",  Date(0), Date(0), 0, "", 0.0, "", "", "", "", "", "", "", "", 0))
+                PropertyCreateScreen(openPropertyCreateDialog, propertyViewModel, context, Property(0L,"", "", "", "", "", "", "", 0.0,0,"", "", "", "","","", "", "", 0.0, "" , 0,  "", "", "", "",  Date(0), Date(0), 0, "", 0.0, "", "", "", "", "", "", "", "", 0))
             }
         }
     }

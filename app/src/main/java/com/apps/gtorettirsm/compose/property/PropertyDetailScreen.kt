@@ -56,7 +56,6 @@ import java.util.Date
 fun PropertyDetailScreen(
     openPropertyDetailDialog: MutableState<Boolean>,
     propertyViewModel: PropertyViewModel = hiltViewModel(),
-    receiptViewModel: ReceiptViewModel = hiltViewModel(),
     propertyId: Long,
     context: Context
 ) {
@@ -66,8 +65,6 @@ fun PropertyDetailScreen(
         openPropertyDetailDialog = openPropertyDetailDialog,
         propertyFlow = property,
         propertyViewModel = propertyViewModel,
-        receiptViewModel = receiptViewModel,
-        propertyId = propertyId,
         context = context
     )
 }
@@ -77,31 +74,19 @@ fun PropertyDetailScreen(
     openPropertyDetailDialog: MutableState<Boolean>,
     propertyFlow: Flow<Property>,
     propertyViewModel: PropertyViewModel,
-    receiptViewModel: ReceiptViewModel,
-    propertyId: Long,
     context: Context
 ) {
 
     val openPropertyDeleteDialog = remember { mutableStateOf(false) }
     val openPropertyChangeAddressDialog = remember { mutableStateOf(false) }
-    val openReceivePaymentDialog = remember { mutableStateOf(false) }
-    val openPropertyExpensesDialog = remember { mutableStateOf(false) }
     val openPropertyCurrentContractDialog = remember { mutableStateOf(false) }
     val openPropertyCityHallRegistrationDialog = remember { mutableStateOf(false) }
     val openPropertyContractManagerDialog = remember { mutableStateOf(false) }
     val openPropertyContractedInstallationsDialog = remember { mutableStateOf(false) }
 
-
-
-
     val property by propertyFlow.collectAsStateWithLifecycle(
-        initialValue = Property(0L,"", "", "", "", "", "", "", 0.0,0,"", "", "", "", "", "", 0.0, "" , 0,  "", "", "", "",  Date(0), Date(0), 0, "", 0.0, "", "", "", "", "", "", "", "", 0)
+        initialValue = Property(0L,"", "", "", "", "", "", "", 0.0,0,"", "", "", "", "", "","","", 0.0, "" , 0,  "", "", "", "",  Date(0), Date(0), 0, "", 0.0, "", "", "", "", "", "", "", "", 0)
     )
-
-
-    val unpaidFlow = receiptViewModel.getUnpaidReceipts(propertyId)
-    val unpaids by unpaidFlow.collectAsStateWithLifecycle(initialValue = emptyList())
-
 
     if (openPropertyDetailDialog.value) {
         AlertDialog(
@@ -183,7 +168,8 @@ fun PropertyDetailScreen(
                             ) {
                                 Button(
                                     onClick = {
-                                        openPropertyDeleteDialog.value = true
+                                        openPropertyChangeAddressDialog.value = true
+
                                     },
                                     colors = ButtonDefaults.buttonColors(
                                         containerColor = getButtonColor()
@@ -208,7 +194,7 @@ fun PropertyDetailScreen(
 
                                 Button(
                                     onClick = {
-                                        openPropertyChangeAddressDialog.value = true
+                                        openPropertyDeleteDialog.value = true
                                     },
                                     colors = ButtonDefaults.buttonColors(
                                         containerColor = getButtonColor()
@@ -244,10 +230,10 @@ fun PropertyDetailScreen(
                             )
 
                             Text(
-                                text = "Inscrição Imobiliária:"
+                                text = "Inscrição Imobiliária: " + property.realEstateRegistration
                             )
                             Text(
-                                text = "Código Cartográfico:"
+                                text = "Código Cartográfico: " + property.iptuCartographicCode
                             )
 
                             Row(
@@ -700,34 +686,13 @@ fun PropertyDetailScreen(
                 PropertyCreateScreen(openPropertyChangeAddressDialog, propertyViewModel, context, property)
             }
         }
-        when {
-            openReceivePaymentDialog.value -> {
-                PropertyReceivePaymentDialog(
-                    openReceivePaymentDialog = openReceivePaymentDialog,
-                    unpaids = unpaids,
-                    receiptViewModel = hiltViewModel(),
-                    receiptPDFViewModel = hiltViewModel(),
-                    property = property,
-                    context = context
-                )
-            }
-        }
-        when {
-            openPropertyExpensesDialog.value -> {
-                PropertyExpensesDialog(
-                    openPropertyExpensesDialog = openPropertyExpensesDialog,
-                    unpaids = unpaids,
-                    receiptViewModel = hiltViewModel(),
-                    receiptPDFViewModel = hiltViewModel(),
-                    property = property,
-                    context = context
-                )
-            }
-        }
+
         when {
             openPropertyCurrentContractDialog.value -> {
                 PropertyCurrentContractDialog(
                     openPropertyCurrentContractDialog = openPropertyCurrentContractDialog,
+                    propertyViewModel = propertyViewModel,
+                    property = property,
                     context = context
                 )
             }
@@ -736,6 +701,8 @@ fun PropertyDetailScreen(
             openPropertyCityHallRegistrationDialog.value -> {
                 PropertyCityHallRegistrationDialog(
                     openPropertyCityHallRegistrationDialog = openPropertyCityHallRegistrationDialog,
+                    propertyViewModel = propertyViewModel,
+                    property = property,
                     context = context
                 )
             }
@@ -744,6 +711,8 @@ fun PropertyDetailScreen(
             openPropertyContractManagerDialog.value -> {
                 PropertyContractManagerDialog(
                     openPropertyContractManagerDialog = openPropertyContractManagerDialog,
+                    propertyViewModel = propertyViewModel,
+                    property = property,
                     context = context
                 )
             }
@@ -752,6 +721,8 @@ fun PropertyDetailScreen(
             openPropertyContractedInstallationsDialog.value -> {
                 PropertyContractedInstallationsDialog(
                     openPropertyContractedInstallationsDialog = openPropertyContractedInstallationsDialog,
+                    propertyViewModel = propertyViewModel,
+                    property = property,
                     context = context
                 )
             }

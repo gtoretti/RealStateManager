@@ -54,6 +54,7 @@ import com.apps.gtorettirsm.compose.utils.showToast
 import com.apps.gtorettirsm.compose.utils.toScreen
 import com.apps.gtorettirsm.data.Property
 import com.apps.gtorettirsm.data.Receipt
+import com.apps.gtorettirsm.viewmodels.PropertyViewModel
 import com.apps.gtorettirsm.viewmodels.ReceiptPDFViewModel
 import com.apps.gtorettirsm.viewmodels.ReceiptViewModel
 import java.text.SimpleDateFormat
@@ -63,19 +64,27 @@ import java.util.Date
 @Composable
 fun PropertyCityHallRegistrationDialog(
     openPropertyCityHallRegistrationDialog: MutableState<Boolean>,
-    context: Context
+    propertyViewModel: PropertyViewModel,
+    context: Context,
+    property: Property
 ) {
 
     var realEstateRegistration by remember { mutableStateOf("") }
-    var totalMunicipalTaxes by remember { mutableStateOf("") }
     var iptuCartographicCode by remember { mutableStateOf("") }
+
+    var loaded by remember { mutableStateOf(false) }
+    if (!loaded) {
+        realEstateRegistration = property.realEstateRegistration
+        iptuCartographicCode = property.iptuCartographicCode
+        loaded = true
+    }
 
     if (openPropertyCityHallRegistrationDialog.value) {
         AlertDialog(shape = RoundedCornerShape(10.dp), onDismissRequest = {
             openPropertyCityHallRegistrationDialog.value = false
         }, modifier = Modifier
             .width(550.dp)
-            .height(800.dp),
+            .height(300.dp),
 
             title = {
                 Text(
@@ -140,30 +149,6 @@ fun PropertyCityHallRegistrationDialog(
                                 }
                             )
 
-                            OutlinedTextField(
-                                value = totalMunicipalTaxes,
-                                onValueChange = {
-                                    totalMunicipalTaxes = it
-                                },
-                                placeholder = { Text("00.000,00") },
-                                keyboardOptions = KeyboardOptions(
-                                    keyboardType = KeyboardType.Decimal
-                                ),
-                                textStyle = TextStyle(
-                                    fontSize = 16.sp,
-                                    color = getTextColor(),
-                                    fontWeight = FontWeight.Normal
-                                ),
-
-                                label = {
-                                    Text(
-                                        text = "Gastos Anuais com Impostos/Taxas (IPTU):",
-                                        style = TextStyle(
-                                            color = getTextColor(), fontSize = 12.sp,
-                                        )
-                                    )
-                                }
-                            )
 
                         }
 
@@ -180,6 +165,8 @@ fun PropertyCityHallRegistrationDialog(
 
                     Button(
                         onClick = {
+                            realEstateRegistration = ""
+                            iptuCartographicCode = ""
                             openPropertyCityHallRegistrationDialog.value = false
                     },
                         colors = ButtonDefaults.buttonColors(
@@ -187,21 +174,69 @@ fun PropertyCityHallRegistrationDialog(
                         ),modifier = Modifier.height(30.dp)
                     ) {
                         Text(
-                            text = "Salvar", style = TextStyle(
+                            text = "Cancelar", style = TextStyle(
                                 fontSize = 14.sp,
                             )
                         )
                     }
 
                     Button(onClick = {
+
+                        propertyViewModel.saveProperty(
+                            Property(
+                                propertyId = property.propertyId,
+                                streetAddress = property.streetAddress,
+                                state = property.state,
+                                city = property.city,
+                                district = property.district,
+                                number = property.number,
+                                complement = property.complement,
+                                zipCode = property.zipCode,
+                                rentalMonthlyPrice = property.rentalMonthlyPrice,
+                                occupied = property.occupied,
+                                cpflName = property.cpflName,
+                                cpflCustomerId = property.cpflCustomerId,
+                                cpflCurrentCPF = property.cpflCurrentCPF,
+                                sanasaName = property.sanasaName,
+                                sanasaCustomerId = property.sanasaCustomerId,
+                                sanasaCurrentCPF = property.sanasaCurrentCPF,
+                                iptuCartographicCode = iptuCartographicCode,
+                                realEstateRegistration = realEstateRegistration,
+                                totalMunicipalTaxes = property.totalMunicipalTaxes,
+                                urlGDriveFolder = property.urlGDriveFolder,
+                                deleted = 0,
+                                contractManagerName= property.contractManagerName,
+                                contractManagerUrl = property.contractManagerUrl,
+                                contractManagerPhoneNumber= property.contractManagerPhoneNumber,
+                                contractManagerEmail= property.contractManagerEmail,
+                                contractStartDate= property.contractStartDate,
+                                contractEndedDate= property.contractEndedDate,
+                                contractMonths= property.contractMonths,
+                                contractValueAdjustmentIndexName= property.contractValueAdjustmentIndexName,
+                                contractMonthlyBillingValue= property.contractMonthlyBillingValue,
+                                contractRenterName= property.contractRenterName,
+                                contractRenterCPF= property.contractRenterCPF,
+                                contractRenterPhone= property.contractRenterPhone,
+                                contractRenterEmail= property.contractRenterEmail,
+                                contractGuarantorName= property.contractGuarantorName,
+                                contractGuarantorCPF= property.contractGuarantorCPF,
+                                contractGuarantorPhone= property.contractGuarantorPhone,
+                                contractGuarantorEmail= property.contractGuarantorEmail,
+                                contractPaymentDate= property.contractPaymentDate
+                            ))
+
+                        realEstateRegistration = ""
+                        iptuCartographicCode = ""
                         openPropertyCityHallRegistrationDialog.value = false
+                        showToast("Registro Municipal alterado com sucesso!",context)
+
                     },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = getButtonColor()
                         ),modifier = Modifier.height(30.dp)
                     ) {
                         Text(
-                            text = "Cancelar", style = TextStyle(
+                            text = "Salvar", style = TextStyle(
                                 fontSize = 14.sp,
                             )
                         )

@@ -54,6 +54,7 @@ import com.apps.gtorettirsm.compose.utils.showToast
 import com.apps.gtorettirsm.compose.utils.toScreen
 import com.apps.gtorettirsm.data.Property
 import com.apps.gtorettirsm.data.Receipt
+import com.apps.gtorettirsm.viewmodels.PropertyViewModel
 import com.apps.gtorettirsm.viewmodels.ReceiptPDFViewModel
 import com.apps.gtorettirsm.viewmodels.ReceiptViewModel
 import java.text.SimpleDateFormat
@@ -63,7 +64,9 @@ import java.util.Date
 @Composable
 fun PropertyContractManagerDialog(
     openPropertyContractManagerDialog: MutableState<Boolean>,
-    context: Context
+    propertyViewModel: PropertyViewModel,
+    context: Context,
+    property: Property
 ) {
 
     var contractManagerName by remember { mutableStateOf("") }
@@ -76,7 +79,7 @@ fun PropertyContractManagerDialog(
             openPropertyContractManagerDialog.value = false
         }, modifier = Modifier
             .width(550.dp)
-            .height(800.dp),
+            .height(450.dp),
 
             title = {
                 Text(
@@ -206,7 +209,7 @@ fun PropertyContractManagerDialog(
                         ),modifier = Modifier.height(30.dp)
                     ) {
                         Text(
-                            text = "Salvar", style = TextStyle(
+                            text = "Cancelar", style = TextStyle(
                                 fontSize = 14.sp,
                             )
                         )
@@ -220,7 +223,7 @@ fun PropertyContractManagerDialog(
                         ),modifier = Modifier.height(30.dp)
                     ) {
                         Text(
-                            text = "Cancelar", style = TextStyle(
+                            text = "Salvar", style = TextStyle(
                                 fontSize = 14.sp,
                             )
                         )
