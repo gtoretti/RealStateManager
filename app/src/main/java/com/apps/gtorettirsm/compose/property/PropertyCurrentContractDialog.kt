@@ -8,38 +8,25 @@ import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -48,17 +35,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.apps.gtorettirsm.compose.utils.DrawScrollableView
 import com.apps.gtorettirsm.compose.utils.getButtonColor
-import com.apps.gtorettirsm.compose.utils.getRedTextColor
 import com.apps.gtorettirsm.compose.utils.getTextColor
-import com.apps.gtorettirsm.compose.utils.showToast
-import com.apps.gtorettirsm.compose.utils.toScreen
 import com.apps.gtorettirsm.data.Property
-import com.apps.gtorettirsm.data.Receipt
 import com.apps.gtorettirsm.viewmodels.PropertyViewModel
-import com.apps.gtorettirsm.viewmodels.ReceiptPDFViewModel
-import com.apps.gtorettirsm.viewmodels.ReceiptViewModel
-import java.text.SimpleDateFormat
-import java.util.Date
 
 
 @Composable
@@ -70,6 +49,7 @@ fun PropertyCurrentContractDialog(
 ) {
 
     var startDate by remember { mutableStateOf("") }
+    var endedDate by remember { mutableStateOf("") }
     var monthlyBillingValue by remember { mutableStateOf("") }
     var months by remember { mutableStateOf("") }
     var valueAdjustmentIndexName by remember { mutableStateOf("") }
@@ -128,6 +108,111 @@ fun PropertyCurrentContractDialog(
                                 label = {
                                     Text(
                                         text = "Valor Atual de Aluguel Mensal:",
+                                        style = TextStyle(
+                                            color = getTextColor(), fontSize = 12.sp,
+                                        )
+                                    )
+                                }
+                            )
+
+                            OutlinedTextField(
+                                value = paymentDate,
+                                onValueChange = {
+                                    paymentDate = it
+                                },
+                                textStyle = TextStyle(
+                                    fontSize = 16.sp,
+                                    color = getTextColor(),
+                                    fontWeight = FontWeight.Normal
+                                ),
+
+                                label = {
+                                    Text(
+                                        text = "Dia de Pagamento no Mês:",
+                                        style = TextStyle(
+                                            color = getTextColor(), fontSize = 12.sp,
+                                        )
+                                    )
+                                }
+                            )
+
+                            OutlinedTextField(
+                                value = valueAdjustmentIndexName,
+                                onValueChange = {
+                                    valueAdjustmentIndexName = it
+                                },
+                                textStyle = TextStyle(
+                                    fontSize = 16.sp,
+                                    color = getTextColor(),
+                                    fontWeight = FontWeight.Normal
+                                ),
+
+                                label = {
+                                    Text(
+                                        text = "Índice de Reajuste Anual:",
+                                        style = TextStyle(
+                                            color = getTextColor(), fontSize = 12.sp,
+                                        )
+                                    )
+                                }
+                            )
+
+                            OutlinedTextField(
+                                value = startDate,
+                                onValueChange = {
+                                    startDate = it
+                                },
+                                textStyle = TextStyle(
+                                    fontSize = 16.sp,
+                                    color = getTextColor(),
+                                    fontWeight = FontWeight.Normal
+                                ),
+
+                                label = {
+                                    Text(
+                                        text = "Data de Início:",
+                                        style = TextStyle(
+                                            color = getTextColor(), fontSize = 12.sp,
+                                        )
+                                    )
+                                }
+                            )
+
+                            OutlinedTextField(
+                                value = months,
+                                onValueChange = {
+                                    months = it
+                                },
+                                textStyle = TextStyle(
+                                    fontSize = 16.sp,
+                                    color = getTextColor(),
+                                    fontWeight = FontWeight.Normal
+                                ),
+
+                                label = {
+                                    Text(
+                                        text = "Período do Contrato em Meses:",
+                                        style = TextStyle(
+                                            color = getTextColor(), fontSize = 12.sp,
+                                        )
+                                    )
+                                }
+                            )
+
+                            OutlinedTextField(
+                                value = endedDate,
+                                onValueChange = {
+                                    endedDate = it
+                                },
+                                textStyle = TextStyle(
+                                    fontSize = 16.sp,
+                                    color = getTextColor(),
+                                    fontWeight = FontWeight.Normal
+                                ),
+
+                                label = {
+                                    Text(
+                                        text = "Data de Término:",
                                         style = TextStyle(
                                             color = getTextColor(), fontSize = 12.sp,
                                         )
@@ -306,96 +391,7 @@ fun PropertyCurrentContractDialog(
                                     )
                                 }
                             )
-
-
-                            OutlinedTextField(
-                                value = paymentDate,
-                                onValueChange = {
-                                    paymentDate = it
-                                },
-                                textStyle = TextStyle(
-                                    fontSize = 16.sp,
-                                    color = getTextColor(),
-                                    fontWeight = FontWeight.Normal
-                                ),
-
-                                label = {
-                                    Text(
-                                        text = "Dia de Pagamento no Mês:",
-                                        style = TextStyle(
-                                            color = getTextColor(), fontSize = 12.sp,
-                                        )
-                                    )
-                                }
-                            )
-
-
-                            OutlinedTextField(
-                                value = startDate,
-                                onValueChange = {
-                                    startDate = it
-                                },
-                                textStyle = TextStyle(
-                                    fontSize = 16.sp,
-                                    color = getTextColor(),
-                                    fontWeight = FontWeight.Normal
-                                ),
-
-                                label = {
-                                    Text(
-                                        text = "Data de Ínicio:",
-                                        style = TextStyle(
-                                            color = getTextColor(), fontSize = 12.sp,
-                                        )
-                                    )
-                                }
-                            )
-
-                            OutlinedTextField(
-                                value = months,
-                                onValueChange = {
-                                    months = it
-                                },
-                                textStyle = TextStyle(
-                                    fontSize = 16.sp,
-                                    color = getTextColor(),
-                                    fontWeight = FontWeight.Normal
-                                ),
-
-                                label = {
-                                    Text(
-                                        text = "Período do Contrato em meses:",
-                                        style = TextStyle(
-                                            color = getTextColor(), fontSize = 12.sp,
-                                        )
-                                    )
-                                }
-                            )
-
-                            OutlinedTextField(
-                                value = valueAdjustmentIndexName,
-                                onValueChange = {
-                                    valueAdjustmentIndexName = it
-                                },
-                                textStyle = TextStyle(
-                                    fontSize = 16.sp,
-                                    color = getTextColor(),
-                                    fontWeight = FontWeight.Normal
-                                ),
-
-                                label = {
-                                    Text(
-                                        text = "Índice de reajuste anual:",
-                                        style = TextStyle(
-                                            color = getTextColor(), fontSize = 12.sp,
-                                        )
-                                    )
-                                }
-                            )
-
-
                         }
-
                     })
 
             }, confirmButton = {
@@ -406,6 +402,8 @@ fun PropertyCurrentContractDialog(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier.fillMaxWidth()
                 ) {
+
+
 
                     Button(
                         onClick = {
