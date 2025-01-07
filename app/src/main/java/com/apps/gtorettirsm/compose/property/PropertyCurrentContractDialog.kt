@@ -17,16 +17,19 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.DatePickerFormatter
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -182,41 +185,52 @@ fun PropertyCurrentContractDialog(
                                 }
                             )
 
-                            OutlinedTextField(
-                                value = startDate,
-                                onValueChange = {
-                                    startDate = it
-                                },
-                                textStyle = TextStyle(
-                                    fontSize = 16.sp,
-                                    color = getTextColor(),
-                                    fontWeight = FontWeight.Normal
-                                ),
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                OutlinedTextField(
+                                    modifier = Modifier.width(160.dp),
+                                    value = startDate,
+                                    onValueChange = {
+                                    },
+                                    textStyle = TextStyle(
+                                        fontSize = 16.sp,
+                                        color = getTextColor(),
+                                        fontWeight = FontWeight.Normal
+                                    ),
 
-                                label = {
-                                    Text(
-                                        text = "Data de Início:",
-                                        style = TextStyle(
-                                            color = getTextColor(), fontSize = 12.sp,
+                                    label = {
+                                        Text(
+                                            text = "Data de Início:",
+                                            style = TextStyle(
+                                                color = getTextColor(), fontSize = 12.sp,
+                                            )
                                         )
+                                    },
+                                    enabled = false
+                                )
+
+                                TextButton(
+                                    modifier = Modifier.padding(5.dp),
+                                    onClick =
+                                    {
+                                        openStartDateDialog.value = true
+                                    },
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Filled.DateRange,
+                                        contentDescription = "Alterar Data de Início",
+                                        tint = getTextColor(),
+                                        modifier = Modifier
+                                            .padding(end = 12.dp)
+                                            .size(24.dp)
                                     )
                                 }
-                            )
-
-                            Button(
-                                onClick = {
-                                    openStartDateDialog.value = true
-                                },
-                                colors = ButtonDefaults.buttonColors(
-                                    containerColor = getButtonColor()
-                                ),modifier = Modifier.height(30.dp)
-                            ) {
-                                Text(
-                                    text = "Alterar Data de Início", style = TextStyle(
-                                        fontSize = 14.sp,
-                                    )
-                                )
                             }
+
+
 
 
                             OutlinedTextField(
@@ -440,7 +454,7 @@ fun PropertyCurrentContractDialog(
                         DatePickerModal(
                             onDateSelected = {
                                 if (it != null) {
-                                    startDate = Date(it).toString()
+                                    startDate = SimpleDateFormat("DD/MM/YYYY").format(Date(it))
                                 }
                         },openDialog = openStartDateDialog, title = "Data de Início"
                         )
@@ -524,7 +538,7 @@ fun DatePickerModal(
     ) {
         DatePicker(title = {}, state = datePickerState, headline = {
             Text(title)
-        }  )
+        }, showModeToggle = false)
     }
 }
 
