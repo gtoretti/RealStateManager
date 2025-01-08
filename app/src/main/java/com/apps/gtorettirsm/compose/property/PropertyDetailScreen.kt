@@ -41,6 +41,7 @@ import com.apps.gtorettirsm.compose.utils.getAttendedDaysDescr
 import com.apps.gtorettirsm.compose.utils.getButtonColor
 import com.apps.gtorettirsm.compose.utils.getTextColor
 import com.apps.gtorettirsm.compose.utils.showToast
+import com.apps.gtorettirsm.compose.utils.toScreen
 import com.apps.gtorettirsm.data.MonthlyBilling
 import com.apps.gtorettirsm.data.Property
 import com.apps.gtorettirsm.data.Receipt
@@ -455,46 +456,46 @@ fun PropertyDetailScreen(
                             )
 
                             Text(
-                                text = "Valor Atual de Aluguel Mensal:"
+                                text = "Valor Atual de Aluguel Mensal: " + property.contractMonthlyBillingValue.toScreen()
                             )
                             Text(
-                                text = "Dia de Pagamento no Mês:"
+                                text = "Dia de Pagamento no Mês: " + property.contractPaymentDate
                             )
                             Text(
-                                text = "Índice de Reajuste Anual:"
+                                text = "Índice de Reajuste Anual: " + property.contractValueAdjustmentIndexName
                             )
                             Text(
-                                text = "Data de Início:"
+                                text = "Data de Início: "+ property.contractStartDate.time
                             )
                             Text(
-                                text = "Período do Contrato em meses:"
+                                text = "Período do Contrato em meses: "+ property.contractMonths
                             )
                             Text(
-                                text = "Data de Término:"
+                                text = "Data de Término: "+ property.contractEndedDate.time
                             )
                             Text(
-                                text = "Nome do Inquilino:"
+                                text = "Nome do Inquilino: " + property.contractRenterName
                             )
                             Text(
-                                text = "CPF/CNPJ do Inquilino:"
+                                text = "CPF/CNPJ do Inquilino: "+ property.contractRenterCPF
                             )
                             Text(
-                                text = "Telefone do Inquilino:"
+                                text = "Telefone do Inquilino: "+ property.contractRenterPhone
                             )
                             Text(
-                                text = "E-mail do Inquilino:"
+                                text = "E-mail do Inquilino: "+ property.contractRenterEmail
                             )
                             Text(
-                                text = "Nome do Fiador:"
+                                text = "Nome do Fiador: "+ property.contractGuarantorName
                             )
                             Text(
-                                text = "CPF/CNPJ do Fiador:"
+                                text = "CPF/CNPJ do Fiador: "+ property.contractGuarantorCPF
                             )
                             Text(
-                                text = "Telefone do Fiador:"
+                                text = "Telefone do Fiador: "+ property.contractGuarantorPhone
                             )
                             Text(
-                                text = "E-mail do Fiador:"
+                                text = "E-mail do Fiador: "+ property.contractGuarantorEmail
                             )
 
                             Row(

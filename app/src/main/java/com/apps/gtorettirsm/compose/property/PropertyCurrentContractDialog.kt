@@ -5,6 +5,7 @@ package com.apps.gtorettirsm.compose.property
 
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
@@ -59,9 +60,12 @@ import androidx.compose.ui.window.Popup
 import com.apps.gtorettirsm.compose.utils.DrawScrollableView
 import com.apps.gtorettirsm.compose.utils.getButtonColor
 import com.apps.gtorettirsm.compose.utils.getTextColor
+import com.apps.gtorettirsm.compose.utils.screenToDouble
+import com.apps.gtorettirsm.compose.utils.showToast
 import com.apps.gtorettirsm.data.Property
 import com.apps.gtorettirsm.viewmodels.PropertyViewModel
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
@@ -152,6 +156,9 @@ fun PropertyCurrentContractDialog(
                                     fontSize = 16.sp,
                                     color = getTextColor(),
                                     fontWeight = FontWeight.Normal
+                                ),placeholder = { Text("") },
+                                keyboardOptions = KeyboardOptions(
+                                    keyboardType = KeyboardType.Number
                                 ),
 
                                 label = {
@@ -243,7 +250,10 @@ fun PropertyCurrentContractDialog(
                                     color = getTextColor(),
                                     fontWeight = FontWeight.Normal
                                 ),
-
+                                placeholder = { Text("36") },
+                                keyboardOptions = KeyboardOptions(
+                                    keyboardType = KeyboardType.Number
+                                ),
                                 label = {
                                     Text(
                                         text = "Período do Contrato em Meses:",
@@ -254,26 +264,52 @@ fun PropertyCurrentContractDialog(
                                 }
                             )
 
-                            OutlinedTextField(
-                                value = endedDate,
-                                onValueChange = {
-                                    endedDate = it
-                                },
-                                textStyle = TextStyle(
-                                    fontSize = 16.sp,
-                                    color = getTextColor(),
-                                    fontWeight = FontWeight.Normal
-                                ),
 
-                                label = {
-                                    Text(
-                                        text = "Data de Término:",
-                                        style = TextStyle(
-                                            color = getTextColor(), fontSize = 12.sp,
+
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                OutlinedTextField(
+                                    modifier = Modifier.width(160.dp),
+                                    value = endedDate,
+                                    onValueChange = {
+                                    },
+                                    textStyle = TextStyle(
+                                        fontSize = 16.sp,
+                                        color = getTextColor(),
+                                        fontWeight = FontWeight.Normal
+                                    ),
+
+                                    label = {
+                                        Text(
+                                            text = "Data de Término:",
+                                            style = TextStyle(
+                                                color = getTextColor(), fontSize = 12.sp,
+                                            )
                                         )
+                                    },
+                                    enabled = false
+                                )
+
+                                TextButton(
+                                    modifier = Modifier.padding(5.dp),
+                                    onClick =
+                                    {
+                                        openEndedDateDialog.value = true
+                                    },
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Filled.DateRange,
+                                        contentDescription = "Alterar Data de Término",
+                                        tint = getTextColor(),
+                                        modifier = Modifier
+                                            .padding(end = 12.dp)
+                                            .size(24.dp)
                                     )
                                 }
-                            )
+                            }
 
                             OutlinedTextField(
                                 value = renterName,
@@ -306,7 +342,10 @@ fun PropertyCurrentContractDialog(
                                     color = getTextColor(),
                                     fontWeight = FontWeight.Normal
                                 ),
-
+                                placeholder = { Text("") },
+                                keyboardOptions = KeyboardOptions(
+                                    keyboardType = KeyboardType.Number
+                                ),
                                 label = {
                                     Text(
                                         text = "CPF/CNPJ do Inquilino:",
@@ -329,7 +368,10 @@ fun PropertyCurrentContractDialog(
                                     color = getTextColor(),
                                     fontWeight = FontWeight.Normal
                                 ),
-
+                                placeholder = { Text("") },
+                                keyboardOptions = KeyboardOptions(
+                                    keyboardType = KeyboardType.Number
+                                ),
                                 label = {
                                     Text(
                                         text = "Telefone do Inquilino:",
@@ -392,7 +434,10 @@ fun PropertyCurrentContractDialog(
                                     color = getTextColor(),
                                     fontWeight = FontWeight.Normal
                                 ),
-
+                                placeholder = { Text("") },
+                                keyboardOptions = KeyboardOptions(
+                                    keyboardType = KeyboardType.Number
+                                ),
                                 label = {
                                     Text(
                                         text = "CPF/CNPJ do Fiador:",
@@ -415,7 +460,10 @@ fun PropertyCurrentContractDialog(
                                     color = getTextColor(),
                                     fontWeight = FontWeight.Normal
                                 ),
-
+                                placeholder = { Text("") },
+                                keyboardOptions = KeyboardOptions(
+                                    keyboardType = KeyboardType.Number
+                                ),
                                 label = {
                                     Text(
                                         text = "Telefone do Fiador:",
@@ -454,12 +502,23 @@ fun PropertyCurrentContractDialog(
                         DatePickerModal(
                             onDateSelected = {
                                 if (it != null) {
-                                    startDate = SimpleDateFormat("DD/MM/YYYY").format(Date(it))
+                                    startDate = SimpleDateFormat("dd/MM/yyyy").format(Date(it))
                                 }
                         },openDialog = openStartDateDialog, title = "Data de Início"
                         )
                     }
+                }
 
+                when {
+                    openEndedDateDialog.value -> {
+                        DatePickerModal(
+                            onDateSelected = {
+                                if (it != null) {
+                                    endedDate = SimpleDateFormat("dd/MM/yyyy").format(Date(it))
+                                }
+                            }, openDialog = openEndedDateDialog, title = "Data de Término"
+                        )
+                    }
                 }
 
             }, confirmButton = {
@@ -475,7 +534,24 @@ fun PropertyCurrentContractDialog(
 
                     Button(
                         onClick = {
-                        openPropertyCurrentContractDialog.value = false
+                            startDate=""
+                            endedDate=""
+                            monthlyBillingValue=""
+                            months=""
+                            valueAdjustmentIndexName=""
+                            renterName=""
+                            renterCPF=""
+                            renterPhone=""
+                            renterEmail=""
+                            guarantorName=""
+                            guarantorCPF=""
+                            guarantorPhone=""
+                            guarantorEmail=""
+                            paymentDate=""
+
+                            openStartDateDialog.value = false
+                            openEndedDateDialog.value = false
+                            openPropertyCurrentContractDialog.value = false
                     },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = getButtonColor()
@@ -489,7 +565,88 @@ fun PropertyCurrentContractDialog(
                     }
 
                     Button(onClick = {
+                        if (monthlyBillingValue.trim().isEmpty()){
+                            monthlyBillingValue="0"
+                        }
+
+                        if (months.trim().isEmpty())
+                            months = "0"
+
+                        if (paymentDate.trim().isEmpty())
+                            paymentDate = "0"
+
+
+                        val fmt = SimpleDateFormat("dd/MM/yyyy")
+                        var startDt = property.contractStartDate
+                        if (startDate.isNotEmpty())
+                            startDt = fmt.parse(startDate)
+                        var endedDt = property.contractEndedDate
+                        if (endedDate.isNotEmpty())
+                            endedDt = fmt.parse(endedDate)
+
+                        propertyViewModel.saveProperty(
+                            Property(
+                                propertyId = property.propertyId,
+                                streetAddress = property.streetAddress,
+                                state = property.state,
+                                city = property.city,
+                                district = property.district,
+                                number = property.number,
+                                complement = property.complement,
+                                zipCode = property.zipCode,
+                                rentalMonthlyPrice = property.rentalMonthlyPrice,
+                                occupied = property.occupied,
+                                cpflName = property.cpflName,
+                                cpflCustomerId = property.cpflCustomerId,
+                                cpflCurrentCPF = property.cpflCurrentCPF,
+                                sanasaName = property.sanasaName,
+                                sanasaCustomerId = property.sanasaCustomerId,
+                                sanasaCurrentCPF = property.sanasaCurrentCPF,
+                                iptuCartographicCode = property.iptuCartographicCode,
+                                realEstateRegistration = property.realEstateRegistration,
+                                totalMunicipalTaxes = property.totalMunicipalTaxes,
+                                urlGDriveFolder = property.urlGDriveFolder,
+                                deleted = 0,
+                                contractManagerName= property.contractManagerName,
+                                contractManagerUrl = property.contractManagerUrl,
+                                contractManagerPhoneNumber= property.contractManagerPhoneNumber,
+                                contractManagerEmail= property.contractManagerEmail,
+                                contractStartDate= startDt,
+                                contractEndedDate= endedDt,
+                                contractMonths= Integer.parseInt(months),
+                                contractValueAdjustmentIndexName= property.contractValueAdjustmentIndexName,
+                                contractMonthlyBillingValue= monthlyBillingValue.screenToDouble(),
+                                contractRenterName= renterName,
+                                contractRenterCPF= renterCPF,
+                                contractRenterPhone= renterPhone,
+                                contractRenterEmail= renterEmail,
+                                contractGuarantorName= guarantorName,
+                                contractGuarantorCPF= guarantorCPF,
+                                contractGuarantorPhone= guarantorPhone,
+                                contractGuarantorEmail= guarantorEmail,
+                                contractPaymentDate= Integer.parseInt(paymentDate)
+                            ))
+
+                        startDate=""
+                        endedDate=""
+                        monthlyBillingValue=""
+                        months=""
+                        valueAdjustmentIndexName=""
+                        renterName=""
+                        renterCPF=""
+                        renterPhone=""
+                        renterEmail=""
+                        guarantorName=""
+                        guarantorCPF=""
+                        guarantorPhone=""
+                        guarantorEmail=""
+                        paymentDate=""
+
+                        openStartDateDialog.value = false
+                        openEndedDateDialog.value = false
                         openPropertyCurrentContractDialog.value = false
+                        showToast("Contrato atualizado com sucesso!",context)
+
                     },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = getButtonColor()

@@ -7,20 +7,20 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class PropertyRepository @Inject constructor(private val patientDao: PropertyDao) {
+class PropertyRepository @Inject constructor(private val propertyDao: PropertyDao) {
 
-    fun getProperties() = patientDao.getProperties()
+    fun getProperties() = propertyDao.getProperties()
 
-    fun getActiveProperties() = patientDao.getActiveProperties()
+    fun getActiveProperties() = propertyDao.getActiveProperties()
 
-    fun getProperty(id: Long) = patientDao.getProperty(id)
+    fun getProperty(id: Long) = propertyDao.getProperty(id)
 
-    suspend fun saveProperty(patient: Property){
-        patientDao.upsert(patient)
+    suspend fun saveProperty(property: Property){
+        propertyDao.upsert(property)
     }
 
     suspend fun deleteProperty(patient: Property){
-        patientDao.delete(patient.propertyId)
+        propertyDao.delete(patient.propertyId)
     }
 
     companion object {
