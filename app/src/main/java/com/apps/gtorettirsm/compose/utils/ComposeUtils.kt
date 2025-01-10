@@ -162,6 +162,35 @@ fun filterMonthlyBillingsByMonth(list: List<MonthlyBilling>, month: Int, year: I
     return ret
 }
 
+fun defaultNaoInformado(s: String): String {
+    var r = "Não Informado." + ""
+    if (!s.trim().isEmpty())
+        r = s
+    return r
+}
+
+fun defaultNaoInformado(d: Date): String {
+    var r = "Não Informado."
+    var fmt = SimpleDateFormat("dd/MM/yyyy")
+    if (!d.time.toString().equals("0"))
+        r = fmt.format(d)
+    return r
+}
+
+fun defaultNaoInformado(l: Int): String {
+    var r = "Não Informado."
+    if (!l.equals(0))
+        r = l.toString()
+    return r
+}
+
+fun defaultNaoInformado(l: Double): String {
+    var r = "Não Informado." + ""
+    if (!l.equals(0))
+        r = l.toScreen()
+    return r
+}
+
 fun filterReceiptsByMonth(list: List<Receipt>, month: Int, year: Int): List<Receipt> {
     var ret: ArrayList<Receipt> = ArrayList()
     list.forEach { a ->

@@ -44,6 +44,7 @@ import androidx.core.app.ActivityCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.apps.gtorettirsm.compose.utils.DrawScrollableView
+import com.apps.gtorettirsm.compose.utils.defaultNaoInformado
 import com.apps.gtorettirsm.compose.utils.getAttendedDaysDescr
 import com.apps.gtorettirsm.compose.utils.getButtonColor
 import com.apps.gtorettirsm.compose.utils.getTextColor
@@ -316,7 +317,7 @@ fun PropertyDetailScreen(
         )
     )
     Text(
-        text = property.realEstateRegistration
+        text = defaultNaoInformado(property.realEstateRegistration)
     )
 
     Text(
@@ -327,7 +328,7 @@ fun PropertyDetailScreen(
         )
     )
     Text(
-        text = property.iptuCartographicCode
+        text = defaultNaoInformado(property.iptuCartographicCode)
     )
 
     Row(
@@ -465,7 +466,7 @@ if (!displayPropertyContractedInstallations.value){
         )
     )
     Text(
-        text = property.cpflName
+        text = defaultNaoInformado(property.cpflName)
     )
 
     Text(
@@ -476,7 +477,7 @@ if (!displayPropertyContractedInstallations.value){
         )
     )
     Text(
-        text = property.cpflCurrentCPF
+        text = defaultNaoInformado(property.cpflCurrentCPF)
     )
 
     Text(
@@ -487,7 +488,7 @@ if (!displayPropertyContractedInstallations.value){
         )
     )
     Text(
-        text = property.cpflCustomerId
+        text = defaultNaoInformado(property.cpflCustomerId)
     )
 
     Row(
@@ -514,7 +515,7 @@ if (!displayPropertyContractedInstallations.value){
         )
     )
     Text(
-        text = property.sanasaName
+        text = defaultNaoInformado(property.sanasaName)
     )
 
 
@@ -526,7 +527,7 @@ if (!displayPropertyContractedInstallations.value){
         )
     )
     Text(
-        text = property.sanasaCurrentCPF
+        text = defaultNaoInformado(property.sanasaCurrentCPF)
     )
 
 
@@ -538,7 +539,7 @@ if (!displayPropertyContractedInstallations.value){
         )
     )
     Text(
-        text = property.sanasaCustomerId
+        text = defaultNaoInformado(property.sanasaCustomerId)
     )
 
     Row(
@@ -665,7 +666,7 @@ if (!displayPropertyContractManager.value){
         )
     )
     Text(
-        text = property.contractManagerName
+        text = defaultNaoInformado(property.contractManagerName)
     )
 
 
@@ -677,7 +678,7 @@ if (!displayPropertyContractManager.value){
         )
     )
     Text(
-        text = property.contractManagerPhoneNumber
+        text = defaultNaoInformado(property.contractManagerPhoneNumber)
     )
 
     Text(
@@ -688,7 +689,7 @@ if (!displayPropertyContractManager.value){
         )
     )
     Text(
-        text = property.contractManagerEmail
+        text = defaultNaoInformado(property.contractManagerEmail)
     )
 
 
@@ -700,7 +701,7 @@ if (!displayPropertyContractManager.value){
         )
     )
     Text(
-        text = property.contractManagerUrl
+        text = defaultNaoInformado(property.contractManagerUrl)
     )
 
     Row(
@@ -828,7 +829,7 @@ if (!displayPropertyCurrentContract.value){
         )
     )
     Text(
-        text = property.contractMonthlyBillingValue.toScreen()
+        text = defaultNaoInformado(property.contractMonthlyBillingValue)
     )
     Text(
         text = "Dia de Pagamento no Mês:",
@@ -838,7 +839,7 @@ if (!displayPropertyCurrentContract.value){
         )
     )
     Text(
-        text = property.contractPaymentDate.toString()
+        text = defaultNaoInformado(property.contractPaymentDate)
     )
 
     Text(
@@ -849,7 +850,7 @@ if (!displayPropertyCurrentContract.value){
         )
     )
     Text(
-        text = property.contractValueAdjustmentIndexName
+        text = defaultNaoInformado(property.contractValueAdjustmentIndexName)
     )
 
 
@@ -861,7 +862,7 @@ if (!displayPropertyCurrentContract.value){
         )
     )
     Text(
-        text = property.contractStartDate.time.toString()
+        text = defaultNaoInformado(property.contractStartDate)
     )
 
     Text(
@@ -872,7 +873,7 @@ if (!displayPropertyCurrentContract.value){
         )
     )
     Text(
-        text = property.contractMonths.toString()
+        text = defaultNaoInformado(property.contractMonths)
     )
 
 
@@ -884,7 +885,7 @@ if (!displayPropertyCurrentContract.value){
         )
     )
     Text(
-        text = property.contractEndedDate.time.toString()
+        text = defaultNaoInformado(property.contractEndedDate)
     )
 
 
@@ -896,7 +897,7 @@ if (!displayPropertyCurrentContract.value){
         )
     )
     Text(
-        text = property.contractRenterName
+        text = defaultNaoInformado(property.contractRenterName)
     )
 
 
@@ -909,7 +910,7 @@ if (!displayPropertyCurrentContract.value){
         )
     )
     Text(
-        text = property.contractRenterCPF
+        text = defaultNaoInformado(property.contractRenterCPF)
     )
 
 
@@ -921,7 +922,7 @@ if (!displayPropertyCurrentContract.value){
         )
     )
     Text(
-        text = property.contractRenterPhone
+        text = defaultNaoInformado(property.contractRenterPhone)
     )
 
 
@@ -934,7 +935,7 @@ if (!displayPropertyCurrentContract.value){
         )
     )
     Text(
-        text = property.contractRenterEmail
+        text = defaultNaoInformado(property.contractRenterEmail)
     )
 
 
@@ -946,7 +947,7 @@ if (!displayPropertyCurrentContract.value){
         )
     )
     Text(
-        text = property.contractGuarantorName
+        text = defaultNaoInformado(property.contractGuarantorName)
     )
 
 
@@ -958,7 +959,7 @@ if (!displayPropertyCurrentContract.value){
         )
     )
     Text(
-        text = property.contractGuarantorCPF
+        text = defaultNaoInformado(property.contractGuarantorCPF)
     )
 
 
@@ -971,7 +972,7 @@ if (!displayPropertyCurrentContract.value){
         )
     )
     Text(
-        text = property.contractGuarantorPhone
+        text = defaultNaoInformado(property.contractGuarantorPhone)
     )
 
 
@@ -983,7 +984,7 @@ if (!displayPropertyCurrentContract.value){
         )
     )
     Text(
-        text = property.contractGuarantorEmail
+        text = defaultNaoInformado(property.contractGuarantorEmail)
     )
 
     Row(
