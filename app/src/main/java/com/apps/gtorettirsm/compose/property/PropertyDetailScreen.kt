@@ -13,13 +13,20 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -81,9 +88,13 @@ fun PropertyDetailScreen(
     val openPropertyDeleteDialog = remember { mutableStateOf(false) }
     val openPropertyChangeAddressDialog = remember { mutableStateOf(false) }
     val openPropertyCurrentContractDialog = remember { mutableStateOf(false) }
+    val displayPropertyCurrentContract = remember { mutableStateOf(false) }
     val openPropertyCityHallRegistrationDialog = remember { mutableStateOf(false) }
+    val displayPropertyCityHallRegistration = remember { mutableStateOf(false) }
     val openPropertyContractManagerDialog = remember { mutableStateOf(false) }
+    val displayPropertyContractManager = remember { mutableStateOf(false) }
     val openPropertyContractedInstallationsDialog = remember { mutableStateOf(false) }
+    val displayPropertyContractedInstallations = remember { mutableStateOf(false) }
 
     val property by propertyFlow.collectAsStateWithLifecycle(
         initialValue = Property(0L,"", "", "", "", "", "", "", 0.0,0,"", "", "", "", "", "","","", 0.0, "" , 0,  "", "", "", "",  Date(0), Date(0), 0, "", 0.0, "", "", "", "", "", "", "", "", 0)
@@ -221,323 +232,804 @@ fun PropertyDetailScreen(
 
                             HorizontalDivider(thickness = 1.dp)
 
-                            Text(
-                                text = "Registro Municipal:",
-                                style = TextStyle(
-                                    color = getTextColor(),
-                                    fontSize = 16.sp,
-                                    fontWeight = FontWeight.Bold,
-                                )
-                            )
 
-                            Text(
-                                text = "Inscrição Imobiliária: " + property.realEstateRegistration
-                            )
-                            Text(
-                                text = "Código Cartográfico: " + property.iptuCartographicCode
-                            )
-
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.End,
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Spacer(modifier = Modifier.height(20.dp))
-                            }
-
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.Center,
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-
-                                Button(
-                                    onClick = {
-                                        openPropertyCityHallRegistrationDialog.value = true
+                            if (!displayPropertyCityHallRegistration.value) {
+                                TextButton(
+                                    modifier = Modifier.padding(5.dp),
+                                    onClick =
+                                    {
+                                        displayPropertyCityHallRegistration.value = true
                                     },
-                                    colors = ButtonDefaults.buttonColors(
-                                        containerColor = getButtonColor()
-                                    ),
-                                    modifier = Modifier.height(30.dp)
                                 ) {
-                                    Text(
-                                        text = "Alterar Registro Municipal",
-                                        style = TextStyle(
-                                            fontSize = 14.sp,
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.Start,
+                                        modifier = Modifier.fillMaxWidth()
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Filled.KeyboardArrowRight,
+                                            contentDescription = "Registro Municipal",
+                                            tint = getTextColor(),
+                                            modifier = Modifier
+                                                .padding(end = 12.dp)
+                                                .size(24.dp)
                                         )
-                                    )
-                                }
-                            }
-
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.End,
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Spacer(modifier = Modifier.height(20.dp))
-                            }
-
-                            HorizontalDivider(thickness = 1.dp)
-
-                            Text(
-                                text = "Instalações Contratadas:",
-                                style = TextStyle(
-                                    color = getTextColor(),
-                                    fontSize = 16.sp,
-                                    fontWeight = FontWeight.Bold,
-                                )
-                            )
-
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.End,
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Spacer(modifier = Modifier.height(20.dp))
-                            }
-
-                            Text(
-                                text = "Energia Elétrica:",
-                                style = TextStyle(
-                                    color = getTextColor(),
-                                    fontSize = 14.sp,
-                                    fontWeight = FontWeight.Bold,
-                                )
-                            )
-                            Text(
-                                text = "Empresa Fornecedora: " + property.cpflName
-                            )
-                            Text(
-                                text = "CPF do Titular: " + property.cpflCurrentCPF
-                            )
-                            Text(
-                                text = "Identificação do Consumidor/Instalação: " + property.cpflCustomerId
-                            )
-
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.End,
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Spacer(modifier = Modifier.height(10.dp))
-                            }
-
-                            Text(
-                                text = "Água e Esgoto:",
-                                style = TextStyle(
-                                    color = getTextColor(),
-                                    fontSize = 14.sp,
-                                    fontWeight = FontWeight.Bold,
-                                )
-                            )
-                            Text(
-                                text = "Empresa Fornecedora: " + property.sanasaName
-                            )
-                            Text(
-                                text = "CPF do Titular: " + property.sanasaCurrentCPF
-                            )
-                            Text(
-                                text = "Identificação do Consumidor/Instalação: " + property.sanasaCustomerId
-                            )
-
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.End,
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Spacer(modifier = Modifier.height(20.dp))
-                            }
-
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.Center,
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Button(
-                                    onClick = {
-                                        openPropertyContractedInstallationsDialog.value=true
-                                    },
-                                    colors = ButtonDefaults.buttonColors(
-                                        containerColor = getButtonColor()
-                                    ),
-                                    modifier = Modifier.height(30.dp)
-                                ) {
-                                    Text(
-                                        text = "Alterar Instalações",
-                                        style = TextStyle(
-                                            fontSize = 14.sp,
+                                        Text(
+                                            text = "Registro Municipal:",
+                                            style = TextStyle(
+                                                color = getTextColor(),
+                                                fontSize = 16.sp,
+                                                fontWeight = FontWeight.Bold,
+                                            )
                                         )
-                                    )
+                                    }
                                 }
-                            }
+                            }else{
 
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.End,
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Spacer(modifier = Modifier.height(20.dp))
-                            }
 
-                            HorizontalDivider(thickness = 1.dp)
-
-                            Text(
-                                text = "Imobiliária Administradora:",
-                                style = TextStyle(
-                                    color = getTextColor(),
-                                    fontSize = 16.sp,
-                                    fontWeight = FontWeight.Bold,
-                                )
-                            )
-
-                            Text(
-                                text = "Nome: " + property.contractManagerName
-                            )
-                            Text(
-                                text = "Telefone: " + property.contractManagerPhoneNumber
-                            )
-                            Text(
-                                text = "E-mail: "  + property.contractManagerEmail
-                            )
-                            Text(
-                                text = "Site: " + property.contractManagerUrl
-                            )
-
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.End,
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Spacer(modifier = Modifier.height(20.dp))
-                            }
-
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.Center,
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Button(
-                                    onClick = {
-                                        openPropertyContractManagerDialog.value = true
-                                    },
-                                    colors = ButtonDefaults.buttonColors(
-                                        containerColor = getButtonColor()
-                                    ),
-                                    modifier = Modifier.height(30.dp)
-                                ) {
-                                    Text(
-                                        text = "Alterar Imobiliária",
-                                        style = TextStyle(
-                                            fontSize = 14.sp,
-                                        )
-                                    )
-                                }
-                            }
-
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.End,
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Spacer(modifier = Modifier.height(20.dp))
-                            }
+    TextButton(
+        modifier = Modifier.padding(5.dp),
+        onClick =
+        {
+            displayPropertyCityHallRegistration.value=false
+        },
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Icon(
+                imageVector = Icons.Filled.KeyboardArrowDown,
+                contentDescription = "Registro Municipal",
+                tint = getTextColor(),
+                modifier = Modifier
+                    .padding(end = 12.dp)
+                    .size(24.dp)
+            )
+            Text(
+                text = "Registro Municipal:",
+                style = TextStyle(
+                    color = getTextColor(),
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                )
+            )
+        }
+    }
 
 
 
-                            HorizontalDivider(thickness = 1.dp)
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.End,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Spacer(modifier = Modifier.height(20.dp))
+    }
 
-                            Text(
-                                text = "Informações do Contrato:",
-                                style = TextStyle(
-                                    color = getTextColor(),
-                                    fontSize = 16.sp,
-                                    fontWeight = FontWeight.Bold,
-                                )
-                            )
+    Text(
+        text = "Inscrição Imobiliária:",
+        style = TextStyle(
+            color = getTextColor(),
+            fontWeight = FontWeight.Bold,
+        )
+    )
+    Text(
+        text = property.realEstateRegistration
+    )
 
-                            Text(
-                                text = "Valor Atual de Aluguel Mensal: " + property.contractMonthlyBillingValue.toScreen()
-                            )
-                            Text(
-                                text = "Dia de Pagamento no Mês: " + property.contractPaymentDate
-                            )
-                            Text(
-                                text = "Índice de Reajuste Anual: " + property.contractValueAdjustmentIndexName
-                            )
-                            Text(
-                                text = "Data de Início: "+ property.contractStartDate.time
-                            )
-                            Text(
-                                text = "Período do Contrato em meses: "+ property.contractMonths
-                            )
-                            Text(
-                                text = "Data de Término: "+ property.contractEndedDate.time
-                            )
-                            Text(
-                                text = "Nome do Inquilino: " + property.contractRenterName
-                            )
-                            Text(
-                                text = "CPF/CNPJ do Inquilino: "+ property.contractRenterCPF
-                            )
-                            Text(
-                                text = "Telefone do Inquilino: "+ property.contractRenterPhone
-                            )
-                            Text(
-                                text = "E-mail do Inquilino: "+ property.contractRenterEmail
-                            )
-                            Text(
-                                text = "Nome do Fiador: "+ property.contractGuarantorName
-                            )
-                            Text(
-                                text = "CPF/CNPJ do Fiador: "+ property.contractGuarantorCPF
-                            )
-                            Text(
-                                text = "Telefone do Fiador: "+ property.contractGuarantorPhone
-                            )
-                            Text(
-                                text = "E-mail do Fiador: "+ property.contractGuarantorEmail
-                            )
+    Text(
+        text = "Código Cartográfico:",
+        style = TextStyle(
+            color = getTextColor(),
+            fontWeight = FontWeight.Bold,
+        )
+    )
+    Text(
+        text = property.iptuCartographicCode
+    )
 
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.End,
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Spacer(modifier = Modifier.height(20.dp))
-                            }
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.End,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Spacer(modifier = Modifier.height(20.dp))
+    }
 
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.Center,
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Button(
-                                    onClick = {
-                                        openPropertyCurrentContractDialog.value = true
-                                    },
-                                    colors = ButtonDefaults.buttonColors(
-                                        containerColor = getButtonColor()
-                                    ),
-                                    modifier = Modifier.height(30.dp)
-                                ) {
-                                    Text(
-                                        text = "Alterar Contrato",
-                                        style = TextStyle(
-                                            fontSize = 14.sp,
-                                        )
-                                    )
-                                }
-                            }
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxWidth()
+    ) {
 
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.End,
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Spacer(modifier = Modifier.height(20.dp))
-                            }
+        Button(
+            onClick = {
+                openPropertyCityHallRegistrationDialog.value = true
+            },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = getButtonColor()
+            ),
+            modifier = Modifier.height(30.dp)
+        ) {
+            Text(
+                text = "Alterar Registro Municipal",
+                style = TextStyle(
+                    fontSize = 14.sp,
+                )
+            )
+        }
+    }
 
-                            HorizontalDivider(thickness = 1.dp)
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.End,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Spacer(modifier = Modifier.height(20.dp))
+    }
+
+    HorizontalDivider(thickness = 1.dp)
+}
+
+
+
+if (!displayPropertyContractedInstallations.value){
+    TextButton(
+        modifier = Modifier.padding(5.dp),
+        onClick =
+        {
+            displayPropertyContractedInstallations.value=true
+        },
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Icon(
+                imageVector = Icons.Filled.KeyboardArrowRight,
+                contentDescription = "Instalações Contratadas",
+                tint = getTextColor(),
+                modifier = Modifier
+                    .padding(end = 12.dp)
+                    .size(24.dp)
+            )
+            Text(
+                text = "Instalações Contratadas:",
+                style = TextStyle(
+                    color = getTextColor(),
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                )
+            )
+        }
+    }
+}else{
+
+    TextButton(
+        modifier = Modifier.padding(5.dp),
+        onClick =
+        {
+            displayPropertyContractedInstallations.value=false
+        },
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Icon(
+                imageVector = Icons.Filled.KeyboardArrowDown,
+                contentDescription = "Instalações Contratadas",
+                tint = getTextColor(),
+                modifier = Modifier
+                    .padding(end = 12.dp)
+                    .size(24.dp)
+            )
+            Text(
+                text = "Instalações Contratadas:",
+                style = TextStyle(
+                    color = getTextColor(),
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                )
+            )
+        }
+    }
+
+
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.End,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Spacer(modifier = Modifier.height(20.dp))
+    }
+
+    Text(
+        text = "Energia Elétrica:",
+        style = TextStyle(
+            color = getTextColor(),
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Bold,
+        )
+    )
+    Text(
+        text = "Empresa Fornecedora:",
+        style = TextStyle(
+            color = getTextColor(),
+            fontWeight = FontWeight.Bold,
+        )
+    )
+    Text(
+        text = property.cpflName
+    )
+
+    Text(
+        text = "CPF do Titular:",
+        style = TextStyle(
+            color = getTextColor(),
+            fontWeight = FontWeight.Bold,
+        )
+    )
+    Text(
+        text = property.cpflCurrentCPF
+    )
+
+    Text(
+        text = "Identificação do Consumidor/Instalação:",
+        style = TextStyle(
+            color = getTextColor(),
+            fontWeight = FontWeight.Bold,
+        )
+    )
+    Text(
+        text = property.cpflCustomerId
+    )
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.End,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Spacer(modifier = Modifier.height(10.dp))
+    }
+
+    Text(
+        text = "Água e Esgoto:",
+        style = TextStyle(
+            color = getTextColor(),
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Bold,
+        )
+    )
+    Text(
+        text = "Empresa Fornecedora:",
+        style = TextStyle(
+            color = getTextColor(),
+            fontWeight = FontWeight.Bold,
+        )
+    )
+    Text(
+        text = property.sanasaName
+    )
+
+
+    Text(
+        text = "CPF do Titular:",
+        style = TextStyle(
+            color = getTextColor(),
+            fontWeight = FontWeight.Bold,
+        )
+    )
+    Text(
+        text = property.sanasaCurrentCPF
+    )
+
+
+    Text(
+        text = "Identificação do Consumidor/Instalação:",
+        style = TextStyle(
+            color = getTextColor(),
+            fontWeight = FontWeight.Bold,
+        )
+    )
+    Text(
+        text = property.sanasaCustomerId
+    )
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.End,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Spacer(modifier = Modifier.height(20.dp))
+    }
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Button(
+            onClick = {
+                openPropertyContractedInstallationsDialog.value=true
+            },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = getButtonColor()
+            ),
+            modifier = Modifier.height(30.dp)
+        ) {
+            Text(
+                text = "Alterar Instalações",
+                style = TextStyle(
+                    fontSize = 14.sp,
+                )
+            )
+        }
+    }
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.End,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Spacer(modifier = Modifier.height(20.dp))
+    }
+
+    HorizontalDivider(thickness = 1.dp)
+
+}
+
+
+
+if (!displayPropertyContractManager.value){
+    TextButton(
+        modifier = Modifier.padding(5.dp),
+        onClick =
+        {
+            displayPropertyContractManager.value=true
+        },
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Icon(
+                imageVector = Icons.Filled.KeyboardArrowRight,
+                contentDescription = "Imobiliária",
+                tint = getTextColor(),
+                modifier = Modifier
+                    .padding(end = 12.dp)
+                    .size(24.dp)
+            )
+            Text(
+                text = "Imobiliária:",
+                style = TextStyle(
+                    color = getTextColor(),
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                )
+            )
+        }
+    }
+}else{
+    TextButton(
+        modifier = Modifier.padding(5.dp),
+        onClick =
+        {
+            displayPropertyContractManager.value=false
+        },
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Icon(
+                imageVector = Icons.Filled.KeyboardArrowDown,
+                contentDescription = "Imobiliária",
+                tint = getTextColor(),
+                modifier = Modifier
+                    .padding(end = 12.dp)
+                    .size(24.dp)
+            )
+            Text(
+                text = "Imobiliária:",
+                style = TextStyle(
+                    color = getTextColor(),
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                )
+            )
+        }
+    }
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.End,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Spacer(modifier = Modifier.height(20.dp))
+    }
+
+    Text(
+        text = "Nome:",
+        style = TextStyle(
+            color = getTextColor(),
+            fontWeight = FontWeight.Bold,
+        )
+    )
+    Text(
+        text = property.contractManagerName
+    )
+
+
+    Text(
+        text = "Telefone:",
+        style = TextStyle(
+            color = getTextColor(),
+            fontWeight = FontWeight.Bold,
+        )
+    )
+    Text(
+        text = property.contractManagerPhoneNumber
+    )
+
+    Text(
+        text = "E-mail:",
+        style = TextStyle(
+            color = getTextColor(),
+            fontWeight = FontWeight.Bold,
+        )
+    )
+    Text(
+        text = property.contractManagerEmail
+    )
+
+
+    Text(
+        text = "Site:",
+        style = TextStyle(
+            color = getTextColor(),
+            fontWeight = FontWeight.Bold,
+        )
+    )
+    Text(
+        text = property.contractManagerUrl
+    )
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.End,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Spacer(modifier = Modifier.height(20.dp))
+    }
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Button(
+            onClick = {
+                openPropertyContractManagerDialog.value = true
+            },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = getButtonColor()
+            ),
+            modifier = Modifier.height(30.dp)
+        ) {
+            Text(
+                text = "Alterar Imobiliária",
+                style = TextStyle(
+                    fontSize = 14.sp,
+                )
+            )
+        }
+    }
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.End,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Spacer(modifier = Modifier.height(20.dp))
+    }
+    HorizontalDivider(thickness = 1.dp)
+
+}
+
+
+
+
+if (!displayPropertyCurrentContract.value){
+    TextButton(
+        modifier = Modifier.padding(5.dp),
+        onClick =
+        {
+            displayPropertyCurrentContract.value=true
+        },
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Icon(
+                imageVector = Icons.Filled.KeyboardArrowRight,
+                contentDescription = "Contrato",
+                tint = getTextColor(),
+                modifier = Modifier
+                    .padding(end = 12.dp)
+                    .size(24.dp)
+            )
+            Text(
+                text = "Contrato:",
+                style = TextStyle(
+                    color = getTextColor(),
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                )
+            )
+        }
+    }
+
+}else{
+    TextButton(
+        modifier = Modifier.padding(5.dp),
+        onClick =
+        {
+            displayPropertyCurrentContract.value=false
+        },
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Icon(
+                imageVector = Icons.Filled.KeyboardArrowDown,
+                contentDescription = "Contrato",
+                tint = getTextColor(),
+                modifier = Modifier
+                    .padding(end = 12.dp)
+                    .size(24.dp)
+            )
+            Text(
+                text = "Contrato:",
+                style = TextStyle(
+                    color = getTextColor(),
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                )
+            )
+        }
+    }
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.End,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Spacer(modifier = Modifier.height(20.dp))
+    }
+
+    Text(
+        text = "Valor Atual de Aluguel Mensal:",
+        style = TextStyle(
+            color = getTextColor(),
+            fontWeight = FontWeight.Bold,
+        )
+    )
+    Text(
+        text = property.contractMonthlyBillingValue.toScreen()
+    )
+    Text(
+        text = "Dia de Pagamento no Mês:",
+        style = TextStyle(
+            color = getTextColor(),
+            fontWeight = FontWeight.Bold,
+        )
+    )
+    Text(
+        text = property.contractPaymentDate.toString()
+    )
+
+    Text(
+        text = "Índice de Reajuste Anual:",
+        style = TextStyle(
+            color = getTextColor(),
+            fontWeight = FontWeight.Bold,
+        )
+    )
+    Text(
+        text = property.contractValueAdjustmentIndexName
+    )
+
+
+    Text(
+        text = "Data de Início:",
+        style = TextStyle(
+            color = getTextColor(),
+            fontWeight = FontWeight.Bold,
+        )
+    )
+    Text(
+        text = property.contractStartDate.time.toString()
+    )
+
+    Text(
+        text = "Período do Contrato em meses:",
+        style = TextStyle(
+            color = getTextColor(),
+            fontWeight = FontWeight.Bold,
+        )
+    )
+    Text(
+        text = property.contractMonths.toString()
+    )
+
+
+    Text(
+        text = "Data de Término:",
+        style = TextStyle(
+            color = getTextColor(),
+            fontWeight = FontWeight.Bold,
+        )
+    )
+    Text(
+        text = property.contractEndedDate.time.toString()
+    )
+
+
+    Text(
+        text = "Nome do Inquilino:",
+        style = TextStyle(
+            color = getTextColor(),
+            fontWeight = FontWeight.Bold,
+        )
+    )
+    Text(
+        text = property.contractRenterName
+    )
+
+
+
+    Text(
+        text = "CPF/CNPJ do Inquilino:",
+        style = TextStyle(
+            color = getTextColor(),
+            fontWeight = FontWeight.Bold,
+        )
+    )
+    Text(
+        text = property.contractRenterCPF
+    )
+
+
+    Text(
+        text = "Telefone do Inquilino:",
+        style = TextStyle(
+            color = getTextColor(),
+            fontWeight = FontWeight.Bold,
+        )
+    )
+    Text(
+        text = property.contractRenterPhone
+    )
+
+
+
+    Text(
+        text = "E-mail do Inquilino:",
+        style = TextStyle(
+            color = getTextColor(),
+            fontWeight = FontWeight.Bold,
+        )
+    )
+    Text(
+        text = property.contractRenterEmail
+    )
+
+
+    Text(
+        text = "Nome do Fiador:",
+        style = TextStyle(
+            color = getTextColor(),
+            fontWeight = FontWeight.Bold,
+        )
+    )
+    Text(
+        text = property.contractGuarantorName
+    )
+
+
+    Text(
+        text = "CPF/CNPJ do Fiador:",
+        style = TextStyle(
+            color = getTextColor(),
+            fontWeight = FontWeight.Bold,
+        )
+    )
+    Text(
+        text = property.contractGuarantorCPF
+    )
+
+
+
+    Text(
+        text = "Telefone do Fiador:",
+        style = TextStyle(
+            color = getTextColor(),
+            fontWeight = FontWeight.Bold,
+        )
+    )
+    Text(
+        text = property.contractGuarantorPhone
+    )
+
+
+    Text(
+        text = "E-mail do Fiador:",
+        style = TextStyle(
+            color = getTextColor(),
+            fontWeight = FontWeight.Bold,
+        )
+    )
+    Text(
+        text = property.contractGuarantorEmail
+    )
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.End,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Spacer(modifier = Modifier.height(20.dp))
+    }
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Button(
+            onClick = {
+                openPropertyCurrentContractDialog.value = true
+            },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = getButtonColor()
+            ),
+            modifier = Modifier.height(30.dp)
+        ) {
+            Text(
+                text = "Alterar Contrato",
+                style = TextStyle(
+                    fontSize = 14.sp,
+                )
+            )
+        }
+    }
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.End,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Spacer(modifier = Modifier.height(20.dp))
+    }
+
+    HorizontalDivider(thickness = 1.dp)
+
+
+}
+
 
 
 

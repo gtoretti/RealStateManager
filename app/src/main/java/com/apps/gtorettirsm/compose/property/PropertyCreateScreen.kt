@@ -4,6 +4,7 @@
 package com.apps.gtorettirsm.compose.property
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -644,7 +645,8 @@ fun fillAddressByCEP() {
                     toastThis.value = "CEP encontrado com sucesso."
                 }
             }catch (e: Exception){
-                toastThis.value = "Endereço não encontrado."
+                e.message?.let { Log.w("fillAddressByCEP", it) }
+                toastThis.value = "O site dos Correios está indisponível. Você pode salvar as informações e tentar mais tarde."
             }
         }
     }
@@ -696,8 +698,8 @@ fun fillCEPByAddress(openCEPListDialog: MutableState<Boolean>) {
                     openCEPListDialog.value = true
                 }
             }catch (e: Exception){
-                e.printStackTrace()
-                toastThis.value = "CEP não encontrado."
+                e.message?.let { Log.w("fillAddressByCEP", it) }
+                toastThis.value = "O site dos Correios está indisponível. Você pode salvar as informações e tentar mais tarde."
             }
         }
     }
