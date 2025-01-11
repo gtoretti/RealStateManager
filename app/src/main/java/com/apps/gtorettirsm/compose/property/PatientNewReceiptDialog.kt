@@ -50,7 +50,7 @@ import com.apps.gtorettirsm.compose.utils.toScreen
 import com.apps.gtorettirsm.data.MonthlyBilling
 import com.apps.gtorettirsm.data.Property
 import com.apps.gtorettirsm.data.Profile
-import com.apps.gtorettirsm.viewmodels.ProfileViewModel
+import com.apps.gtorettirsm.viewmodels.ProviderViewModel
 import com.apps.gtorettirsm.viewmodels.ReceiptPDFViewModel
 import com.apps.gtorettirsm.viewmodels.ReceiptViewModel
 import java.text.SimpleDateFormat
@@ -66,18 +66,11 @@ fun PropertyNewReceiptDialog(
 ) {
     var receiptViewModel: ReceiptViewModel = hiltViewModel()
     var receiptPDFViewModel: ReceiptPDFViewModel = hiltViewModel()
-    var profileViewModel: ProfileViewModel = hiltViewModel()
-    var profiles = profileViewModel.profiles
+    var providerViewModel: ProviderViewModel = hiltViewModel()
+    var profiles = providerViewModel.providers
 
-    val profile = getProfileFromFlow(profiles)
-    PropertyNewReceiptDialog(
-        openPropertyReceiptsDialog,
-        currentAttendedDays,
-        receiptViewModel,
-        profile,
-        patient,
-        context
-    )
+
+
 }
 
 val chosenDay = mutableStateOf(Calendar.getInstance().get(Calendar.DAY_OF_MONTH))

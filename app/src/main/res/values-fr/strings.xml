@@ -7,7 +7,7 @@
     <string name="my_garden_title">Mon jardin</string>
     <string name="plant_detail_image_content_description">Image de plante</string>
     <string name="plant_list_title">Liste des plantes</string>
-    <string name="profile_title" translation_description="Profile">Locador</string>
+    <string name="profile_title" translation_description="Profile">Prestadores</string>
     <string name="properties_title" translation_description="Propertys">Imóveis</string>
     <string name="receipts_title" translation_description="Receipts">Financeiro</string>
     <string name="available">Plantes disponibles</string>

@@ -6,7 +6,7 @@
     <string name="menu_filter_by_grow_zone">Lọc theo vùng phát triển</string>
     <string name="my_garden_title">Vườn của tôi</string>
     <string name="plant_list_title">Danh sách cây</string>
-    <string name="profile_title" translation_description="Profile">Locador</string>
+    <string name="profile_title" translation_description="Profile">Prestadores</string>
     <string name="properties_title" translation_description="Propertys">Imóveis</string>
     <string name="receipts_title" translation_description="Receipts">Financeiro</string>
     <string name="available">Cây Hiện Có</string>

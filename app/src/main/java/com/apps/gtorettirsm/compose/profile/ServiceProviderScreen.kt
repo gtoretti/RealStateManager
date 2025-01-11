@@ -36,21 +36,22 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.apps.gtorettirsm.compose.utils.getButtonColor
 import com.apps.gtorettirsm.compose.utils.showToast
 import com.apps.gtorettirsm.data.Profile
-import com.apps.gtorettirsm.viewmodels.ProfileViewModel
+import com.apps.gtorettirsm.data.Provider
+import com.apps.gtorettirsm.viewmodels.ProviderViewModel
 import kotlinx.coroutines.flow.Flow
 
 
 @Composable
-fun ProfileScreen() {
-    var profileViewModel: ProfileViewModel = hiltViewModel()
-    val profilesFlow = profileViewModel.profiles
-    ProfileScreen(profilesFlow = profilesFlow, profileViewModel = profileViewModel)
+fun ServiceProviderScreen() {
+    var providerViewModel: ProviderViewModel = hiltViewModel()
+    val providerFlow = providerViewModel.providers
+    ServiceProviderScreen(providerFlow = providerFlow, providerViewModel = providerViewModel)
 }
 
 @Composable
-fun ProfileScreen(
-    profilesFlow: Flow<List<Profile>>,
-    profileViewModel: ProfileViewModel
+fun ServiceProviderScreen(
+    providerFlow: Flow<List<Provider>>,
+    providerViewModel: ProviderViewModel
 ) {
     var name by remember { mutableStateOf("") }
     var cpfCnpj by remember { mutableStateOf("") }
@@ -62,16 +63,8 @@ fun ProfileScreen(
     var loaded by remember { mutableStateOf(false) }
     val context = LocalContext.current
 
-    val profiles by profilesFlow.collectAsStateWithLifecycle(initialValue = emptyList())
-    if (profiles.isNotEmpty() && !loaded) {
-        name = profiles[0].name
-        cpfCnpj = profiles[0].cpfCnpj
-        address = profiles[0].address
-        city = profiles[0].city
-        uf = profiles[0].uf
-        phoneNumber = profiles[0].phoneNumber
-        loaded = true
-    }
+    val providers by providerFlow.collectAsStateWithLifecycle(initialValue = emptyList())
+
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -87,7 +80,7 @@ fun ProfileScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    text = "Informações do locador no recibo:"
+                    text = "Prestadores de Serviços:"
                 )
             }
         }
@@ -183,17 +176,6 @@ fun ProfileScreen(
                             cpfCnpj = tmpCPF
                         }
 
-                        profileViewModel.saveProfile(
-                            Profile(
-                                profileId = 1,
-                                name = name,
-                                cpfCnpj = cpfCnpj,
-                                address = address,
-                                city = city,
-                                uf = uf,
-                                phoneNumber = phoneNumber,
-                            )
-                        )
                         showToast("Informações salvas com sucesso!", context)
                     }
             },

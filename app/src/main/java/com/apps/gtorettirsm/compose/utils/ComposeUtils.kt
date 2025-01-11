@@ -163,7 +163,7 @@ fun filterMonthlyBillingsByMonth(list: List<MonthlyBilling>, month: Int, year: I
 }
 
 fun defaultNaoInformado(s: String): String {
-    var r = "Não Informado." + ""
+    var r = "Não Informado."
     if (!s.trim().isEmpty())
         r = s
     return r
@@ -185,8 +185,8 @@ fun defaultNaoInformado(l: Int): String {
 }
 
 fun defaultNaoInformado(l: Double): String {
-    var r = "Não Informado." + ""
-    if (!l.equals(0))
+    var r = "Não Informado."
+    if (!l.toScreen().equals("0,00"))
         r = l.toScreen()
     return r
 }

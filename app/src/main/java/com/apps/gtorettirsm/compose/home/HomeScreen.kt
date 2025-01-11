@@ -34,9 +34,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.apps.gtorettirsm.R
-import com.apps.gtorettirsm.compose.property.PropertyReceiptsReportScreen
+import com.apps.gtorettirsm.compose.property.FinancialScreen
 import com.apps.gtorettirsm.compose.property.PropertiesScreen
-import com.apps.gtorettirsm.compose.profile.ProfileScreen
+import com.apps.gtorettirsm.compose.profile.ServiceProviderScreen
 import com.apps.gtorettirsm.ui.ReceiptTheme
 import kotlinx.coroutines.launch
 
@@ -122,11 +122,11 @@ fun HomePagerScreen(
                 }
 
                 gtorettirsmPage.PROFILE -> {
-                    ProfileScreen()
+                    ServiceProviderScreen()
                 }
 
                 gtorettirsmPage.FINANCING -> {
-                    PropertyReceiptsReportScreen()
+                    FinancialScreen()
                 }
             }
         }

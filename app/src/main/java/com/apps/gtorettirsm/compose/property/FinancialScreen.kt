@@ -45,7 +45,7 @@ import java.util.HashMap
 
 
 @Composable
-fun PropertyReceiptsReportScreen() {
+fun FinancialScreen() {
     var patientViewModel: PropertyViewModel = hiltViewModel()
     var receiptViewModel: ReceiptViewModel = hiltViewModel()
     var receiptPDFViewModel: ReceiptPDFViewModel = hiltViewModel()
@@ -55,11 +55,11 @@ fun PropertyReceiptsReportScreen() {
     patients.forEach { item ->
         patientsMap.put(item.propertyId,item.streetAddress)
     }
-    PropertyReceiptsReportScreen(receiptViewModel,patientsMap,receiptPDFViewModel)
+    FinancialScreen(receiptViewModel,patientsMap,receiptPDFViewModel)
 }
 
 @Composable
-fun PropertyReceiptsReportScreen(
+fun FinancialScreen(
     receiptViewModel: ReceiptViewModel,
     patientsMap: Map<Long,String>,
     receiptPDFViewModel: ReceiptPDFViewModel
@@ -96,7 +96,7 @@ fun PropertyReceiptsReportScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    text = "Pagamentos recebidos:"
+                    text = "Fluxo de Caixa e Relatórios:"
                 )
             }
         }

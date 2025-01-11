@@ -5,35 +5,34 @@ package com.apps.gtorettirsm.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.apps.gtorettirsm.data.Profile
-import com.apps.gtorettirsm.data.ProfileRepository
+import com.apps.gtorettirsm.data.Provider
+import com.apps.gtorettirsm.data.ProviderRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ProfileViewModel @Inject internal constructor(
-    private val repository: ProfileRepository
+class ProviderViewModel @Inject internal constructor(
+    private val repository: ProviderRepository
 ) : ViewModel() {
 
-    var profiles = repository.getProfiles()
+    var providers = repository.getProviders()
 
     init {
         refreshData()
     }
 
-    fun refreshData() {
+    private fun refreshData() {
         try {
-            profiles = repository.getProfiles()
-
+            providers = repository.getProviders()
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
-    fun saveProfile(profile: Profile) {
+    fun saveProvider(provider: Provider) {
         viewModelScope.launch {
-            repository.saveProfile(profile)
+            repository.saveProvider(provider)
         }
     }
 }

@@ -17,10 +17,10 @@ import com.apps.gtorettirsm.utilities.DATABASE_NAME
 
 
 
-@Database(entities = [Profile::class, Property::class, MonthlyBilling::class, Receipt::class, ReceiptPDF::class], version = 1, exportSchema = false)
+@Database(entities = [Provider::class, Property::class, MonthlyBilling::class, Receipt::class, ReceiptPDF::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun profileDao(): ProfileDao
+    abstract fun providerDao(): ProviderDao
     abstract fun patientDao(): PropertyDao
     abstract fun monthlyBillingDao(): MonthlyBillingDao
     abstract fun receiptDao(): ReceiptDao

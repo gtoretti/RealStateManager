@@ -7,7 +7,7 @@ import android.content.Context
 import com.apps.gtorettirsm.data.AppDatabase
 import com.apps.gtorettirsm.data.MonthlyBillingDao
 import com.apps.gtorettirsm.data.PropertyDao
-import com.apps.gtorettirsm.data.ProfileDao
+import com.apps.gtorettirsm.data.ProviderDao
 import com.apps.gtorettirsm.data.ReceiptDao
 import com.apps.gtorettirsm.data.ReceiptPDFDao
 import dagger.Module
@@ -28,8 +28,8 @@ class DatabaseModule {
     }
 
     @Provides
-    fun provideProfileDao(appDatabase: AppDatabase): ProfileDao {
-        return appDatabase.profileDao()
+    fun provideProviderDao(appDatabase: AppDatabase): ProviderDao {
+        return appDatabase.providerDao()
     }
 
     @Provides
