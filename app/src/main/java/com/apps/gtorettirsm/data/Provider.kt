@@ -15,7 +15,24 @@ data class Provider(
     val pix: String,
     val phoneNumber: String,
     val email: String,
-) {
+    val servicesHydraulic: Int,
+    var servicesElectric: Int,
+    val servicesBrickwork: Int,
+    val servicesPainting: Int,
+    val servicesArchitecture: Int,
+    val servicesNotary: Int,
+    val servicesElectronicGate: Int,
+    val servicesElectricFence: Int,
+    val servicesElectronicIntercom: Int,
+    val servicesRoofer: Int,
+    val servicesCleaning: Int,
+    val servicesAluminumFrames: Int,
+    val servicesSteelGatesRailings: Int,
+    val servicesPoolMaintenance: Int,
+    val servicesPoolCleaning: Int,
+
+
+    ) {
 
     override fun toString() = name
 }

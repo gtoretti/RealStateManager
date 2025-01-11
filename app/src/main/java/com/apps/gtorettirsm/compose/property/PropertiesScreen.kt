@@ -51,13 +51,11 @@ import java.util.Date
 fun PropertiesScreen(
 ) {
     var propertyViewModel: PropertyViewModel = hiltViewModel()
-    var receiptViewModel: ReceiptViewModel = hiltViewModel()
 
     val properties = propertyViewModel.activeProperties
     PropertiesScreen(
         propertiesFlow = properties,
         propertyViewModel = propertyViewModel,
-        receiptViewModel = receiptViewModel
     )
 }
 
@@ -65,7 +63,6 @@ fun PropertiesScreen(
 fun PropertiesScreen(
     propertiesFlow: Flow<List<Property>>,
     propertyViewModel: PropertyViewModel,
-    receiptViewModel: ReceiptViewModel,
 ) {
 
     var openPropertyCreateDialog = remember { mutableStateOf(false) }

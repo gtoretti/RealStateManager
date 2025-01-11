@@ -9,16 +9,22 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,12 +34,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.apps.gtorettirsm.compose.property.PropertyDetailScreen
+import com.apps.gtorettirsm.compose.property.ProviderDetailScreen
 import com.apps.gtorettirsm.compose.utils.getButtonColor
+import com.apps.gtorettirsm.compose.utils.getRedTextColor
+import com.apps.gtorettirsm.compose.utils.getTextColor
 import com.apps.gtorettirsm.compose.utils.showToast
 import com.apps.gtorettirsm.data.Profile
 import com.apps.gtorettirsm.data.Provider
@@ -53,18 +64,13 @@ fun ServiceProviderScreen(
     providerFlow: Flow<List<Provider>>,
     providerViewModel: ProviderViewModel
 ) {
-    var name by remember { mutableStateOf("") }
-    var cpfCnpj by remember { mutableStateOf("") }
-    var address by remember { mutableStateOf("") }
-    var city by remember { mutableStateOf("") }
-    var uf by remember { mutableStateOf("") }
-    var phoneNumber by remember { mutableStateOf("") }
 
-    var loaded by remember { mutableStateOf(false) }
     val context = LocalContext.current
 
-    val providers by providerFlow.collectAsStateWithLifecycle(initialValue = emptyList())
+    var openProviderDetailDialog = remember { mutableStateOf(false) }
 
+    val providers by providerFlow.collectAsStateWithLifecycle(initialValue = emptyList())
+    var provider = Provider(0L,"","","","","", 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -85,135 +91,52 @@ fun ServiceProviderScreen(
             }
         }
 
-        OutlinedTextField(
-            modifier = Modifier
-                .fillMaxWidth(),
-            value = name,
-            onValueChange = { name = it },
-            label = {
-                Text("Nome ou Razão Social:")
-            }, placeholder = { Text("Informe seu nome ou razão social.") }
-        )
-
-        OutlinedTextField(
-            modifier = Modifier
-                .fillMaxWidth(),
-            value = cpfCnpj,
-            onValueChange = { cpfCnpj = it },
-            label = {
-                Text("CPF ou CNPJ:")
-            }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            placeholder = { Text("Informe seu CPF ou  CNPJ.") }
-        )
-
-        OutlinedTextField(
-            modifier = Modifier
-                .fillMaxWidth(),
-            value = address,
-            onValueChange = { address = it },
-            label = {
-                Text("Endereço:")
-            }, placeholder = { Text("Informe seu endereço de emissão do recibo.") }
-        )
-
-        OutlinedTextField(
-            modifier = Modifier
-                .fillMaxWidth(),
-            value = city,
-            onValueChange = { city = it },
-            label = {
-                Text("Cidade:")
-            }, placeholder = { Text("Informe a cidade de emissão do recibo.") }
-        )
-
-        OutlinedTextField(
-            modifier = Modifier
-                .fillMaxWidth(),
-            value = uf,
-            onValueChange = { uf = it },
-            label = {
-                Text("Estado:")
-            }, placeholder = { Text("Informe o estado de emissão do recibo.") }
-        )
-
-        OutlinedTextField(
-            modifier = Modifier
-                .fillMaxWidth(),
-            value = phoneNumber,
-            onValueChange = { phoneNumber = it },
-            label = {
-                Text("Telefone:")
-            },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            placeholder = { Text("Informe seu telefone de contato comercial.") }
-        )
-
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.End,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Spacer(modifier = Modifier.height(20.dp))
-        }
 
-        Button(
-            onClick = {
-
-                var tmpCPF =
-                    cpfCnpj.trimEnd().trimStart().replace(".", "").replace(",", "").replace("-", "").replace("/", "")
-                        .replace(" ", "")
-                if (tmpCPF.length > 0 && tmpCPF.length != 11 && tmpCPF.length != 14) {
-                    showToast("Por favor, verifique seu CPF ou CNPJ.", context)
-                } else
-
-                            if (phoneNumber.length > 20) {
-                                showToast("Por favor, verifique o telefone.", context)
-                            } else
-                        {
-
-                        if (tmpCPF.isNotEmpty()) {
-                            tmpCPF = tmpCPF.substring(0, 3) + "." + tmpCPF.substring(3,6) + "." + tmpCPF.substring(6, 9) + "-" + tmpCPF.substring(9, 11)
-                            cpfCnpj = tmpCPF
-                        }
-
-                        showToast("Informações salvas com sucesso!", context)
-                    }
-            },
-            colors = ButtonDefaults.buttonColors(
-                containerColor = getButtonColor()
-            ), modifier = Modifier.height(30.dp), content = {
+            if (providers.isEmpty()) {
                 Text(
-                    text = "Salvar",
+                    text = "Para adicionar prestadores, clique aqui-->",
                     style = TextStyle(
-                        fontSize = 14.sp,
+                        color = getRedTextColor(),
+                        fontSize = 16.sp,
+                        fontFamily = FontFamily.SansSerif,
                     )
                 )
             }
-        )
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.End,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Spacer(modifier = Modifier.height(100.dp))
+            TextButton(
+                modifier = Modifier.padding(5.dp),
+                onClick =
+                {
+                    openProviderDetailDialog.value = true
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.AddCircle,
+                    contentDescription = "Adicionar Prestador",
+                    tint = getTextColor(),
+                    modifier = Modifier
+                        .padding(end = 12.dp)
+                        .size(24.dp)
+                )
+            }
         }
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.End,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Spacer(modifier = Modifier.height(100.dp))
+
+        when {
+            openProviderDetailDialog.value -> {
+                ProviderDetailScreen(
+                    openProviderDetailDialog,
+                    providerViewModel,
+                    context,
+                    provider)
+            }
         }
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.End,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Spacer(modifier = Modifier.height(100.dp))
-        }
-        //AndroidViewAdView()
+
     }
 }
 

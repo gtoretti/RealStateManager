@@ -97,6 +97,9 @@ fun PropertyDetailScreen(
     val openPropertyContractedInstallationsDialog = remember { mutableStateOf(false) }
     val displayPropertyContractedInstallations = remember { mutableStateOf(false) }
 
+    val openPropertyGDriveConf = remember { mutableStateOf(false) }
+    val displayPropertyGDriveConf = remember { mutableStateOf(false) }
+
     val property by propertyFlow.collectAsStateWithLifecycle(
         initialValue = Property(0L,"", "", "", "", "", "", "", 0.0,0,"", "", "", "", "", "","","", 0.0, "" , 0,  "", "", "", "",  Date(0), Date(0), 0, "", 0.0, "", "", "", "", "", "", "", "", 0)
     )
@@ -1025,97 +1028,137 @@ if (!displayPropertyCurrentContract.value){
     ) {
         Spacer(modifier = Modifier.height(20.dp))
     }
-
     HorizontalDivider(thickness = 1.dp)
-
-
 }
 
-
-
-
-                            Text(
-                                text = "Documentos do Imóvel no GDrive:",
-                                style = TextStyle(
-                                    color = getTextColor(),
-                                    fontSize = 16.sp,
-                                    fontWeight = FontWeight.Bold,
-                                )
-                            )
-
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.End,
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Spacer(modifier = Modifier.height(20.dp))
-                            }
-
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.Center,
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Button(
-                                    onClick = {
-                                        openGDriveFolder(context, property.urlGDriveFolder)
+                            if (!displayPropertyGDriveConf.value) {
+                                TextButton(
+                                    modifier = Modifier.padding(5.dp),
+                                    onClick =
+                                    {
+                                        displayPropertyGDriveConf.value = true
                                     },
-                                    colors = ButtonDefaults.buttonColors(
-                                        containerColor = getButtonColor()
-                                    ),
-                                    modifier = Modifier.height(30.dp)
                                 ) {
-                                    Text(
-                                        text = "Abrir URL",
-                                        style = TextStyle(
-                                            fontSize = 14.sp,
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.Start,
+                                        modifier = Modifier.fillMaxWidth()
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Filled.KeyboardArrowRight,
+                                            contentDescription = "Registro Municipal",
+                                            tint = getTextColor(),
+                                            modifier = Modifier
+                                                .padding(end = 12.dp)
+                                                .size(24.dp)
                                         )
-                                    )
+                                        Text(
+                                            text = "Documentos no GDrive:",
+                                            style = TextStyle(
+                                                color = getTextColor(),
+                                                fontSize = 16.sp,
+                                                fontWeight = FontWeight.Bold,
+                                            )
+                                        )
+                                    }
                                 }
-                                }
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.Center,
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-
-                                Button(
-                                    onClick = {
-
+                            }else{
+                                TextButton(
+                                    modifier = Modifier.padding(5.dp),
+                                    onClick =
+                                    {
+                                        displayPropertyGDriveConf.value=false
                                     },
-                                    colors = ButtonDefaults.buttonColors(
-                                        containerColor = getButtonColor()
-                                    ),
-                                    modifier = Modifier.height(30.dp)
                                 ) {
-                                    Text(
-                                        text = "Configurar URL",
-                                        style = TextStyle(
-                                            fontSize = 14.sp,
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.Start,
+                                        modifier = Modifier.fillMaxWidth()
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Filled.KeyboardArrowDown,
+                                            contentDescription = "Documentos no GDrive",
+                                            tint = getTextColor(),
+                                            modifier = Modifier
+                                                .padding(end = 12.dp)
+                                                .size(24.dp)
                                         )
-                                    )
+                                        Text(
+                                            text = "Documentos no GDrive:",
+                                            style = TextStyle(
+                                                color = getTextColor(),
+                                                fontSize = 16.sp,
+                                                fontWeight = FontWeight.Bold,
+                                            )
+                                        )
+                                    }
                                 }
+
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.End,
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Spacer(modifier = Modifier.height(20.dp))
+                                }
+
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.Center,
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Button(
+                                        onClick = {
+                                            openGDriveFolder(context, property.urlGDriveFolder)
+                                        },
+                                        colors = ButtonDefaults.buttonColors(
+                                            containerColor = getButtonColor()
+                                        ),
+                                        modifier = Modifier.height(30.dp)
+                                    ) {
+                                        Text(
+                                            text = "Abrir URL",
+                                            style = TextStyle(
+                                                fontSize = 14.sp,
+                                            )
+                                        )
+                                    }
+                                }
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.Center,
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+
+                                    Button(
+                                        onClick = {
+
+                                        },
+                                        colors = ButtonDefaults.buttonColors(
+                                            containerColor = getButtonColor()
+                                        ),
+                                        modifier = Modifier.height(30.dp)
+                                    ) {
+                                        Text(
+                                            text = "Configurar URL",
+                                            style = TextStyle(
+                                                fontSize = 14.sp,
+                                            )
+                                        )
+                                    }
+                                }
+
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.End,
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Spacer(modifier = Modifier.height(20.dp))
+                                }
+
+                                HorizontalDivider(thickness = 1.dp)
                             }
-
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.End,
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Spacer(modifier = Modifier.height(20.dp))
-                            }
-
-
-
-
-
-
-                            HorizontalDivider(thickness = 1.dp)
-
-
-
                         }
-
                     })
             },
             confirmButton = {
