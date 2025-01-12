@@ -99,7 +99,10 @@ fun ProviderDetailScreen(
     var servicesPainting by remember { mutableIntStateOf(0) }
     var servicesSteelGatesRailings by remember { mutableIntStateOf(0) }
     var servicesPropertySecurity by remember { mutableIntStateOf(0) }
-
+    var servicesCurtains by remember { mutableIntStateOf(0) }
+    var servicesShowerStalls by remember { mutableIntStateOf(0) }
+    var servicesSunshades by remember { mutableIntStateOf(0) }
+    var servicesCabinetsJoinery by remember { mutableIntStateOf(0) }
 
 
     if (openProviderDetailDialog.value) {
@@ -757,6 +760,74 @@ fun ProviderDetailScreen(
                                     )
                                 }
 
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.Start,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .selectable(
+                                            selected = servicesCabinetsJoinery == 1,
+                                            onClick = {
+                                                if (servicesCabinetsJoinery == 0) servicesCabinetsJoinery=1
+                                                else servicesCabinetsJoinery=0
+                                            },
+                                            role = Role.Checkbox
+                                        )
+                                ) {
+                                    Checkbox(checked = (servicesCabinetsJoinery == 1),
+                                        onCheckedChange = {
+                                            if (it) servicesCabinetsJoinery=1
+                                            else servicesCabinetsJoinery=0
+                                        })
+                                    Text(
+                                        text = "Manutenção de Armários e Marcenaria",
+                                        style = TextStyle(
+                                            color = getTextColor(),
+                                            fontSize = 16.sp,
+                                            fontFamily = FontFamily.SansSerif,
+                                        ),
+                                        modifier = Modifier.padding(
+                                            start = 2.dp,
+                                            end = 6.dp
+                                        )
+                                    )
+                                }
+
+
+
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.Start,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .selectable(
+                                            selected = servicesShowerStalls == 1,
+                                            onClick = {
+                                                if (servicesShowerStalls == 0) servicesShowerStalls=1
+                                                else servicesShowerStalls=0
+                                            },
+                                            role = Role.Checkbox
+                                        )
+                                ) {
+                                    Checkbox(checked = (servicesShowerStalls == 1),
+                                        onCheckedChange = {
+                                            if (it) servicesShowerStalls=1
+                                            else servicesShowerStalls=0
+                                        })
+                                    Text(
+                                        text = "Manutenção de Boxes para Banheiros",
+                                        style = TextStyle(
+                                            color = getTextColor(),
+                                            fontSize = 16.sp,
+                                            fontFamily = FontFamily.SansSerif,
+                                        ),
+                                        modifier = Modifier.padding(
+                                            start = 2.dp,
+                                            end = 6.dp
+                                        )
+                                    )
+                                }
+
 
                                 Row(
                                     verticalAlignment = Alignment.CenterVertically,
@@ -825,6 +896,73 @@ fun ProviderDetailScreen(
                                     )
                                 }
 
+
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.Start,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .selectable(
+                                            selected = servicesSunshades == 1,
+                                            onClick = {
+                                                if (servicesSunshades == 0) servicesSunshades=1
+                                                else servicesSunshades=0
+                                            },
+                                            role = Role.Checkbox
+                                        )
+                                ) {
+                                    Checkbox(checked = (servicesSunshades == 1),
+                                        onCheckedChange = {
+                                            if (it) servicesSunshades=1
+                                            else servicesSunshades=0
+                                        })
+                                    Text(
+                                        text = "Manutenção de Coberturas e Toldos",
+                                        style = TextStyle(
+                                            color = getTextColor(),
+                                            fontSize = 16.sp,
+                                            fontFamily = FontFamily.SansSerif,
+                                        ),
+                                        modifier = Modifier.padding(
+                                            start = 2.dp,
+                                            end = 6.dp
+                                        )
+                                    )
+                                }
+
+
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.Start,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .selectable(
+                                            selected = servicesCurtains == 1,
+                                            onClick = {
+                                                if (servicesCurtains == 0) servicesCurtains=1
+                                                else servicesCurtains=0
+                                            },
+                                            role = Role.Checkbox
+                                        )
+                                ) {
+                                    Checkbox(checked = (servicesCurtains == 1),
+                                        onCheckedChange = {
+                                            if (it) servicesCurtains=1
+                                            else servicesCurtains=0
+                                        })
+                                    Text(
+                                        text = "Manutenção de Cortinas",
+                                        style = TextStyle(
+                                            color = getTextColor(),
+                                            fontSize = 16.sp,
+                                            fontFamily = FontFamily.SansSerif,
+                                        ),
+                                        modifier = Modifier.padding(
+                                            start = 2.dp,
+                                            end = 6.dp
+                                        )
+                                    )
+                                }
 
                                 Row(
                                     verticalAlignment = Alignment.CenterVertically,

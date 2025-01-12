@@ -70,7 +70,7 @@ fun ServiceProviderScreen(
     var openProviderDetailDialog = remember { mutableStateOf(false) }
 
     val providers by providerFlow.collectAsStateWithLifecycle(initialValue = emptyList())
-    var provider = Provider(0L,"","","","","", "", 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+    var provider = Provider(0L,"","","","","", "", 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0)
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,

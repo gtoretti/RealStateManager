@@ -29,6 +29,7 @@ data class Provider(
     var servicesElectric: Int,  //Instalações eletricas
     val servicesHydraulic: Int, //Instalações hidraulicas
     val servicesAirConditioningMaintenance: Int, // manutenção de ar-condicionado
+    val servicesShowerStalls: Int, // Manutenção de Boxes para Banheiros
     val servicesRoofer: Int, // manutenção de calhas e telhado
     val servicesElectricFence: Int, // manutenção de cerca eletrica
     val servicesElevatorMaintenance: Int, //manutenção de elevador
@@ -43,7 +44,9 @@ data class Provider(
     val servicesPainting: Int, // Pintura
     val servicesSteelGatesRailings: Int, // portoes e grades de aço
     val servicesPropertySecurity: Int, // segurança patrimonial
-
+    val servicesSunshades: Int, // Manutenção de Coberturas e Toldos
+    val servicesCurtains: Int, // Manutenção de Cortinas
+    val servicesCabinetsJoinery: Int, // Manutenção de Armarios e Marcenaria
 
 
     ) {
