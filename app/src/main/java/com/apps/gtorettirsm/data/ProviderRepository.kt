@@ -11,6 +11,8 @@ class ProviderRepository @Inject constructor(private val providerDao: ProviderDa
 
     fun getProviders() = providerDao.getProviders()
 
+    fun getProvider(id: Long) = providerDao.getProvider(id)
+
     suspend fun saveProvider(provider: Provider){
         providerDao.upsert(provider)
     }
@@ -24,5 +26,9 @@ class ProviderRepository @Inject constructor(private val providerDao: ProviderDa
             instance ?: synchronized(this) {
                 instance ?: ProviderRepository(providerDao).also { instance = it }
             }
+    }
+
+    suspend fun deleteProvider(provider: Provider){
+        providerDao.delete(provider.providerId)
     }
 }

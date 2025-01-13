@@ -39,6 +39,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.apps.gtorettirsm.compose.utils.DrawScrollableView
 import com.apps.gtorettirsm.compose.utils.getButtonColor
 import com.apps.gtorettirsm.compose.utils.getTextColor
@@ -48,6 +49,7 @@ import com.apps.gtorettirsm.data.Provider
 import com.apps.gtorettirsm.viewmodels.ProviderViewModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.flow.Flow
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.OkHttpClient
@@ -57,7 +59,65 @@ import org.json.JSONObject
 
 import java.io.IOException
 import java.text.SimpleDateFormat
+import java.util.Date
 
+val name = mutableStateOf("")
+val cpfCnpj = mutableStateOf("")
+val pix = mutableStateOf("")
+val phoneNumber = mutableStateOf("")
+val email = mutableStateOf("")
+val serviceRegion = mutableStateOf("")
+val servicesAdministration = mutableIntStateOf(0)
+val servicesHydraulic = mutableIntStateOf(0)
+val servicesBrickwork = mutableIntStateOf(0)
+val servicesElectric = mutableIntStateOf(0)
+val servicesArchitecture = mutableIntStateOf(0)
+val servicesInsurer = mutableIntStateOf(0)
+val servicesAutomation = mutableIntStateOf(0)
+val servicesFireBrigade = mutableIntStateOf(0)
+val servicesNotary = mutableIntStateOf(0)
+val servicesPlasterer = mutableIntStateOf(0)
+val servicesElectricFence = mutableIntStateOf(0)
+val servicesAluminumFrames = mutableIntStateOf(0)
+val servicesAirConditioningMaintenance = mutableIntStateOf(0)
+val servicesRoofer = mutableIntStateOf(0)
+val servicesElevatorMaintenance = mutableIntStateOf(0)
+
+val servicesElectronicIntercom = mutableIntStateOf(0)
+val servicesGardening = mutableIntStateOf(0)
+val servicesPoolMaintenance = mutableIntStateOf(0)
+val servicesPlaygroundMaintenance = mutableIntStateOf(0)
+val servicesElectronicGate = mutableIntStateOf(0)
+val servicesCleaning = mutableIntStateOf(0)
+val servicesPoolCleaning = mutableIntStateOf(0)
+val servicesLandscaping = mutableIntStateOf(0)
+val servicesPainting = mutableIntStateOf(0)
+val servicesSteelGatesRailings = mutableIntStateOf(0)
+val servicesPropertySecurity = mutableIntStateOf(0)
+val servicesCurtains = mutableIntStateOf(0)
+val servicesShowerStalls = mutableIntStateOf(0)
+val servicesSunshades = mutableIntStateOf(0)
+val servicesCabinetsJoinery = mutableIntStateOf(0)
+
+
+@Composable
+fun ProviderDetailScreen(
+    openProviderDetailDialog: MutableState<Boolean>,
+    providerViewModel: ProviderViewModel,
+    context: Context,
+    providerId: Long
+) {
+    if (providerId!=0L){
+        var providerFlow = providerViewModel.getProvider(providerId)
+        val provider by providerFlow.collectAsStateWithLifecycle(
+            initialValue = Provider(0L,"","","","","", "", 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0,0)
+        )
+        ProviderDetailScreen(openProviderDetailDialog,providerViewModel,context,provider)
+    }else{
+        ProviderDetailScreen(openProviderDetailDialog,providerViewModel,context,Provider(0L,"","","","","", "", 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0,0))
+    }
+
+}
 
 @Composable
 fun ProviderDetailScreen(
@@ -67,43 +127,51 @@ fun ProviderDetailScreen(
     provider: Provider
 ) {
 
-    var name by remember { mutableStateOf("") }
-    var cpfCnpj by remember { mutableStateOf("") }
-    var pix by remember { mutableStateOf("") }
-    var phoneNumber by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var servicesAdministration by remember { mutableIntStateOf(0) }
-    var servicesHydraulic by remember { mutableIntStateOf(0) }
-    var servicesBrickwork by remember { mutableIntStateOf(0) }
-    var servicesElectric by remember { mutableIntStateOf(0) }
-    var servicesArchitecture by remember { mutableIntStateOf(0) }
-    var servicesInsurer by remember { mutableIntStateOf(0) }
-    var servicesAutomation by remember { mutableIntStateOf(0) }
-    var servicesFireBrigade by remember { mutableIntStateOf(0) }
-    var servicesNotary by remember { mutableIntStateOf(0) }
-    var servicesPlasterer by remember { mutableIntStateOf(0) }
-    var servicesElectricFence by remember { mutableIntStateOf(0) }
-    var servicesAluminumFrames by remember { mutableIntStateOf(0) }
-    var servicesAirConditioningMaintenance by remember { mutableIntStateOf(0) }
-    var servicesRoofer by remember { mutableIntStateOf(0) }
-    var servicesElevatorMaintenance by remember { mutableIntStateOf(0) }
 
-    var servicesElectronicIntercom by remember { mutableIntStateOf(0) }
-    var servicesGardening by remember { mutableIntStateOf(0) }
-    var servicesPoolMaintenance by remember { mutableIntStateOf(0) }
-    var servicesPlaygroundMaintenance by remember { mutableIntStateOf(0) }
-    var servicesElectronicGate by remember { mutableIntStateOf(0) }
-    var servicesCleaning by remember { mutableIntStateOf(0) }
-    var servicesPoolCleaning by remember { mutableIntStateOf(0) }
-    var servicesLandscaping by remember { mutableIntStateOf(0) }
-    var servicesPainting by remember { mutableIntStateOf(0) }
-    var servicesSteelGatesRailings by remember { mutableIntStateOf(0) }
-    var servicesPropertySecurity by remember { mutableIntStateOf(0) }
-    var servicesCurtains by remember { mutableIntStateOf(0) }
-    var servicesShowerStalls by remember { mutableIntStateOf(0) }
-    var servicesSunshades by remember { mutableIntStateOf(0) }
-    var servicesCabinetsJoinery by remember { mutableIntStateOf(0) }
 
+
+
+
+    var openProviderDeleteDialog = remember { mutableStateOf(false) }
+
+    if (provider.providerId!=0L){
+        name.value = provider.name
+        cpfCnpj.value = provider.cpfCnpj
+        pix.value = provider.pix
+        phoneNumber.value = provider.phoneNumber
+        email.value = provider.email
+        serviceRegion.value = provider.serviceRegion
+        servicesAdministration.value = provider.servicesAdministration
+        servicesHydraulic.value = provider.servicesHydraulic
+        servicesBrickwork.value = provider.servicesBrickwork
+        servicesElectric.value = provider.servicesElectric
+        servicesArchitecture.value = provider.servicesArchitecture
+        servicesInsurer.value = provider.servicesInsurer
+        servicesAutomation.value = provider.servicesAutomation
+        servicesFireBrigade.value = provider.servicesFireBrigade
+        servicesNotary.value = provider.servicesNotary
+        servicesPlasterer.value = provider.servicesPlasterer
+        servicesElectricFence.value = provider.servicesElectricFence
+        servicesAluminumFrames.value = provider.servicesAluminumFrames
+        servicesAirConditioningMaintenance.value = provider.servicesAirConditioningMaintenance
+        servicesRoofer.value = provider.servicesRoofer
+        servicesElevatorMaintenance.value = provider.servicesElevatorMaintenance
+        servicesElectronicIntercom.value = provider.servicesElectronicIntercom
+        servicesGardening.value = provider.servicesGardening
+        servicesPoolMaintenance.value = provider.servicesPoolMaintenance
+        servicesPlaygroundMaintenance.value = provider.servicesPlaygroundMaintenance
+        servicesElectronicGate.value = provider.servicesElectronicGate
+        servicesCleaning.value = provider.servicesCleaning
+        servicesPoolCleaning.value = provider.servicesPoolCleaning
+        servicesLandscaping.value = provider.servicesLandscaping
+        servicesPainting.value = provider.servicesPainting
+        servicesSteelGatesRailings.value = provider.servicesSteelGatesRailings
+        servicesPropertySecurity.value = provider.servicesPropertySecurity
+        servicesCurtains.value = provider.servicesCurtains
+        servicesShowerStalls.value = provider.servicesShowerStalls
+        servicesSunshades.value = provider.servicesSunshades
+        servicesCabinetsJoinery.value = provider.servicesCabinetsJoinery
+    }
 
     if (openProviderDetailDialog.value) {
         AlertDialog(
@@ -145,9 +213,9 @@ fun ProviderDetailScreen(
 
 
                     OutlinedTextField(
-                        value = name,
+                        value = name.value,
                         onValueChange = {
-                            name = it
+                            name.value = it
                         },
                         textStyle = TextStyle(
                             fontSize = 16.sp,
@@ -167,9 +235,9 @@ fun ProviderDetailScreen(
                     )
 
                     OutlinedTextField(
-                        value = cpfCnpj,
+                        value = cpfCnpj.value,
                         onValueChange = {
-                            cpfCnpj = it
+                            cpfCnpj.value = it
                         },
                         textStyle = TextStyle(
                             fontSize = 16.sp,
@@ -191,9 +259,9 @@ fun ProviderDetailScreen(
                     )
 
                     OutlinedTextField(
-                        value = pix,
+                        value = pix.value,
                         onValueChange = {
-                            pix = it
+                            pix.value = it
                         },
                         textStyle = TextStyle(
                             fontSize = 16.sp,
@@ -214,9 +282,9 @@ fun ProviderDetailScreen(
 
 
                     OutlinedTextField(
-                        value = phoneNumber,
+                        value = phoneNumber.value,
                         onValueChange = {
-                            phoneNumber = it
+                            phoneNumber.value = it
                         },
                         textStyle = TextStyle(
                             fontSize = 16.sp,
@@ -238,9 +306,9 @@ fun ProviderDetailScreen(
                     )
 
                     OutlinedTextField(
-                        value = email,
+                        value = email.value,
                         onValueChange = {
-                            email = it
+                            email.value = it
                         },
                         textStyle = TextStyle(
                             fontSize = 16.sp,
@@ -259,6 +327,27 @@ fun ProviderDetailScreen(
 
                     )
 
+                    OutlinedTextField(
+                        value = serviceRegion.value,
+                        onValueChange = {
+                            serviceRegion.value = it
+                        },
+                        textStyle = TextStyle(
+                            fontSize = 16.sp,
+                            color = getTextColor(),
+                            fontWeight = FontWeight.Normal
+                        ),
+                        label = {
+                            Text(
+                                text = "Região de Atendimento:",
+                                style = TextStyle(
+                                    color = getTextColor(),fontSize = 12.sp
+                                )
+                            )
+                        },
+                        placeholder = {Text("")},
+
+                        )
 
                     Text(
                         text = "Tipos de Serviços Prestados:",
@@ -283,18 +372,18 @@ fun ProviderDetailScreen(
                                         modifier = Modifier
                                             .fillMaxWidth()
                                             .selectable(
-                                                selected = servicesAdministration == 1,
+                                                selected = servicesAdministration.value == 1,
                                                 onClick = {
-                                                    if (servicesAdministration == 0) servicesAdministration=1
-                                                    else servicesAdministration=0
+                                                    if (servicesAdministration.value == 0) servicesAdministration.value=1
+                                                    else servicesAdministration.value=0
                                                           },
                                                 role = Role.Checkbox
                                             )
                                     ) {
-                                        Checkbox(checked = (servicesAdministration == 1),
+                                        Checkbox(checked = (servicesAdministration.value == 1),
                                             onCheckedChange = {
-                                                if (it) servicesAdministration=1
-                                                else servicesAdministration=0
+                                                if (it) servicesAdministration.value=1
+                                                else servicesAdministration.value=0
                                             })
                                         Text(
                                             text = "Administração de reformas",
@@ -320,18 +409,18 @@ fun ProviderDetailScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .selectable(
-                                            selected = servicesBrickwork == 1,
+                                            selected = servicesBrickwork.value == 1,
                                             onClick = {
-                                                if (servicesBrickwork == 0) servicesBrickwork=1
-                                                else servicesBrickwork=0
+                                                if (servicesBrickwork.value == 0) servicesBrickwork.value=1
+                                                else servicesBrickwork.value=0
                                             },
                                             role = Role.Checkbox
                                         )
                                 ) {
-                                    Checkbox(checked = (servicesBrickwork == 1),
+                                    Checkbox(checked = (servicesBrickwork.value == 1),
                                         onCheckedChange = {
-                                            if (it) servicesBrickwork=1
-                                            else servicesBrickwork=0
+                                            if (it) servicesBrickwork.value=1
+                                            else servicesBrickwork.value=0
                                         })
                                     Text(
                                         text = "Alvenaria",
@@ -355,18 +444,18 @@ fun ProviderDetailScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .selectable(
-                                            selected = servicesArchitecture == 1,
+                                            selected = servicesArchitecture.value == 1,
                                             onClick = {
-                                                if (servicesArchitecture == 0) servicesArchitecture=1
-                                                else servicesArchitecture=0
+                                                if (servicesArchitecture.value == 0) servicesArchitecture.value=1
+                                                else servicesArchitecture.value=0
                                             },
                                             role = Role.Checkbox
                                         )
                                 ) {
-                                    Checkbox(checked = (servicesArchitecture == 1),
+                                    Checkbox(checked = (servicesArchitecture.value == 1),
                                         onCheckedChange = {
-                                            if (it) servicesArchitecture=1
-                                            else servicesArchitecture=0
+                                            if (it) servicesArchitecture.value=1
+                                            else servicesArchitecture.value=0
                                         })
                                     Text(
                                         text = "Arquitetura",
@@ -390,18 +479,18 @@ fun ProviderDetailScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .selectable(
-                                            selected = servicesInsurer == 1,
+                                            selected = servicesInsurer.value == 1,
                                             onClick = {
-                                                if (servicesInsurer == 0) servicesInsurer=1
-                                                else servicesInsurer=0
+                                                if (servicesInsurer.value == 0) servicesInsurer.value=1
+                                                else servicesInsurer.value=0
                                             },
                                             role = Role.Checkbox
                                         )
                                 ) {
-                                    Checkbox(checked = (servicesInsurer == 1),
+                                    Checkbox(checked = (servicesInsurer.value == 1),
                                         onCheckedChange = {
-                                            if (it) servicesInsurer=1
-                                            else servicesInsurer=0
+                                            if (it) servicesInsurer.value=1
+                                            else servicesInsurer.value=0
                                         })
                                     Text(
                                         text = "Asseguradora",
@@ -425,18 +514,18 @@ fun ProviderDetailScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .selectable(
-                                            selected = servicesAutomation == 1,
+                                            selected = servicesAutomation.value == 1,
                                             onClick = {
-                                                if (servicesAutomation == 0) servicesAutomation=1
-                                                else servicesAutomation=0
+                                                if (servicesAutomation.value == 0) servicesAutomation.value=1
+                                                else servicesAutomation.value=0
                                             },
                                             role = Role.Checkbox
                                         )
                                 ) {
-                                    Checkbox(checked = (servicesAutomation == 1),
+                                    Checkbox(checked = (servicesAutomation.value == 1),
                                         onCheckedChange = {
-                                            if (it) servicesAutomation=1
-                                            else servicesAutomation=0
+                                            if (it) servicesAutomation.value=1
+                                            else servicesAutomation.value=0
                                         })
                                     Text(
                                         text = "Automação Residencial",
@@ -460,18 +549,18 @@ fun ProviderDetailScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .selectable(
-                                            selected = servicesFireBrigade == 1,
+                                            selected = servicesFireBrigade.value == 1,
                                             onClick = {
-                                                if (servicesFireBrigade == 0) servicesFireBrigade=1
-                                                else servicesFireBrigade=0
+                                                if (servicesFireBrigade.value == 0) servicesFireBrigade.value=1
+                                                else servicesFireBrigade.value=0
                                             },
                                             role = Role.Checkbox
                                         )
                                 ) {
-                                    Checkbox(checked = (servicesFireBrigade == 1),
+                                    Checkbox(checked = (servicesFireBrigade.value == 1),
                                         onCheckedChange = {
-                                            if (it) servicesFireBrigade=1
-                                            else servicesFireBrigade=0
+                                            if (it) servicesFireBrigade.value=1
+                                            else servicesFireBrigade.value=0
                                         })
                                     Text(
                                         text = "Brigada de Incêncio",
@@ -494,18 +583,18 @@ fun ProviderDetailScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .selectable(
-                                            selected = servicesNotary == 1,
+                                            selected = servicesNotary.value == 1,
                                             onClick = {
-                                                if (servicesNotary == 0) servicesNotary=1
-                                                else servicesNotary=0
+                                                if (servicesNotary.value == 0) servicesNotary.value=1
+                                                else servicesNotary.value=0
                                             },
                                             role = Role.Checkbox
                                         )
                                 ) {
-                                    Checkbox(checked = (servicesNotary == 1),
+                                    Checkbox(checked = (servicesNotary.value == 1),
                                         onCheckedChange = {
-                                            if (it) servicesNotary=1
-                                            else servicesNotary=0
+                                            if (it) servicesNotary.value=1
+                                            else servicesNotary.value=0
                                         })
                                     Text(
                                         text = "Cartório de Imóveis",
@@ -529,18 +618,18 @@ fun ProviderDetailScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .selectable(
-                                            selected = servicesAluminumFrames == 1,
+                                            selected = servicesAluminumFrames.value == 1,
                                             onClick = {
-                                                if (servicesAluminumFrames == 0) servicesAluminumFrames=1
-                                                else servicesAluminumFrames=0
+                                                if (servicesAluminumFrames.value == 0) servicesAluminumFrames.value=1
+                                                else servicesAluminumFrames.value=0
                                             },
                                             role = Role.Checkbox
                                         )
                                 ) {
-                                    Checkbox(checked = (servicesAluminumFrames == 1),
+                                    Checkbox(checked = (servicesAluminumFrames.value == 1),
                                         onCheckedChange = {
-                                            if (it) servicesAluminumFrames=1
-                                            else servicesAluminumFrames=0
+                                            if (it) servicesAluminumFrames.value=1
+                                            else servicesAluminumFrames.value=0
                                         })
                                     Text(
                                         text = "Esquadrias de Alumínio",
@@ -564,18 +653,18 @@ fun ProviderDetailScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .selectable(
-                                            selected = servicesPlasterer == 1,
+                                            selected = servicesPlasterer.value == 1,
                                             onClick = {
-                                                if (servicesPlasterer == 0) servicesPlasterer=1
-                                                else servicesPlasterer=0
+                                                if (servicesPlasterer.value == 0) servicesPlasterer.value=1
+                                                else servicesPlasterer.value=0
                                             },
                                             role = Role.Checkbox
                                         )
                                 ) {
-                                    Checkbox(checked = (servicesPlasterer == 1),
+                                    Checkbox(checked = (servicesPlasterer.value == 1),
                                         onCheckedChange = {
-                                            if (it) servicesPlasterer=1
-                                            else servicesPlasterer=0
+                                            if (it) servicesPlasterer.value=1
+                                            else servicesPlasterer.value=0
                                         })
                                     Text(
                                         text = "Gesseiro",
@@ -598,18 +687,18 @@ fun ProviderDetailScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .selectable(
-                                            selected = servicesElectric == 1,
+                                            selected = servicesElectric.value == 1,
                                             onClick = {
-                                                if (servicesElectric == 0) servicesElectric=1
-                                                else servicesElectric=0
+                                                if (servicesElectric.value == 0) servicesElectric.value=1
+                                                else servicesElectric.value=0
                                             },
                                             role = Role.Checkbox
                                         )
                                 ) {
-                                    Checkbox(checked = (servicesElectric == 1),
+                                    Checkbox(checked = (servicesElectric.value == 1),
                                         onCheckedChange = {
-                                            if (it) servicesElectric=1
-                                            else servicesElectric=0
+                                            if (it) servicesElectric.value=1
+                                            else servicesElectric.value=0
                                         })
                                     Text(
                                         text = "Instalações Elétricas",
@@ -632,18 +721,18 @@ fun ProviderDetailScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .selectable(
-                                            selected = servicesHydraulic == 1,
+                                            selected = servicesHydraulic.value == 1,
                                             onClick = {
-                                                if (servicesHydraulic == 0) servicesHydraulic=1
-                                                else servicesHydraulic=0
+                                                if (servicesHydraulic.value == 0) servicesHydraulic.value=1
+                                                else servicesHydraulic.value=0
                                             },
                                             role = Role.Checkbox
                                         )
                                 ) {
-                                    Checkbox(checked = (servicesHydraulic == 1),
+                                    Checkbox(checked = (servicesHydraulic.value == 1),
                                         onCheckedChange = {
-                                            if (it) servicesHydraulic=1
-                                            else servicesHydraulic=0
+                                            if (it) servicesHydraulic.value=1
+                                            else servicesHydraulic.value=0
                                         })
                                     Text(
                                         text = "Instalações Hidráulicas",
@@ -666,18 +755,18 @@ fun ProviderDetailScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .selectable(
-                                            selected = servicesCleaning == 1,
+                                            selected = servicesCleaning.value == 1,
                                             onClick = {
-                                                if (servicesCleaning == 0) servicesCleaning=1
-                                                else servicesCleaning=0
+                                                if (servicesCleaning.value == 0) servicesCleaning.value=1
+                                                else servicesCleaning.value=0
                                             },
                                             role = Role.Checkbox
                                         )
                                 ) {
-                                    Checkbox(checked = (servicesCleaning == 1),
+                                    Checkbox(checked = (servicesCleaning.value == 1),
                                         onCheckedChange = {
-                                            if (it) servicesCleaning=1
-                                            else servicesCleaning=0
+                                            if (it) servicesCleaning.value=1
+                                            else servicesCleaning.value=0
                                         })
                                     Text(
                                         text = "Limpeza Pós-Obra",
@@ -699,18 +788,18 @@ fun ProviderDetailScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .selectable(
-                                            selected = servicesPoolCleaning == 1,
+                                            selected = servicesPoolCleaning.value == 1,
                                             onClick = {
-                                                if (servicesPoolCleaning == 0) servicesPoolCleaning=1
-                                                else servicesPoolCleaning=0
+                                                if (servicesPoolCleaning.value == 0) servicesPoolCleaning.value=1
+                                                else servicesPoolCleaning.value=0
                                             },
                                             role = Role.Checkbox
                                         )
                                 ) {
-                                    Checkbox(checked = (servicesPoolCleaning == 1),
+                                    Checkbox(checked = (servicesPoolCleaning.value == 1),
                                         onCheckedChange = {
-                                            if (it) servicesPoolCleaning=1
-                                            else servicesPoolCleaning=0
+                                            if (it) servicesPoolCleaning.value=1
+                                            else servicesPoolCleaning.value=0
                                         })
                                     Text(
                                         text = "Limpeza de Piscina",
@@ -733,18 +822,18 @@ fun ProviderDetailScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .selectable(
-                                            selected = servicesAirConditioningMaintenance == 1,
+                                            selected = servicesAirConditioningMaintenance.value == 1,
                                             onClick = {
-                                                if (servicesAirConditioningMaintenance == 0) servicesAirConditioningMaintenance=1
-                                                else servicesAirConditioningMaintenance=0
+                                                if (servicesAirConditioningMaintenance.value == 0) servicesAirConditioningMaintenance.value=1
+                                                else servicesAirConditioningMaintenance.value=0
                                             },
                                             role = Role.Checkbox
                                         )
                                 ) {
-                                    Checkbox(checked = (servicesAirConditioningMaintenance == 1),
+                                    Checkbox(checked = (servicesAirConditioningMaintenance.value == 1),
                                         onCheckedChange = {
-                                            if (it) servicesAirConditioningMaintenance=1
-                                            else servicesAirConditioningMaintenance=0
+                                            if (it) servicesAirConditioningMaintenance.value=1
+                                            else servicesAirConditioningMaintenance.value=0
                                         })
                                     Text(
                                         text = "Manutenção de Ar-Condicionado",
@@ -766,18 +855,18 @@ fun ProviderDetailScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .selectable(
-                                            selected = servicesCabinetsJoinery == 1,
+                                            selected = servicesCabinetsJoinery.value == 1,
                                             onClick = {
-                                                if (servicesCabinetsJoinery == 0) servicesCabinetsJoinery=1
-                                                else servicesCabinetsJoinery=0
+                                                if (servicesCabinetsJoinery.value == 0) servicesCabinetsJoinery.value=1
+                                                else servicesCabinetsJoinery.value=0
                                             },
                                             role = Role.Checkbox
                                         )
                                 ) {
-                                    Checkbox(checked = (servicesCabinetsJoinery == 1),
+                                    Checkbox(checked = (servicesCabinetsJoinery.value == 1),
                                         onCheckedChange = {
-                                            if (it) servicesCabinetsJoinery=1
-                                            else servicesCabinetsJoinery=0
+                                            if (it) servicesCabinetsJoinery.value=1
+                                            else servicesCabinetsJoinery.value=0
                                         })
                                     Text(
                                         text = "Manutenção de Armários e Marcenaria",
@@ -801,18 +890,18 @@ fun ProviderDetailScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .selectable(
-                                            selected = servicesShowerStalls == 1,
+                                            selected = servicesShowerStalls.value == 1,
                                             onClick = {
-                                                if (servicesShowerStalls == 0) servicesShowerStalls=1
-                                                else servicesShowerStalls=0
+                                                if (servicesShowerStalls.value == 0) servicesShowerStalls.value=1
+                                                else servicesShowerStalls.value=0
                                             },
                                             role = Role.Checkbox
                                         )
                                 ) {
-                                    Checkbox(checked = (servicesShowerStalls == 1),
+                                    Checkbox(checked = (servicesShowerStalls.value == 1),
                                         onCheckedChange = {
-                                            if (it) servicesShowerStalls=1
-                                            else servicesShowerStalls=0
+                                            if (it) servicesShowerStalls.value=1
+                                            else servicesShowerStalls.value=0
                                         })
                                     Text(
                                         text = "Manutenção de Boxes para Banheiros",
@@ -835,18 +924,18 @@ fun ProviderDetailScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .selectable(
-                                            selected = servicesRoofer == 1,
+                                            selected = servicesRoofer.value == 1,
                                             onClick = {
-                                                if (servicesRoofer == 0) servicesRoofer=1
-                                                else servicesRoofer=0
+                                                if (servicesRoofer.value == 0) servicesRoofer.value=1
+                                                else servicesRoofer.value=0
                                             },
                                             role = Role.Checkbox
                                         )
                                 ) {
-                                    Checkbox(checked = (servicesRoofer == 1),
+                                    Checkbox(checked = (servicesRoofer.value == 1),
                                         onCheckedChange = {
-                                            if (it) servicesRoofer=1
-                                            else servicesRoofer=0
+                                            if (it) servicesRoofer.value=1
+                                            else servicesRoofer.value=0
                                         })
                                     Text(
                                         text = "Manutenção de Calhas e Telhado",
@@ -869,18 +958,18 @@ fun ProviderDetailScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .selectable(
-                                            selected = servicesElectricFence == 1,
+                                            selected = servicesElectricFence.value == 1,
                                             onClick = {
-                                                if (servicesElectricFence == 0) servicesElectricFence=1
-                                                else servicesElectricFence=0
+                                                if (servicesElectricFence.value == 0) servicesElectricFence.value=1
+                                                else servicesElectricFence.value=0
                                             },
                                             role = Role.Checkbox
                                         )
                                 ) {
-                                    Checkbox(checked = (servicesElectricFence == 1),
+                                    Checkbox(checked = (servicesElectricFence.value == 1),
                                         onCheckedChange = {
-                                            if (it) servicesElectricFence=1
-                                            else servicesElectricFence=0
+                                            if (it) servicesElectricFence.value=1
+                                            else servicesElectricFence.value=0
                                         })
                                     Text(
                                         text = "Manutenção de Cerca Elétrica",
@@ -903,18 +992,18 @@ fun ProviderDetailScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .selectable(
-                                            selected = servicesSunshades == 1,
+                                            selected = servicesSunshades.value == 1,
                                             onClick = {
-                                                if (servicesSunshades == 0) servicesSunshades=1
-                                                else servicesSunshades=0
+                                                if (servicesSunshades.value == 0) servicesSunshades.value=1
+                                                else servicesSunshades.value=0
                                             },
                                             role = Role.Checkbox
                                         )
                                 ) {
-                                    Checkbox(checked = (servicesSunshades == 1),
+                                    Checkbox(checked = (servicesSunshades.value == 1),
                                         onCheckedChange = {
-                                            if (it) servicesSunshades=1
-                                            else servicesSunshades=0
+                                            if (it) servicesSunshades.value=1
+                                            else servicesSunshades.value=0
                                         })
                                     Text(
                                         text = "Manutenção de Coberturas e Toldos",
@@ -937,18 +1026,18 @@ fun ProviderDetailScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .selectable(
-                                            selected = servicesCurtains == 1,
+                                            selected = servicesCurtains.value == 1,
                                             onClick = {
-                                                if (servicesCurtains == 0) servicesCurtains=1
-                                                else servicesCurtains=0
+                                                if (servicesCurtains.value == 0) servicesCurtains.value=1
+                                                else servicesCurtains.value=0
                                             },
                                             role = Role.Checkbox
                                         )
                                 ) {
-                                    Checkbox(checked = (servicesCurtains == 1),
+                                    Checkbox(checked = (servicesCurtains.value == 1),
                                         onCheckedChange = {
-                                            if (it) servicesCurtains=1
-                                            else servicesCurtains=0
+                                            if (it) servicesCurtains.value=1
+                                            else servicesCurtains.value=0
                                         })
                                     Text(
                                         text = "Manutenção de Cortinas",
@@ -970,18 +1059,18 @@ fun ProviderDetailScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .selectable(
-                                            selected = servicesElevatorMaintenance == 1,
+                                            selected = servicesElevatorMaintenance.value == 1,
                                             onClick = {
-                                                if (servicesElevatorMaintenance == 0) servicesElevatorMaintenance=1
-                                                else servicesElevatorMaintenance=0
+                                                if (servicesElevatorMaintenance.value == 0) servicesElevatorMaintenance.value=1
+                                                else servicesElevatorMaintenance.value=0
                                             },
                                             role = Role.Checkbox
                                         )
                                 ) {
-                                    Checkbox(checked = (servicesElevatorMaintenance == 1),
+                                    Checkbox(checked = (servicesElevatorMaintenance.value == 1),
                                         onCheckedChange = {
-                                            if (it) servicesElevatorMaintenance=1
-                                            else servicesElevatorMaintenance=0
+                                            if (it) servicesElevatorMaintenance.value=1
+                                            else servicesElevatorMaintenance.value=0
                                         })
                                     Text(
                                         text = "Manutenção de Elevador",
@@ -1004,18 +1093,18 @@ fun ProviderDetailScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .selectable(
-                                            selected = servicesElectronicIntercom == 1,
+                                            selected = servicesElectronicIntercom.value == 1,
                                             onClick = {
-                                                if (servicesElectronicIntercom == 0) servicesElectronicIntercom=1
-                                                else servicesElectronicIntercom=0
+                                                if (servicesElectronicIntercom.value == 0) servicesElectronicIntercom.value=1
+                                                else servicesElectronicIntercom.value=0
                                             },
                                             role = Role.Checkbox
                                         )
                                 ) {
-                                    Checkbox(checked = (servicesElectronicIntercom == 1),
+                                    Checkbox(checked = (servicesElectronicIntercom.value == 1),
                                         onCheckedChange = {
-                                            if (it) servicesElectronicIntercom=1
-                                            else servicesElectronicIntercom=0
+                                            if (it) servicesElectronicIntercom.value=1
+                                            else servicesElectronicIntercom.value=0
                                         })
                                     Text(
                                         text = "Manutenção de Interfones",
@@ -1039,18 +1128,18 @@ fun ProviderDetailScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .selectable(
-                                            selected = servicesGardening == 1,
+                                            selected = servicesGardening.value == 1,
                                             onClick = {
-                                                if (servicesGardening == 0) servicesGardening=1
-                                                else servicesGardening=0
+                                                if (servicesGardening.value == 0) servicesGardening.value=1
+                                                else servicesGardening.value=0
                                             },
                                             role = Role.Checkbox
                                         )
                                 ) {
-                                    Checkbox(checked = (servicesGardening == 1),
+                                    Checkbox(checked = (servicesGardening.value == 1),
                                         onCheckedChange = {
-                                            if (it) servicesGardening=1
-                                            else servicesGardening=0
+                                            if (it) servicesGardening.value=1
+                                            else servicesGardening.value=0
                                         })
                                     Text(
                                         text = "Manutenção de Jardim",
@@ -1073,18 +1162,18 @@ fun ProviderDetailScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .selectable(
-                                            selected = servicesPoolMaintenance == 1,
+                                            selected = servicesPoolMaintenance.value == 1,
                                             onClick = {
-                                                if (servicesPoolMaintenance == 0) servicesPoolMaintenance=1
-                                                else servicesPoolMaintenance=0
+                                                if (servicesPoolMaintenance.value == 0) servicesPoolMaintenance.value=1
+                                                else servicesPoolMaintenance.value=0
                                             },
                                             role = Role.Checkbox
                                         )
                                 ) {
-                                    Checkbox(checked = (servicesPoolMaintenance == 1),
+                                    Checkbox(checked = (servicesPoolMaintenance.value == 1),
                                         onCheckedChange = {
-                                            if (it) servicesPoolMaintenance=1
-                                            else servicesPoolMaintenance=0
+                                            if (it) servicesPoolMaintenance.value=1
+                                            else servicesPoolMaintenance.value=0
                                         })
                                     Text(
                                         text = "Manutenção de Piscina",
@@ -1108,18 +1197,18 @@ fun ProviderDetailScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .selectable(
-                                            selected = servicesPlaygroundMaintenance == 1,
+                                            selected = servicesPlaygroundMaintenance.value == 1,
                                             onClick = {
-                                                if (servicesPlaygroundMaintenance == 0) servicesPlaygroundMaintenance=1
-                                                else servicesPlaygroundMaintenance=0
+                                                if (servicesPlaygroundMaintenance.value == 0) servicesPlaygroundMaintenance.value=1
+                                                else servicesPlaygroundMaintenance.value=0
                                             },
                                             role = Role.Checkbox
                                         )
                                 ) {
-                                    Checkbox(checked = (servicesPlaygroundMaintenance == 1),
+                                    Checkbox(checked = (servicesPlaygroundMaintenance.value == 1),
                                         onCheckedChange = {
-                                            if (it) servicesPlaygroundMaintenance=1
-                                            else servicesPlaygroundMaintenance=0
+                                            if (it) servicesPlaygroundMaintenance.value=1
+                                            else servicesPlaygroundMaintenance.value=0
                                         })
                                     Text(
                                         text = "Manutenção de Playground",
@@ -1142,18 +1231,18 @@ fun ProviderDetailScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .selectable(
-                                            selected = servicesElectronicGate == 1,
+                                            selected = servicesElectronicGate.value == 1,
                                             onClick = {
-                                                if (servicesElectronicGate == 0) servicesElectronicGate=1
-                                                else servicesElectronicGate=0
+                                                if (servicesElectronicGate.value == 0) servicesElectronicGate.value=1
+                                                else servicesElectronicGate.value=0
                                             },
                                             role = Role.Checkbox
                                         )
                                 ) {
-                                    Checkbox(checked = (servicesElectronicGate == 1),
+                                    Checkbox(checked = (servicesElectronicGate.value == 1),
                                         onCheckedChange = {
-                                            if (it) servicesElectronicGate=1
-                                            else servicesElectronicGate=0
+                                            if (it) servicesElectronicGate.value=1
+                                            else servicesElectronicGate.value=0
                                         })
                                     Text(
                                         text = "Manutenção de Portão Eletrônico",
@@ -1177,18 +1266,18 @@ fun ProviderDetailScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .selectable(
-                                            selected = servicesLandscaping == 1,
+                                            selected = servicesLandscaping.value == 1,
                                             onClick = {
-                                                if (servicesLandscaping == 0) servicesLandscaping=1
-                                                else servicesLandscaping=0
+                                                if (servicesLandscaping.value == 0) servicesLandscaping.value=1
+                                                else servicesLandscaping.value=0
                                             },
                                             role = Role.Checkbox
                                         )
                                 ) {
-                                    Checkbox(checked = (servicesLandscaping == 1),
+                                    Checkbox(checked = (servicesLandscaping.value == 1),
                                         onCheckedChange = {
-                                            if (it) servicesLandscaping=1
-                                            else servicesLandscaping=0
+                                            if (it) servicesLandscaping.value=1
+                                            else servicesLandscaping.value=0
                                         })
                                     Text(
                                         text = "Paisagismo",
@@ -1211,18 +1300,18 @@ fun ProviderDetailScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .selectable(
-                                            selected = servicesPainting == 1,
+                                            selected = servicesPainting.value == 1,
                                             onClick = {
-                                                if (servicesPainting == 0) servicesPainting=1
-                                                else servicesPainting=0
+                                                if (servicesPainting.value == 0) servicesPainting.value=1
+                                                else servicesPainting.value=0
                                             },
                                             role = Role.Checkbox
                                         )
                                 ) {
-                                    Checkbox(checked = (servicesPainting == 1),
+                                    Checkbox(checked = (servicesPainting.value == 1),
                                         onCheckedChange = {
-                                            if (it) servicesPainting=1
-                                            else servicesPainting=0
+                                            if (it) servicesPainting.value=1
+                                            else servicesPainting.value=0
                                         })
                                     Text(
                                         text = "Pintura",
@@ -1245,18 +1334,18 @@ fun ProviderDetailScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .selectable(
-                                            selected = servicesSteelGatesRailings == 1,
+                                            selected = servicesSteelGatesRailings.value == 1,
                                             onClick = {
-                                                if (servicesSteelGatesRailings == 0) servicesSteelGatesRailings=1
-                                                else servicesSteelGatesRailings=0
+                                                if (servicesSteelGatesRailings.value == 0) servicesSteelGatesRailings.value=1
+                                                else servicesSteelGatesRailings.value=0
                                             },
                                             role = Role.Checkbox
                                         )
                                 ) {
-                                    Checkbox(checked = (servicesSteelGatesRailings == 1),
+                                    Checkbox(checked = (servicesSteelGatesRailings.value == 1),
                                         onCheckedChange = {
-                                            if (it) servicesSteelGatesRailings=1
-                                            else servicesSteelGatesRailings=0
+                                            if (it) servicesSteelGatesRailings.value=1
+                                            else servicesSteelGatesRailings.value=0
                                         })
                                     Text(
                                         text = "Portões e Grades de Aço",
@@ -1278,18 +1367,18 @@ fun ProviderDetailScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .selectable(
-                                            selected = servicesPropertySecurity == 1,
+                                            selected = servicesPropertySecurity.value == 1,
                                             onClick = {
-                                                if (servicesPropertySecurity == 0) servicesPropertySecurity=1
-                                                else servicesPropertySecurity=0
+                                                if (servicesPropertySecurity.value == 0) servicesPropertySecurity.value=1
+                                                else servicesPropertySecurity.value=0
                                             },
                                             role = Role.Checkbox
                                         )
                                 ) {
-                                    Checkbox(checked = (servicesPropertySecurity == 1),
+                                    Checkbox(checked = (servicesPropertySecurity.value == 1),
                                         onCheckedChange = {
-                                            if (it) servicesPropertySecurity=1
-                                            else servicesPropertySecurity=0
+                                            if (it) servicesPropertySecurity.value=1
+                                            else servicesPropertySecurity.value=0
                                         })
                                     Text(
                                         text = "Segurança Patrimonial",
@@ -1308,6 +1397,19 @@ fun ProviderDetailScreen(
 
 
                             }
+
+                            when {
+                                openProviderDeleteDialog.value -> {
+                                    ProviderDeleteDialog(
+                                        openProviderDeleteDialog,
+                                        openProviderDetailDialog,
+                                        providerViewModel,
+                                        provider,
+                                        context)
+                                }
+                            }
+
+
                         }
                     )
 
@@ -1336,14 +1438,70 @@ fun ProviderDetailScreen(
                         Text(
                             text = "Cancelar",
                             style = TextStyle(
-                                fontSize = 14.sp,
+                                fontSize = 13.sp,
                             )
                         )
                     }
 
+                    if (provider.providerId!=0L ){
+                        Button(
+                            onClick = {
+                                openProviderDeleteDialog.value=true
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = getButtonColor()
+                            ),modifier = Modifier.height(30.dp)
+                        ) {
+                            Text(
+                                text = "Excluir",
+                                style = TextStyle(
+                                    fontSize = 13.sp,
+                                )
+                            )
+                        }
+                    }
 
                     Button(
                         onClick = {
+
+                            provider.pix = pix.value
+                            provider.name = name.value
+                            provider.email = email.value
+                            provider.cpfCnpj = cpfCnpj.value
+                            provider.phoneNumber = phoneNumber.value
+                            provider.serviceRegion = serviceRegion.value
+                            provider.servicesAdministration =servicesAdministration.value
+                            provider.servicesBrickwork =servicesBrickwork.value
+                            provider.servicesArchitecture =servicesArchitecture.value
+                            provider.servicesInsurer =servicesInsurer.value
+                            provider.servicesAutomation =servicesAutomation.value
+                            provider.servicesFireBrigade =servicesFireBrigade.value
+                            provider.servicesNotary =servicesNotary.value
+                            provider.servicesAluminumFrames =servicesAluminumFrames.value
+                            provider.servicesPlasterer =servicesPlasterer.value
+                            provider.servicesElectric =servicesElectric.value
+                            provider.servicesHydraulic =servicesHydraulic.value
+                            provider.servicesAirConditioningMaintenance =servicesAirConditioningMaintenance.value
+                            provider.servicesShowerStalls =servicesShowerStalls.value
+                            provider.servicesRoofer =servicesRoofer.value
+                            provider.servicesElectricFence =servicesElectricFence.value
+                            provider.servicesElevatorMaintenance =servicesElevatorMaintenance.value
+                            provider.servicesElectronicIntercom =servicesElectronicIntercom.value
+                            provider.servicesGardening =servicesGardening.value
+                            provider.servicesPoolMaintenance =servicesPoolMaintenance.value
+                            provider.servicesPlaygroundMaintenance =servicesPlaygroundMaintenance.value
+                            provider.servicesElectronicGate =servicesElectronicGate.value
+                            provider.servicesCleaning =servicesCleaning.value
+                            provider.servicesPoolCleaning =servicesPoolCleaning.value
+                            provider.servicesLandscaping =servicesLandscaping.value
+                            provider.servicesPainting =servicesPainting.value
+                            provider.servicesSteelGatesRailings =servicesSteelGatesRailings.value
+                            provider.servicesPropertySecurity =servicesPropertySecurity.value
+                            provider.servicesSunshades =servicesSunshades.value
+                            provider.servicesCurtains =servicesCurtains.value
+                            provider.servicesCabinetsJoinery =servicesCabinetsJoinery.value
+
+                            providerViewModel.saveProvider(provider)
 
                             openProviderDetailDialog.value = false
 
@@ -1361,7 +1519,7 @@ fun ProviderDetailScreen(
                         Text(
                             text = "Salvar",
                             style = TextStyle(
-                                fontSize = 14.sp,
+                                fontSize = 13.sp,
                             )
                         )
                     }
