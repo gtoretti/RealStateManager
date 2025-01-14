@@ -40,6 +40,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.apps.gtorettirsm.compose.profile.providerId
 import com.apps.gtorettirsm.compose.utils.DrawScrollableView
 import com.apps.gtorettirsm.compose.utils.getButtonColor
 import com.apps.gtorettirsm.compose.utils.getTextColor
@@ -1430,6 +1431,45 @@ fun ProviderDetailScreen(
                     Button(
                         onClick = {
                             openProviderDetailDialog.value = false
+                            providerId.value = 0L
+
+                            name.value = ""
+                            cpfCnpj.value = ""
+                            pix.value = ""
+                            phoneNumber.value = ""
+                            email.value = ""
+                            serviceRegion.value = ""
+                            servicesAdministration.value = 0
+                            servicesHydraulic.value = 0
+                            servicesBrickwork.value = 0
+                            servicesElectric.value = 0
+                            servicesArchitecture.value = 0
+                            servicesInsurer.value = 0
+                            servicesAutomation.value = 0
+                            servicesFireBrigade.value = 0
+                            servicesNotary.value = 0
+                            servicesPlasterer.value = 0
+                            servicesElectricFence.value = 0
+                            servicesAluminumFrames.value = 0
+                            servicesAirConditioningMaintenance.value = 0
+                            servicesRoofer.value = 0
+                            servicesElevatorMaintenance.value = 0
+                            servicesElectronicIntercom.value = 0
+                            servicesGardening.value = 0
+                            servicesPoolMaintenance.value = 0
+                            servicesPlaygroundMaintenance.value = 0
+                            servicesElectronicGate.value = 0
+                            servicesCleaning.value = 0
+                            servicesPoolCleaning.value = 0
+                            servicesLandscaping.value = 0
+                            servicesPainting.value = 0
+                            servicesSteelGatesRailings.value = 0
+                            servicesPropertySecurity.value = 0
+                            servicesCurtains.value = 0
+                            servicesShowerStalls.value = 0
+                            servicesSunshades.value = 0
+                            servicesCabinetsJoinery.value = 0
+
                         },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = getButtonColor()
@@ -1510,6 +1550,45 @@ fun ProviderDetailScreen(
                             }else{
                                 showToast("Prestador alterado com sucesso!",context)
                             }
+
+                            providerId.value = 0L
+
+                            name.value = ""
+                            cpfCnpj.value = ""
+                            pix.value = ""
+                            phoneNumber.value = ""
+                            email.value = ""
+                            serviceRegion.value = ""
+                            servicesAdministration.value = 0
+                            servicesHydraulic.value = 0
+                            servicesBrickwork.value = 0
+                            servicesElectric.value = 0
+                            servicesArchitecture.value = 0
+                            servicesInsurer.value = 0
+                            servicesAutomation.value = 0
+                            servicesFireBrigade.value = 0
+                            servicesNotary.value = 0
+                            servicesPlasterer.value = 0
+                            servicesElectricFence.value = 0
+                            servicesAluminumFrames.value = 0
+                            servicesAirConditioningMaintenance.value = 0
+                            servicesRoofer.value = 0
+                            servicesElevatorMaintenance.value = 0
+                            servicesElectronicIntercom.value = 0
+                            servicesGardening.value = 0
+                            servicesPoolMaintenance.value = 0
+                            servicesPlaygroundMaintenance.value = 0
+                            servicesElectronicGate.value = 0
+                            servicesCleaning.value = 0
+                            servicesPoolCleaning.value = 0
+                            servicesLandscaping.value = 0
+                            servicesPainting.value = 0
+                            servicesSteelGatesRailings.value = 0
+                            servicesPropertySecurity.value = 0
+                            servicesCurtains.value = 0
+                            servicesShowerStalls.value = 0
+                            servicesSunshades.value = 0
+                            servicesCabinetsJoinery.value = 0
 
                         },
                         colors = ButtonDefaults.buttonColors(
