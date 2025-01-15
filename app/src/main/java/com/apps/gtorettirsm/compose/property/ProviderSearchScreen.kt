@@ -76,6 +76,7 @@ fun ProviderSearchScreen(
     context: Context
 ) {
     val searchName = remember { mutableStateOf("") }
+    var openProviderDetailDialog = remember { mutableStateOf(false) }
 
     if (openProviderSearchDialog.value) {
         AlertDialog(
@@ -1291,8 +1292,8 @@ fun ProviderSearchScreen(
                                     .selectable(
                                         selected = false,
                                         onClick = {
-                                            //openPropertyDetailDialog.value = true
-                                            //propertyId.value = item.providerId
+                                            openProviderDetailDialog.value = true
+                                            providerId.value = item.providerId
                                         },
                                         role = Role.Button
                                     )
@@ -1333,9 +1334,18 @@ fun ProviderSearchScreen(
 
 
 
+                                when {
+                                    openProviderDetailDialog.value -> {
+                                        ProviderDetailScreen(
+                                            openProviderDetailDialog,
+                                            providerViewModel,
+                                            context,
+                                            providerId.value)
+                                    }
+                                }
 
-
-                    }})
+                    }
+                        })
 
                 }
 
@@ -1366,33 +1376,6 @@ fun ProviderSearchScreen(
                         )
                     }
 
-
-
-                    Button(
-                        onClick = {
-
-                            if (searchName.value.trim().isEmpty()){
-                                showToast("Por favor, informe o nome do prestador.",context)
-                            }else{
-
-
-
-
-
-                            }
-
-                        },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = getButtonColor()
-                        ),modifier = Modifier.height(30.dp)
-                    ) {
-                        Text(
-                            text = "Procurar",
-                            style = TextStyle(
-                                fontSize = 13.sp,
-                            )
-                        )
-                    }
 
                 }
 
