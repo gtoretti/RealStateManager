@@ -18,6 +18,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -48,6 +49,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.apps.gtorettirsm.compose.property.PropertyDetailScreen
 import com.apps.gtorettirsm.compose.property.ProviderDetailScreen
+import com.apps.gtorettirsm.compose.property.ProviderSearchScreen
+import com.apps.gtorettirsm.compose.property.providerResult
 import com.apps.gtorettirsm.compose.utils.getButtonColor
 import com.apps.gtorettirsm.compose.utils.getRedTextColor
 import com.apps.gtorettirsm.compose.utils.getTextColor
@@ -76,8 +79,10 @@ fun ServiceProviderScreen(
     val context = LocalContext.current
 
     var openProviderDetailDialog = remember { mutableStateOf(false) }
+    var openProviderSearchDialog = remember { mutableStateOf(false) }
 
     val providers by providerFlow.collectAsStateWithLifecycle(initialValue = emptyList())
+    providerResult.value=ArrayList(providers)
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -113,6 +118,24 @@ fun ServiceProviderScreen(
                         fontFamily = FontFamily.SansSerif,
                     )
                 )
+            }else{
+                TextButton(
+                    modifier = Modifier.padding(5.dp),
+                    onClick =
+                    {
+                        openProviderSearchDialog.value = true
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Search,
+                        contentDescription = "Procurar Prestador",
+                        tint = getTextColor(),
+                        modifier = Modifier
+                            .padding(end = 12.dp)
+                            .size(24.dp)
+                    )
+                }
+
             }
 
             TextButton(
@@ -178,6 +201,14 @@ fun ServiceProviderScreen(
             }
         }
 
+        when {
+            openProviderSearchDialog.value -> {
+                ProviderSearchScreen(
+                    openProviderSearchDialog,
+                    providerViewModel,
+                    context)
+            }
+        }
     }
 }
 

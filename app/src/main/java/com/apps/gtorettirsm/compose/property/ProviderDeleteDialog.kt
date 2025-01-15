@@ -47,7 +47,7 @@ fun ProviderDeleteDialog(
             },
             modifier = Modifier
                 .width(550.dp)
-                .height(250.dp),
+                .height(200.dp),
 
             title = {
                 Text(

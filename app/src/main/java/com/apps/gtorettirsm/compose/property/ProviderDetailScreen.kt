@@ -128,11 +128,6 @@ fun ProviderDetailScreen(
     provider: Provider
 ) {
 
-
-
-
-
-
     var openProviderDeleteDialog = remember { mutableStateOf(false) }
 
     if (provider.providerId!=0L){
@@ -1504,91 +1499,95 @@ fun ProviderDetailScreen(
                     Button(
                         onClick = {
 
-                            provider.pix = pix.value
-                            provider.name = name.value
-                            provider.email = email.value
-                            provider.cpfCnpj = cpfCnpj.value
-                            provider.phoneNumber = phoneNumber.value
-                            provider.serviceRegion = serviceRegion.value
-                            provider.servicesAdministration =servicesAdministration.value
-                            provider.servicesBrickwork =servicesBrickwork.value
-                            provider.servicesArchitecture =servicesArchitecture.value
-                            provider.servicesInsurer =servicesInsurer.value
-                            provider.servicesAutomation =servicesAutomation.value
-                            provider.servicesFireBrigade =servicesFireBrigade.value
-                            provider.servicesNotary =servicesNotary.value
-                            provider.servicesAluminumFrames =servicesAluminumFrames.value
-                            provider.servicesPlasterer =servicesPlasterer.value
-                            provider.servicesElectric =servicesElectric.value
-                            provider.servicesHydraulic =servicesHydraulic.value
-                            provider.servicesAirConditioningMaintenance =servicesAirConditioningMaintenance.value
-                            provider.servicesShowerStalls =servicesShowerStalls.value
-                            provider.servicesRoofer =servicesRoofer.value
-                            provider.servicesElectricFence =servicesElectricFence.value
-                            provider.servicesElevatorMaintenance =servicesElevatorMaintenance.value
-                            provider.servicesElectronicIntercom =servicesElectronicIntercom.value
-                            provider.servicesGardening =servicesGardening.value
-                            provider.servicesPoolMaintenance =servicesPoolMaintenance.value
-                            provider.servicesPlaygroundMaintenance =servicesPlaygroundMaintenance.value
-                            provider.servicesElectronicGate =servicesElectronicGate.value
-                            provider.servicesCleaning =servicesCleaning.value
-                            provider.servicesPoolCleaning =servicesPoolCleaning.value
-                            provider.servicesLandscaping =servicesLandscaping.value
-                            provider.servicesPainting =servicesPainting.value
-                            provider.servicesSteelGatesRailings =servicesSteelGatesRailings.value
-                            provider.servicesPropertySecurity =servicesPropertySecurity.value
-                            provider.servicesSunshades =servicesSunshades.value
-                            provider.servicesCurtains =servicesCurtains.value
-                            provider.servicesCabinetsJoinery =servicesCabinetsJoinery.value
-
-                            providerViewModel.saveProvider(provider)
-
-                            openProviderDetailDialog.value = false
-
-                            if (provider.providerId==0L){
-                                showToast("Prestador adicionado com sucesso!",context)
+                            if (name.value.trim().isEmpty()){
+                                showToast("Por favor, informe o nome do prestador.",context)
                             }else{
-                                showToast("Prestador alterado com sucesso!",context)
+                                provider.pix = pix.value
+                                provider.name = name.value
+                                provider.email = email.value
+                                provider.cpfCnpj = cpfCnpj.value
+                                provider.phoneNumber = phoneNumber.value
+                                provider.serviceRegion = serviceRegion.value
+                                provider.servicesAdministration =servicesAdministration.value
+                                provider.servicesBrickwork =servicesBrickwork.value
+                                provider.servicesArchitecture =servicesArchitecture.value
+                                provider.servicesInsurer =servicesInsurer.value
+                                provider.servicesAutomation =servicesAutomation.value
+                                provider.servicesFireBrigade =servicesFireBrigade.value
+                                provider.servicesNotary =servicesNotary.value
+                                provider.servicesAluminumFrames =servicesAluminumFrames.value
+                                provider.servicesPlasterer =servicesPlasterer.value
+                                provider.servicesElectric =servicesElectric.value
+                                provider.servicesHydraulic =servicesHydraulic.value
+                                provider.servicesAirConditioningMaintenance =servicesAirConditioningMaintenance.value
+                                provider.servicesShowerStalls =servicesShowerStalls.value
+                                provider.servicesRoofer =servicesRoofer.value
+                                provider.servicesElectricFence =servicesElectricFence.value
+                                provider.servicesElevatorMaintenance =servicesElevatorMaintenance.value
+                                provider.servicesElectronicIntercom =servicesElectronicIntercom.value
+                                provider.servicesGardening =servicesGardening.value
+                                provider.servicesPoolMaintenance =servicesPoolMaintenance.value
+                                provider.servicesPlaygroundMaintenance =servicesPlaygroundMaintenance.value
+                                provider.servicesElectronicGate =servicesElectronicGate.value
+                                provider.servicesCleaning =servicesCleaning.value
+                                provider.servicesPoolCleaning =servicesPoolCleaning.value
+                                provider.servicesLandscaping =servicesLandscaping.value
+                                provider.servicesPainting =servicesPainting.value
+                                provider.servicesSteelGatesRailings =servicesSteelGatesRailings.value
+                                provider.servicesPropertySecurity =servicesPropertySecurity.value
+                                provider.servicesSunshades =servicesSunshades.value
+                                provider.servicesCurtains =servicesCurtains.value
+                                provider.servicesCabinetsJoinery =servicesCabinetsJoinery.value
+
+                                providerViewModel.saveProvider(provider)
+
+                                openProviderDetailDialog.value = false
+
+                                if (provider.providerId==0L){
+                                    showToast("Prestador adicionado com sucesso!",context)
+                                }else{
+                                    showToast("Prestador alterado com sucesso!",context)
+                                }
+
+                                providerId.value = 0L
+
+                                name.value = ""
+                                cpfCnpj.value = ""
+                                pix.value = ""
+                                phoneNumber.value = ""
+                                email.value = ""
+                                serviceRegion.value = ""
+                                servicesAdministration.value = 0
+                                servicesHydraulic.value = 0
+                                servicesBrickwork.value = 0
+                                servicesElectric.value = 0
+                                servicesArchitecture.value = 0
+                                servicesInsurer.value = 0
+                                servicesAutomation.value = 0
+                                servicesFireBrigade.value = 0
+                                servicesNotary.value = 0
+                                servicesPlasterer.value = 0
+                                servicesElectricFence.value = 0
+                                servicesAluminumFrames.value = 0
+                                servicesAirConditioningMaintenance.value = 0
+                                servicesRoofer.value = 0
+                                servicesElevatorMaintenance.value = 0
+                                servicesElectronicIntercom.value = 0
+                                servicesGardening.value = 0
+                                servicesPoolMaintenance.value = 0
+                                servicesPlaygroundMaintenance.value = 0
+                                servicesElectronicGate.value = 0
+                                servicesCleaning.value = 0
+                                servicesPoolCleaning.value = 0
+                                servicesLandscaping.value = 0
+                                servicesPainting.value = 0
+                                servicesSteelGatesRailings.value = 0
+                                servicesPropertySecurity.value = 0
+                                servicesCurtains.value = 0
+                                servicesShowerStalls.value = 0
+                                servicesSunshades.value = 0
+                                servicesCabinetsJoinery.value = 0
                             }
-
-                            providerId.value = 0L
-
-                            name.value = ""
-                            cpfCnpj.value = ""
-                            pix.value = ""
-                            phoneNumber.value = ""
-                            email.value = ""
-                            serviceRegion.value = ""
-                            servicesAdministration.value = 0
-                            servicesHydraulic.value = 0
-                            servicesBrickwork.value = 0
-                            servicesElectric.value = 0
-                            servicesArchitecture.value = 0
-                            servicesInsurer.value = 0
-                            servicesAutomation.value = 0
-                            servicesFireBrigade.value = 0
-                            servicesNotary.value = 0
-                            servicesPlasterer.value = 0
-                            servicesElectricFence.value = 0
-                            servicesAluminumFrames.value = 0
-                            servicesAirConditioningMaintenance.value = 0
-                            servicesRoofer.value = 0
-                            servicesElevatorMaintenance.value = 0
-                            servicesElectronicIntercom.value = 0
-                            servicesGardening.value = 0
-                            servicesPoolMaintenance.value = 0
-                            servicesPlaygroundMaintenance.value = 0
-                            servicesElectronicGate.value = 0
-                            servicesCleaning.value = 0
-                            servicesPoolCleaning.value = 0
-                            servicesLandscaping.value = 0
-                            servicesPainting.value = 0
-                            servicesSteelGatesRailings.value = 0
-                            servicesPropertySecurity.value = 0
-                            servicesCurtains.value = 0
-                            servicesShowerStalls.value = 0
-                            servicesSunshades.value = 0
-                            servicesCabinetsJoinery.value = 0
 
                         },
                         colors = ButtonDefaults.buttonColors(
