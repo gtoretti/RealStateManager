@@ -31,6 +31,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -51,6 +52,37 @@ import com.apps.gtorettirsm.compose.property.PropertyDetailScreen
 import com.apps.gtorettirsm.compose.property.ProviderDetailScreen
 import com.apps.gtorettirsm.compose.property.ProviderSearchScreen
 import com.apps.gtorettirsm.compose.property.providerResult
+import com.apps.gtorettirsm.compose.property.searchName
+import com.apps.gtorettirsm.compose.property.searchServicesAdministration
+import com.apps.gtorettirsm.compose.property.searchServicesAirConditioningMaintenance
+import com.apps.gtorettirsm.compose.property.searchServicesAluminumFrames
+import com.apps.gtorettirsm.compose.property.searchServicesArchitecture
+import com.apps.gtorettirsm.compose.property.searchServicesAutomation
+import com.apps.gtorettirsm.compose.property.searchServicesBrickwork
+import com.apps.gtorettirsm.compose.property.searchServicesCabinetsJoinery
+import com.apps.gtorettirsm.compose.property.searchServicesCleaning
+import com.apps.gtorettirsm.compose.property.searchServicesCurtains
+import com.apps.gtorettirsm.compose.property.searchServicesElectric
+import com.apps.gtorettirsm.compose.property.searchServicesElectricFence
+import com.apps.gtorettirsm.compose.property.searchServicesElectronicGate
+import com.apps.gtorettirsm.compose.property.searchServicesElectronicIntercom
+import com.apps.gtorettirsm.compose.property.searchServicesElevatorMaintenance
+import com.apps.gtorettirsm.compose.property.searchServicesFireBrigade
+import com.apps.gtorettirsm.compose.property.searchServicesGardening
+import com.apps.gtorettirsm.compose.property.searchServicesHydraulic
+import com.apps.gtorettirsm.compose.property.searchServicesInsurer
+import com.apps.gtorettirsm.compose.property.searchServicesLandscaping
+import com.apps.gtorettirsm.compose.property.searchServicesNotary
+import com.apps.gtorettirsm.compose.property.searchServicesPainting
+import com.apps.gtorettirsm.compose.property.searchServicesPlasterer
+import com.apps.gtorettirsm.compose.property.searchServicesPlaygroundMaintenance
+import com.apps.gtorettirsm.compose.property.searchServicesPoolCleaning
+import com.apps.gtorettirsm.compose.property.searchServicesPoolMaintenance
+import com.apps.gtorettirsm.compose.property.searchServicesPropertySecurity
+import com.apps.gtorettirsm.compose.property.searchServicesRoofer
+import com.apps.gtorettirsm.compose.property.searchServicesShowerStalls
+import com.apps.gtorettirsm.compose.property.searchServicesSteelGatesRailings
+import com.apps.gtorettirsm.compose.property.searchServicesSunshades
 import com.apps.gtorettirsm.compose.utils.getButtonColor
 import com.apps.gtorettirsm.compose.utils.getRedTextColor
 import com.apps.gtorettirsm.compose.utils.getTextColor
@@ -203,6 +235,39 @@ fun ServiceProviderScreen(
 
         when {
             openProviderSearchDialog.value -> {
+
+                searchName.value = ""
+                searchServicesAdministration.value = 0
+                searchServicesHydraulic.value = 0
+                searchServicesBrickwork.value = 0
+                searchServicesElectric.value = 0
+                searchServicesArchitecture.value = 0
+                searchServicesInsurer.value = 0
+                searchServicesAutomation.value = 0
+                searchServicesFireBrigade.value = 0
+                searchServicesNotary.value = 0
+                searchServicesPlasterer.value = 0
+                searchServicesElectricFence.value = 0
+                searchServicesAluminumFrames.value = 0
+                searchServicesAirConditioningMaintenance.value = 0
+                searchServicesRoofer.value = 0
+                searchServicesElevatorMaintenance.value = 0
+                searchServicesElectronicIntercom.value = 0
+                searchServicesGardening.value = 0
+                searchServicesPoolMaintenance.value = 0
+                searchServicesPlaygroundMaintenance.value = 0
+                searchServicesElectronicGate.value = 0
+                searchServicesCleaning.value = 0
+                searchServicesPoolCleaning.value = 0
+                searchServicesLandscaping.value = 0
+                searchServicesPainting.value = 0
+                searchServicesSteelGatesRailings.value = 0
+                searchServicesPropertySecurity.value = 0
+                searchServicesCurtains.value = 0
+                searchServicesShowerStalls.value = 0
+                searchServicesSunshades.value = 0
+                searchServicesCabinetsJoinery.value = 0
+
                 ProviderSearchScreen(
                     openProviderSearchDialog,
                     providerViewModel,

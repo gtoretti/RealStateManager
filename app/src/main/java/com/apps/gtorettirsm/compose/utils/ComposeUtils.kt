@@ -32,6 +32,7 @@ import com.apps.gtorettirsm.compose.property.getMonthName
 import com.apps.gtorettirsm.data.MonthlyBilling
 import com.apps.gtorettirsm.data.Property
 import com.apps.gtorettirsm.data.Profile
+import com.apps.gtorettirsm.data.Provider
 import com.apps.gtorettirsm.data.Receipt
 import com.apps.gtorettirsm.data.ReceiptPDF
 import com.apps.gtorettirsm.viewmodels.ReceiptViewModel
@@ -124,33 +125,6 @@ fun generatePDF(header: String,
     pdfDocument.close()
 }
 
-
-fun getAttendedDaysDescr(monthlyBillingList: List<MonthlyBilling>): String {
-    var ret = ""
-    monthlyBillingList.forEach { item ->
-        ret = ret + "(" + SimpleDateFormat("dd/MM").format(item.date) + ")   "
-    }
-    return ret
-}
-
-
-@Composable
-fun getProfileFromFlow(profilesFlow: Flow<List<Profile>>): Profile {
-    val profiles by profilesFlow.collectAsStateWithLifecycle(initialValue = emptyList())
-    var profile = Profile(
-        profileId = 0,
-        name = "",
-        cpfCnpj = "",
-        address = "",
-        city = "",
-        uf = "",
-        phoneNumber = "",
-    )
-    if (profiles.size > 0) {
-        profile = profiles.get(0)
-    }
-    return profile
-}
 
 fun filterMonthlyBillingsByMonth(list: List<MonthlyBilling>, month: Int, year: Int): List<MonthlyBilling> {
     var ret: ArrayList<MonthlyBilling> = ArrayList()
@@ -389,4 +363,73 @@ fun getButtonColor(): androidx.compose.ui.graphics.Color {
         return androidx.compose.ui.graphics.Color(0xFF86B4DA)
     else
         return androidx.compose.ui.graphics.Color(0xFF4479A3)
+}
+
+fun getProviderDesc(p: Provider): String{
+    var r = "("
+    if (p.servicesAdministration==1)
+        r += "Administração de Reformas, "
+    if (p.servicesBrickwork==1)
+        r += "Alvenaria, "
+    if (p.servicesArchitecture==1)
+        r += "Arquitetura, "
+    if (p.servicesInsurer==1)
+        r += "Asseguradora, "
+    if (p.servicesAutomation==1)
+        r += "Automação Residencial, "
+    if (p.servicesFireBrigade==1)
+        r += "Brigada de Incêndio, "
+    if (p.servicesNotary==1)
+        r += "Cartório de Imóveis, "
+    if (p.servicesAluminumFrames==1)
+        r += "Esquadrias de Alumínio, "
+    if (p.servicesPlasterer==1)
+        r += "Gesseiro, "
+    if (p.servicesElectric==1)
+        r += "Instalações Elétricas, "
+    if (p.servicesHydraulic==1)
+        r += "Instalações Hidráulicas, "
+    if (p.servicesCleaning==1)
+        r += "Limpeza Pós-Obra, "
+    if (p.servicesPoolCleaning==1)
+        r += "Limpeza de Piscina, "
+    if (p.servicesAirConditioningMaintenance==1)
+        r += "Manutenção de Ar-Condicionado, "
+    if (p.servicesCabinetsJoinery==1)
+        r += "Manutenção de Armários e Marcenaria, "
+    if (p.servicesShowerStalls==1)
+        r += "Manutenção de Boxes para Banheiros, "
+    if (p.servicesRoofer==1)
+        r += "Manutenção de Calhas e Telhado, "
+    if (p.servicesElectricFence==1)
+        r += "Manutenção de Cerca Elétrica, "
+    if (p.servicesSunshades==1)
+        r += "Manutenção de Coberturas e Toldos, "
+    if (p.servicesCurtains==1)
+        r += "Manutenção de Cortinas, "
+    if (p.servicesElevatorMaintenance==1)
+        r += "Manutenção de Elevador, "
+    if (p.servicesElectronicIntercom==1)
+        r += "Manutenção de Interfones, "
+    if (p.servicesGardening==1)
+        r += "Manutenção de Jardim, "
+    if (p.servicesPoolMaintenance==1)
+        r += "Manutenção de Piscina, "
+    if (p.servicesPlaygroundMaintenance==1)
+        r += "Manutenção de Playground, "
+    if (p.servicesElectronicGate==1)
+        r += "Manutenção de Portão Eletrônico, "
+    if (p.servicesLandscaping==1)
+        r += "Paisagismo, "
+    if (p.servicesPainting==1)
+        r += "Pintura, "
+    if (p.servicesSteelGatesRailings==1)
+        r += "Portões e Grades de Aço, "
+    if (p.servicesPropertySecurity==1)
+        r += "Segurança Patrimonial, "
+    r += ")"
+
+    r = r.replace(", )",")")
+
+    return r
 }
