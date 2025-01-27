@@ -55,29 +55,11 @@ import java.text.SimpleDateFormat
 @Composable
 fun PropertyExpensesDialog(
     openPropertyExpensesDialog: MutableState<Boolean>,
-    unpaids: List<Receipt>,
-    receiptViewModel: ReceiptViewModel,
-    receiptPDFViewModel: ReceiptPDFViewModel,
-    property: Property,
     context: Context
 ) {
 
     val openPropertyExpensesCreateDialog = remember { mutableStateOf(false) }
 
-    val select = remember { mutableStateListOf(-1L) }
-    if (select.contains(-1)) {
-        select.remove(-1)
-        unpaids.forEach { receipt ->
-            select.add(receipt.receiptId)
-        }
-    }
-
-    var receiptsTotal = 0.0
-    unpaids.forEach { r ->
-        if (select.contains(r.receiptId)) {
-            receiptsTotal = receiptsTotal + r.total
-        }
-    }
 
     if (openPropertyExpensesDialog.value) {
         AlertDialog(shape = RoundedCornerShape(10.dp), onDismissRequest = {
@@ -88,7 +70,7 @@ fun PropertyExpensesDialog(
 
             title = {
                 Text(
-                    text = "Gastos do Imóvel:", style = TextStyle(
+                    text = "Fluxo de Caixa - Pagamentos:", style = TextStyle(
                         color = getTextColor(),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
@@ -101,29 +83,6 @@ fun PropertyExpensesDialog(
                     verticalArrangement = Arrangement.spacedBy(2.dp)
 
                 ) {
-                    var streetAddress = property.streetAddress  + ", " + property.number
-                    if (property.complement.isNotEmpty())
-                        streetAddress = streetAddress + " - " + property.complement
-
-                    Text(
-                        text = streetAddress
-                    )
-
-                    Text(
-                        text = property.district
-                    )
-                    Text(
-                        text = property.city + " - " + property.state
-                    )
-                    Text(
-                        text = "CEP: "+property.zipCode , style = TextStyle(
-
-                            fontWeight = FontWeight.Bold,
-                            fontFamily = FontFamily.SansSerif,
-                        )
-                    )
-
-                    HorizontalDivider(thickness = 2.dp)
 
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
@@ -147,7 +106,7 @@ fun PropertyExpensesDialog(
                         ) {
                             Icon(
                                 imageVector = Icons.Filled.AddCircle,
-                                contentDescription = "Adicionar Gasto",
+                                contentDescription = "Novo Pagamento",
                                 tint = getTextColor(),
                                 modifier = Modifier
                                     .padding(end = 12.dp)
@@ -157,7 +116,8 @@ fun PropertyExpensesDialog(
                     }
 
 
-                    HorizontalDivider(thickness = 2.dp)
+
+
 
 
                 }

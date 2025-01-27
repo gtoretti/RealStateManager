@@ -36,6 +36,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -80,7 +81,7 @@ fun FinancialScreen(
 ) {
 
     val context = LocalContext.current
-
+    var openPropertyExpensesDialog = remember { mutableStateOf(false) }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -116,6 +117,10 @@ fun FinancialScreen(
 
             Button(
                 onClick = {
+
+                    openPropertyExpensesDialog.value = true
+
+
                  },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = getButtonColor()
@@ -361,7 +366,7 @@ fun FinancialScreen(
             Spacer(modifier = Modifier.height(10.dp))
         }
         Text(
-            text = "Agenda de Pagamentos e Recebimentos:",
+            text = "Calendário de Pagamentos e Recebimentos:",
             style = TextStyle(
                 color = getTextColor(),
                 fontSize = 16.sp,
@@ -488,4 +493,13 @@ fun FinancialScreen(
 
         //AndroidViewAdView()
     }
+
+    when {
+        openPropertyExpensesDialog.value -> {
+            PropertyExpensesDialog(
+                openPropertyExpensesDialog,
+                context)
+        }
+    }
+
 }
