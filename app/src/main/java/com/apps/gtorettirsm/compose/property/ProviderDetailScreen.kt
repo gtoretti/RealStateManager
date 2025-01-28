@@ -19,17 +19,22 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Call
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -50,6 +55,8 @@ import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.apps.gtorettirsm.R
+import com.apps.gtorettirsm.compose.profile.openContactDetails
 import com.apps.gtorettirsm.compose.profile.providerId
 import com.apps.gtorettirsm.compose.utils.DrawScrollableView
 import com.apps.gtorettirsm.compose.utils.getButtonColor
@@ -58,19 +65,11 @@ import com.apps.gtorettirsm.compose.utils.showToast
 import com.apps.gtorettirsm.data.Property
 import com.apps.gtorettirsm.data.Provider
 import com.apps.gtorettirsm.viewmodels.ProviderViewModel
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.flow.Flow
-import okhttp3.Call
-import okhttp3.Callback
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Response
-import org.json.JSONObject
 
-import java.io.IOException
-import java.text.SimpleDateFormat
-import java.util.Date
+import android.content.ClipData
+import android.content.ClipboardManager
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 
 val name = mutableStateOf("")
 val contactId = mutableStateOf("")
@@ -236,28 +235,54 @@ fun ProviderDetailScreen(
                         enabled = false
                     )
 
-                    OutlinedTextField(
-                        value = pix.value,
-                        onValueChange = {
-                            pix.value = it
-                        },
-                        textStyle = TextStyle(
-                            fontSize = 16.sp,
-                            color = getTextColor(),
-                            fontWeight = FontWeight.Normal
-                        ),
-                        label = {
-                            Text(
-                                text = "Chave Pix:",
-                                style = TextStyle(
-                                    color = getTextColor(),fontSize = 12.sp
+
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+
+                        OutlinedTextField(
+                            modifier = Modifier.width(160.dp),
+                            value = pix.value,
+                            onValueChange = {
+                                pix.value = it
+                            },
+                            textStyle = TextStyle(
+                                fontSize = 16.sp,
+                                color = getTextColor(),
+                                fontWeight = FontWeight.Normal
+                            ),
+                            label = {
+                                Text(
+                                    text = "Chave Pix:",
+                                    style = TextStyle(
+                                        color = getTextColor(),fontSize = 12.sp
+                                    )
                                 )
+                            },
+                            placeholder = {Text("")},
+
                             )
-                        },
-                        placeholder = {Text("")},
 
-                    )
-
+                    TextButton(
+                        modifier = Modifier.padding(5.dp),
+                        onClick =
+                        {
+                            copyToClipboard(context,pix.value)
+                        }
+                    ) {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(R.drawable.content_copy_24px),
+                            contentDescription = "Copiar",
+                            tint = getTextColor(),
+                            modifier = Modifier
+                                .padding(end = 12.dp)
+                                .size(24.dp)
+                        )
+                    }
+                    }
 
                     OutlinedTextField(
                         value = serviceRegion.value,
@@ -1594,3 +1619,9 @@ fun Context.getActivity(): Activity? {
     }
 }
 
+
+fun copyToClipboard(context: Context, text: String) {
+    val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+    val clip = ClipData.newPlainText("label", text)
+    clipboard.setPrimaryClip(clip)
+}
