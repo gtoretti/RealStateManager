@@ -271,6 +271,7 @@ fun ProviderDetailScreen(
                         onClick =
                         {
                             copyToClipboard(context,pix.value)
+                            showToast("Chave PIX copiada!", context)
                         }
                     ) {
                         Icon(
