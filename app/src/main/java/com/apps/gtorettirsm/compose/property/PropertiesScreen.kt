@@ -125,7 +125,7 @@ fun PropertiesScreen(
         Column(
             horizontalAlignment = Alignment.Start,
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxWidth().padding(horizontal = 5.dp)
                 .verticalScroll(rememberScrollState()),
         ) {
 
@@ -159,21 +159,31 @@ fun PropertiesScreen(
                             streetAddress = streetAddress + " - " + item.complement
 
                         Text(
-                            text = streetAddress
+                            text = streetAddress,style = TextStyle(
+                                color = getTextColor(),
+                                fontSize = 14.sp,
+                            )
                         )
 
                         Text(
-                            text = item.district
+                            text = item.district,style = TextStyle(
+                                color = getTextColor(),
+                                fontSize = 14.sp,
+                            )
                         )
                         Text(
-                            text = item.city + " - " + item.state
+                            text = item.city + " - " + item.state,style = TextStyle(
+                                color = getTextColor(),
+                                fontSize = 14.sp,
+                            )
                         )
                         Text(
                             text = "CEP: "+item.zipCode , style = TextStyle(
-
+                                color = getTextColor(),
+                                fontSize = 14.sp,
                                 fontWeight = FontWeight.Bold,
-                                fontFamily = FontFamily.SansSerif,
                             )
+
                         )
                         HorizontalDivider(thickness = 1.dp)
                     }

@@ -124,7 +124,7 @@ fun ServiceProviderScreen(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxWidth().padding(horizontal = 5.dp)
             .verticalScroll(rememberScrollState()),
     ) {
         Card(
@@ -225,7 +225,10 @@ fun ServiceProviderScreen(
                             .fillMaxWidth()
                     ){
                         Text(
-                            text = item.name
+                            text = item.name,style = TextStyle(
+                                color = getTextColor(),
+                                fontSize = 14.sp,
+                            )
                         )
 
                         TextButton(

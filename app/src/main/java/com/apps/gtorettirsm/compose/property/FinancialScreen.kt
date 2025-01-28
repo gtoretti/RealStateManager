@@ -85,8 +85,9 @@ fun FinancialScreen(
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp),
-
+        modifier = Modifier
+            .fillMaxWidth()
+            //.verticalScroll(rememberScrollState()),
     ) {
         Card(
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
@@ -112,15 +113,12 @@ fun FinancialScreen(
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 5.dp)
         ) {
 
             Button(
                 onClick = {
-
                     openPropertyExpensesDialog.value = true
-
-
                  },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = getButtonColor()
@@ -129,7 +127,7 @@ fun FinancialScreen(
                 Text(
                     text = "Pagamentos",
                     style = TextStyle(
-                        fontSize = 16.sp,
+                        fontSize = 14.sp,
                     )
                 )
             }
@@ -146,7 +144,7 @@ fun FinancialScreen(
                 Text(
                     text = "Recebimentos",
                     style = TextStyle(
-                        fontSize = 16.sp,
+                        fontSize = 14.sp,
                     )
                 )
             }
@@ -159,7 +157,7 @@ fun FinancialScreen(
             horizontalArrangement = Arrangement.End,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = Modifier.height(10.dp))
         }
 
         Text(
@@ -173,24 +171,16 @@ fun FinancialScreen(
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.End,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Spacer(modifier = Modifier.height(20.dp))
-        }
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxWidth()
         ) {
             OutlinedTextField(
-                modifier = Modifier.width(120.dp),
+                modifier = Modifier.width(112.dp).padding(horizontal = 3.dp),
                 value = "",
                 onValueChange = {
                 },
                 textStyle = TextStyle(
-                    fontSize = 16.sp,
+                    fontSize = 12.sp,
                     color = getTextColor(),
                     fontWeight = FontWeight.Normal
                 ),
@@ -207,7 +197,7 @@ fun FinancialScreen(
             )
 
             TextButton(
-                modifier = Modifier.padding(5.dp),
+                modifier = Modifier.padding(horizontal = 5.dp),
                 onClick =
                 {
                     //openStartDateDialog.value = true
@@ -218,19 +208,19 @@ fun FinancialScreen(
                     contentDescription = "Alterar Data Inicial",
                     tint = getTextColor(),
                     modifier = Modifier
-                        .padding(end = 12.dp)
+                        .padding(horizontal = 5.dp)
                         .size(24.dp)
                 )
             }
 
 
             OutlinedTextField(
-                modifier = Modifier.width(120.dp),
+                modifier = Modifier.width(112.dp).padding(horizontal = 3.dp),
                 value = "",
                 onValueChange = {
                 },
                 textStyle = TextStyle(
-                    fontSize = 16.sp,
+                    fontSize = 12.sp,
                     color = getTextColor(),
                     fontWeight = FontWeight.Normal
                 ),
@@ -247,7 +237,7 @@ fun FinancialScreen(
             )
 
             TextButton(
-                modifier = Modifier.padding(5.dp),
+                modifier = Modifier.padding(horizontal = 5.dp),
                 onClick =
                 {
                     //openEndedDateDialog.value = true
@@ -258,7 +248,7 @@ fun FinancialScreen(
                     contentDescription = "Alterar Data Final",
                     tint = getTextColor(),
                     modifier = Modifier
-                        .padding(end = 12.dp)
+                        .padding(horizontal = 5.dp)
                         .size(24.dp)
                 )
             }
@@ -281,18 +271,10 @@ fun FinancialScreen(
             )
         )
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.End,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Spacer(modifier = Modifier.height(10.dp))
-        }
-
         DrawScrollableView(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(195.dp)
+                .fillMaxWidth().padding(horizontal = 2.dp)
+                .height(120.dp)
                 .border(1.dp, Color.Gray) ,
 
             content = {
@@ -330,27 +312,21 @@ fun FinancialScreen(
 
                             ) {
                                 Text(
-                                    text = streetAddress
-                                )
-
-                                Text(
-                                    text = item.district
-                                )
-                                Text(
-                                    text = item.city + " - " + item.state
+                                    text = streetAddress,
+                                    style = TextStyle(
+                                        color = getTextColor(),
+                                        fontSize = 14.sp,
+                                        )
                                 )
                                 Text(
-                                    text = "CEP: " + item.zipCode, style = TextStyle(
-
-                                        fontWeight = FontWeight.Bold,
-                                        fontFamily = FontFamily.SansSerif,
-                                    )
+                                    text = item.city + " - " + item.state + " - CEP:" + item.zipCode
+                                    ,
+                                    style = TextStyle(
+                                        color = getTextColor(),
+                                        fontSize = 14.sp,
+                                        )
                                 )
-
-
                             }
-
-
                         }
                         HorizontalDivider(thickness = 1.dp)
                     }
@@ -363,61 +339,10 @@ fun FinancialScreen(
             horizontalArrangement = Arrangement.End,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Spacer(modifier = Modifier.height(10.dp))
-        }
-        Text(
-            text = "Calendário de Pagamentos e Recebimentos:",
-            style = TextStyle(
-                color = getTextColor(),
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
-            )
-        )
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.End,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(5.dp))
         }
 
 
-        DrawScrollableView(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(150.dp)
-                .border(1.dp, Color.Gray),
-            content = {
-                Column {
-
-                    properties.forEach { item ->
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Start,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                        ) {
-
-                            var streetAddress = item.streetAddress + ", " + item.number
-                            if (item.complement.isNotEmpty())
-                                streetAddress = streetAddress + " - " + item.complement
-
-
-                            Column(
-                                horizontalAlignment = Alignment.Start,
-                                verticalArrangement = Arrangement.spacedBy(2.dp)
-
-                            ) {
-                                Text(
-                                    text = streetAddress
-                                )
-                            }
-                       }
-
-                    }
-                }
-            })
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -440,7 +365,7 @@ fun FinancialScreen(
                 tint = Color(0xFF08940E),
                 modifier = Modifier
                     .padding(end = 10.dp)
-                    .size(20.dp)
+                    .size(16.dp)
             )
 
             Checkbox(checked = (true),
@@ -459,20 +384,11 @@ fun FinancialScreen(
                 tint = Color(0xFFD50000),
                 modifier = Modifier
                     .padding(end = 10.dp)
-                    .size(20.dp)
+                    .size(16.dp)
             )
 
         }
 
-
-        Text(
-            text = "Total de Pagamentos: ",
-            style = TextStyle(
-                color = getTextColor(),
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
-            )
-        )
         Text(
             text = "Total de Recebimentos: ",
             style = TextStyle(
@@ -481,15 +397,48 @@ fun FinancialScreen(
                 fontWeight = FontWeight.Bold,
             )
         )
-
         Text(
-            text = "Saldo do Período: ",
+            text = "Total de Pagamentos: ",
             style = TextStyle(
                 color = getTextColor(),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
             )
         )
+
+
+        Text(
+            text = "Saldo: ",
+            style = TextStyle(
+                color = getTextColor(),
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+            )
+        )
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.End,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Spacer(modifier = Modifier.height(5.dp))
+        }
+
+        Button(
+            onClick = {
+
+            },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = getButtonColor()
+            ),modifier = Modifier.height(30.dp)
+        ) {
+            Text(
+                text = "Extrato Detalhado",
+                style = TextStyle(
+                    fontSize = 14.sp,
+                )
+            )
+        }
 
         //AndroidViewAdView()
     }
