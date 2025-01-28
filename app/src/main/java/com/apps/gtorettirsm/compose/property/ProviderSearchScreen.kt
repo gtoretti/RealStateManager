@@ -13,19 +13,24 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Call
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -41,9 +46,11 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.apps.gtorettirsm.compose.profile.openContactDetails
 import com.apps.gtorettirsm.compose.profile.providerId
 import com.apps.gtorettirsm.compose.utils.DrawScrollableView
 import com.apps.gtorettirsm.compose.utils.getButtonColor
@@ -116,7 +123,7 @@ fun ProviderSearchScreen(
         var tmp = ArrayList<Provider>()
 
         providerResult.value.forEach { item ->
-            if (item.name.contains(searchName.value.trim()) && searchName.value.trim().isNotEmpty())
+            if (item.name.uppercase().contains(searchName.value.uppercase().trim()) && searchName.value.trim().isNotEmpty())
                 tmp.add(item)
             else if (item.servicesAdministration==1 && searchServicesAdministration.value==1)
                 tmp.add(item)
@@ -251,7 +258,7 @@ fun ProviderSearchScreen(
                                 DrawScrollableView(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .height(250.dp),
+                                        .height(180.dp),
                                     content = {
                                         Column {
 
@@ -1366,7 +1373,7 @@ fun ProviderSearchScreen(
                             Column(
 
                                 modifier = Modifier.padding(horizontal = 10.dp),
-                                verticalArrangement = Arrangement.spacedBy(10.dp)
+                                verticalArrangement = Arrangement.spacedBy(4.dp)
 
                             ) {
 
@@ -1392,23 +1399,49 @@ fun ProviderSearchScreen(
 
                                 Column(
                                     horizontalAlignment = Alignment.Start,
-                                    verticalArrangement = Arrangement.spacedBy(2.dp)
+                                    verticalArrangement = Arrangement.spacedBy(1.dp)
 
                                 ) {
 
 
-                                    Text(
-                                        text = item.name,
-                                        style = TextStyle(
-                                            color = getTextColor(),
-                                            fontSize = 16.sp,
-                                            fontFamily = FontFamily.SansSerif,
-                                        ),
-                                        modifier = Modifier.padding(
-                                            start = 2.dp,
-                                            end = 6.dp
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.SpaceBetween,
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                    ){
+                                        Text(
+                                            text = item.name,
+                                            style = TextStyle(
+                                                color = getTextColor(),
+                                                fontSize = 16.sp,
+                                                fontFamily = FontFamily.SansSerif,
+                                            ),
+                                            modifier = Modifier.padding(
+                                                start = 2.dp,
+                                                end = 6.dp
+                                            )
                                         )
-                                    )
+                                        TextButton(
+                                            modifier = Modifier.padding(5.dp),
+                                            onClick =
+                                            {
+                                                openContactDetails(item.contactId,context)
+                                            }
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.Filled.Call,
+                                                contentDescription = "Chamar Prestador",
+                                                tint = getTextColor(),
+                                                modifier = Modifier
+                                                    .padding(end = 12.dp)
+                                                    .size(20.dp)
+                                            )
+                                        }
+
+                                    }
+
+
                                     Text(
                                         text = getProviderDesc(item),
                                         style = TextStyle(
@@ -1429,7 +1462,7 @@ fun ProviderSearchScreen(
                                         horizontalArrangement = Arrangement.End,
                                         modifier = Modifier.fillMaxWidth()
                                     ) {
-                                        Spacer(modifier = Modifier.height(10.dp))
+                                        HorizontalDivider(thickness = 1.dp)
                                     }
                                 }
                             }

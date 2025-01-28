@@ -11,12 +11,9 @@ import androidx.room.PrimaryKey
 data class Provider(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") var providerId: Long,
     var name: String,
-    var cpfCnpj: String,
     var pix: String,
-    var phoneNumber: String,
-    var email: String,
     var serviceRegion: String,
-
+    var contactId: String,
     var servicesAdministration: Int, //administração de obras
     var servicesBrickwork: Int, //Alvenaria
     var servicesArchitecture: Int, //arquitetura

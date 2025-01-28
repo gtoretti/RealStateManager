@@ -3,6 +3,10 @@
 
 package com.apps.gtorettirsm.compose.profile
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.provider.ContactsContract
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,6 +22,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
+import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -213,9 +218,33 @@ fun ServiceProviderScreen(
 
                 ) {
 
-                    Text(
-                        text = item.name
-                    )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ){
+                        Text(
+                            text = item.name
+                        )
+
+                        TextButton(
+                            modifier = Modifier.padding(5.dp),
+                            onClick =
+                            {
+                                openContactDetails(item.contactId,context)
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Call,
+                                contentDescription = "Chamar Prestador",
+                                tint = getTextColor(),
+                                modifier = Modifier
+                                    .padding(end = 12.dp)
+                                    .size(24.dp)
+                            )
+                        }
+                    }
 
                     HorizontalDivider(thickness = 1.dp)
                 }
@@ -279,4 +308,10 @@ fun ServiceProviderScreen(
 
 
 
-
+fun openContactDetails(contactId: String, context: Context) {
+    val uri: Uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, contactId)
+    val intent = Intent(Intent.ACTION_VIEW).apply {
+        data = uri
+    }
+    context.startActivity(intent)
+}

@@ -9,6 +9,7 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.provider.ContactsContract
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
@@ -72,10 +73,8 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 val name = mutableStateOf("")
-val cpfCnpj = mutableStateOf("")
+val contactId = mutableStateOf("")
 val pix = mutableStateOf("")
-val phoneNumber = mutableStateOf("")
-val email = mutableStateOf("")
 val serviceRegion = mutableStateOf("")
 val servicesAdministration = mutableIntStateOf(0)
 val servicesHydraulic = mutableIntStateOf(0)
@@ -120,11 +119,11 @@ fun ProviderDetailScreen(
     if (providerId!=0L){
         var providerFlow = providerViewModel.getProvider(providerId)
         val provider by providerFlow.collectAsStateWithLifecycle(
-            initialValue = Provider(0L,"","","","","", "", 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0,0)
+            initialValue = Provider(0L,"","","","",  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0,0)
         )
         ProviderDetailScreen(openProviderDetailDialog,providerViewModel,context,provider)
     }else{
-        ProviderDetailScreen(openProviderDetailDialog,providerViewModel,context,Provider(0L,"","","","","", "", 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0,0))
+        ProviderDetailScreen(openProviderDetailDialog,providerViewModel,context,Provider(0L,"","","","", 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0,0))
     }
 
 }
@@ -141,10 +140,7 @@ fun ProviderDetailScreen(
 
     if (provider.providerId!=0L){
         name.value = provider.name
-        cpfCnpj.value = provider.cpfCnpj
         pix.value = provider.pix
-        phoneNumber.value = provider.phoneNumber
-        email.value = provider.email
         serviceRegion.value = provider.serviceRegion
         servicesAdministration.value = provider.servicesAdministration
         servicesHydraulic.value = provider.servicesHydraulic
@@ -215,14 +211,13 @@ fun ProviderDetailScreen(
 
                 ) {
 
-                    if (provider.providerId==0L ){
-                        contactPicker(context)
-                    }
+
+                    contactPicker(context)
 
                     OutlinedTextField(
                         value = name.value,
                         onValueChange = {
-                            name.value = it
+
                         },
                         textStyle = TextStyle(
                             fontSize = 16.sp,
@@ -238,31 +233,7 @@ fun ProviderDetailScreen(
                             )
                         },
                         placeholder = {Text("")},
-
-                    )
-
-                    OutlinedTextField(
-                        value = cpfCnpj.value,
-                        onValueChange = {
-                            cpfCnpj.value = it
-                        },
-                        textStyle = TextStyle(
-                            fontSize = 16.sp,
-                            color = getTextColor(),
-                            fontWeight = FontWeight.Normal
-                        ),
-                        label = {
-                            Text(
-                                text = "CPF/CNPJ:",
-                                style = TextStyle(
-                                    color = getTextColor(),fontSize = 12.sp
-                                )
-                            )
-                        },
-                        placeholder = {Text("")},
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Number
-                        )
+                        enabled = false
                     )
 
                     OutlinedTextField(
@@ -287,52 +258,6 @@ fun ProviderDetailScreen(
 
                     )
 
-
-                    OutlinedTextField(
-                        value = phoneNumber.value,
-                        onValueChange = {
-                            phoneNumber.value = it
-                        },
-                        textStyle = TextStyle(
-                            fontSize = 16.sp,
-                            color = getTextColor(),
-                            fontWeight = FontWeight.Normal
-                        ),
-                        label = {
-                            Text(
-                                text = "Telefone:",
-                                style = TextStyle(
-                                    color = getTextColor(),fontSize = 12.sp
-                                )
-                            )
-                        },
-                        placeholder = {Text("")},
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Number
-                        )
-                    )
-
-                    OutlinedTextField(
-                        value = email.value,
-                        onValueChange = {
-                            email.value = it
-                        },
-                        textStyle = TextStyle(
-                            fontSize = 16.sp,
-                            color = getTextColor(),
-                            fontWeight = FontWeight.Normal
-                        ),
-                        label = {
-                            Text(
-                                text = "E-mail:",
-                                style = TextStyle(
-                                    color = getTextColor(),fontSize = 12.sp
-                                )
-                            )
-                        },
-                        placeholder = {Text("")},
-
-                    )
 
                     OutlinedTextField(
                         value = serviceRegion.value,
@@ -1438,12 +1363,9 @@ fun ProviderDetailScreen(
                         onClick = {
                             openProviderDetailDialog.value = false
                             providerId.value = 0L
-
                             name.value = ""
-                            cpfCnpj.value = ""
                             pix.value = ""
-                            phoneNumber.value = ""
-                            email.value = ""
+                            contactId.value = ""
                             serviceRegion.value = ""
                             servicesAdministration.value = 0
                             servicesHydraulic.value = 0
@@ -1511,14 +1433,12 @@ fun ProviderDetailScreen(
                         onClick = {
 
                             if (name.value.trim().isEmpty()){
-                                showToast("Por favor, informe o nome do prestador.",context)
+                                showToast("Por favor, selecione o Contato do prestador.",context)
                             }else{
                                 provider.pix = pix.value
                                 provider.name = name.value
-                                provider.email = email.value
-                                provider.cpfCnpj = cpfCnpj.value
-                                provider.phoneNumber = phoneNumber.value
                                 provider.serviceRegion = serviceRegion.value
+                                provider.contactId = contactId.value
                                 provider.servicesAdministration =servicesAdministration.value
                                 provider.servicesBrickwork =servicesBrickwork.value
                                 provider.servicesArchitecture =servicesArchitecture.value
@@ -1563,11 +1483,9 @@ fun ProviderDetailScreen(
                                 providerId.value = 0L
 
                                 name.value = ""
-                                cpfCnpj.value = ""
                                 pix.value = ""
-                                phoneNumber.value = ""
-                                email.value = ""
                                 serviceRegion.value = ""
+                                contactId.value = ""
                                 servicesAdministration.value = 0
                                 servicesHydraulic.value = 0
                                 servicesBrickwork.value = 0
@@ -1648,7 +1566,7 @@ fun contactPicker(
         ),modifier = Modifier.height(30.dp)
     ) {
         Text(
-            text = "Selecionar de Meus Contatos",
+            text = "Selecionar Contato",
             style = TextStyle(
                 fontSize = 13.sp,
             )
@@ -1675,3 +1593,4 @@ fun Context.getActivity(): Activity? {
         else -> null
     }
 }
+

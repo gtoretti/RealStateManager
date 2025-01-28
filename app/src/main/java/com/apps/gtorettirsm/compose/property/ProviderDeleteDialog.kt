@@ -84,10 +84,8 @@ fun ProviderDeleteDialog(
                         openProviderDetailDialog.value = false
 
                         name.value = ""
-                        cpfCnpj.value = ""
                         pix.value = ""
-                        phoneNumber.value = ""
-                        email.value = ""
+                        contactId.value = ""
                         serviceRegion.value = ""
                         servicesAdministration.value = 0
                         servicesHydraulic.value = 0
