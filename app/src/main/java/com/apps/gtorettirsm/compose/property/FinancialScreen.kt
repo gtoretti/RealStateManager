@@ -86,6 +86,7 @@ fun FinancialScreen(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxWidth()
+            .verticalScroll(rememberScrollState()),
     ) {
         Card(
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
@@ -275,7 +276,7 @@ fun FinancialScreen(
             horizontalAlignment = Alignment.Start,
             modifier = Modifier
                 .fillMaxWidth().padding(horizontal = 2.dp).border(1.dp, Color.Gray)
-                .verticalScroll(rememberScrollState()),
+                //.verticalScroll(rememberScrollState()),
         ) {
 
 
@@ -384,22 +385,8 @@ fun FinancialScreen(
         }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         Text(
-            text = "Total de Recebimentos: ",
+            text = "Total de Recebimentos (+): ",
             style = TextStyle(
                 color = getTextColor(),
                 fontSize = 16.sp,
@@ -407,7 +394,7 @@ fun FinancialScreen(
             )
         )
         Text(
-            text = "Total de Pagamentos: ",
+            text = "Total de Pagamentos (-): ",
             style = TextStyle(
                 color = getTextColor(),
                 fontSize = 16.sp,
@@ -424,6 +411,14 @@ fun FinancialScreen(
                 fontWeight = FontWeight.Bold,
             )
         )
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.End,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Spacer(modifier = Modifier.height(10.dp))
+        }
 
         Button(
             onClick = {
