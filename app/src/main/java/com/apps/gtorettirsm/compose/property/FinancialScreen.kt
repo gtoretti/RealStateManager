@@ -85,9 +85,7 @@ fun FinancialScreen(
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .fillMaxWidth()
-            //.verticalScroll(rememberScrollState()),
+        modifier = Modifier.fillMaxWidth()
     ) {
         Card(
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
@@ -119,10 +117,10 @@ fun FinancialScreen(
             Button(
                 onClick = {
                     openPropertyExpensesDialog.value = true
-                 },
+                },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = getButtonColor()
-                ),modifier = Modifier.height(33.dp)
+                ), modifier = Modifier.height(33.dp)
             ) {
                 Text(
                     text = "Pagamentos",
@@ -139,7 +137,7 @@ fun FinancialScreen(
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = getButtonColor()
-                ),modifier = Modifier.height(33.dp)
+                ), modifier = Modifier.height(33.dp)
             ) {
                 Text(
                     text = "Recebimentos",
@@ -271,78 +269,74 @@ fun FinancialScreen(
             )
         )
 
-        DrawScrollableView(
+
+
+        Column(
+            horizontalAlignment = Alignment.Start,
             modifier = Modifier
-                .fillMaxWidth().padding(horizontal = 2.dp)
-                .height(120.dp)
-                .border(1.dp, Color.Gray) ,
-
-            content = {
-                Column {
-
-                    properties.forEach { item ->
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Start,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .selectable(
-                                    selected = (true),
-                                    onClick = {
-
-                                    },
-                                    role = Role.Checkbox
-
-                                )
-                        ) {
-                            Checkbox(checked = (true),
-                                onCheckedChange = {
-
-                                })
+                .fillMaxWidth().padding(horizontal = 2.dp).border(1.dp, Color.Gray)
+                .verticalScroll(rememberScrollState()),
+        ) {
 
 
-                            var streetAddress = item.streetAddress + ", " + item.number
-                            if (item.complement.isNotEmpty())
-                                streetAddress = streetAddress + " - " + item.complement
+            properties.forEach { item ->
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Start,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .selectable(
+                            selected = (true),
+                            onClick = {
+
+                            },
+                            role = Role.Checkbox
+
+                        )
+                ) {
+                    Checkbox(checked = (true),
+                        onCheckedChange = {
+
+                        })
 
 
-                            Column(
-                                horizontalAlignment = Alignment.Start,
-                                verticalArrangement = Arrangement.spacedBy(2.dp)
+                    var streetAddress = item.streetAddress + ", " + item.number
+                    if (item.complement.isNotEmpty())
+                        streetAddress = streetAddress + " - " + item.complement
 
-                            ) {
-                                Text(
-                                    text = streetAddress,
-                                    style = TextStyle(
-                                        color = getTextColor(),
-                                        fontSize = 14.sp,
-                                        )
-                                )
-                                Text(
-                                    text = item.city + " - " + item.state + " - CEP:" + item.zipCode
-                                    ,
-                                    style = TextStyle(
-                                        color = getTextColor(),
-                                        fontSize = 14.sp,
-                                        )
-                                )
-                            }
-                        }
-                        HorizontalDivider(thickness = 1.dp)
+
+                    Column(
+                        horizontalAlignment = Alignment.Start,
+                        verticalArrangement = Arrangement.spacedBy(2.dp)
+
+                    ) {
+                        Text(
+                            text = streetAddress,
+                            style = TextStyle(
+                                color = getTextColor(),
+                                fontSize = 14.sp,
+                            )
+                        )
+                        Text(
+                            text = item.city + " - " + item.state + " - CEP:" + item.zipCode,
+                            style = TextStyle(
+                                color = getTextColor(),
+                                fontSize = 14.sp,
+                            )
+                        )
                     }
                 }
-            })
-
+                HorizontalDivider(thickness = 1.dp)
+            }
+        }
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.End,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Spacer(modifier = Modifier.height(5.dp))
+            Spacer(modifier = Modifier.height(10.dp))
         }
-
-
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -389,6 +383,21 @@ fun FinancialScreen(
 
         }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         Text(
             text = "Total de Recebimentos: ",
             style = TextStyle(
@@ -416,28 +425,27 @@ fun FinancialScreen(
             )
         )
 
+        Button(
+            onClick = {
+            },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = getButtonColor()
+            ), modifier = Modifier.height(33.dp)
+        ) {
+            Text(
+                text = "Gerar Relatório",
+                style = TextStyle(
+                    fontSize = 14.sp,
+                )
+            )
+        }
+
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.End,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Spacer(modifier = Modifier.height(5.dp))
-        }
-
-        Button(
-            onClick = {
-
-            },
-            colors = ButtonDefaults.buttonColors(
-                containerColor = getButtonColor()
-            ),modifier = Modifier.height(30.dp)
-        ) {
-            Text(
-                text = "Extrato Detalhado",
-                style = TextStyle(
-                    fontSize = 14.sp,
-                )
-            )
+            Spacer(modifier = Modifier.height(20.dp))
         }
 
         //AndroidViewAdView()
