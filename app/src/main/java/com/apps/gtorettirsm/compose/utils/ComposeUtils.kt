@@ -391,6 +391,10 @@ fun getProviderDesc(p: Provider): String{
         r += "Instalações Hidráulicas, "
     if (p.servicesCleaning==1)
         r += "Limpeza Pós-Obra, "
+    if (p.servicesOthers==1)
+        r += "Outros, "
+    if (p.servicesMaterialSupplier==1)
+        r += "Fornecedor de Materiais, "
     if (p.servicesPoolCleaning==1)
         r += "Limpeza de Piscina, "
     if (p.servicesAirConditioningMaintenance==1)

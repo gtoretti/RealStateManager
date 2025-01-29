@@ -108,6 +108,8 @@ fun ProviderDeleteDialog(
                         servicesPlaygroundMaintenance.value = 0
                         servicesElectronicGate.value = 0
                         servicesCleaning.value = 0
+                        servicesOthers.value = 0
+                        servicesMaterialSupplier.value = 0
                         servicesPoolCleaning.value = 0
                         servicesLandscaping.value = 0
                         servicesPainting.value = 0

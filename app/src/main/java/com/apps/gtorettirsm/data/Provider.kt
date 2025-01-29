@@ -22,6 +22,7 @@ data class Provider(
     var servicesFireBrigade: Int, // brigada de incendio
     var servicesNotary: Int, //cartorio de imoveis
     var servicesAluminumFrames: Int, // esquadrias de aluminio
+    var servicesMaterialSupplier: Int, // fornecedor de materiais
     var servicesPlasterer: Int,   // gesseiro
     var servicesElectric: Int,  //Instalações eletricas
     var servicesHydraulic: Int, //Instalações hidraulicas
@@ -35,6 +36,7 @@ data class Provider(
     var servicesPoolMaintenance: Int, // manutenção de piscinas
     var servicesPlaygroundMaintenance: Int,  // manutenção de playground
     var servicesElectronicGate: Int, // manutenção de portao eletronico
+    var servicesOthers: Int, // Outros
     var servicesCleaning: Int, // limpeza pos-obra
     var servicesPoolCleaning: Int, //limpeza de piscinas
     var servicesLandscaping: Int,  // paisagismo

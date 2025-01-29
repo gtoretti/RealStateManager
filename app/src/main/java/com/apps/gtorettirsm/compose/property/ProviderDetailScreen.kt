@@ -97,6 +97,8 @@ val servicesPoolMaintenance = mutableIntStateOf(0)
 val servicesPlaygroundMaintenance = mutableIntStateOf(0)
 val servicesElectronicGate = mutableIntStateOf(0)
 val servicesCleaning = mutableIntStateOf(0)
+val servicesOthers = mutableIntStateOf(0)
+val servicesMaterialSupplier = mutableIntStateOf(0)
 val servicesPoolCleaning = mutableIntStateOf(0)
 val servicesLandscaping = mutableIntStateOf(0)
 val servicesPainting = mutableIntStateOf(0)
@@ -118,11 +120,11 @@ fun ProviderDetailScreen(
     if (providerId!=0L){
         var providerFlow = providerViewModel.getProvider(providerId)
         val provider by providerFlow.collectAsStateWithLifecycle(
-            initialValue = Provider(0L,"","","","",  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0,0)
+            initialValue = Provider(0L,"","","","",  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0,0,0,0)
         )
         ProviderDetailScreen(openProviderDetailDialog,providerViewModel,context,provider)
     }else{
-        ProviderDetailScreen(openProviderDetailDialog,providerViewModel,context,Provider(0L,"","","","", 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0,0))
+        ProviderDetailScreen(openProviderDetailDialog,providerViewModel,context,Provider(0L,"","","","", 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0,0,0,0))
     }
 
 }
@@ -163,6 +165,8 @@ fun ProviderDetailScreen(
         servicesPlaygroundMaintenance.value = provider.servicesPlaygroundMaintenance
         servicesElectronicGate.value = provider.servicesElectronicGate
         servicesCleaning.value = provider.servicesCleaning
+        servicesOthers.value = provider.servicesOthers
+        servicesMaterialSupplier.value = provider.servicesMaterialSupplier
         servicesPoolCleaning.value = provider.servicesPoolCleaning
         servicesLandscaping.value = provider.servicesLandscaping
         servicesPainting.value = provider.servicesPainting
@@ -603,6 +607,43 @@ fun ProviderDetailScreen(
                                         )
                                     )
                                 }
+
+
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.Start,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .selectable(
+                                            selected = servicesMaterialSupplier.value == 1,
+                                            onClick = {
+                                                if (servicesMaterialSupplier.value == 0) servicesMaterialSupplier.value=1
+                                                else servicesMaterialSupplier.value=0
+                                            },
+                                            role = Role.Checkbox
+                                        )
+                                ) {
+                                    Checkbox(checked = (servicesMaterialSupplier.value == 1),
+                                        onCheckedChange = {
+                                            if (it) servicesMaterialSupplier.value=1
+                                            else servicesMaterialSupplier.value=0
+                                        })
+                                    Text(
+                                        text = "Fornecedor de Materiais",
+                                        style = TextStyle(
+                                            color = getTextColor(),
+                                            fontSize = 16.sp,
+                                            fontFamily = FontFamily.SansSerif,
+                                        ),
+                                        modifier = Modifier.padding(
+                                            start = 2.dp,
+                                            end = 6.dp
+                                        )
+                                    )
+                                }
+
+
+
 
 
 
@@ -1217,7 +1258,38 @@ fun ProviderDetailScreen(
                                     )
                                 }
 
-
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.Start,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .selectable(
+                                            selected = servicesOthers.value == 1,
+                                            onClick = {
+                                                if (servicesOthers.value == 0) servicesOthers.value=1
+                                                else servicesOthers.value=0
+                                            },
+                                            role = Role.Checkbox
+                                        )
+                                ) {
+                                    Checkbox(checked = (servicesOthers.value == 1),
+                                        onCheckedChange = {
+                                            if (it) servicesOthers.value=1
+                                            else servicesOthers.value=0
+                                        })
+                                    Text(
+                                        text = "Outros",
+                                        style = TextStyle(
+                                            color = getTextColor(),
+                                            fontSize = 16.sp,
+                                            fontFamily = FontFamily.SansSerif,
+                                        ),
+                                        modifier = Modifier.padding(
+                                            start = 2.dp,
+                                            end = 6.dp
+                                        )
+                                    )
+                                }
 
                                 Row(
                                     verticalAlignment = Alignment.CenterVertically,
@@ -1415,6 +1487,8 @@ fun ProviderDetailScreen(
                             servicesPlaygroundMaintenance.value = 0
                             servicesElectronicGate.value = 0
                             servicesCleaning.value = 0
+                            servicesOthers.value = 0
+                            servicesMaterialSupplier.value = 0
                             servicesPoolCleaning.value = 0
                             servicesLandscaping.value = 0
                             servicesPainting.value = 0
@@ -1488,6 +1562,8 @@ fun ProviderDetailScreen(
                                 provider.servicesPlaygroundMaintenance =servicesPlaygroundMaintenance.value
                                 provider.servicesElectronicGate =servicesElectronicGate.value
                                 provider.servicesCleaning =servicesCleaning.value
+                                provider.servicesOthers =servicesOthers.value
+                                provider.servicesMaterialSupplier =servicesMaterialSupplier.value
                                 provider.servicesPoolCleaning =servicesPoolCleaning.value
                                 provider.servicesLandscaping =servicesLandscaping.value
                                 provider.servicesPainting =servicesPainting.value
@@ -1534,6 +1610,8 @@ fun ProviderDetailScreen(
                                 servicesPlaygroundMaintenance.value = 0
                                 servicesElectronicGate.value = 0
                                 servicesCleaning.value = 0
+                                servicesOthers.value = 0
+                                servicesMaterialSupplier.value = 0
                                 servicesPoolCleaning.value = 0
                                 servicesLandscaping.value = 0
                                 servicesPainting.value = 0
