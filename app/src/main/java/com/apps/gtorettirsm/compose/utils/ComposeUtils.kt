@@ -431,5 +431,5 @@ fun getProviderDesc(p: Provider): String{
 
     r = r.replace(", )",")")
 
-    return r
+    return p.name + ":" + r
 }

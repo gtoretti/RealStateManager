@@ -506,13 +506,14 @@ fun PropertyCreateScreen(
 
                     DrawScrollableView(
                         modifier = Modifier
-                            .fillMaxWidth()
+                            .fillMaxWidth().padding(horizontal = 3.dp)
                             .fillMaxHeight(),
                         content = {
                             Column {
 
                                 adresses.forEach { address ->
                                     Column(
+                                        modifier = Modifier.padding(horizontal = 5.dp),
                                         horizontalAlignment = Alignment.Start,
                                         verticalArrangement = Arrangement.spacedBy(2.dp)
 

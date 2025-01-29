@@ -220,16 +220,11 @@ fun ServiceProviderScreen(
 
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween,
+                        horizontalArrangement = Arrangement.Start,
                         modifier = Modifier
                             .fillMaxWidth()
                     ){
-                        Text(
-                            text = item.name,style = TextStyle(
-                                color = getTextColor(),
-                                fontSize = 14.sp,
-                            )
-                        )
+
 
                         TextButton(
                             modifier = Modifier.padding(5.dp),
@@ -247,6 +242,13 @@ fun ServiceProviderScreen(
                                     .size(24.dp)
                             )
                         }
+
+                        Text(
+                            text = item.name,style = TextStyle(
+                                color = getTextColor(),
+                                fontSize = 14.sp,
+                            )
+                        )
                     }
 
                     HorizontalDivider(thickness = 1.dp)

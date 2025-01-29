@@ -5,6 +5,7 @@ package com.apps.gtorettirsm.compose.property
 
 import android.content.Context
 import android.util.Log
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -41,6 +42,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -215,12 +217,12 @@ fun ProviderSearchScreen(
 
 
                     DrawScrollableView(
-                        modifier = Modifier.padding(horizontal = 10.dp),
+                        modifier = Modifier.padding(horizontal = 3.dp),
                         content = {
                             Column(
 
-                                modifier = Modifier.padding(horizontal = 10.dp),
-                                verticalArrangement = Arrangement.spacedBy(10.dp)
+                                modifier = Modifier.padding(horizontal = 3.dp),
+                                verticalArrangement = Arrangement.spacedBy(5.dp)
 
                             ) {
 
@@ -258,7 +260,7 @@ fun ProviderSearchScreen(
                                 DrawScrollableView(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .height(180.dp),
+                                        .height(180.dp).border(1.dp, Color.Gray),
                                     content = {
                                         Column {
 
@@ -1368,11 +1370,12 @@ fun ProviderSearchScreen(
                     }
 
                     DrawScrollableView(
-                        modifier = Modifier.padding(horizontal = 10.dp),
+                        modifier = Modifier.padding(horizontal = 3.dp).border(1.dp, Color.Gray),
+
                         content = {
                             Column(
 
-                                modifier = Modifier.padding(horizontal = 10.dp),
+                                modifier = Modifier.padding(horizontal = 3.dp),
                                 verticalArrangement = Arrangement.spacedBy(4.dp)
 
                             ) {
@@ -1410,18 +1413,6 @@ fun ProviderSearchScreen(
                                         modifier = Modifier
                                             .fillMaxWidth()
                                     ){
-                                        Text(
-                                            text = item.name,
-                                            style = TextStyle(
-                                                color = getTextColor(),
-                                                fontSize = 16.sp,
-                                                fontFamily = FontFamily.SansSerif,
-                                            ),
-                                            modifier = Modifier.padding(
-                                                start = 2.dp,
-                                                end = 6.dp
-                                            )
-                                        )
                                         TextButton(
                                             modifier = Modifier.padding(5.dp),
                                             onClick =
@@ -1434,28 +1425,29 @@ fun ProviderSearchScreen(
                                                 contentDescription = "Chamar Prestador",
                                                 tint = getTextColor(),
                                                 modifier = Modifier
-                                                    .padding(end = 12.dp)
-                                                    .size(20.dp)
+                                                    .padding(end = 2.dp)
+                                                    .size(16.dp)
                                             )
                                         }
 
-                                    }
-
-
-                                    Text(
-                                        text = getProviderDesc(item),
-                                        style = TextStyle(
-                                            color = getTextColor(),
-                                            fontSize = 16.sp,
-                                            fontFamily = FontFamily.SansSerif,
-                                        ),
-                                        modifier = Modifier.padding(
-                                            start = 2.dp,
-                                            end = 6.dp
+                                        Text(
+                                            text = getProviderDesc(item),
+                                            style = TextStyle(
+                                                color = getTextColor(),
+                                                fontSize = 16.sp,
+                                                fontFamily = FontFamily.SansSerif,
+                                            ),
+                                            modifier = Modifier.padding(
+                                                start = 2.dp,
+                                                end = 6.dp
+                                            )
                                         )
-                                    )
 
 
+
+
+
+                                    }
 
                                     Row(
                                         verticalAlignment = Alignment.CenterVertically,

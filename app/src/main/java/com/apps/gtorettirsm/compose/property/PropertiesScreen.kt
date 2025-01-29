@@ -3,6 +3,7 @@
 
 package com.apps.gtorettirsm.compose.property
 
+import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -46,6 +47,13 @@ import com.apps.gtorettirsm.viewmodels.ReceiptPDFViewModel
 import com.apps.gtorettirsm.viewmodels.ReceiptViewModel
 import kotlinx.coroutines.flow.Flow
 import java.util.Date
+
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.material.icons.filled.Call
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
+import com.apps.gtorettirsm.R
 
 @Composable
 fun PropertiesScreen(
@@ -147,46 +155,77 @@ fun PropertiesScreen(
                         )
                 ) {
 
+                    var streetAddress = item.streetAddress + ", " + item.number
+                    if (item.complement.isNotEmpty())
+                        streetAddress = streetAddress + " - " + item.complement
 
-                    Column(
-                        horizontalAlignment = Alignment.Start,
-                        verticalArrangement = Arrangement.spacedBy(2.dp)
 
-                    ) {
+                    Column() {
 
-                        var streetAddress = item.streetAddress + ", " + item.number
-                        if (item.complement.isNotEmpty())
-                            streetAddress = streetAddress + " - " + item.complement
 
-                        Text(
-                            text = streetAddress,style = TextStyle(
-                                color = getTextColor(),
-                                fontSize = 14.sp,
-                            )
-                        )
+                        Row() {
 
-                        Text(
-                            text = item.district,style = TextStyle(
-                                color = getTextColor(),
-                                fontSize = 14.sp,
-                            )
-                        )
-                        Text(
-                            text = item.city + " - " + item.state,style = TextStyle(
-                                color = getTextColor(),
-                                fontSize = 14.sp,
-                            )
-                        )
-                        Text(
-                            text = "CEP: "+item.zipCode , style = TextStyle(
-                                color = getTextColor(),
-                                fontSize = 14.sp,
-                                fontWeight = FontWeight.Bold,
-                            )
+                            TextButton(
+                                modifier = Modifier.padding(5.dp),
+                                onClick =
+                                {
+                                    openMapWithAddress(
+                                        item.streetAddress + ", " + item.number + ", " + item.district + ", " + item.city + ", " + item.state,
+                                        context
+                                    )
+                                }
+                            ) {
+                                Icon(
+                                    imageVector = ImageVector.vectorResource(R.drawable.location_on_24px),
+                                    contentDescription = "Mapa",
+                                    tint = getTextColor(),
+                                    modifier = Modifier
+                                        .padding(end = 2.dp)
+                                        .size(16.dp)
+                                )
+                            }
 
-                        )
+                            Column(
+                                horizontalAlignment = Alignment.Start,
+                                verticalArrangement = Arrangement.spacedBy(2.dp)
+
+                            ) {
+
+
+                                Text(
+                                    text = streetAddress, style = TextStyle(
+                                        color = getTextColor(),
+                                        fontSize = 14.sp,
+                                    )
+                                )
+
+                                Text(
+                                    text = item.district, style = TextStyle(
+                                        color = getTextColor(),
+                                        fontSize = 14.sp,
+                                    )
+                                )
+                                Text(
+                                    text = item.city + " - " + item.state, style = TextStyle(
+                                        color = getTextColor(),
+                                        fontSize = 14.sp,
+                                    )
+                                )
+                                Text(
+                                    text = "CEP: " + item.zipCode, style = TextStyle(
+                                        color = getTextColor(),
+                                        fontSize = 14.sp,
+                                        fontWeight = FontWeight.Bold,
+                                    )
+
+                                )
+
+                            }
+
+                        }
                         HorizontalDivider(thickness = 1.dp)
                     }
+
                 }
             }
 
@@ -211,4 +250,12 @@ fun PropertiesScreen(
             }
         }
     }
+}
+
+
+fun openMapWithAddress(address: String, context: Context) {
+    val gmmIntentUri = Uri.parse("geo:0,0?q=${Uri.encode(address)}")
+    val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+    mapIntent.setPackage("com.google.android.apps.maps")
+    context.startActivity(mapIntent)
 }

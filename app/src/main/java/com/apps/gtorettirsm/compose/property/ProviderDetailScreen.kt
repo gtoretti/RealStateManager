@@ -140,6 +140,7 @@ fun ProviderDetailScreen(
     if (provider.providerId!=0L){
         name.value = provider.name
         pix.value = provider.pix
+        contactId.value = provider.contactId
         serviceRegion.value = provider.serviceRegion
         servicesAdministration.value = provider.servicesAdministration
         servicesHydraulic.value = provider.servicesHydraulic

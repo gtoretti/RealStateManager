@@ -122,7 +122,7 @@ fun FinancialScreen(
                  },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = getButtonColor()
-                ),modifier = Modifier.height(30.dp)
+                ),modifier = Modifier.height(33.dp)
             ) {
                 Text(
                     text = "Pagamentos",
@@ -139,7 +139,7 @@ fun FinancialScreen(
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = getButtonColor()
-                ),modifier = Modifier.height(30.dp)
+                ),modifier = Modifier.height(33.dp)
             ) {
                 Text(
                     text = "Recebimentos",
