@@ -138,147 +138,16 @@ fun PropertyExpensesCreateDialog(
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
 
+                    PropertiesDropdownMenu(properties)
 
-Row() {
-    OutlinedTextField(
-
-        value =dropDownSelectPropertyDesc.value,
-        onValueChange = {
-
-        },
-        textStyle = TextStyle(
-            fontSize = 16.sp,
-            color = getTextColor(),
-            fontWeight = FontWeight.Normal
-        ), placeholder = { Text("") },
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Decimal
-        ),
-        label = {
-            Row(verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Start,
-                modifier = Modifier.fillMaxWidth()){
-                PropertiesDropdownMenu(properties)
-                Text(
-                    text = "Imóvel:",
-                    style = TextStyle(
-                        color = getTextColor(), fontSize = 12.sp,
-                    )
-                )
-            }
-
-        }, enabled = false
-    )
-
-}
-
-
-
-                    val types = listOf("Serviços Prestados", "Água e Esgoto","Energia Elétrica","Condomínio","Impostos", "Outros")
-                    Row() {
-                        OutlinedTextField(
-
-                            value = dropDownSelectExpenseType.value,
-                            onValueChange = {
-
-                            },
-                            textStyle = TextStyle(
-                                fontSize = 16.sp,
-                                color = getTextColor(),
-                                fontWeight = FontWeight.Normal
-                            ), placeholder = { Text("") },
-                            keyboardOptions = KeyboardOptions(
-                                keyboardType = KeyboardType.Decimal
-                            ),
-                            label = {
-                                Row(verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.Start,
-                                    modifier = Modifier.fillMaxWidth()){
-                                    ExpenseTypeDropdownMenu(types)
-                                    Text(
-                                        text = "Tipo de Pagamento:",
-                                        style = TextStyle(
-                                            color = getTextColor(), fontSize = 12.sp,
-                                        )
-                                    )
-                                }
-
-                            }, enabled = false
-                        )
-
-                    }
-
-
+                    ExpenseTypeDropdownMenu()
 
 if (dropDownSelectExpenseType.value.equals("Serviços Prestados")) {
 
-    Row() {
-        OutlinedTextField(
+    ProvidersDropdownMenu(providers)
 
-            value = dropDownSelectProviderName.value,
-            onValueChange = {
+    ProviderServicesDropdownMenu(dropDownSelectProviderServices.value)
 
-            },
-            textStyle = TextStyle(
-                fontSize = 16.sp,
-                color = getTextColor(),
-                fontWeight = FontWeight.Normal
-            ), placeholder = { Text("") },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Decimal
-            ),
-            label = {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Start,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    ProvidersDropdownMenu(providers)
-                    Text(
-                        text = "Prestador de Serviço:",
-                        style = TextStyle(
-                            color = getTextColor(), fontSize = 12.sp,
-                        )
-                    )
-                }
-
-            }, enabled = false
-        )
-    }
-
-    Row() {
-        OutlinedTextField(
-
-            value = dropDownSelectProviderServiceDesc.value,
-            onValueChange = {
-
-            },
-            textStyle = TextStyle(
-                fontSize = 16.sp,
-                color = getTextColor(),
-                fontWeight = FontWeight.Normal
-            ), placeholder = { Text("") },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Decimal
-            ),
-            label = {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Start,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    ProviderServicesDropdownMenu(dropDownSelectProviderServices.value)
-                    Text(
-                        text = "Tipo de Serviço Prestado:",
-                        style = TextStyle(
-                            color = getTextColor(), fontSize = 12.sp,
-                        )
-                    )
-                }
-
-            }, enabled = false
-        )
-    }
 }else{
     dropDownSelectProviderId.value = 0L
     dropDownSelectProviderName.value = ""
@@ -364,7 +233,7 @@ if (dropDownSelectExpenseType.value.equals("Serviços Prestados")) {
                             fontSize = 16.sp,
                             color = getTextColor(),
                             fontWeight = FontWeight.Normal
-                        ),placeholder = {Text("Exemplos: reforma de telhado; impostos; conta de água...")},
+                        ),placeholder = {Text("")},
                         label = {
                             Text(
                                 text = "Descrição:",
@@ -418,123 +287,190 @@ if (dropDownSelectExpenseType.value.equals("Serviços Prestados")) {
 fun PropertiesDropdownMenu(properties: List<Property>) {
     var expanded by remember { mutableStateOf(false) }
 
-    Box(
-        modifier = Modifier
-            .padding(10.dp)
-    ) {
-        IconButton(onClick = { expanded = !expanded },
+    Row() {
+        OutlinedTextField(
             modifier = Modifier
-                .padding(end = 12.dp)
-                .size(24.dp)
-        ) {
-            Icon(Icons.Default.KeyboardArrowDown, contentDescription = "Selecionar Imóvel")
-        }
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
-            properties.forEach { item ->
+                .fillMaxWidth()
+                .clickable {
+                    expanded = !expanded
+                },
+            value =dropDownSelectPropertyDesc.value,
+            onValueChange = {
 
-                var streetAddress = item.streetAddress + ", " + item.number
-                if (item.complement.isNotEmpty())
-                    streetAddress = streetAddress + " - " + item.complement
-
-                DropdownMenuItem(
-                    text = {
-                        Column(
-                            horizontalAlignment = Alignment.Start,
-                            verticalArrangement = Arrangement.spacedBy(2.dp)
-
+            },
+            textStyle = TextStyle(
+                fontSize = 16.sp,
+                color = getTextColor(),
+                fontWeight = FontWeight.Normal
+            ), placeholder = { Text("") },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Decimal
+            ),
+            label = {
+                Row(verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Start,
+                    modifier = Modifier.fillMaxWidth()){
+                    Box(
+                        modifier = Modifier
+                            .padding(10.dp)
+                    ) {
+                        IconButton(onClick = { expanded = !expanded },
+                            modifier = Modifier
+                                .padding(end = 12.dp)
+                                .size(24.dp)
                         ) {
-
-                        Text(
-                            text = streetAddress, style = TextStyle(
-                                color = getTextColor(),
-                                fontSize = 14.sp,
-                            )
-                        )
-
-                        Text(
-                            text = item.district, style = TextStyle(
-                                color = getTextColor(),
-                                fontSize = 14.sp,
-                            )
-                        )
-                        Text(
-                            text = item.city + " - " + item.state, style = TextStyle(
-                                color = getTextColor(),
-                                fontSize = 14.sp,
-                            )
-                        )
-                        Text(
-                            text = "CEP: " + item.zipCode, style = TextStyle(
-                                color = getTextColor(),
-                                fontSize = 14.sp,
-                                fontWeight = FontWeight.Bold,
-                            )
-                        )
-                            HorizontalDivider(thickness = 1.dp)
-
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.End,
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Spacer(modifier = Modifier.height(5.dp))
-                            }
-
+                            Icon(Icons.Default.KeyboardArrowDown, contentDescription = "Selecionar Imóvel")
                         }
-                           },
-                    onClick = {
-                        dropDownSelectPropertyId.value = item.propertyId
-                        dropDownSelectPropertyDesc.value = streetAddress + ", " + item.district + ", " +  item.city + " - " + item.state + ", " + item.zipCode
-                        expanded = !expanded
+                        DropdownMenu(
+                            expanded = expanded,
+                            onDismissRequest = { expanded = false }
+                        ) {
+                            properties.forEach { item ->
+
+                                var streetAddress = item.streetAddress + ", " + item.number
+                                if (item.complement.isNotEmpty())
+                                    streetAddress = streetAddress + " - " + item.complement
+
+                                DropdownMenuItem(
+                                    text = {
+                                        Column(
+                                            horizontalAlignment = Alignment.Start,
+                                            verticalArrangement = Arrangement.spacedBy(2.dp)
+
+                                        ) {
+
+                                            Text(
+                                                text = streetAddress, style = TextStyle(
+                                                    color = getTextColor(),
+                                                    fontSize = 14.sp,
+                                                )
+                                            )
+
+                                            Text(
+                                                text = item.district, style = TextStyle(
+                                                    color = getTextColor(),
+                                                    fontSize = 14.sp,
+                                                )
+                                            )
+                                            Text(
+                                                text = item.city + " - " + item.state, style = TextStyle(
+                                                    color = getTextColor(),
+                                                    fontSize = 14.sp,
+                                                )
+                                            )
+                                            Text(
+                                                text = "CEP: " + item.zipCode, style = TextStyle(
+                                                    color = getTextColor(),
+                                                    fontSize = 14.sp,
+                                                    fontWeight = FontWeight.Bold,
+                                                )
+                                            )
+                                            HorizontalDivider(thickness = 1.dp)
+
+                                            Row(
+                                                verticalAlignment = Alignment.CenterVertically,
+                                                horizontalArrangement = Arrangement.End,
+                                                modifier = Modifier.fillMaxWidth()
+                                            ) {
+                                                Spacer(modifier = Modifier.height(5.dp))
+                                            }
+                                        }
+                                    },
+                                    onClick = {
+                                        dropDownSelectPropertyId.value = item.propertyId
+                                        dropDownSelectPropertyDesc.value = streetAddress + ", " + item.district + ", " +  item.city + " - " + item.state + ", " + item.zipCode
+                                        expanded = !expanded
+                                    }
+                                )
+                            }
+                        }
                     }
-                )
-            }
-        }
+                    Text(
+                        text = "Imóvel:",
+                        style = TextStyle(
+                            color = getTextColor(), fontSize = 12.sp,
+                        )
+                    )
+                }
+            }, enabled = false
+        )
     }
 }
 
 
 @Composable
-fun ExpenseTypeDropdownMenu(types: List<String>) {
+fun ExpenseTypeDropdownMenu() {
     var expanded by remember { mutableStateOf(false) }
-
-    Box(
-        modifier = Modifier
-            .padding(10.dp)
-    ) {
-        IconButton(onClick = { expanded = !expanded },
+    val types = listOf("Serviços Prestados", "Água e Esgoto","Energia Elétrica","Condomínio","Impostos", "Outros")
+    Row() {
+        OutlinedTextField(
             modifier = Modifier
-                .padding(end = 12.dp)
-                .size(24.dp)
-        ) {
-            Icon(Icons.Default.KeyboardArrowDown, contentDescription = "Selecionar Tipo de Pagamento")
-        }
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
-            types.forEach { item ->
+                .fillMaxWidth()
+                .clickable {
+                    expanded = !expanded
+                },
+            value = dropDownSelectExpenseType.value,
+            onValueChange = {
 
-                DropdownMenuItem(
-                    text = {
-                            Text(
-                                text = item, style = TextStyle(
-                                    color = getTextColor(),
-                                    fontSize = 14.sp,
+            },
+            textStyle = TextStyle(
+                fontSize = 16.sp,
+                color = getTextColor(),
+                fontWeight = FontWeight.Normal
+            ), placeholder = { Text("") },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Decimal
+            ),
+            label = {
+                Row(verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Start,
+                    modifier = Modifier.fillMaxWidth()){
+                    Box(
+                        modifier = Modifier
+                            .padding(10.dp)
+                    ) {
+                        IconButton(onClick = { expanded = !expanded },
+                            modifier = Modifier
+                                .padding(end = 12.dp)
+                                .size(24.dp)
+                        ) {
+                            Icon(Icons.Default.KeyboardArrowDown, contentDescription = "Selecionar Tipo de Pagamento")
+                        }
+                        DropdownMenu(
+                            expanded = expanded,
+                            onDismissRequest = { expanded = false }
+                        ) {
+                            types.forEach { item ->
+
+                                DropdownMenuItem(
+                                    text = {
+                                        Text(
+                                            text = item, style = TextStyle(
+                                                color = getTextColor(),
+                                                fontSize = 14.sp,
+                                            )
+                                        )
+                                    },
+                                    onClick = {
+                                        dropDownSelectExpenseType.value = item
+                                        expanded = !expanded
+                                    }
                                 )
-                            )
-                    },
-                    onClick = {
-                        dropDownSelectExpenseType.value = item
-                        expanded = !expanded
+                            }
+                        }
                     }
-                )
-            }
-        }
+                    Text(
+                        text = "Tipo de Pagamento:",
+                        style = TextStyle(
+                            color = getTextColor(), fontSize = 12.sp,
+                        )
+                    )
+                }
+
+            }, enabled = false
+        )
     }
+
 }
 
 
@@ -542,59 +478,94 @@ fun ExpenseTypeDropdownMenu(types: List<String>) {
 fun ProvidersDropdownMenu(providers: List<Provider>) {
     var expanded by remember { mutableStateOf(false) }
 
-    Box(
-        modifier = Modifier
-            .padding(10.dp)
-    ) {
-        IconButton(onClick = { expanded = !expanded },
+    Row() {
+        OutlinedTextField(
             modifier = Modifier
-                .padding(end = 12.dp)
-                .size(24.dp)
-        ) {
-            Icon(Icons.Default.KeyboardArrowDown, contentDescription = "Selecionar Imóvel")
-        }
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
-            providers.forEach { item ->
-
-                DropdownMenuItem(
-                    text = {
-                        Column(
-                            horizontalAlignment = Alignment.Start,
-                            verticalArrangement = Arrangement.spacedBy(2.dp)
-
+                .fillMaxWidth()
+                .clickable {
+                    expanded = !expanded
+                },
+            value = dropDownSelectProviderName.value,
+            onValueChange = { },
+            textStyle = TextStyle(
+                fontSize = 16.sp,
+                color = getTextColor(),
+                fontWeight = FontWeight.Normal
+            ), placeholder = { Text("") },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Decimal
+            ),
+            label = {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Start,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .padding(10.dp)
+                    ) {
+                        IconButton(onClick = { expanded = !expanded },
+                            modifier = Modifier
+                                .padding(end = 12.dp)
+                                .size(24.dp)
                         ) {
-
-                            Text(
-                                text = item.name, style = TextStyle(
-                                    color = getTextColor(),
-                                    fontSize = 14.sp,
-                                )
-                            )
-
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.End,
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Spacer(modifier = Modifier.height(5.dp))
-                            }
-
+                            Icon(Icons.Default.KeyboardArrowDown, contentDescription = "Selecionar Imóvel")
                         }
-                    },
-                    onClick = {
-                        dropDownSelectProviderServiceDesc.value = ""
-                        dropDownSelectProviderId.value = item.providerId
-                        dropDownSelectProviderName.value = item.name
-                        dropDownSelectProviderServices.value = getProviderServicesList(item)
-                        expanded = !expanded
+                        DropdownMenu(
+                            expanded = expanded,
+                            onDismissRequest = { expanded = false }
+                        ) {
+                            providers.forEach { item ->
+
+                                DropdownMenuItem(
+                                    text = {
+                                        Column(
+                                            horizontalAlignment = Alignment.Start,
+                                            verticalArrangement = Arrangement.spacedBy(2.dp)
+
+                                        ) {
+
+                                            Text(
+                                                text = item.name, style = TextStyle(
+                                                    color = getTextColor(),
+                                                    fontSize = 14.sp,
+                                                )
+                                            )
+
+                                            Row(
+                                                verticalAlignment = Alignment.CenterVertically,
+                                                horizontalArrangement = Arrangement.End,
+                                                modifier = Modifier.fillMaxWidth()
+                                            ) {
+                                                Spacer(modifier = Modifier.height(5.dp))
+                                            }
+
+                                        }
+                                    },
+                                    onClick = {
+                                        dropDownSelectProviderServiceDesc.value = ""
+                                        dropDownSelectProviderId.value = item.providerId
+                                        dropDownSelectProviderName.value = item.name
+                                        dropDownSelectProviderServices.value = getProviderServicesList(item)
+                                        expanded = !expanded
+                                    }
+                                )
+                            }
+                        }
                     }
-                )
-            }
-        }
+                    Text(
+                        text = "Prestador de Serviço:",
+                        style = TextStyle(
+                            color = getTextColor(), fontSize = 12.sp,
+                        )
+                    )
+                }
+
+            }, enabled = false
+        )
     }
+
 }
 
 
@@ -602,54 +573,107 @@ fun ProvidersDropdownMenu(providers: List<Provider>) {
 fun ProviderServicesDropdownMenu(services: List<String>) {
     var expanded by remember { mutableStateOf(false) }
 
-    Box(
-        modifier = Modifier
-            .padding(10.dp)
-    ) {
-        IconButton(onClick = { expanded = !expanded },
+    Row() {
+        OutlinedTextField(
+
             modifier = Modifier
-                .padding(end = 12.dp)
-                .size(24.dp)
-        ) {
-            Icon(Icons.Default.KeyboardArrowDown, contentDescription = "Selecionar Imóvel")
-        }
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
-            services.forEach { item ->
+                .fillMaxWidth()
+                .clickable {
+                    expanded = !expanded
+                },
 
-                DropdownMenuItem(
-                    text = {
-                        Column(
-                            horizontalAlignment = Alignment.Start,
-                            verticalArrangement = Arrangement.spacedBy(2.dp)
+            value = dropDownSelectProviderServiceDesc.value,
+            onValueChange = { },
+            textStyle = TextStyle(
+                fontSize = 16.sp,
+                color = getTextColor(),
+                fontWeight = FontWeight.Normal
+            ), placeholder = { Text("") },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Decimal
+            ),
+            label = {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Start,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
 
+
+
+                    Box(
+                        modifier = Modifier
+                            .padding(10.dp)
+                    ) {
+                        IconButton(onClick = { expanded = !expanded },
+                            modifier = Modifier
+                                .padding(end = 12.dp)
+                                .size(24.dp)
                         ) {
-
-                            Text(
-                                text = item, style = TextStyle(
-                                    color = getTextColor(),
-                                    fontSize = 14.sp,
-                                )
-                            )
-
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.End,
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Spacer(modifier = Modifier.height(5.dp))
-                            }
-
+                            Icon(Icons.Default.KeyboardArrowDown, contentDescription = "Selecionar Imóvel")
                         }
-                    },
-                    onClick = {
-                        dropDownSelectProviderServiceDesc.value = item
-                        expanded = !expanded
+                        DropdownMenu(
+                            expanded = expanded,
+                            onDismissRequest = { expanded = false }
+                        ) {
+                            services.forEach { item ->
+
+                                DropdownMenuItem(
+                                    text = {
+                                        Column(
+                                            horizontalAlignment = Alignment.Start,
+                                            verticalArrangement = Arrangement.spacedBy(2.dp)
+
+                                        ) {
+
+                                            Text(
+                                                text = item, style = TextStyle(
+                                                    color = getTextColor(),
+                                                    fontSize = 14.sp,
+                                                )
+                                            )
+
+                                            Row(
+                                                verticalAlignment = Alignment.CenterVertically,
+                                                horizontalArrangement = Arrangement.End,
+                                                modifier = Modifier.fillMaxWidth()
+                                            ) {
+                                                Spacer(modifier = Modifier.height(5.dp))
+                                            }
+
+                                        }
+                                    },
+                                    onClick = {
+                                        dropDownSelectProviderServiceDesc.value = item
+                                        expanded = !expanded
+                                    }
+                                )
+                            }
+                        }
                     }
-                )
-            }
-        }
+
+                    Text(
+                        text = "Tipo de Serviço Prestado:",
+                        style = TextStyle(
+                            color = getTextColor(), fontSize = 12.sp,
+                        )
+                    )
+                }
+
+            }, enabled = false
+        )
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
