@@ -26,19 +26,26 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Divider
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -60,13 +67,8 @@ import com.apps.gtorettirsm.compose.utils.DrawScrollableView
 import com.apps.gtorettirsm.compose.utils.getButtonColor
 import com.apps.gtorettirsm.compose.utils.getRedTextColor
 import com.apps.gtorettirsm.compose.utils.getTextColor
-import com.apps.gtorettirsm.compose.utils.showToast
-import com.apps.gtorettirsm.compose.utils.toScreen
-import com.apps.gtorettirsm.data.Property
-import com.apps.gtorettirsm.data.Receipt
-import com.apps.gtorettirsm.viewmodels.ReceiptPDFViewModel
-import com.apps.gtorettirsm.viewmodels.ReceiptViewModel
-import java.text.SimpleDateFormat
+
+
 
 
 @Composable
@@ -75,8 +77,11 @@ fun PropertyExpensesCreateDialog(
     context: Context
 ) {
 
+    var propertyDesc by remember { mutableStateOf("") }
+    var propertyId by remember { mutableLongStateOf(0L) }
     var expenseValue by remember { mutableStateOf("") }
     var expenseDescription by remember { mutableStateOf("") }
+    var paymentDate by remember { mutableStateOf("") }
 
     if (openPropertyExpensesCreateDialog.value) {
         AlertDialog(shape = RoundedCornerShape(10.dp), onDismissRequest = {
@@ -100,6 +105,39 @@ fun PropertyExpensesCreateDialog(
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
 
+
+Row() {
+    OutlinedTextField(
+
+        value = propertyDesc,
+        onValueChange = {
+
+        },
+        textStyle = TextStyle(
+            fontSize = 16.sp,
+            color = getTextColor(),
+            fontWeight = FontWeight.Normal
+        ), placeholder = { Text("") },
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Decimal
+        ),
+        label = {
+            Row(verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start,
+                modifier = Modifier.fillMaxWidth()){
+                PropertiesDropdownMenu()
+                Text(
+                    text = "Imóvel:",
+                    style = TextStyle(
+                        color = getTextColor(), fontSize = 12.sp,
+                    )
+                )
+            }
+
+        }, enabled = false
+    )
+
+}
                     OutlinedTextField(
                         value = expenseValue,
                         onValueChange = {
@@ -143,6 +181,50 @@ fun PropertyExpensesCreateDialog(
                         }
                     )
 
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        OutlinedTextField(
+                            modifier = Modifier.width(160.dp),
+                            value = paymentDate,
+                            onValueChange = {
+                            },
+                            textStyle = TextStyle(
+                                fontSize = 16.sp,
+                                color = getTextColor(),
+                                fontWeight = FontWeight.Normal
+                            ),
+
+                            label = {
+                                Text(
+                                    text = "Data do Pagamento:",
+                                    style = TextStyle(
+                                        color = getTextColor(), fontSize = 12.sp,
+                                    )
+                                )
+                            },
+                            enabled = false
+                        )
+
+                        TextButton(
+                            modifier = Modifier.padding(5.dp),
+                            onClick =
+                            {
+                                //openStartDateDialog.value = true
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.DateRange,
+                                contentDescription = "Alterar a Data do Pagamento",
+                                tint = getTextColor(),
+                                modifier = Modifier
+                                    .padding(end = 12.dp)
+                                    .size(24.dp)
+                            )
+                        }
+                    }
 
 
 
@@ -175,3 +257,36 @@ fun PropertyExpensesCreateDialog(
     }
 }
 
+
+@Composable
+fun PropertiesDropdownMenu() {
+    var expanded by remember { mutableStateOf(false) }
+    val menuItemData = List(10) { "Option ${it + 1}" }
+
+    Box(
+        modifier = Modifier
+            .padding(10.dp)
+    ) {
+        IconButton(onClick = { expanded = !expanded },
+            modifier = Modifier
+                .padding(end = 12.dp)
+                .size(24.dp)
+        ) {
+            Icon(Icons.Default.KeyboardArrowDown, contentDescription = "Selecionar Imóvel")
+        }
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            menuItemData.forEach { option ->
+                DropdownMenuItem(
+                    text = { Text(option) },
+                    onClick = {
+                        expanded = !expanded
+
+                    }
+                )
+            }
+        }
+    }
+}
