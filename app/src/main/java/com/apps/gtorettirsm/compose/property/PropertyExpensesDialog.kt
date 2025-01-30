@@ -103,6 +103,11 @@ fun PropertyExpensesDialog(
                             {
                                 dropDownSelectPropertyId.value = 0L
                                 dropDownSelectPropertyDesc.value = ""
+                                dropDownSelectExpenseType.value = ""
+                                dropDownSelectProviderId.value = 0L
+                                dropDownSelectProviderName.value = ""
+                                dropDownSelectProviderServices.value = ArrayList<String>()
+                                dropDownSelectProviderServiceDesc.value = ""
                                 openPropertyExpensesCreateDialog.value = true
                             }
                         ) {

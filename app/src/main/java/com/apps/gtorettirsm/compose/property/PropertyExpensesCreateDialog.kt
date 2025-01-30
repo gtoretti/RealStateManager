@@ -279,6 +279,11 @@ if (dropDownSelectExpenseType.value.equals("Serviços Prestados")) {
             }, enabled = false
         )
     }
+}else{
+    dropDownSelectProviderId.value = 0L
+    dropDownSelectProviderName.value = ""
+    dropDownSelectProviderServices.value = ArrayList<String>()
+    dropDownSelectProviderServiceDesc.value = ""
 }
 
                     OutlinedTextField(
@@ -385,6 +390,12 @@ if (dropDownSelectExpenseType.value.equals("Serviços Prestados")) {
                         openPropertyExpensesCreateDialog.value = false
                         dropDownSelectPropertyId.value = 0L
                         dropDownSelectPropertyDesc.value = ""
+                        dropDownSelectExpenseType.value = ""
+                        dropDownSelectProviderId.value = 0L
+                        dropDownSelectProviderName.value = ""
+                        dropDownSelectProviderServices.value = ArrayList<String>()
+                        dropDownSelectProviderServiceDesc.value = ""
+
                     },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = getButtonColor()
@@ -574,6 +585,7 @@ fun ProvidersDropdownMenu(providers: List<Provider>) {
                         }
                     },
                     onClick = {
+                        dropDownSelectProviderServiceDesc.value = ""
                         dropDownSelectProviderId.value = item.providerId
                         dropDownSelectProviderName.value = item.name
                         dropDownSelectProviderServices.value = getProviderServicesList(item)
