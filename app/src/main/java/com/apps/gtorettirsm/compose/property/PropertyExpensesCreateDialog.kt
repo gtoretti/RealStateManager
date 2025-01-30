@@ -276,6 +276,28 @@ if (dropDownSelectExpenseType.value.equals("Serviços Prestados")) {
                             )
                         )
                     }
+
+                    Button(onClick = {
+                        openPropertyExpensesCreateDialog.value = false
+                        dropDownSelectPropertyId.value = 0L
+                        dropDownSelectPropertyDesc.value = ""
+                        dropDownSelectExpenseType.value = ""
+                        dropDownSelectProviderId.value = 0L
+                        dropDownSelectProviderName.value = ""
+                        dropDownSelectProviderServices.value = ArrayList<String>()
+                        dropDownSelectProviderServiceDesc.value = ""
+
+                    },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = getButtonColor()
+                        ),modifier = Modifier.height(30.dp)
+                    ) {
+                        Text(
+                            text = "Salvar", style = TextStyle(
+                                fontSize = 14.sp,
+                            )
+                        )
+                    }
                 }
             }
         )

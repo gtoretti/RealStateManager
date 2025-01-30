@@ -7,6 +7,7 @@ package com.apps.gtorettirsm.compose.property
 import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.waitForUpOrCancellation
@@ -198,7 +199,10 @@ fun PropertyCurrentContractDialog(
                                 modifier = Modifier.fillMaxWidth()
                             ) {
                                 OutlinedTextField(
-                                    modifier = Modifier.width(160.dp),
+                                    modifier = Modifier.width(160.dp)
+                                        .clickable {
+                                        openStartDateDialog.value = true
+                                    },
                                     value = startDate,
                                     onValueChange = {
                                     },
@@ -272,7 +276,10 @@ fun PropertyCurrentContractDialog(
                                 modifier = Modifier.fillMaxWidth()
                             ) {
                                 OutlinedTextField(
-                                    modifier = Modifier.width(160.dp),
+                                    modifier = Modifier.width(160.dp)
+                                        .clickable {
+                                            openEndedDateDialog.value = true
+                                        },
                                     value = endedDate,
                                     onValueChange = {
                                     },
