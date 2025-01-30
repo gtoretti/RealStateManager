@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -45,6 +46,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -63,22 +65,53 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.apps.gtorettirsm.compose.utils.DrawScrollableView
 import com.apps.gtorettirsm.compose.utils.getButtonColor
+import com.apps.gtorettirsm.compose.utils.getProviderServicesList
 import com.apps.gtorettirsm.compose.utils.getRedTextColor
 import com.apps.gtorettirsm.compose.utils.getTextColor
+import com.apps.gtorettirsm.data.Property
+import com.apps.gtorettirsm.data.Provider
+import com.apps.gtorettirsm.viewmodels.PropertyViewModel
+import com.apps.gtorettirsm.viewmodels.ProviderViewModel
+import java.util.ArrayList
+import java.util.Date
 
 
-
+val dropDownSelectPropertyId = mutableLongStateOf(0)
+val dropDownSelectPropertyDesc = mutableStateOf("")
+val dropDownSelectExpenseType = mutableStateOf("")
+val dropDownSelectProviderId = mutableLongStateOf(0)
+val dropDownSelectProviderName = mutableStateOf("")
+val dropDownSelectProviderServices = mutableStateOf(ArrayList<String>())
+val dropDownSelectProviderServiceDesc = mutableStateOf("")
 
 @Composable
 fun PropertyExpensesCreateDialog(
     openPropertyExpensesCreateDialog: MutableState<Boolean>,
     context: Context
 ) {
+    var propertyViewModel: PropertyViewModel = hiltViewModel()
+    val propertiesFlow = propertyViewModel.properties
+    val properties by propertiesFlow.collectAsStateWithLifecycle(initialValue = emptyList())
 
-    var propertyDesc by remember { mutableStateOf("") }
-    var propertyId by remember { mutableLongStateOf(0L) }
+    var providerViewModel: ProviderViewModel = hiltViewModel()
+    val providerFlow = providerViewModel.providers
+    val providers by providerFlow.collectAsStateWithLifecycle(initialValue = emptyList())
+    PropertyExpensesCreateDialog(openPropertyExpensesCreateDialog,context,properties,providers)
+}
+
+
+@Composable
+fun PropertyExpensesCreateDialog(
+    openPropertyExpensesCreateDialog: MutableState<Boolean>,
+    context: Context,
+    properties: List<Property>,
+    providers: List<Provider>
+) {
+
     var expenseValue by remember { mutableStateOf("") }
     var expenseDescription by remember { mutableStateOf("") }
     var paymentDate by remember { mutableStateOf("") }
@@ -109,7 +142,7 @@ fun PropertyExpensesCreateDialog(
 Row() {
     OutlinedTextField(
 
-        value = propertyDesc,
+        value =dropDownSelectPropertyDesc.value,
         onValueChange = {
 
         },
@@ -125,7 +158,7 @@ Row() {
             Row(verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Start,
                 modifier = Modifier.fillMaxWidth()){
-                PropertiesDropdownMenu()
+                PropertiesDropdownMenu(properties)
                 Text(
                     text = "Imóvel:",
                     style = TextStyle(
@@ -138,6 +171,116 @@ Row() {
     )
 
 }
+
+
+
+                    val types = listOf("Serviços Prestados", "Água e Esgoto","Energia Elétrica","Condomínio","Impostos", "Outros")
+                    Row() {
+                        OutlinedTextField(
+
+                            value = dropDownSelectExpenseType.value,
+                            onValueChange = {
+
+                            },
+                            textStyle = TextStyle(
+                                fontSize = 16.sp,
+                                color = getTextColor(),
+                                fontWeight = FontWeight.Normal
+                            ), placeholder = { Text("") },
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Decimal
+                            ),
+                            label = {
+                                Row(verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.Start,
+                                    modifier = Modifier.fillMaxWidth()){
+                                    ExpenseTypeDropdownMenu(types)
+                                    Text(
+                                        text = "Tipo de Pagamento:",
+                                        style = TextStyle(
+                                            color = getTextColor(), fontSize = 12.sp,
+                                        )
+                                    )
+                                }
+
+                            }, enabled = false
+                        )
+
+                    }
+
+
+
+if (dropDownSelectExpenseType.value.equals("Serviços Prestados")) {
+
+    Row() {
+        OutlinedTextField(
+
+            value = dropDownSelectProviderName.value,
+            onValueChange = {
+
+            },
+            textStyle = TextStyle(
+                fontSize = 16.sp,
+                color = getTextColor(),
+                fontWeight = FontWeight.Normal
+            ), placeholder = { Text("") },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Decimal
+            ),
+            label = {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Start,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    ProvidersDropdownMenu(providers)
+                    Text(
+                        text = "Prestador de Serviço:",
+                        style = TextStyle(
+                            color = getTextColor(), fontSize = 12.sp,
+                        )
+                    )
+                }
+
+            }, enabled = false
+        )
+    }
+
+    Row() {
+        OutlinedTextField(
+
+            value = dropDownSelectProviderServiceDesc.value,
+            onValueChange = {
+
+            },
+            textStyle = TextStyle(
+                fontSize = 16.sp,
+                color = getTextColor(),
+                fontWeight = FontWeight.Normal
+            ), placeholder = { Text("") },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Decimal
+            ),
+            label = {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Start,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    ProviderServicesDropdownMenu(dropDownSelectProviderServices.value)
+                    Text(
+                        text = "Tipo de Serviço Prestado:",
+                        style = TextStyle(
+                            color = getTextColor(), fontSize = 12.sp,
+                        )
+                    )
+                }
+
+            }, enabled = false
+        )
+    }
+}
+
                     OutlinedTextField(
                         value = expenseValue,
                         onValueChange = {
@@ -161,25 +304,6 @@ Row() {
                         }
                     )
 
-                    OutlinedTextField(
-                        value = expenseDescription,
-                        onValueChange = {
-                            expenseDescription = it
-                        },
-                        textStyle = TextStyle(
-                            fontSize = 16.sp,
-                            color = getTextColor(),
-                            fontWeight = FontWeight.Normal
-                        ),placeholder = {Text("Exemplos: reforma de telhado; impostos; conta de água...")},
-                          label = {
-                            Text(
-                                text = "Descrição:",
-                                style = TextStyle(
-                                    color = getTextColor(),fontSize = 12.sp,
-                                )
-                            )
-                        }
-                    )
 
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
@@ -226,6 +350,25 @@ Row() {
                         }
                     }
 
+                    OutlinedTextField(
+                        value = expenseDescription,
+                        onValueChange = {
+                            expenseDescription = it
+                        },
+                        textStyle = TextStyle(
+                            fontSize = 16.sp,
+                            color = getTextColor(),
+                            fontWeight = FontWeight.Normal
+                        ),placeholder = {Text("Exemplos: reforma de telhado; impostos; conta de água...")},
+                        label = {
+                            Text(
+                                text = "Descrição:",
+                                style = TextStyle(
+                                    color = getTextColor(),fontSize = 12.sp,
+                                )
+                            )
+                        }
+                    )
 
 
                 }
@@ -240,6 +383,8 @@ Row() {
                 ) {
                     Button(onClick = {
                         openPropertyExpensesCreateDialog.value = false
+                        dropDownSelectPropertyId.value = 0L
+                        dropDownSelectPropertyDesc.value = ""
                     },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = getButtonColor()
@@ -259,9 +404,8 @@ Row() {
 
 
 @Composable
-fun PropertiesDropdownMenu() {
+fun PropertiesDropdownMenu(properties: List<Property>) {
     var expanded by remember { mutableStateOf(false) }
-    val menuItemData = List(10) { "Option ${it + 1}" }
 
     Box(
         modifier = Modifier
@@ -278,12 +422,219 @@ fun PropertiesDropdownMenu() {
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {
-            menuItemData.forEach { option ->
-                DropdownMenuItem(
-                    text = { Text(option) },
-                    onClick = {
-                        expanded = !expanded
+            properties.forEach { item ->
 
+                var streetAddress = item.streetAddress + ", " + item.number
+                if (item.complement.isNotEmpty())
+                    streetAddress = streetAddress + " - " + item.complement
+
+                DropdownMenuItem(
+                    text = {
+                        Column(
+                            horizontalAlignment = Alignment.Start,
+                            verticalArrangement = Arrangement.spacedBy(2.dp)
+
+                        ) {
+
+                        Text(
+                            text = streetAddress, style = TextStyle(
+                                color = getTextColor(),
+                                fontSize = 14.sp,
+                            )
+                        )
+
+                        Text(
+                            text = item.district, style = TextStyle(
+                                color = getTextColor(),
+                                fontSize = 14.sp,
+                            )
+                        )
+                        Text(
+                            text = item.city + " - " + item.state, style = TextStyle(
+                                color = getTextColor(),
+                                fontSize = 14.sp,
+                            )
+                        )
+                        Text(
+                            text = "CEP: " + item.zipCode, style = TextStyle(
+                                color = getTextColor(),
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Bold,
+                            )
+                        )
+                            HorizontalDivider(thickness = 1.dp)
+
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.End,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Spacer(modifier = Modifier.height(5.dp))
+                            }
+
+                        }
+                           },
+                    onClick = {
+                        dropDownSelectPropertyId.value = item.propertyId
+                        dropDownSelectPropertyDesc.value = streetAddress + ", " + item.district + ", " +  item.city + " - " + item.state + ", " + item.zipCode
+                        expanded = !expanded
+                    }
+                )
+            }
+        }
+    }
+}
+
+
+@Composable
+fun ExpenseTypeDropdownMenu(types: List<String>) {
+    var expanded by remember { mutableStateOf(false) }
+
+    Box(
+        modifier = Modifier
+            .padding(10.dp)
+    ) {
+        IconButton(onClick = { expanded = !expanded },
+            modifier = Modifier
+                .padding(end = 12.dp)
+                .size(24.dp)
+        ) {
+            Icon(Icons.Default.KeyboardArrowDown, contentDescription = "Selecionar Tipo de Pagamento")
+        }
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            types.forEach { item ->
+
+                DropdownMenuItem(
+                    text = {
+                            Text(
+                                text = item, style = TextStyle(
+                                    color = getTextColor(),
+                                    fontSize = 14.sp,
+                                )
+                            )
+                    },
+                    onClick = {
+                        dropDownSelectExpenseType.value = item
+                        expanded = !expanded
+                    }
+                )
+            }
+        }
+    }
+}
+
+
+@Composable
+fun ProvidersDropdownMenu(providers: List<Provider>) {
+    var expanded by remember { mutableStateOf(false) }
+
+    Box(
+        modifier = Modifier
+            .padding(10.dp)
+    ) {
+        IconButton(onClick = { expanded = !expanded },
+            modifier = Modifier
+                .padding(end = 12.dp)
+                .size(24.dp)
+        ) {
+            Icon(Icons.Default.KeyboardArrowDown, contentDescription = "Selecionar Imóvel")
+        }
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            providers.forEach { item ->
+
+                DropdownMenuItem(
+                    text = {
+                        Column(
+                            horizontalAlignment = Alignment.Start,
+                            verticalArrangement = Arrangement.spacedBy(2.dp)
+
+                        ) {
+
+                            Text(
+                                text = item.name, style = TextStyle(
+                                    color = getTextColor(),
+                                    fontSize = 14.sp,
+                                )
+                            )
+
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.End,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Spacer(modifier = Modifier.height(5.dp))
+                            }
+
+                        }
+                    },
+                    onClick = {
+                        dropDownSelectProviderId.value = item.providerId
+                        dropDownSelectProviderName.value = item.name
+                        dropDownSelectProviderServices.value = getProviderServicesList(item)
+                        expanded = !expanded
+                    }
+                )
+            }
+        }
+    }
+}
+
+
+@Composable
+fun ProviderServicesDropdownMenu(services: List<String>) {
+    var expanded by remember { mutableStateOf(false) }
+
+    Box(
+        modifier = Modifier
+            .padding(10.dp)
+    ) {
+        IconButton(onClick = { expanded = !expanded },
+            modifier = Modifier
+                .padding(end = 12.dp)
+                .size(24.dp)
+        ) {
+            Icon(Icons.Default.KeyboardArrowDown, contentDescription = "Selecionar Imóvel")
+        }
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            services.forEach { item ->
+
+                DropdownMenuItem(
+                    text = {
+                        Column(
+                            horizontalAlignment = Alignment.Start,
+                            verticalArrangement = Arrangement.spacedBy(2.dp)
+
+                        ) {
+
+                            Text(
+                                text = item, style = TextStyle(
+                                    color = getTextColor(),
+                                    fontSize = 14.sp,
+                                )
+                            )
+
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.End,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Spacer(modifier = Modifier.height(5.dp))
+                            }
+
+                        }
+                    },
+                    onClick = {
+                        dropDownSelectProviderServiceDesc.value = item
+                        expanded = !expanded
                     }
                 )
             }

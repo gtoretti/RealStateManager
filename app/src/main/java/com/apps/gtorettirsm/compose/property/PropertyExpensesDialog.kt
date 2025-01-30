@@ -101,6 +101,8 @@ fun PropertyExpensesDialog(
                             modifier = Modifier.padding(5.dp),
                             onClick =
                             {
+                                dropDownSelectPropertyId.value = 0L
+                                dropDownSelectPropertyDesc.value = ""
                                 openPropertyExpensesCreateDialog.value = true
                             }
                         ) {
