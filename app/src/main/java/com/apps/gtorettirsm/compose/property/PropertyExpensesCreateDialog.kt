@@ -72,6 +72,7 @@ import com.apps.gtorettirsm.compose.utils.getButtonColor
 import com.apps.gtorettirsm.compose.utils.getProviderServicesList
 import com.apps.gtorettirsm.compose.utils.getRedTextColor
 import com.apps.gtorettirsm.compose.utils.getTextColor
+import com.apps.gtorettirsm.compose.utils.showToast
 import com.apps.gtorettirsm.data.Property
 import com.apps.gtorettirsm.data.Provider
 import com.apps.gtorettirsm.viewmodels.PropertyViewModel
@@ -278,14 +279,31 @@ if (dropDownSelectExpenseType.value.equals("Serviços Prestados")) {
                     }
 
                     Button(onClick = {
-                        openPropertyExpensesCreateDialog.value = false
-                        dropDownSelectPropertyId.value = 0L
-                        dropDownSelectPropertyDesc.value = ""
-                        dropDownSelectExpenseType.value = ""
-                        dropDownSelectProviderId.value = 0L
-                        dropDownSelectProviderName.value = ""
-                        dropDownSelectProviderServices.value = ArrayList<String>()
-                        dropDownSelectProviderServiceDesc.value = ""
+                        if (dropDownSelectPropertyId.value == 0L){
+                            showToast("Por favor, selecione o imóvel referente ao pagamento.",context)
+                        }else
+                            if (dropDownSelectExpenseType.value == ""){
+                                showToast("Por favor, selecione o tipo do pagamento.",context)
+                            }else
+                                if (dropDownSelectExpenseType.value.equals("Serviços Prestados") && dropDownSelectProviderId.value == 0L){
+                                    showToast("Por favor, selecione o prestador de serviço.",context)
+                                }else
+                                    if (dropDownSelectExpenseType.value.equals("Serviços Prestados") && dropDownSelectProviderServiceDesc.value == ""){
+                                        showToast("Por favor, selecione o tipo de serviço prestado.",context)
+                                    }else{
+
+
+
+                                        openPropertyExpensesCreateDialog.value = false
+                                        dropDownSelectPropertyId.value = 0L
+                                        dropDownSelectPropertyDesc.value = ""
+                                        dropDownSelectExpenseType.value = ""
+                                        dropDownSelectProviderId.value = 0L
+                                        dropDownSelectProviderName.value = ""
+                                        dropDownSelectProviderServices.value = ArrayList<String>()
+                                        dropDownSelectProviderServiceDesc.value = ""
+                                    }
+
 
                     },
                         colors = ButtonDefaults.buttonColors(
