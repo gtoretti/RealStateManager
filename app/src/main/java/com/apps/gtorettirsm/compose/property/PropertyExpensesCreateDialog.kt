@@ -72,11 +72,15 @@ import com.apps.gtorettirsm.compose.utils.getButtonColor
 import com.apps.gtorettirsm.compose.utils.getProviderServicesList
 import com.apps.gtorettirsm.compose.utils.getRedTextColor
 import com.apps.gtorettirsm.compose.utils.getTextColor
+import com.apps.gtorettirsm.compose.utils.screenToDouble
 import com.apps.gtorettirsm.compose.utils.showToast
+import com.apps.gtorettirsm.data.Expense
 import com.apps.gtorettirsm.data.Property
 import com.apps.gtorettirsm.data.Provider
+import com.apps.gtorettirsm.viewmodels.ExpenseViewModel
 import com.apps.gtorettirsm.viewmodels.PropertyViewModel
 import com.apps.gtorettirsm.viewmodels.ProviderViewModel
+import java.text.SimpleDateFormat
 import java.util.ArrayList
 import java.util.Date
 
@@ -101,7 +105,10 @@ fun PropertyExpensesCreateDialog(
     var providerViewModel: ProviderViewModel = hiltViewModel()
     val providerFlow = providerViewModel.providers
     val providers by providerFlow.collectAsStateWithLifecycle(initialValue = emptyList())
-    PropertyExpensesCreateDialog(openPropertyExpensesCreateDialog,context,properties,providers)
+
+    var expenseViewModel: ExpenseViewModel = hiltViewModel()
+
+    PropertyExpensesCreateDialog(openPropertyExpensesCreateDialog,context,properties,providers,expenseViewModel)
 }
 
 
@@ -110,12 +117,15 @@ fun PropertyExpensesCreateDialog(
     openPropertyExpensesCreateDialog: MutableState<Boolean>,
     context: Context,
     properties: List<Property>,
-    providers: List<Provider>
+    providers: List<Provider>,
+    expenseViewModel: ExpenseViewModel
 ) {
 
     var expenseValue by remember { mutableStateOf("") }
     var expenseDescription by remember { mutableStateOf("") }
     var paymentDate by remember { mutableStateOf("") }
+    val openDateDialog = remember { mutableStateOf(false) }
+
 
     if (openPropertyExpensesCreateDialog.value) {
         AlertDialog(shape = RoundedCornerShape(10.dp), onDismissRequest = {
@@ -186,7 +196,10 @@ if (dropDownSelectExpenseType.value.equals("Serviços Prestados")) {
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         OutlinedTextField(
-                            modifier = Modifier.width(160.dp),
+                            modifier = Modifier.width(160.dp)
+                                .clickable {
+                                    openDateDialog.value = true
+                                },
                             value = paymentDate,
                             onValueChange = {
                             },
@@ -211,7 +224,7 @@ if (dropDownSelectExpenseType.value.equals("Serviços Prestados")) {
                             modifier = Modifier.padding(5.dp),
                             onClick =
                             {
-                                //openStartDateDialog.value = true
+                                openDateDialog.value = true
                             },
                         ) {
                             Icon(
@@ -246,6 +259,19 @@ if (dropDownSelectExpenseType.value.equals("Serviços Prestados")) {
                     )
 
 
+                }
+
+
+                when {
+                    openDateDialog.value -> {
+                        DatePickerModal(
+                            onDateSelected = {
+                                if (it != null) {
+                                    paymentDate = SimpleDateFormat("dd/MM/yyyy").format(Date(it))
+                                }
+                            }, openDialog = openDateDialog, title = "Data do Pagamento"
+                        )
+                    }
                 }
 
             }, confirmButton = {
@@ -290,19 +316,34 @@ if (dropDownSelectExpenseType.value.equals("Serviços Prestados")) {
                                 }else
                                     if (dropDownSelectExpenseType.value.equals("Serviços Prestados") && dropDownSelectProviderServiceDesc.value == ""){
                                         showToast("Por favor, selecione o tipo de serviço prestado.",context)
-                                    }else{
+                                    }else
+                                        if (expenseValue.trim().isEmpty()){
+                                        showToast("Por favor, informe o valor do serviço prestado.",context)
+                                    }else
+                                            if (paymentDate.trim().isEmpty()){
+                                                showToast("Por favor, informe a data do pagamento.",context)
+                                            }else
+                                    {
+                                        var desc = expenseDescription
+                                            if (dropDownSelectProviderServiceDesc.value.trim().isNotEmpty())
+                                                desc = desc + " - " + dropDownSelectProviderServiceDesc.value
 
+                                            val fmt = SimpleDateFormat("dd/MM/yyyy")
+                                            var dateDt = fmt.parse(paymentDate)
 
+                            expenseViewModel.saveExpense(Expense(0L,dateDt,dropDownSelectPropertyId.value,expenseValue.screenToDouble(),desc,"",dropDownSelectProviderId.value))
+                            showToast("Pagamento registrado com sucesso!",context)
 
-                                        openPropertyExpensesCreateDialog.value = false
-                                        dropDownSelectPropertyId.value = 0L
-                                        dropDownSelectPropertyDesc.value = ""
-                                        dropDownSelectExpenseType.value = ""
-                                        dropDownSelectProviderId.value = 0L
-                                        dropDownSelectProviderName.value = ""
-                                        dropDownSelectProviderServices.value = ArrayList<String>()
-                                        dropDownSelectProviderServiceDesc.value = ""
-                                    }
+                            openPropertyExpensesCreateDialog.value = false
+                            dropDownSelectPropertyId.value = 0L
+                            dropDownSelectPropertyDesc.value = ""
+                            dropDownSelectExpenseType.value = ""
+                            dropDownSelectProviderId.value = 0L
+                            dropDownSelectProviderName.value = ""
+                            dropDownSelectProviderServices.value = ArrayList<String>()
+                            dropDownSelectProviderServiceDesc.value = ""
+                        }
+
 
 
                     },
@@ -703,17 +744,4 @@ fun ProviderServicesDropdownMenu(services: List<String>) {
             }, enabled = false
         )
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

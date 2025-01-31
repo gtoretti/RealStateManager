@@ -5,6 +5,7 @@ package com.apps.gtorettirsm.di
 
 import android.content.Context
 import com.apps.gtorettirsm.data.AppDatabase
+import com.apps.gtorettirsm.data.ExpenseDao
 import com.apps.gtorettirsm.data.MonthlyBillingDao
 import com.apps.gtorettirsm.data.PropertyDao
 import com.apps.gtorettirsm.data.ProviderDao
@@ -50,5 +51,10 @@ class DatabaseModule {
     @Provides
     fun provideReceiptPDFDao(appDatabase: AppDatabase): ReceiptPDFDao {
         return appDatabase.receiptPDFDao()
+    }
+
+    @Provides
+    fun provideExpenseDao(appDatabase: AppDatabase): ExpenseDao {
+        return appDatabase.expenseDao()
     }
 }
