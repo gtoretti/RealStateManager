@@ -14,10 +14,14 @@ import java.util.Date
  */
 @Dao
 interface ExpenseDao {
-    @Query("SELECT * FROM expense where id = :expenseId ORDER BY date DESC")
-    fun getExpenses(expenseId: Long): Flow<List<Expense>>
+
+    @Query("SELECT * FROM expense where propertyId = :propertyId ORDER BY date DESC")
+    fun getExpenses(propertyId: Long): Flow<List<Expense>>
 
     @Upsert
     suspend fun upsert(expense: Expense)
+
+    @Query("DELETE FROM expense where id = :expenseId")
+    suspend fun delete(expenseId: Long)
 
 }

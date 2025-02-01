@@ -13,12 +13,12 @@ import kotlinx.coroutines.flow.Flow
  */
 @Dao
 interface ReceivingDao {
-    @Query("SELECT * FROM receiving where propertyId = :propertyId ")
+    @Query("SELECT * FROM receiving where propertyId = :propertyId ORDER BY receivingDate DESC")
     fun getReceivings(propertyId: Long): Flow<List<Receiving>>
 
     @Upsert
     suspend fun upsert(receiving: Receiving)
 
-    @Query("DELETE FROM receiving where id = :monthlyBillingId")
-    suspend fun delete(monthlyBillingId: Long)
+    @Query("DELETE FROM receiving where id = :receivingId")
+    suspend fun delete(receivingId: Long)
 }

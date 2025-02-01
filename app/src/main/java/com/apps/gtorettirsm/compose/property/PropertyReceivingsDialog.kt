@@ -24,6 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -33,15 +34,32 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.apps.gtorettirsm.compose.utils.DrawScrollableView
 import com.apps.gtorettirsm.compose.utils.getButtonColor
 import com.apps.gtorettirsm.compose.utils.getRedTextColor
 import com.apps.gtorettirsm.compose.utils.getTextColor
-
+import com.apps.gtorettirsm.data.Property
+import com.apps.gtorettirsm.viewmodels.PropertyViewModel
 
 @Composable
 fun PropertyReceivingsDialog(
     openPropertyExpensesDialog: MutableState<Boolean>,
     context: Context
+)  {
+    var propertyViewModel: PropertyViewModel = hiltViewModel()
+    val propertiesFlow = propertyViewModel.properties
+    val properties by propertiesFlow.collectAsStateWithLifecycle(initialValue = emptyList())
+
+    PropertyReceivingsDialog(openPropertyExpensesDialog,context,properties)
+}
+
+@Composable
+fun PropertyReceivingsDialog(
+    openPropertyExpensesDialog: MutableState<Boolean>,
+    context: Context,
+    properties: List<Property>,
 ) {
 
     val openPropertyReceivingsCreateDialog = remember { mutableStateOf(false) }
@@ -108,7 +126,14 @@ fun PropertyReceivingsDialog(
                         }
                     }
 
+                    PropertiesDropdownMenu(properties)
+                    DrawScrollableView(
+                        modifier = Modifier.padding(horizontal = 10.dp),
+                        content = {
 
+
+
+                        })
 
 
 
@@ -124,6 +149,8 @@ fun PropertyReceivingsDialog(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Button(onClick = {
+                        dropDownSelectPropertyId.value = 0L
+                        dropDownSelectPropertyDesc.value = ""
                         openPropertyExpensesDialog.value = false
                     },
                         colors = ButtonDefaults.buttonColors(
