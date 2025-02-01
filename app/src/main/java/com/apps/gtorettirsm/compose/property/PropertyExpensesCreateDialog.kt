@@ -5,8 +5,6 @@ package com.apps.gtorettirsm.compose.property
 
 
 import android.content.Context
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -320,16 +318,16 @@ if (dropDownSelectExpenseType.value.equals("Serviços Prestados")) {
                                         if (expenseValue.trim().isEmpty()){
                                         showToast("Por favor, informe o valor pago.",context)
                                     }else
-                                            if (paymentDate.trim().isEmpty()){
+                                        if (paymentDate.trim().isEmpty()){
                                                 showToast("Por favor, informe a data do pagamento.",context)
-                                            }else
-                                    {
-                                        var desc = expenseDescription
-                                            if (dropDownSelectProviderServiceDesc.value.trim().isNotEmpty())
-                                                desc = desc + " - " + dropDownSelectProviderServiceDesc.value
+                                        }else
+                                            {
+                                                var desc = expenseDescription
+                                                    if (dropDownSelectProviderServiceDesc.value.trim().isNotEmpty())
+                                                        desc = desc + " - " + dropDownSelectProviderServiceDesc.value
 
-                                            val fmt = SimpleDateFormat("dd/MM/yyyy")
-                                            var dateDt = fmt.parse(paymentDate)
+                                                    val fmt = SimpleDateFormat("dd/MM/yyyy")
+                                                    var dateDt = fmt.parse(paymentDate)
 
                             expenseViewModel.saveExpense(Expense(0L,dateDt,dropDownSelectPropertyId.value,expenseValue.screenToDouble(),desc,"",dropDownSelectProviderId.value))
                             showToast("Pagamento registrado com sucesso!",context)

@@ -9,7 +9,7 @@ import javax.inject.Singleton
 @Singleton
 class ExpenseRepository @Inject constructor(private val expenseDao: ExpenseDao) {
 
-
+    fun getExpensesByProperty(id:Long) = expenseDao.getExpenses(id)
 
     suspend fun saveExpense(expense: Expense){
         expenseDao.upsert(expense)

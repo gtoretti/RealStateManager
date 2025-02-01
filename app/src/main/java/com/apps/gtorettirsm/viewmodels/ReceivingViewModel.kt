@@ -20,6 +20,8 @@ class ReceivingViewModel @Inject internal constructor(
     private val receivingRepository: ReceivingRepository,
 ) : ViewModel() {
 
+    fun getReceivingsByProperty(id:Long) = receivingRepository.getReceivings(id)
+
     fun saveReceiving(receiving: Receiving) {
         viewModelScope.launch {
             receivingRepository.saveReceiving(receiving)

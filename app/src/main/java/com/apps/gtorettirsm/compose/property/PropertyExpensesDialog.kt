@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
@@ -30,6 +31,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -41,7 +43,10 @@ import com.apps.gtorettirsm.compose.utils.DrawScrollableView
 import com.apps.gtorettirsm.compose.utils.getButtonColor
 import com.apps.gtorettirsm.compose.utils.getRedTextColor
 import com.apps.gtorettirsm.compose.utils.getTextColor
+import com.apps.gtorettirsm.compose.utils.toScreen
+import com.apps.gtorettirsm.data.Expense
 import com.apps.gtorettirsm.data.Property
+import com.apps.gtorettirsm.viewmodels.ExpenseViewModel
 import com.apps.gtorettirsm.viewmodels.PropertyViewModel
 
 @Composable
@@ -66,6 +71,9 @@ fun PropertyExpensesDialog(
 
     val openPropertyExpensesCreateDialog = remember { mutableStateOf(false) }
 
+    var expenseViewModel: ExpenseViewModel = hiltViewModel()
+    val expensesFlow = expenseViewModel.getExpensesByProperty(dropDownSelectPropertyId.value)
+    val expenses by expensesFlow.collectAsStateWithLifecycle(initialValue = emptyList())
 
     if (openPropertyExpensesDialog.value) {
         AlertDialog(shape = RoundedCornerShape(10.dp), onDismissRequest = {
@@ -132,6 +140,33 @@ fun PropertyExpensesDialog(
                     DrawScrollableView(
                         modifier = Modifier.padding(horizontal = 10.dp),
                         content = {
+                            Column {
+                            expenses.forEach { item ->
+
+
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.SpaceBetween,
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .selectable(
+                                                selected = false,
+                                                onClick = {
+
+                                                },
+                                                role = Role.Button
+                                            )
+                                    ) {
+
+
+                                        Text(text = item.value.toScreen())
+
+                                    }
+                                }
+
+
+
+                            }
 
 
 
