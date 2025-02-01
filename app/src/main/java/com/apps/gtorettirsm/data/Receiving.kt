@@ -8,12 +8,12 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.Date
 
-@Entity(tableName = "monthlyBilling")
-data class MonthlyBilling(
-    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val monthlyBillingId: Long,
-    val date: Date,
+@Entity(tableName = "receiving")
+data class Receiving(
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val receivingId: Long,
+    val receivingDate: Date,
     val propertyId: Long,
     val totalValue: Double,
-    var receiptId: Long,
+    val billingDate: Date,
     val comments: String,
 )

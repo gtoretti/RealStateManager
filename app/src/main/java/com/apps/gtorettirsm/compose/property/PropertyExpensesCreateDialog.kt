@@ -318,7 +318,7 @@ if (dropDownSelectExpenseType.value.equals("Serviços Prestados")) {
                                         showToast("Por favor, selecione o tipo de serviço prestado.",context)
                                     }else
                                         if (expenseValue.trim().isEmpty()){
-                                        showToast("Por favor, informe o valor do serviço prestado.",context)
+                                        showToast("Por favor, informe o valor pago.",context)
                                     }else
                                             if (paymentDate.trim().isEmpty()){
                                                 showToast("Por favor, informe a data do pagamento.",context)

@@ -41,16 +41,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.apps.gtorettirsm.compose.utils.getRedTextColor
 import com.apps.gtorettirsm.compose.utils.getTextColor
 import com.apps.gtorettirsm.data.Property
-import com.apps.gtorettirsm.viewmodels.MonthlyBillingViewModel
 import com.apps.gtorettirsm.viewmodels.PropertyViewModel
-import com.apps.gtorettirsm.viewmodels.ReceiptPDFViewModel
-import com.apps.gtorettirsm.viewmodels.ReceiptViewModel
 import kotlinx.coroutines.flow.Flow
 import java.util.Date
 
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.material.icons.filled.Call
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import com.apps.gtorettirsm.R

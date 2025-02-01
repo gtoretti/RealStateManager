@@ -6,10 +6,9 @@ package com.apps.gtorettirsm.di
 import android.content.Context
 import com.apps.gtorettirsm.data.AppDatabase
 import com.apps.gtorettirsm.data.ExpenseDao
-import com.apps.gtorettirsm.data.MonthlyBillingDao
+import com.apps.gtorettirsm.data.ReceivingDao
 import com.apps.gtorettirsm.data.PropertyDao
 import com.apps.gtorettirsm.data.ProviderDao
-import com.apps.gtorettirsm.data.ReceiptDao
 import com.apps.gtorettirsm.data.ReceiptPDFDao
 import dagger.Module
 import dagger.Provides
@@ -39,16 +38,6 @@ class DatabaseModule {
     }
 
     @Provides
-    fun provideMonthlyBillingDao(appDatabase: AppDatabase): MonthlyBillingDao {
-        return appDatabase.monthlyBillingDao()
-    }
-
-    @Provides
-    fun provideReceiptDao(appDatabase: AppDatabase): ReceiptDao {
-        return appDatabase.receiptDao()
-    }
-
-    @Provides
     fun provideReceiptPDFDao(appDatabase: AppDatabase): ReceiptPDFDao {
         return appDatabase.receiptPDFDao()
     }
@@ -56,5 +45,10 @@ class DatabaseModule {
     @Provides
     fun provideExpenseDao(appDatabase: AppDatabase): ExpenseDao {
         return appDatabase.expenseDao()
+    }
+
+    @Provides
+    fun provideReceivingDao(appDatabase: AppDatabase): ReceivingDao {
+        return appDatabase.receivingDao()
     }
 }

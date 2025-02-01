@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -35,36 +34,23 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.apps.gtorettirsm.compose.profile.providerId
-import com.apps.gtorettirsm.compose.utils.DrawScrollableView
 import com.apps.gtorettirsm.compose.utils.getButtonColor
-import com.apps.gtorettirsm.compose.utils.getRedTextColor
 import com.apps.gtorettirsm.compose.utils.getTextColor
-import com.apps.gtorettirsm.compose.utils.showToast
-import com.apps.gtorettirsm.compose.utils.toScreen
 import com.apps.gtorettirsm.data.Property
 import com.apps.gtorettirsm.viewmodels.PropertyViewModel
-import com.apps.gtorettirsm.viewmodels.ReceiptPDFViewModel
-import com.apps.gtorettirsm.viewmodels.ReceiptViewModel
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.HashMap
 
 
 @Composable
@@ -82,10 +68,12 @@ fun FinancialScreen(
 
     val context = LocalContext.current
     var openPropertyExpensesDialog = remember { mutableStateOf(false) }
+    var openPropertyReceivingsDialog = remember { mutableStateOf(false) }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
             .verticalScroll(rememberScrollState()),
     ) {
         Card(
@@ -112,7 +100,9 @@ fun FinancialScreen(
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 5.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 5.dp)
         ) {
 
             Button(
@@ -135,6 +125,7 @@ fun FinancialScreen(
 
             Button(
                 onClick = {
+                    openPropertyReceivingsDialog.value = true
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = getButtonColor()
@@ -174,7 +165,9 @@ fun FinancialScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             OutlinedTextField(
-                modifier = Modifier.width(112.dp).padding(horizontal = 3.dp),
+                modifier = Modifier
+                    .width(112.dp)
+                    .padding(horizontal = 3.dp),
                 value = "",
                 onValueChange = {
                 },
@@ -214,7 +207,9 @@ fun FinancialScreen(
 
 
             OutlinedTextField(
-                modifier = Modifier.width(112.dp).padding(horizontal = 3.dp),
+                modifier = Modifier
+                    .width(112.dp)
+                    .padding(horizontal = 3.dp),
                 value = "",
                 onValueChange = {
                 },
@@ -275,7 +270,9 @@ fun FinancialScreen(
         Column(
             horizontalAlignment = Alignment.Start,
             modifier = Modifier
-                .fillMaxWidth().padding(horizontal = 2.dp).border(1.dp, Color.Gray)
+                .fillMaxWidth()
+                .padding(horizontal = 2.dp)
+                .border(1.dp, Color.Gray)
                 //.verticalScroll(rememberScrollState()),
         ) {
 
@@ -450,6 +447,14 @@ fun FinancialScreen(
         openPropertyExpensesDialog.value -> {
             PropertyExpensesDialog(
                 openPropertyExpensesDialog,
+                context)
+        }
+    }
+
+    when {
+        openPropertyReceivingsDialog.value -> {
+            PropertyReceivingsDialog(
+                openPropertyReceivingsDialog,
                 context)
         }
     }

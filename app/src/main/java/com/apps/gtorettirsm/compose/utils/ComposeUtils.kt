@@ -19,24 +19,20 @@ import android.widget.ListPopupWindow
 import android.widget.ScrollView
 import android.widget.Toast
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.FileProvider
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 //import com.google.android.gms.ads.AdRequest
 //import com.google.android.gms.ads.AdView
-import com.apps.gtorettirsm.compose.property.getMonthName
-import com.apps.gtorettirsm.data.MonthlyBilling
+
+import com.apps.gtorettirsm.data.Receiving
 import com.apps.gtorettirsm.data.Property
 import com.apps.gtorettirsm.data.Profile
 import com.apps.gtorettirsm.data.Provider
-import com.apps.gtorettirsm.data.Receipt
 import com.apps.gtorettirsm.data.ReceiptPDF
-import com.apps.gtorettirsm.viewmodels.ReceiptViewModel
-import kotlinx.coroutines.flow.Flow
+import com.apps.gtorettirsm.viewmodels.ReceivingViewModel
 import java.io.File
 import java.io.FileOutputStream
 import java.math.RoundingMode
@@ -126,11 +122,11 @@ fun generatePDF(header: String,
 }
 
 
-fun filterMonthlyBillingsByMonth(list: List<MonthlyBilling>, month: Int, year: Int): List<MonthlyBilling> {
-    var ret: ArrayList<MonthlyBilling> = ArrayList()
+fun filterMonthlyBillingsByMonth(list: List<Receiving>, month: Int, year: Int): List<Receiving> {
+    var ret: ArrayList<Receiving> = ArrayList()
     list.forEach { a ->
         var d = Calendar.getInstance()
-        d.time = a.date
+        d.time = a.billingDate
         if (d.get(Calendar.MONTH) == month && d.get(Calendar.YEAR) == year) ret.add(a)
     }
     return ret
@@ -165,16 +161,6 @@ fun defaultNaoInformado(l: Double): String {
     return r
 }
 
-fun filterReceiptsByMonth(list: List<Receipt>, month: Int, year: Int): List<Receipt> {
-    var ret: ArrayList<Receipt> = ArrayList()
-    list.forEach { a ->
-        var d = Calendar.getInstance()
-        d.time = a.date
-        if (d.get(Calendar.MONTH) == month && d.get(Calendar.YEAR) == year) ret.add(a)
-    }
-    return ret
-}
-
 fun String.replaceLast(oldValue: String, newValue: String): String {
     val lastIndex = lastIndexOf(oldValue)
     if (lastIndex == -1) {
@@ -205,11 +191,11 @@ fun Double.toScreen(): String {
 fun generateReceipt(
     profile: Profile,
     patient: Property,
-    list: List<MonthlyBilling>,
+    list: List<Receiving>,
     selected: List<Long>,
     receiptDate: Calendar,
     context: Context,
-    receiptViewModel: ReceiptViewModel,
+    receivingViewModel: ReceivingViewModel,
 ) {
 
     var receiptTotalValue: Double = 0.0
@@ -220,7 +206,7 @@ fun generateReceipt(
 
 
     var receiptDateDescr =
-       sdfDay.format(receiptDate.time) + " de " + getMonthName(receiptDate.get(Calendar.MONTH)) + " de " + receiptDate.get(Calendar.YEAR)
+       sdfDay.format(receiptDate.time) + " de " + " de " + receiptDate.get(Calendar.YEAR)
 
 
     var daysDescr = ""
@@ -230,22 +216,13 @@ fun generateReceipt(
     var year:Int = 0
     list.forEach { monthlyBilling ->
 
-        if (selected.contains(monthlyBilling.monthlyBillingId)) {
-            receiptTotalValue = receiptTotalValue + patient.rentalMonthlyPrice
-            sessionValue = monthlyBilling.totalValue
-            var attDate = Calendar.getInstance()
-            attDate.time = monthlyBilling.date
-            daysDescr = daysDescr + attDate.get(Calendar.DAY_OF_MONTH) + " , "
-            month = attDate.get(Calendar.MONTH)
-            year = attDate.get(Calendar.YEAR)
-            qtdMonthlyBillings++
-        }
+
     }
 
     if (daysDescr.length > 0) {
         daysDescr = daysDescr.substring(
             0, daysDescr.length - 3
-        ) + " de " + getMonthName(month) + " de " + year
+        ) + " de " + " de " + year
         daysDescr = daysDescr.replaceLast(",", "e")
     }
 
@@ -274,10 +251,9 @@ fun generateReceipt(
     var pdfFileName = patient.streetAddress.replace(" ","_") + "_" + (receiptDate.get(Calendar.MONTH)+1) + "_" + receiptDate.get(Calendar.YEAR) + "-" + Date().time.milliseconds
 
     //setting received date same as receiptDate just because received date is not null
-    var receipt = Receipt(0, receiptDate.time, patient.propertyId, receiptTotalValue, receiptDate.time, 0)
-    var receiptPDF = ReceiptPDF(0,0,header,body,signingName,signingCPF,footer,pdfFileName)
+     var receiptPDF = ReceiptPDF(0,0,header,body,signingName,signingCPF,footer,pdfFileName)
 
-    receiptViewModel.saveReceipt(receipt, list, selected,receiptPDF)
+
     showToast("Recibo registrado com sucesso! Criando arquivo PDF para assinatura...", context)
     generatePDF(header,body,signingName, signingCPF, footer, context, pdfFileName)
 }
