@@ -89,7 +89,8 @@ import java.util.Date
 @Composable
 fun PropertyReceivingsCreateDialog(
     openPropertyReceivingsCreateDialog: MutableState<Boolean>,
-    context: Context
+    context: Context,
+    receivingId: Long
 ) {
     var propertyViewModel: PropertyViewModel = hiltViewModel()
     val propertiesFlow = propertyViewModel.properties
@@ -273,7 +274,7 @@ fun PropertyReceivingsCreateDialog(
 
                     Button(onClick = {
                         if (dropDownSelectPropertyId.value == 0L){
-                            showToast("Por favor, selecione o imóvel referente ao pagamento.",context)
+                            showToast("Por favor, selecione o imóvel referente ao recebimento.",context)
                         }else
 
                                         if (receivingValue.trim().isEmpty()){

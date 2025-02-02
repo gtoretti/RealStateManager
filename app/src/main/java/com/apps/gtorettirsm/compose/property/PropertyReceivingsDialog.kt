@@ -8,6 +8,7 @@ import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -27,6 +28,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -74,6 +76,7 @@ fun PropertyReceivingsDialog(
     var receivingViewModel: ReceivingViewModel = hiltViewModel()
     val receivingsFlow = receivingViewModel.getReceivingsByProperty(dropDownSelectPropertyId.value)
     val receivings by receivingsFlow.collectAsStateWithLifecycle(initialValue = emptyList())
+    var receivingId = remember { mutableLongStateOf(0L) }
 
     if (openPropertyExpensesDialog.value) {
         AlertDialog(shape = RoundedCornerShape(10.dp), onDismissRequest = {
@@ -136,7 +139,40 @@ fun PropertyReceivingsDialog(
                         }
                     }
 
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.End,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Spacer(modifier = Modifier.height(10.dp))
+                    }
+                    Text(
+                        text = "Recebimentos Realizados:",
+                        style = TextStyle(
+                            color = getTextColor(),
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                        )
+                    )
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.End,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Spacer(modifier = Modifier.height(10.dp))
+                    }
+
                     PropertiesDropdownMenu(properties)
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.End,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Spacer(modifier = Modifier.height(10.dp))
+                    }
+
                     DrawScrollableView(
                         modifier = Modifier.padding(horizontal = 10.dp),
                         content = {
@@ -154,7 +190,7 @@ fun PropertyReceivingsDialog(
                                             .selectable(
                                                 selected = false,
                                                 onClick = {
-
+                                                    receivingId.value = item.receivingId
                                                 },
                                                 role = Role.Button
                                             )
@@ -163,7 +199,8 @@ fun PropertyReceivingsDialog(
 
                                         Column(
                                             modifier = Modifier
-                                                .fillMaxWidth())
+                                                .fillMaxWidth()
+                                                .padding(horizontal = 5.dp))
                                         {
                                             Row(
                                                 verticalAlignment = Alignment.CenterVertically,
@@ -174,21 +211,21 @@ fun PropertyReceivingsDialog(
                                                 Text(
                                                     text = fmt.format(item.receivingDate), style = TextStyle(
                                                         color = getTextColor(),
-                                                        fontSize = 14.sp,
+                                                        fontSize = 15.sp,
                                                     )
                                                 )
 
                                                 Text(
                                                     text = item.totalValue.toScreen(), style = TextStyle(
                                                         color = getTextColor(),
-                                                        fontSize = 14.sp,
+                                                        fontSize = 15.sp,
                                                     )
                                                 )
                                             }
                                             Text(
                                                 text = item.comments, style = TextStyle(
                                                     color = getTextColor(),
-                                                    fontSize = 14.sp,
+                                                    fontSize = 15.sp,
                                                 )
                                             )
                                             HorizontalDivider(thickness = 1.dp)
@@ -241,6 +278,7 @@ fun PropertyReceivingsDialog(
                 PropertyReceivingsCreateDialog(
                     openPropertyReceivingsCreateDialog = openPropertyReceivingsCreateDialog,
                     context = context,
+                    receivingId.value
                 )
             }
         }

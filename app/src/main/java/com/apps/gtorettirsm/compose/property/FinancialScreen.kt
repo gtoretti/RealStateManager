@@ -114,7 +114,7 @@ fun FinancialScreen(
                 ), modifier = Modifier.height(33.dp)
             ) {
                 Text(
-                    text = "Pagamentos",
+                    text = "Desenbolsos",
                     style = TextStyle(
                         fontSize = 14.sp,
                     )
@@ -391,7 +391,7 @@ fun FinancialScreen(
             )
         )
         Text(
-            text = "Total de Pagamentos (-): ",
+            text = "Total de Desenbolsos (-): ",
             style = TextStyle(
                 color = getTextColor(),
                 fontSize = 16.sp,

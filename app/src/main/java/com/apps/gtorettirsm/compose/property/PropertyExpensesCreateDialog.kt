@@ -94,7 +94,8 @@ val dropDownSelectProviderServiceDesc = mutableStateOf("")
 @Composable
 fun PropertyExpensesCreateDialog(
     openPropertyExpensesCreateDialog: MutableState<Boolean>,
-    context: Context
+    context: Context,
+    expenseId: Long
 ) {
     var propertyViewModel: PropertyViewModel = hiltViewModel()
     val propertiesFlow = propertyViewModel.properties
@@ -106,7 +107,7 @@ fun PropertyExpensesCreateDialog(
 
     var expenseViewModel: ExpenseViewModel = hiltViewModel()
 
-    PropertyExpensesCreateDialog(openPropertyExpensesCreateDialog,context,properties,providers,expenseViewModel)
+    PropertyExpensesCreateDialog(openPropertyExpensesCreateDialog,context,properties,providers,expenseViewModel,expenseId)
 }
 
 
@@ -116,7 +117,8 @@ fun PropertyExpensesCreateDialog(
     context: Context,
     properties: List<Property>,
     providers: List<Provider>,
-    expenseViewModel: ExpenseViewModel
+    expenseViewModel: ExpenseViewModel,
+    expenseId: Long
 ) {
 
     var expenseValue by remember { mutableStateOf("") }
@@ -134,7 +136,7 @@ fun PropertyExpensesCreateDialog(
 
             title = {
                 Text(
-                    text = "Novo Pagamento:", style = TextStyle(
+                    text = "Novo Desenbolso:", style = TextStyle(
                         color = getTextColor(),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
@@ -209,7 +211,7 @@ if (dropDownSelectExpenseType.value.equals("Serviços Prestados")) {
 
                             label = {
                                 Text(
-                                    text = "Data do Pagamento:",
+                                    text = "Data do Desenbolso:",
                                     style = TextStyle(
                                         color = getTextColor(), fontSize = 12.sp,
                                     )
@@ -227,7 +229,7 @@ if (dropDownSelectExpenseType.value.equals("Serviços Prestados")) {
                         ) {
                             Icon(
                                 imageVector = Icons.Filled.DateRange,
-                                contentDescription = "Alterar a Data do Pagamento",
+                                contentDescription = "Alterar a Data do Desenbolso",
                                 tint = getTextColor(),
                                 modifier = Modifier
                                     .padding(end = 12.dp)
@@ -267,7 +269,7 @@ if (dropDownSelectExpenseType.value.equals("Serviços Prestados")) {
                                 if (it != null) {
                                     paymentDate = SimpleDateFormat("dd/MM/yyyy").format(Date(it))
                                 }
-                            }, openDialog = openDateDialog, title = "Data do Pagamento"
+                            }, openDialog = openDateDialog, title = "Data do Desenbolso"
                         )
                     }
                 }
@@ -304,10 +306,10 @@ if (dropDownSelectExpenseType.value.equals("Serviços Prestados")) {
 
                     Button(onClick = {
                         if (dropDownSelectPropertyId.value == 0L){
-                            showToast("Por favor, selecione o imóvel referente ao pagamento.",context)
+                            showToast("Por favor, selecione o imóvel referente ao desenbolso.",context)
                         }else
                             if (dropDownSelectExpenseType.value == ""){
-                                showToast("Por favor, selecione o tipo do pagamento.",context)
+                                showToast("Por favor, selecione o tipo do desenbolso.",context)
                             }else
                                 if (dropDownSelectExpenseType.value.equals("Serviços Prestados") && dropDownSelectProviderId.value == 0L){
                                     showToast("Por favor, selecione o prestador de serviço.",context)
@@ -319,18 +321,17 @@ if (dropDownSelectExpenseType.value.equals("Serviços Prestados")) {
                                         showToast("Por favor, informe o valor pago.",context)
                                     }else
                                         if (paymentDate.trim().isEmpty()){
-                                                showToast("Por favor, informe a data do pagamento.",context)
+                                                showToast("Por favor, informe a data do desenbolso.",context)
                                         }else
                                             {
-                                                var desc = expenseDescription
-                                                    if (dropDownSelectProviderServiceDesc.value.trim().isNotEmpty())
-                                                        desc = desc + " - " + dropDownSelectProviderServiceDesc.value
 
-                                                    val fmt = SimpleDateFormat("dd/MM/yyyy")
-                                                    var dateDt = fmt.parse(paymentDate)
 
-                            expenseViewModel.saveExpense(Expense(0L,dateDt,dropDownSelectPropertyId.value,expenseValue.screenToDouble(),desc,"",dropDownSelectProviderId.value))
-                            showToast("Pagamento registrado com sucesso!",context)
+                                                val fmt = SimpleDateFormat("dd/MM/yyyy")
+                                                var dateDt = fmt.parse(paymentDate)
+
+                            expenseViewModel.saveExpense(Expense(expenseId,dateDt,dropDownSelectPropertyId.value,expenseValue.screenToDouble(),expenseDescription,dropDownSelectExpenseType.value,dropDownSelectProviderServiceDesc.value,dropDownSelectProviderId.value,
+                                dropDownSelectProviderName.value))
+                            showToast("Desenbolso registrado com sucesso!",context)
 
                             openPropertyExpensesCreateDialog.value = false
                             dropDownSelectPropertyId.value = 0L
@@ -341,8 +342,6 @@ if (dropDownSelectExpenseType.value.equals("Serviços Prestados")) {
                             dropDownSelectProviderServices.value = ArrayList<String>()
                             dropDownSelectProviderServiceDesc.value = ""
                         }
-
-
 
                     },
                         colors = ButtonDefaults.buttonColors(
@@ -366,6 +365,9 @@ if (dropDownSelectExpenseType.value.equals("Serviços Prestados")) {
 fun PropertiesDropdownMenu(properties: List<Property>) {
     var expanded by remember { mutableStateOf(false) }
 
+    var desc = "Selecione o Imóvel"
+    if (dropDownSelectPropertyDesc.value.isNotEmpty())
+        desc = dropDownSelectPropertyDesc.value
     Row() {
         OutlinedTextField(
             modifier = Modifier
@@ -373,7 +375,7 @@ fun PropertiesDropdownMenu(properties: List<Property>) {
                 .clickable {
                     expanded = !expanded
                 },
-            value =dropDownSelectPropertyDesc.value,
+            value =desc,
             onValueChange = {
 
             },
@@ -513,7 +515,7 @@ fun ExpenseTypeDropdownMenu() {
                                 .padding(end = 12.dp)
                                 .size(24.dp)
                         ) {
-                            Icon(Icons.Default.KeyboardArrowDown, contentDescription = "Selecionar Tipo de Pagamento")
+                            Icon(Icons.Default.KeyboardArrowDown, contentDescription = "Selecionar Tipo de Desenbolso")
                         }
                         DropdownMenu(
                             expanded = expanded,
@@ -539,7 +541,7 @@ fun ExpenseTypeDropdownMenu() {
                         }
                     }
                     Text(
-                        text = "Tipo de Pagamento:",
+                        text = "Tipo de Desenbolso:",
                         style = TextStyle(
                             color = getTextColor(), fontSize = 12.sp,
                         )

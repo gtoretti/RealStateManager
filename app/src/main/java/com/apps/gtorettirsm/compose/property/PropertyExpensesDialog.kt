@@ -8,6 +8,7 @@ import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -28,6 +29,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -47,8 +49,10 @@ import com.apps.gtorettirsm.compose.utils.getTextColor
 import com.apps.gtorettirsm.compose.utils.toScreen
 import com.apps.gtorettirsm.data.Expense
 import com.apps.gtorettirsm.data.Property
+import com.apps.gtorettirsm.data.Provider
 import com.apps.gtorettirsm.viewmodels.ExpenseViewModel
 import com.apps.gtorettirsm.viewmodels.PropertyViewModel
+import com.apps.gtorettirsm.viewmodels.ProviderViewModel
 import java.text.SimpleDateFormat
 
 @Composable
@@ -76,6 +80,7 @@ fun PropertyExpensesDialog(
     var expenseViewModel: ExpenseViewModel = hiltViewModel()
     val expensesFlow = expenseViewModel.getExpensesByProperty(dropDownSelectPropertyId.value)
     val expenses by expensesFlow.collectAsStateWithLifecycle(initialValue = emptyList())
+    var expenseId = remember { mutableLongStateOf(0L) }
 
     if (openPropertyExpensesDialog.value) {
         AlertDialog(shape = RoundedCornerShape(10.dp), onDismissRequest = {
@@ -86,7 +91,7 @@ fun PropertyExpensesDialog(
 
             title = {
                 Text(
-                    text = "Pagamentos:", style = TextStyle(
+                    text = "Desenbolsos:", style = TextStyle(
                         color = getTextColor(),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
@@ -129,7 +134,7 @@ fun PropertyExpensesDialog(
                         ) {
                             Icon(
                                 imageVector = Icons.Filled.AddCircle,
-                                contentDescription = "Novo Pagamento",
+                                contentDescription = "Novo Desenbolso",
                                 tint = getTextColor(),
                                 modifier = Modifier
                                     .padding(end = 12.dp)
@@ -138,15 +143,46 @@ fun PropertyExpensesDialog(
                         }
                     }
 
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.End,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Spacer(modifier = Modifier.height(10.dp))
+                    }
+                    Text(
+                        text = "Desenbolsos Realizados:",
+                        style = TextStyle(
+                            color = getTextColor(),
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                        )
+                    )
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.End,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Spacer(modifier = Modifier.height(10.dp))
+                    }
+
                     PropertiesDropdownMenu(properties)
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.End,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Spacer(modifier = Modifier.height(10.dp))
+                    }
+
                     DrawScrollableView(
                         modifier = Modifier.padding(horizontal = 10.dp),
                         content = {
                             Column {
 
                                 val fmt = SimpleDateFormat("dd/MM/yyyy")
-
-
 
                             expenses.forEach { item ->
 
@@ -158,7 +194,8 @@ fun PropertyExpensesDialog(
                                         .selectable(
                                             selected = false,
                                             onClick = {
-
+                                                expenseId.value = item.expenseId
+                                                openPropertyExpensesCreateDialog.value = true
                                             },
                                             role = Role.Button
                                         )
@@ -166,7 +203,8 @@ fun PropertyExpensesDialog(
 
                                     Column(
                                         modifier = Modifier
-                                        .fillMaxWidth())
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 5.dp))
                                     {
                                         Row(
                                             verticalAlignment = Alignment.CenterVertically,
@@ -177,44 +215,32 @@ fun PropertyExpensesDialog(
                                             Text(
                                                 text = fmt.format(item.date), style = TextStyle(
                                                     color = getTextColor(),
-                                                    fontSize = 14.sp,
+                                                    fontSize = 15.sp,
                                                 )
                                             )
 
                                             Text(
                                                 text = item.value.toScreen(), style = TextStyle(
                                                     color = getTextColor(),
-                                                    fontSize = 14.sp,
+                                                    fontSize = 15.sp,
                                                 )
                                             )
                                         }
                                         Text(
-                                            text = item.description, style = TextStyle(
+                                            text = item.serviceDesc + " (" + item.providerName + "): " + item.comments, style = TextStyle(
                                                 color = getTextColor(),
-                                                fontSize = 14.sp,
+                                                fontSize = 15.sp,
                                             )
                                         )
                                         HorizontalDivider(thickness = 1.dp)
                                     }
 
-
-
-
-
-
                                     }
                                 }
 
-
-
                             }
 
-
-
                         })
-
-
-
 
                 }
 
@@ -250,6 +276,7 @@ fun PropertyExpensesDialog(
                 PropertyExpensesCreateDialog(
                     openPropertyExpensesCreateDialog = openPropertyExpensesCreateDialog,
                     context = context,
+                    expenseId.value
                 )
             }
         }
