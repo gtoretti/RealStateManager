@@ -20,6 +20,7 @@ import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -47,6 +48,7 @@ import com.apps.gtorettirsm.data.Property
 import com.apps.gtorettirsm.viewmodels.ExpenseViewModel
 import com.apps.gtorettirsm.viewmodels.PropertyViewModel
 import com.apps.gtorettirsm.viewmodels.ReceivingViewModel
+import java.text.SimpleDateFormat
 
 @Composable
 fun PropertyReceivingsDialog(
@@ -139,6 +141,8 @@ fun PropertyReceivingsDialog(
                         modifier = Modifier.padding(horizontal = 10.dp),
                         content = {
                             Column {
+
+                                val fmt = SimpleDateFormat("dd/MM/yyyy")
                                 receivings.forEach { item ->
 
 
@@ -157,7 +161,38 @@ fun PropertyReceivingsDialog(
                                     ) {
 
 
-                                        Text(text = item.totalValue.toScreen())
+                                        Column(
+                                            modifier = Modifier
+                                                .fillMaxWidth())
+                                        {
+                                            Row(
+                                                verticalAlignment = Alignment.CenterVertically,
+                                                horizontalArrangement = Arrangement.SpaceBetween,
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                            ){
+                                                Text(
+                                                    text = fmt.format(item.receivingDate), style = TextStyle(
+                                                        color = getTextColor(),
+                                                        fontSize = 14.sp,
+                                                    )
+                                                )
+
+                                                Text(
+                                                    text = item.totalValue.toScreen(), style = TextStyle(
+                                                        color = getTextColor(),
+                                                        fontSize = 14.sp,
+                                                    )
+                                                )
+                                            }
+                                            Text(
+                                                text = item.comments, style = TextStyle(
+                                                    color = getTextColor(),
+                                                    fontSize = 14.sp,
+                                                )
+                                            )
+                                            HorizontalDivider(thickness = 1.dp)
+                                        }
 
                                     }
                                 }

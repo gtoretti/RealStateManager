@@ -21,6 +21,7 @@ import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -48,6 +49,7 @@ import com.apps.gtorettirsm.data.Expense
 import com.apps.gtorettirsm.data.Property
 import com.apps.gtorettirsm.viewmodels.ExpenseViewModel
 import com.apps.gtorettirsm.viewmodels.PropertyViewModel
+import java.text.SimpleDateFormat
 
 @Composable
 fun PropertyExpensesDialog(
@@ -141,25 +143,64 @@ fun PropertyExpensesDialog(
                         modifier = Modifier.padding(horizontal = 10.dp),
                         content = {
                             Column {
+
+                                val fmt = SimpleDateFormat("dd/MM/yyyy")
+
+
+
                             expenses.forEach { item ->
 
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .selectable(
+                                            selected = false,
+                                            onClick = {
 
-                                    Row(
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        horizontalArrangement = Arrangement.SpaceBetween,
+                                            },
+                                            role = Role.Button
+                                        )
+                                ) {
+
+                                    Column(
                                         modifier = Modifier
-                                            .fillMaxWidth()
-                                            .selectable(
-                                                selected = false,
-                                                onClick = {
-
-                                                },
-                                                role = Role.Button
+                                        .fillMaxWidth())
+                                    {
+                                        Row(
+                                            verticalAlignment = Alignment.CenterVertically,
+                                            horizontalArrangement = Arrangement.SpaceBetween,
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                        ){
+                                            Text(
+                                                text = fmt.format(item.date), style = TextStyle(
+                                                    color = getTextColor(),
+                                                    fontSize = 14.sp,
+                                                )
                                             )
-                                    ) {
+
+                                            Text(
+                                                text = item.value.toScreen(), style = TextStyle(
+                                                    color = getTextColor(),
+                                                    fontSize = 14.sp,
+                                                )
+                                            )
+                                        }
+                                        Text(
+                                            text = item.description, style = TextStyle(
+                                                color = getTextColor(),
+                                                fontSize = 14.sp,
+                                            )
+                                        )
+                                        HorizontalDivider(thickness = 1.dp)
+                                    }
 
 
-                                        Text(text = item.value.toScreen())
+
+
+
 
                                     }
                                 }
