@@ -48,9 +48,15 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.apps.gtorettirsm.compose.utils.getButtonColor
+import com.apps.gtorettirsm.compose.utils.getRedTextColor
 import com.apps.gtorettirsm.compose.utils.getTextColor
+import com.apps.gtorettirsm.compose.utils.toScreen
 import com.apps.gtorettirsm.data.Property
+import com.apps.gtorettirsm.viewmodels.ExpenseViewModel
 import com.apps.gtorettirsm.viewmodels.PropertyViewModel
+import com.apps.gtorettirsm.viewmodels.ReceivingViewModel
+import java.text.SimpleDateFormat
+import java.util.Date
 
 
 @Composable
@@ -58,17 +64,24 @@ fun FinancialScreen() {
     var propertyViewModel: PropertyViewModel = hiltViewModel()
     val propertiesFlow = propertyViewModel.properties
     val properties by propertiesFlow.collectAsStateWithLifecycle(initialValue = emptyList())
-    FinancialScreen(properties)
+
+    var expenseViewModel: ExpenseViewModel = hiltViewModel()
+    var receivingViewModel: ReceivingViewModel = hiltViewModel()
+    FinancialScreen(properties,expenseViewModel,receivingViewModel)
 }
 
 @Composable
 fun FinancialScreen(
     properties: List<Property>,
+    expenseViewModel: ExpenseViewModel,
+    receivingViewModel: ReceivingViewModel
 ) {
 
     val context = LocalContext.current
     var openPropertyExpensesDialog = remember { mutableStateOf(false) }
     var openPropertyReceivingsDialog = remember { mutableStateOf(false) }
+
+    val fmt = SimpleDateFormat("dd/MM/yyyy")
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -277,7 +290,7 @@ fun FinancialScreen(
         ) {
 
 
-            properties.forEach { item ->
+            properties.forEach { property ->
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Start,
@@ -298,9 +311,9 @@ fun FinancialScreen(
                         })
 
 
-                    var streetAddress = item.streetAddress + ", " + item.number
-                    if (item.complement.isNotEmpty())
-                        streetAddress = streetAddress + " - " + item.complement
+                    var streetAddress = property.streetAddress + ", " + property.number
+                    if (property.complement.isNotEmpty())
+                        streetAddress = streetAddress + " - " + property.complement
 
 
                     Column(
@@ -316,14 +329,68 @@ fun FinancialScreen(
                             )
                         )
                         Text(
-                            text = item.city + " - " + item.state + " - CEP:" + item.zipCode,
+                            text = property.city + " - " + property.state + " - CEP:" + property.zipCode,
                             style = TextStyle(
                                 color = getTextColor(),
                                 fontSize = 14.sp,
                             )
                         )
                     }
+
                 }
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 3.dp),
+
+                    horizontalAlignment = Alignment.Start,
+                    verticalArrangement = Arrangement.spacedBy(2.dp)
+
+                ) {
+                    var reportList = getFinancialReport(property.propertyId, expenseViewModel, receivingViewModel)
+                    reportList.forEach { reportRecord ->
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(
+                                text = fmt.format(reportRecord.date),
+                                style = TextStyle(
+                                    color = getTextColor(),
+                                    fontSize = 14.sp,
+                                )
+                            )
+                            Text(
+                                text = reportRecord.description,
+                                style = TextStyle(
+                                    color = getTextColor(),
+                                    fontSize = 14.sp,
+                                )
+                            )
+
+                            if (reportRecord.prefix == "(-)"){
+                                Text(
+                                    text = reportRecord.prefix + " " + reportRecord.value.toScreen(),
+                                    style = TextStyle(
+                                        color = getRedTextColor(),
+                                        fontSize = 14.sp,
+                                    )
+                                )
+                            }else{
+                                Text(
+                                    text = reportRecord.prefix + " " + reportRecord.value.toScreen(),
+                                    style = TextStyle(
+                                        color = getTextColor(),
+                                        fontSize = 14.sp,
+                                    )
+                                )
+                            }
+
+                        }
+                    }
+                }
+
                 HorizontalDivider(thickness = 1.dp)
             }
         }
@@ -458,5 +525,39 @@ fun FinancialScreen(
                 context)
         }
     }
+
+}
+
+data class FinancialReportRecord(
+    var prefix: String,
+    var date: Date,
+    var value: Double,
+    var description: String,
+) {
+}
+
+@Composable
+fun getFinancialReport(propertyId: Long, expenseViewModel: ExpenseViewModel, receivingViewModel: ReceivingViewModel) : List<FinancialReportRecord>{
+
+    val expFlow = expenseViewModel.getExpensesByProperty(propertyId)
+    val expenses = expFlow.collectAsStateWithLifecycle(initialValue = emptyList())
+    val expensesList = expenses.value
+
+    val recFlow = receivingViewModel.getReceivingsByProperty(propertyId)
+    val receivings = recFlow.collectAsStateWithLifecycle(initialValue = emptyList())
+    val receivingList = receivings.value
+
+    var ret = ArrayList<FinancialReportRecord>()
+
+    for (item in expensesList) {
+        ret.add(FinancialReportRecord("(-)",item.date,item.value,item.serviceDesc))
+    }
+
+    for (item in receivingList) {
+        ret.add(FinancialReportRecord("(+)",item.receivingDate,item.totalValue,item.comments))
+    }
+
+    ret.sortByDescending { it.date }
+    return ret
 
 }
