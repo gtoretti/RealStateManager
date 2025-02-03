@@ -121,6 +121,7 @@ fun PropertyReceivingsDialog(
                             modifier = Modifier.padding(5.dp),
                             onClick =
                             {
+                                receiving.value = Receiving(0L, Date(0),0L,0.0,Date(0),"")
                                 dropDownSelectPropertyId.value = 0L
                                 dropDownSelectPropertyDesc.value = ""
                                 dropDownSelectExpenseType.value = ""
@@ -257,8 +258,14 @@ fun PropertyReceivingsDialog(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Button(onClick = {
+                        receiving.value = Receiving(0L, Date(0),0L,0.0,Date(0),"")
                         dropDownSelectPropertyId.value = 0L
                         dropDownSelectPropertyDesc.value = ""
+                        dropDownSelectExpenseType.value = ""
+                        dropDownSelectProviderId.value = 0L
+                        dropDownSelectProviderName.value = ""
+                        dropDownSelectProviderServices.value = ArrayList<String>()
+                        dropDownSelectProviderServiceDesc.value = ""
                         openPropertyReceivingsDialog.value = false
                     },
                         colors = ButtonDefaults.buttonColors(

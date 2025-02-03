@@ -120,9 +120,11 @@ fun PropertyReceivingsCreateDialog(
     val fmt = SimpleDateFormat("dd/MM/yyyy")
 
     var loaded by remember { mutableStateOf("") }
+    var header = "Novo Recebimento:"
     if (openPropertyReceivingsCreateDialog.value) {
 
         if (receiving.receivingId!= 0L) {
+            header = "Alterar Recebimento:"
 
             if (loaded.trim().isEmpty()) {
                 dropDownSelectPropertyId.value = receiving.propertyId
@@ -140,9 +142,10 @@ fun PropertyReceivingsCreateDialog(
             .width(550.dp)
             .height(800.dp),
 
+
             title = {
                 Text(
-                    text = "Novo Recebimento:", style = TextStyle(
+                    text = header, style = TextStyle(
                         color = getTextColor(),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,

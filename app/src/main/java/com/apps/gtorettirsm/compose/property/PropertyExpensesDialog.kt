@@ -122,6 +122,7 @@ fun PropertyExpensesDialog(
                             modifier = Modifier.padding(5.dp),
                             onClick =
                             {
+                                expense.value = Expense(0L,Date(0),0L,0.0,"","","",0L,"")
                                 dropDownSelectPropertyId.value = 0L
                                 dropDownSelectPropertyDesc.value = ""
                                 dropDownSelectExpenseType.value = ""
@@ -224,8 +225,16 @@ fun PropertyExpensesDialog(
                                                 )
                                             )
                                         }
+                                        var desc = item.serviceDesc
+                                        if (item.providerName.trim().isNotEmpty()){
+                                            desc = desc + " (" + item.providerName + ") "
+                                        }
+                                        if (item.comments.trim().isNotEmpty()){
+                                            desc = desc + " : " + item.comments
+                                        }
+
                                         Text(
-                                            text = item.serviceDesc + " (" + item.providerName + "): " + item.comments, style = TextStyle(
+                                            text = desc, style = TextStyle(
                                                 color = getTextColor(),
                                                 fontSize = 15.sp,
                                             )
@@ -251,8 +260,14 @@ fun PropertyExpensesDialog(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Button(onClick = {
+                        expense.value = Expense(0L,Date(0),0L,0.0,"","","",0L,"")
                         dropDownSelectPropertyId.value = 0L
                         dropDownSelectPropertyDesc.value = ""
+                        dropDownSelectExpenseType.value = ""
+                        dropDownSelectProviderId.value = 0L
+                        dropDownSelectProviderName.value = ""
+                        dropDownSelectProviderServices.value = ArrayList<String>()
+                        dropDownSelectProviderServiceDesc.value = ""
                         openPropertyExpensesDialog.value = false
                     },
                         colors = ButtonDefaults.buttonColors(

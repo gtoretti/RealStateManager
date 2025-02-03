@@ -131,9 +131,11 @@ fun PropertyExpensesCreateDialog(
     val fmt = SimpleDateFormat("dd/MM/yyyy")
 
     var loaded by remember { mutableStateOf("") }
+    var header = "Novo Desenbolso:"
     if (openPropertyExpensesCreateDialog.value) {
 
         if (expense.expenseId!= 0L) {
+            header = "Alterar Desenbolso:"
             for (item in providers) {
                 if (item.providerId == expense.providerId){
                     dropDownSelectProviderServices.value = getProviderServicesList(item)
@@ -162,7 +164,7 @@ fun PropertyExpensesCreateDialog(
 
             title = {
                 Text(
-                    text = "Novo Desenbolso:", style = TextStyle(
+                    text = header, style = TextStyle(
                         color = getTextColor(),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
@@ -353,8 +355,12 @@ if (dropDownSelectExpenseType.value == "Serviços Prestados") {
                                             {
 
                                                 var dateDt = fmt.parse(paymentDate)
+                                                var serviceDescr = dropDownSelectProviderServiceDesc.value
+                                                if (!dropDownSelectExpenseType.value.equals("Serviços Prestados")){
+                                                    serviceDescr = dropDownSelectExpenseType.value
+                                                }
 
-                            expenseViewModel.saveExpense(Expense(expense.expenseId,dateDt,dropDownSelectPropertyId.value,expenseValue.screenToDouble(),expenseDescription,dropDownSelectExpenseType.value,dropDownSelectProviderServiceDesc.value,dropDownSelectProviderId.value,
+                            expenseViewModel.saveExpense(Expense(expense.expenseId,dateDt,dropDownSelectPropertyId.value,expenseValue.screenToDouble(),expenseDescription,dropDownSelectExpenseType.value,serviceDescr,dropDownSelectProviderId.value,
                                 dropDownSelectProviderName.value))
                             showToast("Desenbolso registrado com sucesso!",context)
 
