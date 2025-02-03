@@ -13,6 +13,10 @@ import kotlinx.coroutines.flow.Flow
  */
 @Dao
 interface ReceivingDao {
+
+    @Query("SELECT * FROM receiving where id = :id")
+    fun getReceiving(id: Long): Flow<Receiving>
+
     @Query("SELECT * FROM receiving where propertyId = :propertyId ORDER BY receivingDate DESC")
     fun getReceivings(propertyId: Long): Flow<List<Receiving>>
 

@@ -9,6 +9,8 @@ import javax.inject.Singleton
 @Singleton
 class ExpenseRepository @Inject constructor(private val expenseDao: ExpenseDao) {
 
+    fun getExpense(id:Long) = expenseDao.getExpense(id)
+
     fun getExpensesByProperty(id:Long) = expenseDao.getExpenses(id)
 
     suspend fun saveExpense(expense: Expense){

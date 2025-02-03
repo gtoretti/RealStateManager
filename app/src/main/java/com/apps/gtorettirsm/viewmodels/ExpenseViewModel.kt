@@ -19,6 +19,8 @@ class ExpenseViewModel @Inject internal constructor(
     private val repository: ExpenseRepository
 ) : ViewModel() {
 
+    fun getExpense(id:Long) = repository.getExpense(id)
+
     fun getExpensesByProperty(id:Long) = repository.getExpensesByProperty(id)
 
     fun saveExpense(expense: Expense) {

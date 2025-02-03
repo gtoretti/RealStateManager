@@ -54,6 +54,7 @@ import com.apps.gtorettirsm.viewmodels.ExpenseViewModel
 import com.apps.gtorettirsm.viewmodels.PropertyViewModel
 import com.apps.gtorettirsm.viewmodels.ProviderViewModel
 import java.text.SimpleDateFormat
+import java.util.Date
 
 @Composable
 fun PropertyExpensesDialog(
@@ -80,7 +81,7 @@ fun PropertyExpensesDialog(
     var expenseViewModel: ExpenseViewModel = hiltViewModel()
     val expensesFlow = expenseViewModel.getExpensesByProperty(dropDownSelectPropertyId.value)
     val expenses by expensesFlow.collectAsStateWithLifecycle(initialValue = emptyList())
-    var expenseId = remember { mutableLongStateOf(0L) }
+    var expense = remember { mutableStateOf(Expense(0L,Date(0),0L,0.0,"","","",0L,"")) }
 
     if (openPropertyExpensesDialog.value) {
         AlertDialog(shape = RoundedCornerShape(10.dp), onDismissRequest = {
@@ -194,7 +195,7 @@ fun PropertyExpensesDialog(
                                         .selectable(
                                             selected = false,
                                             onClick = {
-                                                expenseId.value = item.expenseId
+                                                expense.value = item
                                                 openPropertyExpensesCreateDialog.value = true
                                             },
                                             role = Role.Button
@@ -276,7 +277,7 @@ fun PropertyExpensesDialog(
                 PropertyExpensesCreateDialog(
                     openPropertyExpensesCreateDialog = openPropertyExpensesCreateDialog,
                     context = context,
-                    expenseId.value
+                    expense.value
                 )
             }
         }
