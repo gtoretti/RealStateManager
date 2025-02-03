@@ -17,6 +17,10 @@ class ExpenseRepository @Inject constructor(private val expenseDao: ExpenseDao) 
         expenseDao.upsert(expense)
     }
 
+    suspend fun deleteExpense(expense: Expense){
+        expenseDao.delete(expense.expenseId)
+    }
+
     companion object {
 
         // For Singleton instantiation

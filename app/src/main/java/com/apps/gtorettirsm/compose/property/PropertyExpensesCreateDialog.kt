@@ -123,6 +123,8 @@ fun PropertyExpensesCreateDialog(
     expense: Expense
 ) {
 
+    val openPropertyExpenseDeleteDialog = remember { mutableStateOf(false) }
+
     var expenseValue by remember { mutableStateOf("") }
     var expenseDescription by remember { mutableStateOf("") }
     var paymentDate by remember { mutableStateOf("") }
@@ -302,6 +304,12 @@ if (dropDownSelectExpenseType.value == "Serviços Prestados") {
                         )
                     }
                 }
+                when {
+                    openPropertyExpenseDeleteDialog.value -> {
+                        PropertyExpenseDeleteDialog(openPropertyExpenseDeleteDialog,openPropertyExpensesCreateDialog,expenseViewModel,expense,context)
+                    }
+                }
+
 
             }, confirmButton = {
 
@@ -328,9 +336,27 @@ if (dropDownSelectExpenseType.value == "Serviços Prestados") {
                     ) {
                         Text(
                             text = "Cancelar", style = TextStyle(
-                                fontSize = 14.sp,
+                                fontSize = 13.sp,
                             )
                         )
+                    }
+
+
+                    if (expense.expenseId!= 0L) {
+                        Button(
+                            onClick = {
+                                openPropertyExpenseDeleteDialog.value = true
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = getButtonColor()
+                            ), modifier = Modifier.height(30.dp)
+                        ) {
+                            Text(
+                                text = "Excluir", style = TextStyle(
+                                    fontSize = 13.sp,
+                                )
+                            )
+                        }
                     }
 
                     Button(onClick = {
@@ -381,7 +407,7 @@ if (dropDownSelectExpenseType.value == "Serviços Prestados") {
                     ) {
                         Text(
                             text = "Salvar", style = TextStyle(
-                                fontSize = 14.sp,
+                                fontSize = 13.sp,
                             )
                         )
                     }

@@ -29,4 +29,10 @@ class ExpenseViewModel @Inject internal constructor(
         }
     }
 
+    fun deleteExpense(expense: Expense) {
+        viewModelScope.launch {
+            repository.deleteExpense(expense)
+        }
+    }
+
 }

@@ -28,5 +28,9 @@ class ReceivingViewModel @Inject internal constructor(
         }
     }
 
-
+    fun deleteReceiving(receiving: Receiving) {
+        viewModelScope.launch {
+            receivingRepository.deleteReceiving(receiving)
+        }
+    }
 }

@@ -112,6 +112,8 @@ fun PropertyReceivingsCreateDialog(
     receiving: Receiving
 ) {
 
+    val openPropertyReceivingDeleteDialog = remember { mutableStateOf(false) }
+
     var receivingValue by remember { mutableStateOf("") }
     var receivingDescription by remember { mutableStateOf("") }
     var receivingDate by remember { mutableStateOf("") }
@@ -267,6 +269,12 @@ fun PropertyReceivingsCreateDialog(
                         )
                     }
                 }
+                when {
+                    openPropertyReceivingDeleteDialog.value -> {
+                        PropertyReceivingDeleteDialog(openPropertyReceivingDeleteDialog,openPropertyReceivingsCreateDialog,receivingViewModel,receiving,context)
+                    }
+                }
+
 
             }, confirmButton = {
 
@@ -287,9 +295,26 @@ fun PropertyReceivingsCreateDialog(
                     ) {
                         Text(
                             text = "Cancelar", style = TextStyle(
-                                fontSize = 14.sp,
+                                fontSize = 13.sp,
                             )
                         )
+                    }
+
+                    if (receiving.receivingId!= 0L) {
+                        Button(
+                            onClick = {
+                                openPropertyReceivingDeleteDialog.value = true
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = getButtonColor()
+                            ), modifier = Modifier.height(30.dp)
+                        ) {
+                            Text(
+                                text = "Excluir", style = TextStyle(
+                                    fontSize = 13.sp,
+                                )
+                            )
+                        }
                     }
 
                     Button(onClick = {
@@ -329,7 +354,7 @@ fun PropertyReceivingsCreateDialog(
                     ) {
                         Text(
                             text = "Salvar", style = TextStyle(
-                                fontSize = 14.sp,
+                                fontSize = 13.sp,
                             )
                         )
                     }
