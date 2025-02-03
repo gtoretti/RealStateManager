@@ -74,6 +74,7 @@ import com.apps.gtorettirsm.compose.utils.getRedTextColor
 import com.apps.gtorettirsm.compose.utils.getTextColor
 import com.apps.gtorettirsm.compose.utils.screenToDouble
 import com.apps.gtorettirsm.compose.utils.showToast
+import com.apps.gtorettirsm.compose.utils.toScreen
 import com.apps.gtorettirsm.data.Expense
 import com.apps.gtorettirsm.data.Property
 import com.apps.gtorettirsm.data.Provider
@@ -90,7 +91,7 @@ import java.util.Date
 fun PropertyReceivingsCreateDialog(
     openPropertyReceivingsCreateDialog: MutableState<Boolean>,
     context: Context,
-    receivingId: Long
+    receiving: Receiving
 ) {
     var propertyViewModel: PropertyViewModel = hiltViewModel()
     val propertiesFlow = propertyViewModel.properties
@@ -98,7 +99,7 @@ fun PropertyReceivingsCreateDialog(
 
     var receivingViewModel: ReceivingViewModel = hiltViewModel()
 
-    PropertyReceivingsCreateDialog(openPropertyReceivingsCreateDialog,context,properties,receivingViewModel)
+    PropertyReceivingsCreateDialog(openPropertyReceivingsCreateDialog,context,properties,receivingViewModel,receiving)
 }
 
 
@@ -107,7 +108,8 @@ fun PropertyReceivingsCreateDialog(
     openPropertyReceivingsCreateDialog: MutableState<Boolean>,
     context: Context,
     properties: List<Property>,
-    receivingViewModel: ReceivingViewModel
+    receivingViewModel: ReceivingViewModel,
+    receiving: Receiving
 ) {
 
     var receivingValue by remember { mutableStateOf("") }
@@ -115,8 +117,23 @@ fun PropertyReceivingsCreateDialog(
     var receivingDate by remember { mutableStateOf("") }
     val openDateDialog = remember { mutableStateOf(false) }
 
+    val fmt = SimpleDateFormat("dd/MM/yyyy")
 
+    var loaded by remember { mutableStateOf("") }
     if (openPropertyReceivingsCreateDialog.value) {
+
+        if (receiving.receivingId!= 0L) {
+
+            if (loaded.trim().isEmpty()) {
+                dropDownSelectPropertyId.value = receiving.propertyId
+                receivingValue = receiving.totalValue.toScreen()
+                receivingDescription = receiving.comments
+                receivingDate = fmt.format(receiving.receivingDate)
+                loaded = "true"
+            }
+        }
+
+
         AlertDialog(shape = RoundedCornerShape(10.dp), onDismissRequest = {
             openPropertyReceivingsCreateDialog.value = false
         }, modifier = Modifier
@@ -290,7 +307,7 @@ fun PropertyReceivingsCreateDialog(
                                             var dateDt = fmt.parse(receivingDate)
                                         var billingDt = fmt.parse(receivingDate)
 
-                                        receivingViewModel.saveReceiving(Receiving(0L,dateDt,dropDownSelectPropertyId.value,receivingValue.screenToDouble(),billingDt,desc))
+                                        receivingViewModel.saveReceiving(Receiving(receiving.receivingId,dateDt,dropDownSelectPropertyId.value,receivingValue.screenToDouble(),billingDt,desc))
 
                             showToast("Recebimento registrado com sucesso!",context)
 

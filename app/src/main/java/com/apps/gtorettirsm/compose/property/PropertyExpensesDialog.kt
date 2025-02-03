@@ -68,7 +68,6 @@ fun PropertyExpensesDialog(
     PropertyExpensesDialog(openPropertyExpensesDialog,context,properties)
 }
 
-
 @Composable
 fun PropertyExpensesDialog(
     openPropertyExpensesDialog: MutableState<Boolean>,
@@ -184,9 +183,7 @@ fun PropertyExpensesDialog(
                             Column {
 
                                 val fmt = SimpleDateFormat("dd/MM/yyyy")
-
                             expenses.forEach { item ->
-
                                 Row(
                                     verticalAlignment = Alignment.CenterVertically,
                                     horizontalArrangement = Arrangement.SpaceBetween,

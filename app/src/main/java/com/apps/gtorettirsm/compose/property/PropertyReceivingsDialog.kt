@@ -46,11 +46,14 @@ import com.apps.gtorettirsm.compose.utils.getButtonColor
 import com.apps.gtorettirsm.compose.utils.getRedTextColor
 import com.apps.gtorettirsm.compose.utils.getTextColor
 import com.apps.gtorettirsm.compose.utils.toScreen
+import com.apps.gtorettirsm.data.Expense
 import com.apps.gtorettirsm.data.Property
+import com.apps.gtorettirsm.data.Receiving
 import com.apps.gtorettirsm.viewmodels.ExpenseViewModel
 import com.apps.gtorettirsm.viewmodels.PropertyViewModel
 import com.apps.gtorettirsm.viewmodels.ReceivingViewModel
 import java.text.SimpleDateFormat
+import java.util.Date
 
 @Composable
 fun PropertyReceivingsDialog(
@@ -66,7 +69,7 @@ fun PropertyReceivingsDialog(
 
 @Composable
 fun PropertyReceivingsDialog(
-    openPropertyExpensesDialog: MutableState<Boolean>,
+    openPropertyReceivingsDialog: MutableState<Boolean>,
     context: Context,
     properties: List<Property>,
 ) {
@@ -76,11 +79,11 @@ fun PropertyReceivingsDialog(
     var receivingViewModel: ReceivingViewModel = hiltViewModel()
     val receivingsFlow = receivingViewModel.getReceivingsByProperty(dropDownSelectPropertyId.value)
     val receivings by receivingsFlow.collectAsStateWithLifecycle(initialValue = emptyList())
-    var receivingId = remember { mutableLongStateOf(0L) }
+    var receiving = remember { mutableStateOf(Receiving(0L, Date(0),0L,0.0,Date(0),"")) }
 
-    if (openPropertyExpensesDialog.value) {
+    if (openPropertyReceivingsDialog.value) {
         AlertDialog(shape = RoundedCornerShape(10.dp), onDismissRequest = {
-            openPropertyExpensesDialog.value = false
+            openPropertyReceivingsDialog.value = false
         }, modifier = Modifier
             .width(550.dp)
             .height(800.dp),
@@ -180,8 +183,6 @@ fun PropertyReceivingsDialog(
 
                                 val fmt = SimpleDateFormat("dd/MM/yyyy")
                                 receivings.forEach { item ->
-
-
                                     Row(
                                         verticalAlignment = Alignment.CenterVertically,
                                         horizontalArrangement = Arrangement.SpaceBetween,
@@ -190,7 +191,8 @@ fun PropertyReceivingsDialog(
                                             .selectable(
                                                 selected = false,
                                                 onClick = {
-                                                    receivingId.value = item.receivingId
+                                                    receiving.value = item
+                                                    openPropertyReceivingsCreateDialog.value = true
                                                 },
                                                 role = Role.Button
                                             )
@@ -257,7 +259,7 @@ fun PropertyReceivingsDialog(
                     Button(onClick = {
                         dropDownSelectPropertyId.value = 0L
                         dropDownSelectPropertyDesc.value = ""
-                        openPropertyExpensesDialog.value = false
+                        openPropertyReceivingsDialog.value = false
                     },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = getButtonColor()
@@ -278,7 +280,7 @@ fun PropertyReceivingsDialog(
                 PropertyReceivingsCreateDialog(
                     openPropertyReceivingsCreateDialog = openPropertyReceivingsCreateDialog,
                     context = context,
-                    receivingId.value
+                    receiving.value
                 )
             }
         }
