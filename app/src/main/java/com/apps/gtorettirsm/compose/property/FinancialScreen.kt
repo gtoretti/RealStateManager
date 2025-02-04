@@ -4,6 +4,7 @@
 package com.apps.gtorettirsm.compose.property
 
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -39,7 +41,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -47,6 +51,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.apps.gtorettirsm.R
 import com.apps.gtorettirsm.compose.utils.getButtonColor
 import com.apps.gtorettirsm.compose.utils.getRedTextColor
 import com.apps.gtorettirsm.compose.utils.getTextColor
@@ -347,8 +352,16 @@ fun FinancialScreen(
                     verticalArrangement = Arrangement.spacedBy(2.dp)
 
                 ) {
+                    var total: Double = 0.0
                     var reportList = getFinancialReport(property.propertyId, expenseViewModel, receivingViewModel)
                     reportList.forEach { reportRecord ->
+
+                        if (reportRecord.prefix == "(-)") {
+                            total -= reportRecord.value
+                        }else{
+                            total += reportRecord.value
+                        }
+
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween,
@@ -369,26 +382,87 @@ fun FinancialScreen(
                                 )
                             )
 
-                            if (reportRecord.prefix == "(-)"){
-                                Text(
-                                    text = reportRecord.prefix + " " + reportRecord.value.toScreen(),
-                                    style = TextStyle(
-                                        color = getRedTextColor(),
-                                        fontSize = 14.sp,
+                            Card(
+                                modifier = Modifier
+                                    .padding(3.dp),
+                                colors = CardDefaults.cardColors(
+                                    containerColor = Color.Transparent),
+                                shape = RoundedCornerShape(0.dp)
+                            ){
+                                Row(){
+                                    Icon(
+                                        imageVector = Icons.Filled.Check,
+                                        contentDescription = "Realizados",
+                                        tint = Color(0xFF08940E),
+                                        modifier = Modifier
+                                            .padding(end = 10.dp)
+                                            .size(16.dp)
                                     )
-                                )
-                            }else{
-                                Text(
-                                    text = reportRecord.prefix + " " + reportRecord.value.toScreen(),
-                                    style = TextStyle(
-                                        color = getTextColor(),
-                                        fontSize = 14.sp,
-                                    )
-                                )
+                                    if (reportRecord.prefix == "(-)"){
+                                        Text(
+                                            text = reportRecord.prefix + " " + reportRecord.value.toScreen(),
+                                            style = TextStyle(
+                                                color = getRedTextColor(),
+                                                fontSize = 14.sp,
+                                            )
+                                        )
+                                    }else{
+                                        Text(
+                                            text = reportRecord.prefix + " " + reportRecord.value.toScreen(),
+                                            style = TextStyle(
+                                                color = getTextColor(),
+                                                fontSize = 14.sp,
+                                            )
+                                        )
+                                    }
+
+                                }
+
                             }
+
 
                         }
                     }
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            text = "Total:",
+                            style = TextStyle(
+                                color = getTextColor(),
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Bold,
+                            )
+                        )
+
+                        if (total<0.0){
+                            Text(
+                                text = "(-) " + total.toScreen().replace("-",""),
+                                style = TextStyle(
+                                    color = getRedTextColor(),
+                                    fontSize = 14.sp,
+                                    fontWeight = FontWeight.Bold,
+                                )
+                            )
+                        }else{
+                            Text(
+                                text = "(+) " + total.toScreen(),
+                                style = TextStyle(
+                                    color = getTextColor(),
+                                    fontSize = 14.sp,
+                                    fontWeight = FontWeight.Bold,
+                                )
+                            )
+                        }
+
+
+
+
+                    }
+
                 }
 
                 HorizontalDivider(thickness = 1.dp)
@@ -403,15 +477,16 @@ fun FinancialScreen(
             Spacer(modifier = Modifier.height(10.dp))
         }
 
+
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center,
+            horizontalArrangement = Arrangement.Start,
             modifier = Modifier.fillMaxWidth()
         ) {
             Checkbox(checked = (true),
                 onCheckedChange = {})
             Text(
-                text = "Realizados",
+                text = "Recebimentos e Desenbolsos Realizados",
                 style = TextStyle(
                     color = getTextColor(),
                     fontSize = 16.sp,
@@ -420,17 +495,23 @@ fun FinancialScreen(
             )
             Icon(
                 imageVector = Icons.Filled.Check,
-                contentDescription = "Realizados",
+                contentDescription = "Recebimentos e Desenbolsos Realizados",
                 tint = Color(0xFF08940E),
                 modifier = Modifier
                     .padding(end = 10.dp)
-                    .size(16.dp)
+                    .size(20.dp)
             )
+        }
 
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start,
+            modifier = Modifier.fillMaxWidth()
+        ) {
             Checkbox(checked = (true),
                 onCheckedChange = {})
             Text(
-                text = "Pendentes",
+                text = "Recebimentos Previstos",
                 style = TextStyle(
                     color = getTextColor(),
                     fontSize = 16.sp,
@@ -438,15 +519,40 @@ fun FinancialScreen(
                 )
             )
             Icon(
-                imageVector = Icons.Filled.Close,
-                contentDescription = "Pendentes",
+                imageVector = ImageVector.vectorResource(R.drawable.schedule_24px),
+                contentDescription = "Recebimentos Previstos",
+                tint = Color(0xFF08940E),
+                modifier = Modifier
+                    .padding(end = 10.dp)
+                    .size(20.dp)
+            )
+        }
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Checkbox(checked = (true),
+                onCheckedChange = {})
+            Text(
+                text = "Recebimentos Atrasados",
+                style = TextStyle(
+                    color = getTextColor(),
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                )
+            )
+            Icon(
+                imageVector = ImageVector.vectorResource(R.drawable.warning_24px),
+                contentDescription = "Recebimentos Atrasados",
                 tint = Color(0xFFD50000),
                 modifier = Modifier
                     .padding(end = 10.dp)
-                    .size(16.dp)
+                    .size(20.dp)
             )
-
         }
+
 
 
         Text(
