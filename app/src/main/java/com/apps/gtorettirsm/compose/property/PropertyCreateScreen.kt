@@ -420,6 +420,8 @@ fun PropertyCreateScreen(
                                                             contractStartDate= property.contractStartDate,
                                                             contractEndedDate= property.contractEndedDate,
                                                             contractMonths= property.contractMonths,
+                                                            contractDays = property.contractDays,
+                                                            contractMonthsDaysDescr = property.contractMonthsDaysDescr,
                                                             contractValueAdjustmentIndexName= property.contractValueAdjustmentIndexName,
                                                             contractMonthlyBillingValue= property.contractMonthlyBillingValue,
                                                             contractRenterName= property.contractRenterName,

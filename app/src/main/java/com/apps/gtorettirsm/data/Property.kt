@@ -42,6 +42,8 @@ data class Property(
     val contractStartDate: Date,
     val contractEndedDate: Date,
     val contractMonths: Int,
+    val contractDays: Int,
+    val contractMonthsDaysDescr: String,
     val contractValueAdjustmentIndexName: String,
     val contractMonthlyBillingValue: Double,
     val contractRenterName: String,

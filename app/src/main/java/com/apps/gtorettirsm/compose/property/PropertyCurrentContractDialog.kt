@@ -67,7 +67,9 @@ fun PropertyCurrentContractDialog(
     var startDate by remember { mutableStateOf("") }
     var endedDate by remember { mutableStateOf("") }
     var monthlyBillingValue by remember { mutableStateOf("") }
+    var monthsDaysDescr by remember { mutableStateOf("") }
     var months by remember { mutableStateOf("") }
+    var days by remember { mutableStateOf("") }
     var valueAdjustmentIndexName by remember { mutableStateOf("") }
     var renterName by remember { mutableStateOf("") }
     var renterCPF by remember { mutableStateOf("") }
@@ -83,6 +85,29 @@ fun PropertyCurrentContractDialog(
     val openEndedDateDialog = remember { mutableStateOf(false) }
 
     val fmt = SimpleDateFormat("dd/MM/yyyy")
+
+    var loaded by remember { mutableStateOf("") }
+    if (property.propertyId!=0L && loaded.trim().isEmpty()){
+        if (property.contractStartDate.time>0)
+            startDate = fmt.format(property.contractStartDate)
+        if (property.contractEndedDate.time>0)
+            endedDate = fmt.format(property.contractEndedDate)
+        monthlyBillingValue  = property.contractMonthlyBillingValue.toString()
+        monthsDaysDescr  = property.contractMonthsDaysDescr
+        months  = property.contractMonths.toString()
+        days  = property.contractDays.toString()
+        valueAdjustmentIndexName  = property.contractValueAdjustmentIndexName
+        renterName  = property.contractRenterName
+        renterCPF  = property.contractRenterCPF
+        renterPhone = property.contractRenterPhone
+        renterEmail  = property.contractRenterEmail
+        guarantorName = property.contractGuarantorName
+        guarantorCPF = property.contractGuarantorCPF
+        guarantorPhone = property.contractGuarantorPhone
+        guarantorEmail = property.contractGuarantorEmail
+        paymentDate = property.contractPaymentDate.toString()
+        loaded = "true"
+    }
 
     if (openPropertyCurrentContractDialog.value) {
         AlertDialog(shape = RoundedCornerShape(10.dp), onDismissRequest = {
@@ -281,9 +306,9 @@ fun PropertyCurrentContractDialog(
 
 
                             OutlinedTextField(
-                                value = months,
+                                value = monthsDaysDescr,
                                 onValueChange = {
-                                    months = it
+
                                 },
                                 textStyle = TextStyle(
                                     fontSize = 16.sp,
@@ -497,31 +522,42 @@ fun PropertyCurrentContractDialog(
                                 if (it != null) {
                                     startDate = SimpleDateFormat("dd/MM/yyyy").format(Date(it))
                                     if (endedDate.trim().isNotEmpty()){
-                                        var days = daysBetween(fmt.parse(startDate),fmt.parse(endedDate))
-                                        if (days<=0){
+                                        var daysbet = daysBetween(fmt.parse(startDate),fmt.parse(endedDate))
+                                        if (daysbet<=0){
                                             showToast("A Data de Término deve ser posterior à Data de Início do Contrato",context)
-                                            endedDate = ""
+                                            startDate = ""
                                         }else{
                                             var start = Calendar.getInstance()
                                             start.time = fmt.parse(startDate)
                                             var end = Calendar.getInstance()
                                             end.time = fmt.parse(endedDate)
                                             var qtdmonths =0
-                                            var days = 0
+                                            var qtddays = 0
 
                                             if (start.get(Calendar.DAY_OF_MONTH)==end.get(Calendar.DAY_OF_MONTH)){
                                                 qtdmonths = ((end.get(Calendar.YEAR) - start.get(Calendar.YEAR)) * 12 + end.get(Calendar.MONTH)) - start.get(Calendar.MONTH)
                                             }else{
                                                 if (start.get(Calendar.DAY_OF_MONTH)<end.get(Calendar.DAY_OF_MONTH)){
                                                     qtdmonths = ((end.get(Calendar.YEAR) - start.get(Calendar.YEAR)) * 12 + end.get(Calendar.MONTH)) - start.get(Calendar.MONTH)
-                                                    days = end.get(Calendar.DAY_OF_MONTH) - start.get(Calendar.DAY_OF_MONTH)
+                                                    qtddays = end.get(Calendar.DAY_OF_MONTH) - start.get(Calendar.DAY_OF_MONTH)
                                                 }else{
                                                     qtdmonths = ((end.get(Calendar.YEAR) - start.get(Calendar.YEAR)) * 12 + end.get(Calendar.MONTH)) - start.get(Calendar.MONTH) -1
-                                                    days = end.get(Calendar.DAY_OF_MONTH) + (30 - start.get(Calendar.DAY_OF_MONTH))
+                                                    qtddays = end.get(Calendar.DAY_OF_MONTH) + (30 - start.get(Calendar.DAY_OF_MONTH))
                                                 }
-                                                days++
+                                                qtddays++
                                             }
-                                            months = "" + qtdmonths + " meses " + days + " dias"
+                                            if (qtdmonths>1){
+                                                monthsDaysDescr = "" + qtdmonths + " meses "
+                                            }else
+                                                if (qtdmonths==1){
+                                                    monthsDaysDescr = "" + qtdmonths + " mês "
+                                                }
+                                            if (qtddays>1){
+                                                monthsDaysDescr = monthsDaysDescr +  qtddays + " dias"
+                                            }else
+                                                if (qtddays==1){
+                                                    monthsDaysDescr = monthsDaysDescr +  qtddays + " dia"
+                                                }
                                         }
                                     }
                                 }
@@ -537,8 +573,8 @@ fun PropertyCurrentContractDialog(
                                 if (it != null) {
                                     endedDate = SimpleDateFormat("dd/MM/yyyy").format(Date(it))
                                     if (startDate.trim().isNotEmpty()){
-                                        var days = daysBetween(fmt.parse(startDate),fmt.parse(endedDate))
-                                        if (days<=0){
+                                        var daysbet = daysBetween(fmt.parse(startDate),fmt.parse(endedDate))
+                                        if (daysbet<=0){
                                             showToast("A Data de Término deve ser posterior à Data de Início do Contrato",context)
                                             endedDate = ""
                                         }else{
@@ -547,21 +583,34 @@ fun PropertyCurrentContractDialog(
                                             var end = Calendar.getInstance()
                                             end.time = fmt.parse(endedDate)
                                             var qtdmonths =0
-                                            var days = 0
+                                            var qtdDays = 0
 
                                             if (start.get(Calendar.DAY_OF_MONTH)==end.get(Calendar.DAY_OF_MONTH)){
                                                 qtdmonths = ((end.get(Calendar.YEAR) - start.get(Calendar.YEAR)) * 12 + end.get(Calendar.MONTH)) - start.get(Calendar.MONTH)
                                             }else{
                                                 if (start.get(Calendar.DAY_OF_MONTH)<end.get(Calendar.DAY_OF_MONTH)){
                                                     qtdmonths = ((end.get(Calendar.YEAR) - start.get(Calendar.YEAR)) * 12 + end.get(Calendar.MONTH)) - start.get(Calendar.MONTH)
-                                                    days = end.get(Calendar.DAY_OF_MONTH) - start.get(Calendar.DAY_OF_MONTH)
+                                                    qtdDays = end.get(Calendar.DAY_OF_MONTH) - start.get(Calendar.DAY_OF_MONTH)
                                                 }else{
                                                     qtdmonths = ((end.get(Calendar.YEAR) - start.get(Calendar.YEAR)) * 12 + end.get(Calendar.MONTH)) - start.get(Calendar.MONTH) -1
-                                                    days = end.get(Calendar.DAY_OF_MONTH) + (30 - start.get(Calendar.DAY_OF_MONTH))
+                                                    qtdDays = end.get(Calendar.DAY_OF_MONTH) + (30 - start.get(Calendar.DAY_OF_MONTH))
                                                 }
-                                                days++
+                                                qtdDays++
                                             }
-                                            months = "" + qtdmonths + " meses " + days + " dias"
+                                            if (qtdmonths>1){
+                                                monthsDaysDescr = "" + qtdmonths + " meses "
+                                            }else
+                                                if (qtdmonths==1){
+                                                    monthsDaysDescr = "" + qtdmonths + " mês "
+                                                }
+                                            if (qtdDays>1){
+                                                monthsDaysDescr = monthsDaysDescr +  qtdDays + " dias"
+                                            }else
+                                                if (qtdDays==1){
+                                                    monthsDaysDescr = monthsDaysDescr +  qtdDays + " dia"
+                                                }
+                                            months = qtdmonths.toString()
+                                            days = qtdDays.toString()
                                         }
                                     }
                                 }
@@ -624,8 +673,6 @@ fun PropertyCurrentContractDialog(
                         if (paymentDate.trim().isEmpty())
                             paymentDate = "0"
 
-
-
                         var startDt = property.contractStartDate
                         if (startDate.isNotEmpty())
                             startDt = fmt.parse(startDate)
@@ -663,7 +710,9 @@ fun PropertyCurrentContractDialog(
                                 contractStartDate= startDt,
                                 contractEndedDate= endedDt,
                                 contractMonths= Integer.parseInt(months),
-                                contractValueAdjustmentIndexName= property.contractValueAdjustmentIndexName,
+                                contractDays = Integer.parseInt(days),
+                                contractMonthsDaysDescr = monthsDaysDescr,
+                                contractValueAdjustmentIndexName= valueAdjustmentIndexName,
                                 contractMonthlyBillingValue= monthlyBillingValue.screenToDouble(),
                                 contractRenterName= renterName,
                                 contractRenterCPF= renterCPF,
