@@ -118,6 +118,10 @@ fun PropertyReceivingsCreateDialog(
     var receivingValue by remember { mutableStateOf("") }
     var receivingDescription by remember { mutableStateOf("") }
     var receivingDate by remember { mutableStateOf("") }
+    var nextPendingRent by remember { mutableStateOf("") }
+    var nextPendingRentDelayInDays by remember { mutableStateOf("") }
+    var nextPendingRentDelayTotalFine by remember { mutableStateOf("") }
+
     val openDateDialog = remember { mutableStateOf(false) }
 
     val fmt = SimpleDateFormat("dd/MM/yyyy")
@@ -138,7 +142,7 @@ fun PropertyReceivingsCreateDialog(
             }
         }else{
             if (dropDownSelectReceivingType.value == "Aluguel"){
-                receivingDescription =getNextNewRentReceivingDescr(dropDownSelectPropertyId.value, properties, receivingViewModel)
+                nextPendingRent =getNextNewRentReceivingDescr(dropDownSelectPropertyId.value, properties, receivingViewModel,context)
             }
         }
 
@@ -167,28 +171,34 @@ fun PropertyReceivingsCreateDialog(
 
                     PropertiesDropdownMenu(properties)
 
-                    OutlinedTextField(
-                        value = receivingValue,
-                        onValueChange = {
-                            receivingValue = it
-                        },
-                        textStyle = TextStyle(
-                            fontSize = 16.sp,
-                            color = getTextColor(),
-                            fontWeight = FontWeight.Normal
-                        ),placeholder = {Text("00.000,00")},
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Decimal
-                        ),
-                        label = {
-                            Text(
-                                text = "Valor:",
-                                style = TextStyle(
-                                    color = getTextColor(),fontSize = 12.sp,
+                    ReceivingTypeDropdownMenu()
+
+                    if (dropDownSelectReceivingType.value.equals("Aluguel")){
+                        OutlinedTextField(
+                            value = nextPendingRent,
+                            onValueChange = {
+
+                            },
+                            textStyle = TextStyle(
+                                fontSize = 16.sp,
+                                color = getTextColor(),
+                                fontWeight = FontWeight.Normal
+                            ),placeholder = {Text("")},
+                            label = {
+                                Text(
+                                    text = "Próximo Aluguel a Receber:",
+                                    style = TextStyle(
+                                        color = getTextColor(),fontSize = 12.sp,
+                                    )
                                 )
-                            )
-                        }
-                    )
+                            }, enabled = false
+                        )
+                    }
+
+
+
+
+
 
 
                     Row(
@@ -239,7 +249,78 @@ fun PropertyReceivingsCreateDialog(
                         }
                     }
 
-                    ReceivingTypeDropdownMenu()
+
+                    if (dropDownSelectReceivingType.value.equals("Aluguel")){
+                        OutlinedTextField(
+                            value = receivingDescription,
+                            onValueChange = {
+                                receivingDescription = it
+                            },
+                            textStyle = TextStyle(
+                                fontSize = 16.sp,
+                                color = getTextColor(),
+                                fontWeight = FontWeight.Normal
+                            ),placeholder = {Text("")},
+                            label = {
+                                Text(
+                                    text = "Atraso em Dias:",
+                                    style = TextStyle(
+                                        color = getTextColor(),fontSize = 12.sp,
+                                    )
+                                )
+                            }, enabled = false
+                        )
+
+                        OutlinedTextField(
+                            value = receivingDescription,
+                            onValueChange = {
+                                receivingDescription = it
+                            },
+                            textStyle = TextStyle(
+                                fontSize = 16.sp,
+                                color = getTextColor(),
+                                fontWeight = FontWeight.Normal
+                            ),placeholder = {Text("")},
+                            label = {
+                                Text(
+                                    text = "Valor da Multa:",
+                                    style = TextStyle(
+                                        color = getTextColor(),fontSize = 12.sp,
+                                    )
+                                )
+                            }, enabled = false
+                        )
+                    }
+
+
+
+
+
+
+
+
+                    OutlinedTextField(
+                        value = receivingValue,
+                        onValueChange = {
+                            receivingValue = it
+                        },
+                        textStyle = TextStyle(
+                            fontSize = 16.sp,
+                            color = getTextColor(),
+                            fontWeight = FontWeight.Normal
+                        ),placeholder = {Text("00.000,00")},
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Decimal
+                        ),
+                        label = {
+                            Text(
+                                text = "Valor Recebido:",
+                                style = TextStyle(
+                                    color = getTextColor(),fontSize = 12.sp,
+                                )
+                            )
+                        }
+                    )
 
                     OutlinedTextField(
                         value = receivingDescription,
@@ -253,7 +334,7 @@ fun PropertyReceivingsCreateDialog(
                         ),placeholder = {Text("")},
                         label = {
                             Text(
-                                text = "Descrição:",
+                                text = "Comentários:",
                                 style = TextStyle(
                                     color = getTextColor(),fontSize = 12.sp,
                                 )
@@ -341,15 +422,15 @@ fun PropertyReceivingsCreateDialog(
 
                                             val fmt = SimpleDateFormat("dd/MM/yyyy")
                                             var dateDt = fmt.parse(receivingDate)
-                                        var billingDt = fmt.parse(receivingDate)
+
 
                                         receivingViewModel.saveReceiving(Receiving(receiving.receivingId,dateDt,dropDownSelectPropertyId.value,receivingValue.screenToDouble(),dropDownSelectReceivingType.value,desc))
 
-                            showToast("Recebimento registrado com sucesso!",context)
+                                        showToast("Recebimento registrado com sucesso!",context)
 
-                            openPropertyReceivingsCreateDialog.value = false
-                            dropDownSelectPropertyId.value = 0L
-                            dropDownSelectPropertyDesc.value = ""
+                                        openPropertyReceivingsCreateDialog.value = false
+                                        dropDownSelectPropertyId.value = 0L
+                                        dropDownSelectPropertyDesc.value = ""
                                         dropDownSelectReceivingType.value = ""
 
                         }
@@ -451,8 +532,9 @@ fun ReceivingTypeDropdownMenu() {
 
 
 @Composable
-fun getNextNewRentReceivingDescr(propertyId:Long, properties: List<Property>, receivingViewModel: ReceivingViewModel): String{
+fun getNextNewRentReceivingDescr(propertyId:Long, properties: List<Property>, receivingViewModel: ReceivingViewModel, context: Context): String{
     var ret = ""
+    val fmt = SimpleDateFormat("dd/MM/yyyy")
     var property = Property(0L,"", "", "", "", "", "", "", 0.0,0,"", "", "", "","","", "", "", 0.0, "" , 0,  "", "", "", "",  Date(0), Date(0), 0,0, "","", 0.0, "", "", "", "", "", "", "", "", 0)
     for (item in properties) {
         if (item.propertyId == propertyId)
@@ -460,34 +542,39 @@ fun getNextNewRentReceivingDescr(propertyId:Long, properties: List<Property>, re
         break
     }
 
-    if (property.contractStartDate.time==0L){
-        return "ERROR-Por favor, informe o período do contrato."
+    if (property.contractStartDate.time==0L || property.contractEndedDate.time==0L){
+        showToast("Por favor, informe as datas de Início e Término do Contrato.",context)
+        return ""
     }
 
-    var startDate = Calendar.getInstance()
-    startDate.time = property.contractStartDate
-    startDate.set(Calendar.DAY_OF_MONTH,property.contractPaymentDate)
+    var startBillingDate = Calendar.getInstance()
+    startBillingDate.time = property.contractStartDate
+    startBillingDate.set(Calendar.DAY_OF_MONTH,property.contractPaymentDate)
+    var totalBillingQtd = property.contractMonths
+    if (property.contractDays > 0)
+        totalBillingQtd++
 
 
     var rentFlow = receivingViewModel.getRentReceivings(propertyId,property.contractStartDate)
     val properties by rentFlow.collectAsStateWithLifecycle(initialValue = emptyList())
     val paymentsQtd = properties.size
 
-    if (paymentsQtd >= property.contractMonths){
-        return "ERROR-O Contrato está Vencido. Por favor, atualize o contrato."
+    if (paymentsQtd >= totalBillingQtd){
+        showToast("O período do contrato está quitado. Por favor verifique o período do contrato.",context)
+        return ""
     }else{
         //proximo vencimento a quitar:
-        startDate.add(Calendar.MONTH,paymentsQtd+1)
+        startBillingDate.add(Calendar.MONTH,paymentsQtd+1)
+        ret = fmt.format(startBillingDate.time)
 
 
         //calculo de atraso:
-        var today = Calendar.getInstance()
-        var delay = daysBetween(startDate,today)
-        val fmt = SimpleDateFormat("dd/MM/yyyy")
-        ret= "Aluguel de Vencimento " + fmt.format(startDate)
-        if (delay>0){
-            ret=ret+"(ATRASO DE "+delay+" DIAS)"
-        }
+        //var delay = daysBetween(startDate,today)
+
+        //ret= "Aluguel de Vencimento " + fmt.format(startDate)
+        //if (delay>0){
+        //    ret=ret+"(ATRASO DE "+delay+" DIAS)"
+        //}
     }
     return ret
 }
