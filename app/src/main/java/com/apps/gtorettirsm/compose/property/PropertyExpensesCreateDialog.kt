@@ -88,6 +88,7 @@ import java.util.Date
 val dropDownSelectPropertyId = mutableLongStateOf(0)
 val dropDownSelectPropertyDesc = mutableStateOf("")
 val dropDownSelectExpenseType = mutableStateOf("")
+val dropDownSelectReceivingType = mutableStateOf("")
 val dropDownSelectProviderId = mutableLongStateOf(0)
 val dropDownSelectProviderName = mutableStateOf("")
 val dropDownSelectProviderServices = mutableStateOf(ArrayList<String>())
@@ -328,7 +329,7 @@ if (dropDownSelectExpenseType.value == "Serviços Prestados") {
                         dropDownSelectProviderName.value = ""
                         dropDownSelectProviderServices.value = ArrayList<String>()
                         dropDownSelectProviderServiceDesc.value = ""
-
+                        dropDownSelectReceivingType.value = ""
                     },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = getButtonColor()
@@ -398,6 +399,7 @@ if (dropDownSelectExpenseType.value == "Serviços Prestados") {
                             dropDownSelectProviderName.value = ""
                             dropDownSelectProviderServices.value = ArrayList<String>()
                             dropDownSelectProviderServiceDesc.value = ""
+                                                dropDownSelectReceivingType.value = ""
                         }
 
                     },

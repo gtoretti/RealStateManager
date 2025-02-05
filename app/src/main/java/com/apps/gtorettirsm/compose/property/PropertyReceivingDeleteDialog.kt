@@ -112,6 +112,7 @@ fun PropertyReceivingDeleteDialog(
 
                         dropDownSelectPropertyId.value = 0L
                         dropDownSelectPropertyDesc.value = ""
+                        dropDownSelectReceivingType.value = ""
 
                         openPropertyReceivingDeleteDialog.value = false
                         openPropertyReceivingsCreateDialog.value = false

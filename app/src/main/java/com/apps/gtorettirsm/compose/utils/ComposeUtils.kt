@@ -126,7 +126,7 @@ fun filterMonthlyBillingsByMonth(list: List<Receiving>, month: Int, year: Int): 
     var ret: ArrayList<Receiving> = ArrayList()
     list.forEach { a ->
         var d = Calendar.getInstance()
-        d.time = a.billingDate
+        //d.time = a.billingDate
         if (d.get(Calendar.MONTH) == month && d.get(Calendar.YEAR) == year) ret.add(a)
     }
     return ret
@@ -137,6 +137,21 @@ fun defaultNaoInformado(s: String): String {
     if (!s.trim().isEmpty())
         r = s
     return r
+}
+
+fun daysBetween(startDate: Calendar, endDate: Calendar): Long {
+    val startMillis = startDate.timeInMillis
+    val endMillis = endDate.timeInMillis
+    val diffMillis = endMillis - startMillis
+    return diffMillis / (24 * 60 * 60 * 1000)
+}
+
+fun daysBetween(startDate: Date, endDate: Date): Long {
+    val startMillis = startDate.time
+    val endMillis = endDate.time
+    var diffMillis = endMillis - startMillis
+    diffMillis /= (24 * 60 * 60 * 1000)
+    return diffMillis
 }
 
 fun defaultNaoInformado(d: Date): String {

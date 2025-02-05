@@ -5,37 +5,26 @@ package com.apps.gtorettirsm.compose.property
 
 
 import android.content.Context
-import android.util.Log
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.awaitEachGesture
-import androidx.compose.foundation.gestures.awaitFirstDown
-import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
-import androidx.compose.material3.DatePickerFormatter
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -48,17 +37,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.input.pointer.PointerEventPass
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Popup
 import com.apps.gtorettirsm.compose.utils.DrawScrollableView
+import com.apps.gtorettirsm.compose.utils.daysBetween
 import com.apps.gtorettirsm.compose.utils.getButtonColor
 import com.apps.gtorettirsm.compose.utils.getTextColor
 import com.apps.gtorettirsm.compose.utils.screenToDouble
@@ -68,7 +54,6 @@ import com.apps.gtorettirsm.viewmodels.PropertyViewModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
-import java.util.Locale
 
 
 @Composable
@@ -96,6 +81,8 @@ fun PropertyCurrentContractDialog(
 
     val openStartDateDialog = remember { mutableStateOf(false) }
     val openEndedDateDialog = remember { mutableStateOf(false) }
+
+    val fmt = SimpleDateFormat("dd/MM/yyyy")
 
     if (openPropertyCurrentContractDialog.value) {
         AlertDialog(shape = RoundedCornerShape(10.dp), onDismissRequest = {
@@ -199,10 +186,11 @@ fun PropertyCurrentContractDialog(
                                 modifier = Modifier.fillMaxWidth()
                             ) {
                                 OutlinedTextField(
-                                    modifier = Modifier.width(160.dp)
+                                    modifier = Modifier
+                                        .width(160.dp)
                                         .clickable {
-                                        openStartDateDialog.value = true
-                                    },
+                                            openStartDateDialog.value = true
+                                        },
                                     value = startDate,
                                     onValueChange = {
                                     },
@@ -242,41 +230,14 @@ fun PropertyCurrentContractDialog(
                             }
 
 
-
-
-                            OutlinedTextField(
-                                value = months,
-                                onValueChange = {
-                                    months = it
-                                },
-                                textStyle = TextStyle(
-                                    fontSize = 16.sp,
-                                    color = getTextColor(),
-                                    fontWeight = FontWeight.Normal
-                                ),
-                                placeholder = { Text("36") },
-                                keyboardOptions = KeyboardOptions(
-                                    keyboardType = KeyboardType.Number
-                                ),
-                                label = {
-                                    Text(
-                                        text = "Período do Contrato em Meses:",
-                                        style = TextStyle(
-                                            color = getTextColor(), fontSize = 12.sp,
-                                        )
-                                    )
-                                }
-                            )
-
-
-
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 modifier = Modifier.fillMaxWidth()
                             ) {
                                 OutlinedTextField(
-                                    modifier = Modifier.width(160.dp)
+                                    modifier = Modifier
+                                        .width(160.dp)
                                         .clickable {
                                             openEndedDateDialog.value = true
                                         },
@@ -317,6 +278,31 @@ fun PropertyCurrentContractDialog(
                                     )
                                 }
                             }
+
+
+                            OutlinedTextField(
+                                value = months,
+                                onValueChange = {
+                                    months = it
+                                },
+                                textStyle = TextStyle(
+                                    fontSize = 16.sp,
+                                    color = getTextColor(),
+                                    fontWeight = FontWeight.Normal
+                                ),
+                                placeholder = { Text("") },
+                                keyboardOptions = KeyboardOptions(
+                                    keyboardType = KeyboardType.Number
+                                ),
+                                label = {
+                                    Text(
+                                        text = "Período do Contrato em Meses:",
+                                        style = TextStyle(
+                                            color = getTextColor(), fontSize = 12.sp,
+                                        )
+                                    )
+                                }, enabled = false
+                            )
 
                             OutlinedTextField(
                                 value = renterName,
@@ -510,6 +496,34 @@ fun PropertyCurrentContractDialog(
                             onDateSelected = {
                                 if (it != null) {
                                     startDate = SimpleDateFormat("dd/MM/yyyy").format(Date(it))
+                                    if (endedDate.trim().isNotEmpty()){
+                                        var days = daysBetween(fmt.parse(startDate),fmt.parse(endedDate))
+                                        if (days<=0){
+                                            showToast("A Data de Término deve ser posterior à Data de Início do Contrato",context)
+                                            endedDate = ""
+                                        }else{
+                                            var start = Calendar.getInstance()
+                                            start.time = fmt.parse(startDate)
+                                            var end = Calendar.getInstance()
+                                            end.time = fmt.parse(endedDate)
+                                            var qtdmonths =0
+                                            var days = 0
+
+                                            if (start.get(Calendar.DAY_OF_MONTH)==end.get(Calendar.DAY_OF_MONTH)){
+                                                qtdmonths = ((end.get(Calendar.YEAR) - start.get(Calendar.YEAR)) * 12 + end.get(Calendar.MONTH)) - start.get(Calendar.MONTH)
+                                            }else{
+                                                if (start.get(Calendar.DAY_OF_MONTH)<end.get(Calendar.DAY_OF_MONTH)){
+                                                    qtdmonths = ((end.get(Calendar.YEAR) - start.get(Calendar.YEAR)) * 12 + end.get(Calendar.MONTH)) - start.get(Calendar.MONTH)
+                                                    days = end.get(Calendar.DAY_OF_MONTH) - start.get(Calendar.DAY_OF_MONTH)
+                                                }else{
+                                                    qtdmonths = ((end.get(Calendar.YEAR) - start.get(Calendar.YEAR)) * 12 + end.get(Calendar.MONTH)) - start.get(Calendar.MONTH) -1
+                                                    days = end.get(Calendar.DAY_OF_MONTH) + (30 - start.get(Calendar.DAY_OF_MONTH))
+                                                }
+                                                days++
+                                            }
+                                            months = "" + qtdmonths + " meses " + days + " dias"
+                                        }
+                                    }
                                 }
                         },openDialog = openStartDateDialog, title = "Data de Início"
                         )
@@ -522,6 +536,34 @@ fun PropertyCurrentContractDialog(
                             onDateSelected = {
                                 if (it != null) {
                                     endedDate = SimpleDateFormat("dd/MM/yyyy").format(Date(it))
+                                    if (startDate.trim().isNotEmpty()){
+                                        var days = daysBetween(fmt.parse(startDate),fmt.parse(endedDate))
+                                        if (days<=0){
+                                            showToast("A Data de Término deve ser posterior à Data de Início do Contrato",context)
+                                            endedDate = ""
+                                        }else{
+                                            var start = Calendar.getInstance()
+                                            start.time = fmt.parse(startDate)
+                                            var end = Calendar.getInstance()
+                                            end.time = fmt.parse(endedDate)
+                                            var qtdmonths =0
+                                            var days = 0
+
+                                            if (start.get(Calendar.DAY_OF_MONTH)==end.get(Calendar.DAY_OF_MONTH)){
+                                                qtdmonths = ((end.get(Calendar.YEAR) - start.get(Calendar.YEAR)) * 12 + end.get(Calendar.MONTH)) - start.get(Calendar.MONTH)
+                                            }else{
+                                                if (start.get(Calendar.DAY_OF_MONTH)<end.get(Calendar.DAY_OF_MONTH)){
+                                                    qtdmonths = ((end.get(Calendar.YEAR) - start.get(Calendar.YEAR)) * 12 + end.get(Calendar.MONTH)) - start.get(Calendar.MONTH)
+                                                    days = end.get(Calendar.DAY_OF_MONTH) - start.get(Calendar.DAY_OF_MONTH)
+                                                }else{
+                                                    qtdmonths = ((end.get(Calendar.YEAR) - start.get(Calendar.YEAR)) * 12 + end.get(Calendar.MONTH)) - start.get(Calendar.MONTH) -1
+                                                    days = end.get(Calendar.DAY_OF_MONTH) + (30 - start.get(Calendar.DAY_OF_MONTH))
+                                                }
+                                                days++
+                                            }
+                                            months = "" + qtdmonths + " meses " + days + " dias"
+                                        }
+                                    }
                                 }
                             }, openDialog = openEndedDateDialog, title = "Data de Término"
                         )
@@ -583,7 +625,7 @@ fun PropertyCurrentContractDialog(
                             paymentDate = "0"
 
 
-                        val fmt = SimpleDateFormat("dd/MM/yyyy")
+
                         var startDt = property.contractStartDate
                         if (startDate.isNotEmpty())
                             startDt = fmt.parse(startDate)

@@ -47,6 +47,7 @@ import java.util.Date
 
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import com.apps.gtorettirsm.R
@@ -71,7 +72,7 @@ fun PropertiesScreen(
 
     var openPropertyCreateDialog = remember { mutableStateOf(false) }
     var openPropertyDetailDialog = remember { mutableStateOf(false) }
-    var propertyId = remember { mutableStateOf(0L) }
+    var propertyId = remember { mutableLongStateOf(0L) }
 
     val context = LocalContext.current
     val properties by propertiesFlow.collectAsStateWithLifecycle(initialValue = emptyList())

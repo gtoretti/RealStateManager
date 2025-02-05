@@ -14,6 +14,6 @@ data class Receiving(
     val receivingDate: Date,
     val propertyId: Long,
     val totalValue: Double,
-    val billingDate: Date,
+    val type: String,
     val comments: String,
 )

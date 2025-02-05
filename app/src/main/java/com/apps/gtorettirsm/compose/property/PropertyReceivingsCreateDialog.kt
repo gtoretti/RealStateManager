@@ -68,6 +68,7 @@ import androidx.compose.ui.window.PopupProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.apps.gtorettirsm.compose.utils.DrawScrollableView
+import com.apps.gtorettirsm.compose.utils.daysBetween
 import com.apps.gtorettirsm.compose.utils.getButtonColor
 import com.apps.gtorettirsm.compose.utils.getProviderServicesList
 import com.apps.gtorettirsm.compose.utils.getRedTextColor
@@ -84,7 +85,7 @@ import com.apps.gtorettirsm.viewmodels.PropertyViewModel
 import com.apps.gtorettirsm.viewmodels.ProviderViewModel
 import com.apps.gtorettirsm.viewmodels.ReceivingViewModel
 import java.text.SimpleDateFormat
-import java.util.ArrayList
+import java.util.Calendar
 import java.util.Date
 
 @Composable
@@ -134,6 +135,10 @@ fun PropertyReceivingsCreateDialog(
                 receivingDescription = receiving.comments
                 receivingDate = fmt.format(receiving.receivingDate)
                 loaded = "true"
+            }
+        }else{
+            if (dropDownSelectReceivingType.value == "Aluguel"){
+                receivingDescription =getNextNewRentReceivingDescr(dropDownSelectPropertyId.value, properties, receivingViewModel)
             }
         }
 
@@ -234,6 +239,8 @@ fun PropertyReceivingsCreateDialog(
                         }
                     }
 
+                    ReceivingTypeDropdownMenu()
+
                     OutlinedTextField(
                         value = receivingDescription,
                         onValueChange = {
@@ -288,6 +295,7 @@ fun PropertyReceivingsCreateDialog(
                         openPropertyReceivingsCreateDialog.value = false
                         dropDownSelectPropertyId.value = 0L
                         dropDownSelectPropertyDesc.value = ""
+                        dropDownSelectReceivingType.value = ""
                     },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = getButtonColor()
@@ -335,13 +343,14 @@ fun PropertyReceivingsCreateDialog(
                                             var dateDt = fmt.parse(receivingDate)
                                         var billingDt = fmt.parse(receivingDate)
 
-                                        receivingViewModel.saveReceiving(Receiving(receiving.receivingId,dateDt,dropDownSelectPropertyId.value,receivingValue.screenToDouble(),billingDt,desc))
+                                        receivingViewModel.saveReceiving(Receiving(receiving.receivingId,dateDt,dropDownSelectPropertyId.value,receivingValue.screenToDouble(),dropDownSelectReceivingType.value,desc))
 
                             showToast("Recebimento registrado com sucesso!",context)
 
                             openPropertyReceivingsCreateDialog.value = false
                             dropDownSelectPropertyId.value = 0L
                             dropDownSelectPropertyDesc.value = ""
+                                        dropDownSelectReceivingType.value = ""
 
                         }
 
@@ -362,5 +371,124 @@ fun PropertyReceivingsCreateDialog(
             }
         )
     }
+}
+
+
+@Composable
+fun ReceivingTypeDropdownMenu() {
+    var expanded by remember { mutableStateOf(false) }
+    val types = listOf("Aluguel", "Outros")
+    Row() {
+        OutlinedTextField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable {
+                    expanded = !expanded
+                },
+            value = dropDownSelectReceivingType.value,
+            onValueChange = {
+
+            },
+            textStyle = TextStyle(
+                fontSize = 16.sp,
+                color = getTextColor(),
+                fontWeight = FontWeight.Normal
+            ), placeholder = { Text("") },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Decimal
+            ),
+            label = {
+                Row(verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Start,
+                    modifier = Modifier.fillMaxWidth()){
+                    Box(
+                        modifier = Modifier
+                            .padding(10.dp)
+                    ) {
+                        IconButton(onClick = { expanded = !expanded },
+                            modifier = Modifier
+                                .padding(end = 12.dp)
+                                .size(24.dp)
+                        ) {
+                            Icon(Icons.Default.KeyboardArrowDown, contentDescription = "Selecionar Tipo de Recebimento")
+                        }
+                        DropdownMenu(
+                            expanded = expanded,
+                            onDismissRequest = { expanded = false }
+                        ) {
+                            types.forEach { item ->
+
+                                DropdownMenuItem(
+                                    text = {
+                                        Text(
+                                            text = item, style = TextStyle(
+                                                color = getTextColor(),
+                                                fontSize = 14.sp,
+                                            )
+                                        )
+                                    },
+                                    onClick = {
+                                        dropDownSelectReceivingType.value = item
+                                        expanded = !expanded
+                                    }
+                                )
+                            }
+                        }
+                    }
+                    Text(
+                        text = "Tipo de Recebimento:",
+                        style = TextStyle(
+                            color = getTextColor(), fontSize = 12.sp,
+                        )
+                    )
+                }
+
+            }, enabled = false
+        )
+    }
+
+}
+
+
+@Composable
+fun getNextNewRentReceivingDescr(propertyId:Long, properties: List<Property>, receivingViewModel: ReceivingViewModel): String{
+    var ret = ""
+    var property = Property(0L,"", "", "", "", "", "", "", 0.0,0,"", "", "", "","","", "", "", 0.0, "" , 0,  "", "", "", "",  Date(0), Date(0), 0, "", 0.0, "", "", "", "", "", "", "", "", 0)
+    for (item in properties) {
+        if (item.propertyId == propertyId)
+            property = item
+        break
+    }
+
+    if (property.contractStartDate.time==0L){
+        return "ERROR-Por favor, informe o período do contrato."
+    }
+
+    var startDate = Calendar.getInstance()
+    startDate.time = property.contractStartDate
+    startDate.set(Calendar.DAY_OF_MONTH,property.contractPaymentDate)
+
+
+    var rentFlow = receivingViewModel.getRentReceivings(propertyId,property.contractStartDate)
+    val properties by rentFlow.collectAsStateWithLifecycle(initialValue = emptyList())
+    val paymentsQtd = properties.size
+
+    if (paymentsQtd >= property.contractMonths){
+        return "ERROR-O Contrato está Vencido. Por favor, atualize o contrato."
+    }else{
+        //proximo vencimento a quitar:
+        startDate.add(Calendar.MONTH,paymentsQtd+1)
+
+
+        //calculo de atraso:
+        var today = Calendar.getInstance()
+        var delay = daysBetween(startDate,today)
+        val fmt = SimpleDateFormat("dd/MM/yyyy")
+        ret= "Aluguel de Vencimento " + fmt.format(startDate)
+        if (delay>0){
+            ret=ret+"(ATRASO DE "+delay+" DIAS)"
+        }
+    }
+    return ret
 }
 

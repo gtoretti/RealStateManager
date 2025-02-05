@@ -120,7 +120,7 @@ fun PropertyExpenseDeleteDialog(
                         dropDownSelectProviderName.value = ""
                         dropDownSelectProviderServices.value = ArrayList<String>()
                         dropDownSelectProviderServiceDesc.value = ""
-
+                        dropDownSelectReceivingType.value = ""
 
                         openPropertyExpenseDeleteDialog.value = false
                         openPropertyExpensesCreateDialog.value = false

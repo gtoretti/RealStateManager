@@ -130,6 +130,7 @@ fun PropertyExpensesDialog(
                                 dropDownSelectProviderName.value = ""
                                 dropDownSelectProviderServices.value = ArrayList<String>()
                                 dropDownSelectProviderServiceDesc.value = ""
+                                dropDownSelectReceivingType.value = ""
                                 openPropertyExpensesCreateDialog.value = true
                             }
                         ) {
@@ -268,6 +269,7 @@ fun PropertyExpensesDialog(
                         dropDownSelectProviderName.value = ""
                         dropDownSelectProviderServices.value = ArrayList<String>()
                         dropDownSelectProviderServiceDesc.value = ""
+                        dropDownSelectReceivingType.value = ""
                         openPropertyExpensesDialog.value = false
                     },
                         colors = ButtonDefaults.buttonColors(

@@ -3,6 +3,7 @@
 
 package com.apps.gtorettirsm.data
 
+import java.util.Date
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -10,6 +11,8 @@ import javax.inject.Singleton
 class ReceivingRepository @Inject constructor(private val receivingDao: ReceivingDao) {
 
     fun getReceivings(idProperty: Long) = receivingDao.getReceivings(idProperty)
+
+    fun getRentReceivings(idProperty: Long, contractStartDate: Date) = receivingDao.getRentReceivings(idProperty,contractStartDate)
 
     suspend fun saveReceiving(receiving: Receiving){
         receivingDao.upsert(receiving)
