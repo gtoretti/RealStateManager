@@ -5,6 +5,7 @@ package com.apps.gtorettirsm.compose.property
 
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -122,7 +123,6 @@ fun PropertyReceivingsCreateDialog(
     var fineValue by remember { mutableStateOf("") }
     var delayDays by remember { mutableStateOf("") }
 
-
     val openDateDialog = remember { mutableStateOf(false) }
 
     val fmt = SimpleDateFormat("dd/MM/yyyy")
@@ -136,24 +136,91 @@ fun PropertyReceivingsCreateDialog(
 
             if (loaded.trim().isEmpty()) {
                 dropDownSelectPropertyId.value = receiving.propertyId
+                dropDownSelectReceivingType.value = receiving.type
+                fineValue = receiving.fineValue.toScreen()
                 receivingValue = receiving.totalValue.toScreen()
+                delayDays = receiving.delayDays.toString()
+                rentBillingDueDate = fmt.format(receiving.rentBillingDueDate)
                 receivingDescription = receiving.comments
                 receivingDate = fmt.format(receiving.receivingDate)
                 loaded = "true"
             }
-        }else{
-            if (dropDownSelectReceivingType.value == "Aluguel"){
-                rentBillingDueDate =getNextNewRentReceivingDescr(dropDownSelectPropertyId.value, properties, receivingViewModel,context)
-                if (rentBillingDueDate.trim().isEmpty()){
-                    dropDownSelectReceivingType.value = "Outros"
-                }
-                if (receivingDate.trim().isNotEmpty() && rentBillingDueDate.trim().isNotEmpty()){
-                    var delayDaysLong = daysBetween(fmt.parse(rentBillingDueDate),fmt.parse(receivingDate))
-                    if (delayDaysLong<0)
+        }
+
+        var paymentsList = ArrayList<Receiving>()
+        if (dropDownSelectPropertyId.value!=0L){
+            var property = Property(0L,"", "", "", "", "", "", "", 0.0,0,"", "", "", "","","", "", "", 0.0, "" , 0,  "", "", "", "",  Date(0), Date(0), 0,0, "","", 0.0, "", "", "", "", "", "", "", "", 0,0.0)
+            for (item in properties) {
+                if (item.propertyId == dropDownSelectPropertyId.value)
+                    property = item
+                break
+            }
+            var rentFlow = receivingViewModel.getRentReceivings(dropDownSelectPropertyId.value,property.contractStartDate)
+            val payments by rentFlow.collectAsStateWithLifecycle(initialValue = emptyList())
+            paymentsList.addAll(payments)
+        }
+
+        if (dropDownSelectReceivingType.value == "Aluguel"){
+
+                //busco o proximo vencimento somente se for recebimento novo ou se esta alterando type Outros para Aluguel
+            if (rentBillingDueDate.trim().isEmpty())
+                rentBillingDueDate =getNextNewRentReceivingDescr(dropDownSelectPropertyId.value, properties, receivingViewModel,context,paymentsList)
+
+            if (rentBillingDueDate.trim().isEmpty()){
+                dropDownSelectReceivingType.value = "Outros"
+            }else
+            {
+                if (receivingDate.trim().isNotEmpty() && rentBillingDueDate.trim().isNotEmpty()) {
+                    var delayDaysLong =
+                        daysBetween(fmt.parse(rentBillingDueDate), fmt.parse(receivingDate))
+                    if (delayDaysLong < 0)
                         delayDaysLong = 0
                     delayDays = delayDaysLong.toString()
 
-                    var property = Property(0L,"", "", "", "", "", "", "", 0.0,0,"", "", "", "","","", "", "", 0.0, "" , 0,  "", "", "", "",  Date(0), Date(0), 0,0, "","", 0.0, "", "", "", "", "", "", "", "", 0,0.0)
+                    var property = Property(
+                        0L,
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        0.0,
+                        0,
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        0.0,
+                        "",
+                        0,
+                        "",
+                        "",
+                        "",
+                        "",
+                        Date(0),
+                        Date(0),
+                        0,
+                        0,
+                        "",
+                        "",
+                        0.0,
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        0,
+                        0.0
+                    )
                     for (item in properties) {
                         if (item.propertyId == dropDownSelectPropertyId.value)
                             property = item
@@ -161,10 +228,12 @@ fun PropertyReceivingsCreateDialog(
                     }
                     fineValue = (property.contractFinePerDelayedDay * delayDaysLong).toScreen()
 
-                    receivingValue = (property.contractMonthlyBillingValue + (property.contractFinePerDelayedDay * delayDaysLong)).toScreen()
+                    receivingValue =
+                        (property.contractMonthlyBillingValue + (property.contractFinePerDelayedDay * delayDaysLong)).toScreen()
                 }
             }
         }
+
 
 
         AlertDialog(shape = RoundedCornerShape(10.dp), onDismissRequest = {
@@ -570,7 +639,7 @@ fun ReceivingTypeDropdownMenu() {
 
 
 @Composable
-fun getNextNewRentReceivingDescr(propertyId:Long, properties: List<Property>, receivingViewModel: ReceivingViewModel, context: Context): String{
+fun getNextNewRentReceivingDescr(propertyId:Long, properties: List<Property>, receivingViewModel: ReceivingViewModel, context: Context, payments: List<Receiving>): String{
     var ret = ""
     val fmt = SimpleDateFormat("dd/MM/yyyy")
     var property = Property(0L,"", "", "", "", "", "", "", 0.0,0,"", "", "", "","","", "", "", 0.0, "" , 0,  "", "", "", "",  Date(0), Date(0), 0,0, "","", 0.0, "", "", "", "", "", "", "", "", 0,0.0)
@@ -594,10 +663,7 @@ fun getNextNewRentReceivingDescr(propertyId:Long, properties: List<Property>, re
     startBillingDate.time = property.contractStartDate
     startBillingDate.set(Calendar.DAY_OF_MONTH,1)
 
-    var rentFlow = receivingViewModel.getRentReceivings(propertyId,startBillingDate.time)
-    val payments by rentFlow.collectAsStateWithLifecycle(initialValue = emptyList())
     val paymentsQtd = payments.size
-
 
     var totalBillingQtd = property.contractMonths
     if (property.contractDays > 0)
@@ -621,11 +687,15 @@ fun getNextNewRentReceivingDescr(propertyId:Long, properties: List<Property>, re
             var paid = false
             //checa lista de pagamentos realizados se tem cada cobrança
             for (payment in payments) {
+
                 var dueDate = Calendar.getInstance()
                 dueDate.time = payment.rentBillingDueDate
-                if (dueDate.get(Calendar.YEAR) == startBillingDate.get(Calendar.YEAR) && dueDate.get(Calendar.MONTH) == startBillingDate.get(Calendar.MONTH) )
+
+                if (dueDate.get(Calendar.YEAR) == startBillingDate.get(Calendar.YEAR) && dueDate.get(Calendar.MONTH) == startBillingDate.get(Calendar.MONTH) ){
                     paid = true
-                break
+                    break
+                }
+
             }
             //se nao tem a cobrança, essa é a proxima a pagar
             if (!paid){
