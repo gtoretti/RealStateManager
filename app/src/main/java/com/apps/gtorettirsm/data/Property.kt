@@ -55,6 +55,7 @@ data class Property(
     val contractGuarantorPhone: String,
     val contractGuarantorEmail: String,
     val contractPaymentDate: Int,
+    val contractFinePerDelayedDay: Double,
 
 
     ) {

@@ -194,6 +194,7 @@ fun Double.toWords(language: String, country: String): String {
 }
 
 fun String.screenToDouble(): Double {
+    if (this.trim().isEmpty()) return 0.0
     var ret = this.replace(".", "")
     ret = ret.replace(",", ".")
     return ret.toDouble()

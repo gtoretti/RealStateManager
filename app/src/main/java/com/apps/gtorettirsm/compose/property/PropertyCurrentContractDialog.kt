@@ -80,6 +80,8 @@ fun PropertyCurrentContractDialog(
     var guarantorPhone by remember { mutableStateOf("") }
     var guarantorEmail by remember { mutableStateOf("") }
     var paymentDate by remember { mutableStateOf("") }
+    var contractFinePerDelayedDay by remember { mutableStateOf("") }
+
 
     val openStartDateDialog = remember { mutableStateOf(false) }
     val openEndedDateDialog = remember { mutableStateOf(false) }
@@ -183,6 +185,31 @@ fun PropertyCurrentContractDialog(
                                     )
                                 }
                             )
+
+                            OutlinedTextField(
+                                value = contractFinePerDelayedDay,
+                                onValueChange = {
+                                    contractFinePerDelayedDay = it
+                                },
+                                textStyle = TextStyle(
+                                    fontSize = 16.sp,
+                                    color = getTextColor(),
+                                    fontWeight = FontWeight.Normal
+                                ),placeholder = { Text("0.000,00") },
+                                keyboardOptions = KeyboardOptions(
+                                    keyboardType = KeyboardType.Decimal
+                                ),
+
+                                label = {
+                                    Text(
+                                        text = "Valor da Multa por Dia de Atraso:",
+                                        style = TextStyle(
+                                            color = getTextColor(), fontSize = 12.sp,
+                                        )
+                                    )
+                                }
+                            )
+
 
                             OutlinedTextField(
                                 value = valueAdjustmentIndexName,
@@ -646,6 +673,7 @@ fun PropertyCurrentContractDialog(
                             guarantorPhone=""
                             guarantorEmail=""
                             paymentDate=""
+                            contractFinePerDelayedDay = ""
 
                             openStartDateDialog.value = false
                             openEndedDateDialog.value = false
@@ -722,7 +750,8 @@ fun PropertyCurrentContractDialog(
                                 contractGuarantorCPF= guarantorCPF,
                                 contractGuarantorPhone= guarantorPhone,
                                 contractGuarantorEmail= guarantorEmail,
-                                contractPaymentDate= Integer.parseInt(paymentDate)
+                                contractPaymentDate= Integer.parseInt(paymentDate),
+                                contractFinePerDelayedDay = contractFinePerDelayedDay.screenToDouble()
                             ))
 
                         startDate=""
@@ -739,6 +768,7 @@ fun PropertyCurrentContractDialog(
                         guarantorPhone=""
                         guarantorEmail=""
                         paymentDate=""
+                        contractFinePerDelayedDay = ""
 
                         openStartDateDialog.value = false
                         openEndedDateDialog.value = false

@@ -251,7 +251,8 @@ fun PropertyContractManagerDialog(
                                 contractGuarantorCPF= property.contractGuarantorCPF,
                                 contractGuarantorPhone= property.contractGuarantorPhone,
                                 contractGuarantorEmail= property.contractGuarantorEmail,
-                                contractPaymentDate= property.contractPaymentDate
+                                contractPaymentDate= property.contractPaymentDate,
+                                contractFinePerDelayedDay = property.contractFinePerDelayedDay
                             ))
 
 

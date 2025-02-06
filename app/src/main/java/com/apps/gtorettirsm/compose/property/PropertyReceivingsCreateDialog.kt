@@ -152,6 +152,16 @@ fun PropertyReceivingsCreateDialog(
                     if (delayDaysLong<0)
                         delayDaysLong = 0
                     delayDays = delayDaysLong.toString()
+
+                    var property = Property(0L,"", "", "", "", "", "", "", 0.0,0,"", "", "", "","","", "", "", 0.0, "" , 0,  "", "", "", "",  Date(0), Date(0), 0,0, "","", 0.0, "", "", "", "", "", "", "", "", 0,0.0)
+                    for (item in properties) {
+                        if (item.propertyId == dropDownSelectPropertyId.value)
+                            property = item
+                        break
+                    }
+                    fineValue = (property.contractFinePerDelayedDay * delayDaysLong).toScreen()
+
+                    receivingValue = (property.contractMonthlyBillingValue + (property.contractFinePerDelayedDay * delayDaysLong)).toScreen()
                 }
             }
         }
@@ -204,12 +214,6 @@ fun PropertyReceivingsCreateDialog(
                             }, enabled = false
                         )
                     }
-
-
-
-
-
-
 
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
@@ -301,13 +305,6 @@ fun PropertyReceivingsCreateDialog(
                             }, enabled = false
                         )
                     }
-
-
-
-
-
-
-
 
                     OutlinedTextField(
                         value = receivingValue,
@@ -576,7 +573,7 @@ fun ReceivingTypeDropdownMenu() {
 fun getNextNewRentReceivingDescr(propertyId:Long, properties: List<Property>, receivingViewModel: ReceivingViewModel, context: Context): String{
     var ret = ""
     val fmt = SimpleDateFormat("dd/MM/yyyy")
-    var property = Property(0L,"", "", "", "", "", "", "", 0.0,0,"", "", "", "","","", "", "", 0.0, "" , 0,  "", "", "", "",  Date(0), Date(0), 0,0, "","", 0.0, "", "", "", "", "", "", "", "", 0)
+    var property = Property(0L,"", "", "", "", "", "", "", 0.0,0,"", "", "", "","","", "", "", 0.0, "" , 0,  "", "", "", "",  Date(0), Date(0), 0,0, "","", 0.0, "", "", "", "", "", "", "", "", 0,0.0)
     for (item in properties) {
         if (item.propertyId == propertyId)
             property = item

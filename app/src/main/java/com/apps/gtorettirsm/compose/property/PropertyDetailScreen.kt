@@ -92,7 +92,7 @@ fun PropertyDetailScreen(
     val displayPropertyGDriveConf = remember { mutableStateOf(false) }
 
     val property by propertyFlow.collectAsStateWithLifecycle(
-        initialValue = Property(0L,"", "", "", "", "", "", "", 0.0,0,"", "", "", "", "", "","","", 0.0, "" , 0,  "", "", "", "",  Date(0), Date(0), 0,0, "","", 0.0, "", "", "", "", "", "", "", "", 0)
+        initialValue = Property(0L,"", "", "", "", "", "", "", 0.0,0,"", "", "", "", "", "","","", 0.0, "" , 0,  "", "", "", "",  Date(0), Date(0), 0,0, "","", 0.0, "", "", "", "", "", "", "", "", 0,0.0)
     )
 
     if (openPropertyDetailDialog.value) {
@@ -835,6 +835,19 @@ if (!displayPropertyCurrentContract.value){
     Text(
         text = defaultNaoInformado(property.contractPaymentDate)
     )
+
+    Text(
+        text = "Valor da Multa por Dia de Atraso:",
+        style = TextStyle(
+            color = getTextColor(),
+            fontWeight = FontWeight.Bold,
+        )
+    )
+    Text(
+        text = defaultNaoInformado(property.contractFinePerDelayedDay)
+    )
+
+
 
     Text(
         text = "Índice de Reajuste Anual:",
