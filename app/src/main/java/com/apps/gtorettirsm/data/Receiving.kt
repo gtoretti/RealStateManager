@@ -16,4 +16,7 @@ data class Receiving(
     val totalValue: Double,
     val type: String,
     val comments: String,
+    val rentBillingDueDate: Date,
+    val fineValue: Double,
+    val delayDays: Long,
 )

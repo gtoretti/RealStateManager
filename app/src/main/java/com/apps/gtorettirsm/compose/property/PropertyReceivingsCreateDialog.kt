@@ -118,9 +118,10 @@ fun PropertyReceivingsCreateDialog(
     var receivingValue by remember { mutableStateOf("") }
     var receivingDescription by remember { mutableStateOf("") }
     var receivingDate by remember { mutableStateOf("") }
-    var nextPendingRent by remember { mutableStateOf("") }
-    var nextPendingRentDelayInDays by remember { mutableStateOf("") }
-    var nextPendingRentDelayTotalFine by remember { mutableStateOf("") }
+    var rentBillingDueDate by remember { mutableStateOf("") }
+    var fineValue by remember { mutableStateOf("") }
+    var delayDays by remember { mutableStateOf("") }
+
 
     val openDateDialog = remember { mutableStateOf(false) }
 
@@ -142,7 +143,7 @@ fun PropertyReceivingsCreateDialog(
             }
         }else{
             if (dropDownSelectReceivingType.value == "Aluguel"){
-                nextPendingRent =getNextNewRentReceivingDescr(dropDownSelectPropertyId.value, properties, receivingViewModel,context)
+                rentBillingDueDate =getNextNewRentReceivingDescr(dropDownSelectPropertyId.value, properties, receivingViewModel,context)
             }
         }
 
@@ -175,7 +176,7 @@ fun PropertyReceivingsCreateDialog(
 
                     if (dropDownSelectReceivingType.value.equals("Aluguel")){
                         OutlinedTextField(
-                            value = nextPendingRent,
+                            value = rentBillingDueDate,
                             onValueChange = {
 
                             },
@@ -186,7 +187,7 @@ fun PropertyReceivingsCreateDialog(
                             ),placeholder = {Text("")},
                             label = {
                                 Text(
-                                    text = "Próximo Aluguel a Receber:",
+                                    text = "Vencimento do Próximo Aluguel a Receber:",
                                     style = TextStyle(
                                         color = getTextColor(),fontSize = 12.sp,
                                     )
@@ -252,9 +253,9 @@ fun PropertyReceivingsCreateDialog(
 
                     if (dropDownSelectReceivingType.value.equals("Aluguel")){
                         OutlinedTextField(
-                            value = receivingDescription,
+                            value = delayDays,
                             onValueChange = {
-                                receivingDescription = it
+
                             },
                             textStyle = TextStyle(
                                 fontSize = 16.sp,
@@ -272,9 +273,9 @@ fun PropertyReceivingsCreateDialog(
                         )
 
                         OutlinedTextField(
-                            value = receivingDescription,
+                            value = fineValue,
                             onValueChange = {
-                                receivingDescription = it
+
                             },
                             textStyle = TextStyle(
                                 fontSize = 16.sp,
@@ -421,10 +422,22 @@ fun PropertyReceivingsCreateDialog(
                                         var desc = receivingDescription
 
                                             val fmt = SimpleDateFormat("dd/MM/yyyy")
-                                            var dateDt = fmt.parse(receivingDate)
+                                            var receivingDateDt = fmt.parse(receivingDate)
 
 
-                                        receivingViewModel.saveReceiving(Receiving(receiving.receivingId,dateDt,dropDownSelectPropertyId.value,receivingValue.screenToDouble(),dropDownSelectReceivingType.value,desc))
+                                        var rentBillingMonth= Date(0L)
+                                        var rentBillingDueDate= Date(0L)
+                                        var fineValueDouble = 0.0
+                                        var delayDaysLong = 0L
+                                        if (delayDays.trim().isNotEmpty()){
+                                            delayDaysLong = delayDays.toLong()
+                                        }
+                                        if (fineValue.trim().isNotEmpty()){
+                                            fineValueDouble = fineValue.screenToDouble()
+                                        }
+
+
+                                        receivingViewModel.saveReceiving(Receiving(receiving.receivingId,receivingDateDt,dropDownSelectPropertyId.value,receivingValue.screenToDouble(),dropDownSelectReceivingType.value,desc,rentBillingDueDate,fineValueDouble,delayDaysLong))
 
                                         showToast("Recebimento registrado com sucesso!",context)
 
@@ -542,39 +555,57 @@ fun getNextNewRentReceivingDescr(propertyId:Long, properties: List<Property>, re
         break
     }
 
-    if (property.contractStartDate.time==0L || property.contractEndedDate.time==0L){
+    if (property.contractStartDate.time==0L || property.contractEndedDate.time==0L || (property.contractMonths==0 && property.contractDays == 0)){
         showToast("Por favor, informe as datas de Início e Término do Contrato.",context)
         return ""
     }
 
     var startBillingDate = Calendar.getInstance()
     startBillingDate.time = property.contractStartDate
-    startBillingDate.set(Calendar.DAY_OF_MONTH,property.contractPaymentDate)
+    startBillingDate.set(Calendar.DAY_OF_MONTH,1)
+
+    var rentFlow = receivingViewModel.getRentReceivings(propertyId,startBillingDate.time)
+    val payments by rentFlow.collectAsStateWithLifecycle(initialValue = emptyList())
+    val paymentsQtd = payments.size
+
+
     var totalBillingQtd = property.contractMonths
     if (property.contractDays > 0)
         totalBillingQtd++
-
-
-    var rentFlow = receivingViewModel.getRentReceivings(propertyId,property.contractStartDate)
-    val properties by rentFlow.collectAsStateWithLifecycle(initialValue = emptyList())
-    val paymentsQtd = properties.size
 
     if (paymentsQtd >= totalBillingQtd){
         showToast("O período do contrato está quitado. Por favor verifique o período do contrato.",context)
         return ""
     }else{
         //proximo vencimento a quitar:
-        startBillingDate.add(Calendar.MONTH,paymentsQtd+1)
-        ret = fmt.format(startBillingDate.time)
 
+        //checa se tem algum no meio que nao foi pago:
 
-        //calculo de atraso:
-        //var delay = daysBetween(startDate,today)
+        var i = 0
+        var billing = Calendar.getInstance()
 
-        //ret= "Aluguel de Vencimento " + fmt.format(startDate)
-        //if (delay>0){
-        //    ret=ret+"(ATRASO DE "+delay+" DIAS)"
-        //}
+        //corre a lista de cobranças mensais e checa se houve pagamento
+        while (i < totalBillingQtd) {
+            startBillingDate.add(Calendar.MONTH,1)
+
+            var paid = false
+            //checa lista de pagamentos realizados se tem cada cobrança
+            for (payment in payments) {
+                var dueDate = Calendar.getInstance()
+                dueDate.time = payment.rentBillingDueDate
+                if (dueDate.get(Calendar.YEAR) == startBillingDate.get(Calendar.YEAR) && dueDate.get(Calendar.MONTH) == startBillingDate.get(Calendar.MONTH) )
+                    paid = true
+                break
+            }
+            //se nao tem a cobrança, essa é a proxima a pagar
+            if (!paid){
+                billing.time = startBillingDate.time
+                billing.set(Calendar.DAY_OF_MONTH,property.contractPaymentDate)
+                break
+            }
+            i++
+        }
+        ret = fmt.format(billing.time)
     }
     return ret
 }
