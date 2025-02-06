@@ -144,6 +144,15 @@ fun PropertyReceivingsCreateDialog(
         }else{
             if (dropDownSelectReceivingType.value == "Aluguel"){
                 rentBillingDueDate =getNextNewRentReceivingDescr(dropDownSelectPropertyId.value, properties, receivingViewModel,context)
+                if (rentBillingDueDate.trim().isEmpty()){
+                    dropDownSelectReceivingType.value = "Outros"
+                }
+                if (receivingDate.trim().isNotEmpty() && rentBillingDueDate.trim().isNotEmpty()){
+                    var delayDaysLong = daysBetween(fmt.parse(rentBillingDueDate),fmt.parse(receivingDate))
+                    if (delayDaysLong<0)
+                        delayDaysLong = 0
+                    delayDays = delayDaysLong.toString()
+                }
             }
         }
 
@@ -353,6 +362,11 @@ fun PropertyReceivingsCreateDialog(
                             onDateSelected = {
                                 if (it != null) {
                                     receivingDate = SimpleDateFormat("dd/MM/yyyy").format(Date(it))
+                                    if (dropDownSelectReceivingType.value.equals("Aluguel") && rentBillingDueDate.trim().isNotEmpty()){
+                                        delayDays = daysBetween(fmt.parse(rentBillingDueDate),Date(it)).toString()
+
+
+                                    }
                                 }
                             }, openDialog = openDateDialog, title = "Data do Recebimento"
                         )
@@ -408,45 +422,59 @@ fun PropertyReceivingsCreateDialog(
                     }
 
                     Button(onClick = {
-                        if (dropDownSelectPropertyId.value == 0L){
-                            showToast("Por favor, selecione o imóvel referente ao recebimento.",context)
-                        }else
-
-                                        if (receivingValue.trim().isEmpty()){
-                                        showToast("Por favor, informe o valor recebido.",context)
-                                    }else
-                                            if (receivingDate.trim().isEmpty()){
-                                                showToast("Por favor, informe a data do recebimento.",context)
-                                            }else
-                                    {
-                                        var desc = receivingDescription
-
-                                            val fmt = SimpleDateFormat("dd/MM/yyyy")
-                                            var receivingDateDt = fmt.parse(receivingDate)
-
-
-                                        var rentBillingMonth= Date(0L)
-                                        var rentBillingDueDate= Date(0L)
-                                        var fineValueDouble = 0.0
-                                        var delayDaysLong = 0L
-                                        if (delayDays.trim().isNotEmpty()){
-                                            delayDaysLong = delayDays.toLong()
-                                        }
-                                        if (fineValue.trim().isNotEmpty()){
-                                            fineValueDouble = fineValue.screenToDouble()
-                                        }
+                        if (dropDownSelectPropertyId.value == 0L) {
+                            showToast(
+                                "Por favor, selecione o imóvel referente ao recebimento.",
+                                context
+                            )
+                        } else
+                            if (receivingValue.trim().isEmpty()) {
+                                showToast("Por favor, informe o valor recebido.", context)
+                            } else
+                                if (receivingDate.trim().isEmpty()) {
+                                    showToast("Por favor, informe a data do recebimento.", context)
+                                } else {
+                                    var desc = receivingDescription
+                                    var receivingDateDt = fmt.parse(receivingDate)
 
 
-                                        receivingViewModel.saveReceiving(Receiving(receiving.receivingId,receivingDateDt,dropDownSelectPropertyId.value,receivingValue.screenToDouble(),dropDownSelectReceivingType.value,desc,rentBillingDueDate,fineValueDouble,delayDaysLong))
+                                    var rentBillingDueDateDt = Date(0L)
+                                    if (rentBillingDueDate.trim().isNotEmpty()) {
+                                        rentBillingDueDateDt = fmt.parse(rentBillingDueDate)
+                                    }
 
-                                        showToast("Recebimento registrado com sucesso!",context)
+                                    var fineValueDouble = 0.0
+                                    if (fineValue.trim().isNotEmpty())
+                                        fineValueDouble = fineValue.screenToDouble()
 
-                                        openPropertyReceivingsCreateDialog.value = false
-                                        dropDownSelectPropertyId.value = 0L
-                                        dropDownSelectPropertyDesc.value = ""
-                                        dropDownSelectReceivingType.value = ""
+                                    var delayDaysLong = 0L
 
-                        }
+                                    if (delayDays.trim().isNotEmpty()) {
+                                        delayDaysLong = delayDays.toLong()
+                                    }
+
+                                    receivingViewModel.saveReceiving(
+                                        Receiving(
+                                            receiving.receivingId,
+                                            receivingDateDt,
+                                            dropDownSelectPropertyId.value,
+                                            receivingValue.screenToDouble(),
+                                            dropDownSelectReceivingType.value,
+                                            desc,
+                                            rentBillingDueDateDt,
+                                            fineValueDouble,
+                                            delayDaysLong
+                                        )
+                                    )
+
+                                    showToast("Recebimento registrado com sucesso!", context)
+
+                                    openPropertyReceivingsCreateDialog.value = false
+                                    dropDownSelectPropertyId.value = 0L
+                                    dropDownSelectPropertyDesc.value = ""
+                                    dropDownSelectReceivingType.value = ""
+
+                                }
 
 
 
@@ -555,8 +583,13 @@ fun getNextNewRentReceivingDescr(propertyId:Long, properties: List<Property>, re
         break
     }
 
+    if (property.contractPaymentDate==0){
+        showToast("Por favor, informe o Dia de Pagamento no Mês nas informações do contrato.",context)
+        return ""
+    }
+
     if (property.contractStartDate.time==0L || property.contractEndedDate.time==0L || (property.contractMonths==0 && property.contractDays == 0)){
-        showToast("Por favor, informe as datas de Início e Término do Contrato.",context)
+        showToast("Por favor, informe as datas de Início e Término nas informações do contrato.",context)
         return ""
     }
 
