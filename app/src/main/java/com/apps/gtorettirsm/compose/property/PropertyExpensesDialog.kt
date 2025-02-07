@@ -105,45 +105,7 @@ fun PropertyExpensesDialog(
 
                 ) {
 
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(
-                            text = "Para adicionar, clique aqui->",
-                            style = TextStyle(
-                                color = getRedTextColor(),
-                                fontSize = 16.sp,
-                                fontFamily = FontFamily.SansSerif,
-                            )
-                        )
 
-                        TextButton(
-                            modifier = Modifier.padding(5.dp),
-                            onClick =
-                            {
-                                expense.value = Expense(0L,Date(0),0L,0.0,"","","",0L,"")
-                                dropDownSelectPropertyId.value = 0L
-                                dropDownSelectPropertyDesc.value = ""
-                                dropDownSelectExpenseType.value = ""
-                                dropDownSelectProviderId.value = 0L
-                                dropDownSelectProviderName.value = ""
-                                dropDownSelectProviderServices.value = ArrayList<String>()
-                                dropDownSelectProviderServiceDesc.value = ""
-                                dropDownSelectReceivingType.value = ""
-                                openPropertyExpensesCreateDialog.value = true
-                            }
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.AddCircle,
-                                contentDescription = "Novo Desenbolso",
-                                tint = getTextColor(),
-                                modifier = Modifier
-                                    .padding(end = 12.dp)
-                                    .size(24.dp)
-                            )
-                        }
-                    }
 
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
@@ -278,6 +240,30 @@ fun PropertyExpensesDialog(
                     ) {
                         Text(
                             text = "Cancelar", style = TextStyle(
+                                fontSize = 14.sp,
+                            )
+                        )
+                    }
+
+
+                    Button(onClick = {
+                        expense.value = Expense(0L,Date(0),0L,0.0,"","","",0L,"")
+                        dropDownSelectPropertyId.value = 0L
+                        dropDownSelectPropertyDesc.value = ""
+                        dropDownSelectExpenseType.value = ""
+                        dropDownSelectProviderId.value = 0L
+                        dropDownSelectProviderName.value = ""
+                        dropDownSelectProviderServices.value = ArrayList<String>()
+                        dropDownSelectProviderServiceDesc.value = ""
+                        dropDownSelectReceivingType.value = ""
+                        openPropertyExpensesCreateDialog.value = true
+                    },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = getButtonColor()
+                        ),modifier = Modifier.height(30.dp)
+                    ) {
+                        Text(
+                            text = "Adicionar", style = TextStyle(
                                 fontSize = 14.sp,
                             )
                         )

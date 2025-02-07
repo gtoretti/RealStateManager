@@ -511,7 +511,7 @@ fun FinancialScreen(
             Checkbox(checked = (true),
                 onCheckedChange = {})
             Text(
-                text = "Recebimentos Previstos",
+                text = "Recebimentos de Aluguéis Previstos",
                 style = TextStyle(
                     color = getTextColor(),
                     fontSize = 16.sp,
@@ -520,7 +520,7 @@ fun FinancialScreen(
             )
             Icon(
                 imageVector = ImageVector.vectorResource(R.drawable.schedule_24px),
-                contentDescription = "Recebimentos Previstos",
+                contentDescription = "Recebimentos de Aluguéis Previstos",
                 tint = Color(0xFF08940E),
                 modifier = Modifier
                     .padding(end = 10.dp)
@@ -536,7 +536,7 @@ fun FinancialScreen(
             Checkbox(checked = (true),
                 onCheckedChange = {})
             Text(
-                text = "Recebimentos Atrasados",
+                text = "Recebimentos de Aluguéis Atrasados",
                 style = TextStyle(
                     color = getTextColor(),
                     fontSize = 16.sp,
@@ -545,7 +545,7 @@ fun FinancialScreen(
             )
             Icon(
                 imageVector = ImageVector.vectorResource(R.drawable.warning_24px),
-                contentDescription = "Recebimentos Atrasados",
+                contentDescription = "Recebimentos de Aluguéis Atrasados",
                 tint = Color(0xFFD50000),
                 modifier = Modifier
                     .padding(end = 10.dp)

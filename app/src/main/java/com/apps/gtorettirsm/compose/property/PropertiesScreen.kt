@@ -47,10 +47,14 @@ import java.util.Date
 
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.foundation.layout.height
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import com.apps.gtorettirsm.R
+import com.apps.gtorettirsm.compose.utils.getButtonColor
 
 @Composable
 fun PropertiesScreen(
@@ -93,40 +97,51 @@ fun PropertiesScreen(
                 )
             }
         }
+
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.End,
             modifier = Modifier.fillMaxWidth()
         ) {
+            Spacer(modifier = Modifier.height(10.dp))
+        }
 
-            if (properties.isEmpty()) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.End,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 5.dp)
+        ) {
+
+            Button(
+                onClick = {
+                    openPropertyCreateDialog.value = true
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = getButtonColor()
+                ), modifier = Modifier.height(33.dp)
+            ) {
                 Text(
-                    text = "Para adicionar Imóveis, clique aqui-->",
+                    text = "Adicionar",
                     style = TextStyle(
-                        color = getRedTextColor(),
-                        fontSize = 16.sp,
-                        fontFamily = FontFamily.SansSerif,
+                        fontSize = 14.sp,
                     )
                 )
             }
 
-            TextButton(
-                modifier = Modifier.padding(5.dp),
-                onClick =
-                {
-                    openPropertyCreateDialog.value = true
-                }
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.AddCircle,
-                    contentDescription = "Adicionar Imóvel",
-                    tint = getTextColor(),
-                    modifier = Modifier
-                        .padding(end = 12.dp)
-                        .size(24.dp)
-                )
-            }
         }
+
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.End,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Spacer(modifier = Modifier.height(10.dp))
+        }
+
+
         Column(
             horizontalAlignment = Alignment.Start,
             modifier = Modifier

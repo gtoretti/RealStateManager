@@ -33,6 +33,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -89,60 +90,20 @@ fun PropertyReceivingsDialog(
             .height(800.dp),
 
             title = {
-                Text(
-                    text = "Recebimentos:", style = TextStyle(
-                        color = getTextColor(),
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold,
-                        fontFamily = FontFamily.SansSerif,
+                    Text(
+                        text = "Recebimentos:", style = TextStyle(
+                            color = getTextColor(),
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = FontFamily.SansSerif,
+                        )
                     )
-                )
             }, text = {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
                     verticalArrangement = Arrangement.spacedBy(2.dp)
 
                 ) {
-
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(
-                            text = "Para adicionar, clique aqui->",
-                            style = TextStyle(
-                                color = getRedTextColor(),
-                                fontSize = 16.sp,
-                                fontFamily = FontFamily.SansSerif,
-                            )
-                        )
-
-                        TextButton(
-                            modifier = Modifier.padding(5.dp),
-                            onClick =
-                            {
-                                receiving.value = Receiving(0L, Date(0),0L,0.0,"","",Date(0),0.0,0L)
-                                dropDownSelectPropertyId.value = 0L
-                                dropDownSelectPropertyDesc.value = ""
-                                dropDownSelectExpenseType.value = ""
-                                dropDownSelectProviderId.value = 0L
-                                dropDownSelectProviderName.value = ""
-                                dropDownSelectProviderServices.value = ArrayList<String>()
-                                dropDownSelectProviderServiceDesc.value = ""
-                                dropDownSelectReceivingType.value = ""
-                                openPropertyReceivingsCreateDialog.value = true
-                            }
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.AddCircle,
-                                contentDescription = "Novo Recebimento",
-                                tint = getTextColor(),
-                                modifier = Modifier
-                                    .padding(end = 12.dp)
-                                    .size(24.dp)
-                            )
-                        }
-                    }
 
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
@@ -240,20 +201,10 @@ fun PropertyReceivingsDialog(
                                             )
                                             HorizontalDivider(thickness = 1.dp)
                                         }
-
                                     }
                                 }
-
-
                             }
-
-
-
                         })
-
-
-
-
                 }
 
             }, confirmButton = {
@@ -286,6 +237,35 @@ fun PropertyReceivingsDialog(
                             )
                         )
                     }
+
+
+                    Button(
+                        modifier = Modifier.height(30.dp),
+                        onClick =
+                        {
+                            receiving.value =
+                                Receiving(0L, Date(0), 0L, 0.0, "", "", Date(0), 0.0, 0L)
+                            dropDownSelectPropertyId.value = 0L
+                            dropDownSelectPropertyDesc.value = ""
+                            dropDownSelectExpenseType.value = ""
+                            dropDownSelectProviderId.value = 0L
+                            dropDownSelectProviderName.value = ""
+                            dropDownSelectProviderServices.value = ArrayList<String>()
+                            dropDownSelectProviderServiceDesc.value = ""
+                            dropDownSelectReceivingType.value = ""
+                            openPropertyReceivingsCreateDialog.value = true
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = getButtonColor()
+                        ),
+                    ) {
+                        Text(
+                            text = "Adicionar", style = TextStyle(
+                                fontSize = 14.sp,
+                            )
+                        )
+                    }
+
                 }
             }
         )

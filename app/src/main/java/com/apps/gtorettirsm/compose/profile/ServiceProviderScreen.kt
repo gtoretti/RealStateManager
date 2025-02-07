@@ -147,54 +147,60 @@ fun ServiceProviderScreen(
             horizontalArrangement = Arrangement.End,
             modifier = Modifier.fillMaxWidth()
         ) {
-
-            if (providers.isEmpty()) {
-                Text(
-                    text = "Para adicionar prestadores, clique aqui-->",
-                    style = TextStyle(
-                        color = getRedTextColor(),
-                        fontSize = 16.sp,
-                        fontFamily = FontFamily.SansSerif,
-                    )
-                )
-            }else{
-                TextButton(
-                    modifier = Modifier.padding(5.dp),
-                    onClick =
-                    {
-                        openProviderSearchDialog.value = true
-                    }
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Search,
-                        contentDescription = "Procurar Prestador",
-                        tint = getTextColor(),
-                        modifier = Modifier
-                            .padding(end = 12.dp)
-                            .size(24.dp)
-                    )
-                }
-
-            }
-
-            TextButton(
-                modifier = Modifier.padding(5.dp),
-                onClick =
-                {
-                    openProviderDetailDialog.value = true
-                }
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.AddCircle,
-                    contentDescription = "Adicionar Prestador",
-                    tint = getTextColor(),
-                    modifier = Modifier
-                        .padding(end = 12.dp)
-                        .size(24.dp)
-                )
-            }
+            Spacer(modifier = Modifier.height(10.dp))
         }
 
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 5.dp)
+        ) {
+
+
+            Button(
+                onClick = {
+                    openProviderSearchDialog.value = true
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = getButtonColor()
+                ), modifier = Modifier.height(33.dp)
+            ) {
+                Text(
+                    text = "Pesquisar",
+                    style = TextStyle(
+                        fontSize = 14.sp,
+                    )
+                )
+            }
+
+            Button(
+                onClick = {
+                    openProviderDetailDialog.value = true
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = getButtonColor()
+                ), modifier = Modifier.height(33.dp)
+            ) {
+                Text(
+                    text = "Adicionar",
+                    style = TextStyle(
+                        fontSize = 14.sp,
+                    )
+                )
+            }
+
+        }
+
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.End,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Spacer(modifier = Modifier.height(10.dp))
+        }
 
         providers.forEach { item ->
 
