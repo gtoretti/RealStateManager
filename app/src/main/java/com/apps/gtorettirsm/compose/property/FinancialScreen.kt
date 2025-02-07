@@ -344,6 +344,8 @@ Row(){
 
 
             properties.forEach { property ->
+
+                val eachPropertyCheckbox = remember { mutableStateOf(true) }
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Start,
@@ -352,15 +354,24 @@ Row(){
                         .selectable(
                             selected = (true),
                             onClick = {
-
+                                if (eachPropertyCheckbox.value){
+                                    eachPropertyCheckbox.value = false
+                                }else{
+                                    eachPropertyCheckbox.value = true
+                                }
                             },
                             role = Role.Checkbox
 
                         )
                 ) {
-                    Checkbox(checked = (true),
-                        onCheckedChange = {
 
+                    Checkbox(checked = (eachPropertyCheckbox.value),
+                        onCheckedChange = {
+                            if (it){
+                                eachPropertyCheckbox.value = true
+                            }else{
+                                eachPropertyCheckbox.value = false
+                            }
                         })
 
 
@@ -404,136 +415,137 @@ Row(){
                     var reportList = getFinancialReport(property, expenseViewModel, receivingViewModel, fmt.parse(filterStartDate),fmt.parse(filterEndDate),filterRecordsDONE.value, filterRecordsPREVIEW.value, filterRecordsPENDING.value)
                     reportList.forEach { reportRecord ->
 
-                        if (reportRecord.prefix == "(-)") {
-                            total -= reportRecord.value
-                        }else{
-                            total += reportRecord.value
-                        }
+                        if (eachPropertyCheckbox.value) {
 
+                            if (reportRecord.prefix == "(-)") {
+                                total -= reportRecord.value
+                            } else {
+                                total += reportRecord.value
+                            }
+
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text(
+                                    text = fmt.format(reportRecord.date),
+                                    style = TextStyle(
+                                        color = getTextColor(),
+                                        fontSize = 14.sp,
+                                    )
+                                )
+                                Text(
+                                    text = reportRecord.description,
+                                    style = TextStyle(
+                                        color = getTextColor(),
+                                        fontSize = 14.sp,
+                                    )
+                                )
+
+                                Card(
+                                    modifier = Modifier
+                                        .padding(3.dp),
+                                    colors = CardDefaults.cardColors(
+                                        containerColor = Color.Transparent
+                                    ),
+                                    shape = RoundedCornerShape(0.dp)
+                                ) {
+                                    Row() {
+
+                                        if (reportRecord.type.equals("DONE"))
+                                            Icon(
+                                                imageVector = Icons.Filled.Check,
+                                                contentDescription = "Realizado",
+                                                tint = Color(0xFF08940E),
+                                                modifier = Modifier
+                                                    .padding(end = 10.dp)
+                                                    .size(16.dp)
+                                            ) else
+                                            if (reportRecord.type.equals("PENDING"))
+                                                Icon(
+                                                    imageVector = ImageVector.vectorResource(R.drawable.warning_24px),
+                                                    contentDescription = "Pendente",
+                                                    tint = Color(0xFFD50000),
+                                                    modifier = Modifier
+                                                        .padding(end = 10.dp)
+                                                        .size(16.dp)
+                                                ) else
+                                                if (reportRecord.type.equals("PREVIEW"))
+                                                    Icon(
+                                                        imageVector = ImageVector.vectorResource(R.drawable.schedule_24px),
+                                                        contentDescription = "Previsto",
+                                                        tint = Color(0xFF08940E),
+                                                        modifier = Modifier
+                                                            .padding(end = 10.dp)
+                                                            .size(16.dp)
+                                                    )
+
+
+
+                                        if (reportRecord.prefix == "(-)") {
+                                            Text(
+                                                text = reportRecord.prefix + " " + reportRecord.value.toScreen(),
+                                                style = TextStyle(
+                                                    color = getRedTextColor(),
+                                                    fontSize = 14.sp,
+                                                )
+                                            )
+                                        } else {
+                                            Text(
+                                                text = reportRecord.prefix + " " + reportRecord.value.toScreen(),
+                                                style = TextStyle(
+                                                    color = getTextColor(),
+                                                    fontSize = 14.sp,
+                                                )
+                                            )
+                                        }
+
+                                    }
+
+                                }
+
+
+                            }
+                        }
+                    }
+
+                    if (eachPropertyCheckbox.value) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween,
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             Text(
-                                text = fmt.format(reportRecord.date),
+                                text = "Total:",
                                 style = TextStyle(
                                     color = getTextColor(),
                                     fontSize = 14.sp,
-                                )
-                            )
-                            Text(
-                                text = reportRecord.description,
-                                style = TextStyle(
-                                    color = getTextColor(),
-                                    fontSize = 14.sp,
+                                    fontWeight = FontWeight.Bold,
                                 )
                             )
 
-                            Card(
-                                modifier = Modifier
-                                    .padding(3.dp),
-                                colors = CardDefaults.cardColors(
-                                    containerColor = Color.Transparent),
-                                shape = RoundedCornerShape(0.dp)
-                            ){
-                                Row(){
-
-                                    if (reportRecord.type.equals("DONE"))
-                                    Icon(
-                                        imageVector = Icons.Filled.Check,
-                                        contentDescription = "Realizado",
-                                        tint = Color(0xFF08940E),
-                                        modifier = Modifier
-                                            .padding(end = 10.dp)
-                                            .size(16.dp)
-                                    )else
-                                        if (reportRecord.type.equals("PENDING"))
-                                            Icon(
-                                                imageVector = ImageVector.vectorResource(R.drawable.warning_24px),
-                                                contentDescription = "Pendente",
-                                                tint = Color(0xFFD50000),
-                                                modifier = Modifier
-                                                    .padding(end = 10.dp)
-                                                    .size(16.dp)
-                                            )else
-                                            if (reportRecord.type.equals("PREVIEW"))
-                                                Icon(
-                                                    imageVector = ImageVector.vectorResource(R.drawable.schedule_24px),
-                                                    contentDescription = "Previsto",
-                                                    tint = Color(0xFF08940E),
-                                                    modifier = Modifier
-                                                        .padding(end = 10.dp)
-                                                        .size(16.dp)
-                                                )
-
-
-
-                                    if (reportRecord.prefix == "(-)"){
-                                        Text(
-                                            text = reportRecord.prefix + " " + reportRecord.value.toScreen(),
-                                            style = TextStyle(
-                                                color = getRedTextColor(),
-                                                fontSize = 14.sp,
-                                            )
-                                        )
-                                    }else{
-                                        Text(
-                                            text = reportRecord.prefix + " " + reportRecord.value.toScreen(),
-                                            style = TextStyle(
-                                                color = getTextColor(),
-                                                fontSize = 14.sp,
-                                            )
-                                        )
-                                    }
-
-                                }
-
+                            if (total < 0.0) {
+                                Text(
+                                    text = "(-) " + total.toScreen().replace("-", ""),
+                                    style = TextStyle(
+                                        color = getRedTextColor(),
+                                        fontSize = 14.sp,
+                                        fontWeight = FontWeight.Bold,
+                                    )
+                                )
+                            } else {
+                                Text(
+                                    text = "(+) " + total.toScreen(),
+                                    style = TextStyle(
+                                        color = getTextColor(),
+                                        fontSize = 14.sp,
+                                        fontWeight = FontWeight.Bold,
+                                    )
+                                )
                             }
-
-
                         }
                     }
-
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(
-                            text = "Total:",
-                            style = TextStyle(
-                                color = getTextColor(),
-                                fontSize = 14.sp,
-                                fontWeight = FontWeight.Bold,
-                            )
-                        )
-
-                        if (total<0.0){
-                            Text(
-                                text = "(-) " + total.toScreen().replace("-",""),
-                                style = TextStyle(
-                                    color = getRedTextColor(),
-                                    fontSize = 14.sp,
-                                    fontWeight = FontWeight.Bold,
-                                )
-                            )
-                        }else{
-                            Text(
-                                text = "(+) " + total.toScreen(),
-                                style = TextStyle(
-                                    color = getTextColor(),
-                                    fontSize = 14.sp,
-                                    fontWeight = FontWeight.Bold,
-                                )
-                            )
-                        }
-
-
-
-
-                    }
-
                 }
 
                 HorizontalDivider(thickness = 1.dp)
@@ -792,7 +804,10 @@ fun getFinancialReport(property: Property, expenseViewModel: ExpenseViewModel, r
         }
 
         for (item in receivingList) {
-            ret.add(FinancialReportRecord("(+)",item.receivingDate,item.totalValue,item.comments,"DONE"))
+            var descr = item.type
+            if (descr == "Outros")
+                descr = descr + ":" + item.comments
+            ret.add(FinancialReportRecord("(+)",item.receivingDate,item.totalValue,descr,"DONE"))
         }
     }
 
