@@ -96,6 +96,10 @@ fun FinancialScreen(
     val openStartDateDialog = remember { mutableStateOf(false) }
     val openEndDateDialog = remember { mutableStateOf(false) }
 
+    val filterRecordsDONE = remember { mutableStateOf(true) }
+    val filterRecordsPREVIEW = remember { mutableStateOf(true) }
+    val filterRecordsPENDING = remember { mutableStateOf(true) }
+
     val fmt = SimpleDateFormat("dd/MM/yyyy")
 
 
@@ -397,7 +401,7 @@ Row(){
 
                 ) {
                     var total: Double = 0.0
-                    var reportList = getFinancialReport(property.propertyId, expenseViewModel, receivingViewModel, fmt.parse(filterStartDate),fmt.parse(filterEndDate))
+                    var reportList = getFinancialReport(property, expenseViewModel, receivingViewModel, fmt.parse(filterStartDate),fmt.parse(filterEndDate),filterRecordsDONE.value, filterRecordsPREVIEW.value, filterRecordsPENDING.value)
                     reportList.forEach { reportRecord ->
 
                         if (reportRecord.prefix == "(-)") {
@@ -548,10 +552,22 @@ Row(){
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().clickable {
+                if (filterRecordsDONE.value){
+                    filterRecordsDONE.value = false
+                }else{
+                    filterRecordsDONE.value = true
+                }
+            }
         ) {
-            Checkbox(checked = (true),
-                onCheckedChange = {})
+            Checkbox(checked = (filterRecordsDONE.value),
+                onCheckedChange = {
+                    if (it){
+                        filterRecordsDONE.value = true
+                    }else{
+                        filterRecordsDONE.value = false
+                    }
+                })
             Text(
                 text = "Recebimentos e Desenbolsos Realizados",
                 style = TextStyle(
@@ -573,10 +589,22 @@ Row(){
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().clickable {
+                if (filterRecordsPREVIEW.value){
+                    filterRecordsPREVIEW.value = false
+                }else{
+                    filterRecordsPREVIEW.value = true
+                }
+            }
         ) {
-            Checkbox(checked = (true),
-                onCheckedChange = {})
+            Checkbox(checked = (filterRecordsPREVIEW.value),
+                onCheckedChange = {
+                    if (it){
+                        filterRecordsPREVIEW.value = true
+                    }else{
+                        filterRecordsPREVIEW.value = false
+                    }
+                })
             Text(
                 text = "Recebimentos de Aluguéis Previstos",
                 style = TextStyle(
@@ -598,12 +626,24 @@ Row(){
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().clickable {
+                if (filterRecordsPENDING.value){
+                    filterRecordsPENDING.value = false
+                }else{
+                    filterRecordsPENDING.value = true
+                }
+            }
         ) {
-            Checkbox(checked = (true),
-                onCheckedChange = {})
+            Checkbox(checked = (filterRecordsPENDING.value),
+                onCheckedChange = {
+                    if (it){
+                        filterRecordsPENDING.value = true
+                    }else{
+                        filterRecordsPENDING.value = false
+                    }
+                })
             Text(
-                text = "Recebimentos de Aluguéis Pendentes",
+                text = "Aluguéis Atrasados Pendentes",
                 style = TextStyle(
                     color = getTextColor(),
                     fontSize = 16.sp,
@@ -612,7 +652,7 @@ Row(){
             )
             Icon(
                 imageVector = ImageVector.vectorResource(R.drawable.warning_24px),
-                contentDescription = "Recebimentos de Aluguéis Pendentes",
+                contentDescription = "Aluguéis Atrasados Pendentes",
                 tint = Color(0xFFD50000),
                 modifier = Modifier
                     .padding(end = 10.dp)
@@ -734,25 +774,79 @@ data class FinancialReportRecord(
 }
 
 @Composable
-fun getFinancialReport(propertyId: Long, expenseViewModel: ExpenseViewModel, receivingViewModel: ReceivingViewModel, startDate: Date, endDate: Date) : List<FinancialReportRecord>{
-
-    val expFlow = expenseViewModel.getExpensesByProperty(propertyId,startDate,endDate)
-    val expenses = expFlow.collectAsStateWithLifecycle(initialValue = emptyList())
-    val expensesList = expenses.value
-
-    val recFlow = receivingViewModel.getReceivingsByProperty(propertyId,startDate,endDate)
-    val receivings = recFlow.collectAsStateWithLifecycle(initialValue = emptyList())
-    val receivingList = receivings.value
+fun getFinancialReport(property: Property, expenseViewModel: ExpenseViewModel, receivingViewModel: ReceivingViewModel, startDate: Date, endDate: Date, filterRecordsDONE: Boolean, filterRecordsPREVIEW: Boolean, filterRecordsPENDING: Boolean) : List<FinancialReportRecord>{
 
     var ret = ArrayList<FinancialReportRecord>()
 
-    for (item in expensesList) {
-        ret.add(FinancialReportRecord("(-)",item.date,item.value,item.serviceDesc,"DONE"))
+    if (filterRecordsDONE){
+        val expFlow = expenseViewModel.getExpensesByProperty(property.propertyId,startDate,endDate)
+        val expenses = expFlow.collectAsStateWithLifecycle(initialValue = emptyList())
+        val expensesList = expenses.value
+
+        val recFlow = receivingViewModel.getReceivingsByProperty(property.propertyId,startDate,endDate)
+        val receivings = recFlow.collectAsStateWithLifecycle(initialValue = emptyList())
+        val receivingList = receivings.value
+
+        for (item in expensesList) {
+            ret.add(FinancialReportRecord("(-)",item.date,item.value,item.serviceDesc,"DONE"))
+        }
+
+        for (item in receivingList) {
+            ret.add(FinancialReportRecord("(+)",item.receivingDate,item.totalValue,item.comments,"DONE"))
+        }
     }
 
-    for (item in receivingList) {
-        ret.add(FinancialReportRecord("(+)",item.receivingDate,item.totalValue,item.comments,"DONE"))
+    //checar se preencheu contract start date
+    if (filterRecordsPENDING || filterRecordsPREVIEW){
+
+        val recFlow = receivingViewModel.getRentReceivingsByDateFilter(property.propertyId,property.contractStartDate, startDate,endDate)
+        val receivedListFlow = recFlow.collectAsStateWithLifecycle(initialValue = emptyList())
+        val receivedList = receivedListFlow.value
+
+        var today = Calendar.getInstance()
+        var eachBilling = Calendar.getInstance()
+        eachBilling.time = property.contractStartDate
+        eachBilling.set(Calendar.DAY_OF_MONTH,property.contractPaymentDate)
+        var totalBillingsQtd = property.contractMonths
+        if (property.contractDays>0)
+            totalBillingsQtd + totalBillingsQtd + 1
+
+        var i=0
+        while (i<totalBillingsQtd){
+            eachBilling.add(Calendar.MONTH,1)
+
+            if (eachBilling.after(startDate) && eachBilling.before(endDate)){
+                var paid = false
+                //checa se foi pago. se nao foi é pendente ou previsto
+
+                for (received in receivedList) {
+                    var eachReceived = Calendar.getInstance()
+                    eachReceived.time = received.rentBillingDueDate
+                    if (eachReceived.get(Calendar.YEAR) == eachBilling.get(Calendar.YEAR) && eachReceived.get(Calendar.MONTH) == eachBilling.get(Calendar.MONTH)){
+                        paid = true
+                        break
+                    }
+                }
+
+                if (!paid){
+                    if (eachBilling.before(today)){
+                        //atrasado
+                        if (filterRecordsPENDING){
+                            ret.add(FinancialReportRecord("(+)",eachBilling.time,property.contractMonthlyBillingValue,"Aluguel","PENDING"))
+                        }
+
+                    }else{
+                        //previsto
+                        if (filterRecordsPREVIEW){
+                            ret.add(FinancialReportRecord("(+)",eachBilling.time,property.contractMonthlyBillingValue,"Aluguel","PREVIEW"))
+                        }
+                    }
+                }
+            }
+            i++
+        }
     }
+
 
     ret.sortByDescending { it.date }
     return ret

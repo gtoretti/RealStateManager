@@ -27,6 +27,9 @@ interface ReceivingDao {
     @Query("SELECT * FROM receiving where propertyId = :propertyId and type = 'Aluguel' and rentBillingDueDate > :contractStartDate ORDER BY rentBillingDueDate")
     fun getRentReceivings(propertyId: Long, contractStartDate: Date): Flow<List<Receiving>>
 
+    @Query("SELECT * FROM receiving where propertyId = :propertyId and type = 'Aluguel' and rentBillingDueDate > :contractStartDate and rentBillingDueDate BETWEEN :startDateFilter and :endDateFilter ORDER BY rentBillingDueDate")
+    fun getRentReceivingsByDateFilter(propertyId: Long, contractStartDate: Date, startDateFilter:Date, endDateFilter:Date): Flow<List<Receiving>>
+
     @Upsert
     suspend fun upsert(receiving: Receiving)
 

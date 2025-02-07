@@ -16,6 +16,8 @@ class ReceivingRepository @Inject constructor(private val receivingDao: Receivin
 
     fun getRentReceivings(idProperty: Long, contractStartDate: Date) = receivingDao.getRentReceivings(idProperty,contractStartDate)
 
+    fun getRentReceivingsByDateFilter(idProperty: Long, contractStartDate: Date, startDateFilter: Date, endDateFilter: Date) = receivingDao.getRentReceivingsByDateFilter(idProperty,contractStartDate,startDateFilter,endDateFilter)
+
     suspend fun saveReceiving(receiving: Receiving){
         receivingDao.upsert(receiving)
     }
