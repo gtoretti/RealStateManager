@@ -3,6 +3,7 @@
 
 package com.apps.gtorettirsm.data
 
+import java.util.Date
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -10,6 +11,8 @@ import javax.inject.Singleton
 class ExpenseRepository @Inject constructor(private val expenseDao: ExpenseDao) {
 
     fun getExpense(id:Long) = expenseDao.getExpense(id)
+
+    fun getExpensesByProperty(id:Long, startDate: Date, endDate: Date) = expenseDao.getExpenses(id, startDate,endDate)
 
     fun getExpensesByProperty(id:Long) = expenseDao.getExpenses(id)
 

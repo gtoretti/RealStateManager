@@ -18,6 +18,9 @@ interface ReceivingDao {
     @Query("SELECT * FROM receiving where id = :id")
     fun getReceiving(id: Long): Flow<Receiving>
 
+    @Query("SELECT * FROM receiving where propertyId = :propertyId and receivingDate BETWEEN :startDate and :endDate ORDER BY receivingDate DESC")
+    fun getReceivings(propertyId: Long, startDate: Date, endDate: Date): Flow<List<Receiving>>
+
     @Query("SELECT * FROM receiving where propertyId = :propertyId ORDER BY receivingDate DESC")
     fun getReceivings(propertyId: Long): Flow<List<Receiving>>
 

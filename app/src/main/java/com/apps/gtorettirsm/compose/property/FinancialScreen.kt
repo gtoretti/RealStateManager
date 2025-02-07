@@ -4,8 +4,10 @@
 package com.apps.gtorettirsm.compose.property
 
 
+import android.icu.util.Calendar
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -63,6 +65,7 @@ import com.apps.gtorettirsm.viewmodels.ExpenseViewModel
 import com.apps.gtorettirsm.viewmodels.PropertyViewModel
 import com.apps.gtorettirsm.viewmodels.ReceivingViewModel
 import java.text.SimpleDateFormat
+import java.time.YearMonth
 import java.util.Date
 
 
@@ -94,6 +97,19 @@ fun FinancialScreen(
     val openEndDateDialog = remember { mutableStateOf(false) }
 
     val fmt = SimpleDateFormat("dd/MM/yyyy")
+
+
+    val loaded = remember { mutableStateOf(false) }
+    if (!loaded.value){
+        val currentMonth = Calendar.getInstance()
+        currentMonth.set(Calendar.DAY_OF_MONTH,1)
+        filterStartDate = fmt.format(currentMonth.time)
+
+        currentMonth.add(Calendar.MONTH,1)
+        currentMonth.add(Calendar.DAY_OF_MONTH,-1)
+        filterEndDate = fmt.format(currentMonth.time)
+        loaded.value = true
+    }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -186,91 +202,112 @@ fun FinancialScreen(
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.End,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Spacer(modifier = Modifier.height(5.dp))
+        }
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxWidth()
         ) {
-            OutlinedTextField(
-                modifier = Modifier
-                    .width(112.dp)
-                    .padding(horizontal = 3.dp),
-                value = filterStartDate,
-                onValueChange = {
-                },
-                textStyle = TextStyle(
-                    fontSize = 12.sp,
-                    color = getTextColor(),
-                    fontWeight = FontWeight.Normal
-                ),
 
-                label = {
-                    Text(
-                        text = "Data Inicial:",
-                        style = TextStyle(
-                            color = getTextColor(), fontSize = 12.sp,
-                        )
-                    )
-                },
-                enabled = false
-            )
 
-            TextButton(
-                modifier = Modifier.padding(horizontal = 5.dp),
-                onClick =
-                {
-                    openStartDateDialog.value = true
-                },
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.DateRange,
-                    contentDescription = "Alterar Data Inicial",
-                    tint = getTextColor(),
+            Row(){
+                OutlinedTextField(
                     modifier = Modifier
-                        .padding(horizontal = 5.dp)
-                        .size(24.dp)
+                        .width(120.dp)
+                        .padding(horizontal = 3.dp)
+                        .clickable {
+                            openStartDateDialog.value = true
+                        },
+                    value = filterStartDate,
+                    onValueChange = {
+                    },
+                    textStyle = TextStyle(
+                        fontSize = 15.sp,
+                        color = getTextColor(),
+                        fontWeight = FontWeight.Normal
+                    ),
+
+                    label = {
+                        Text(
+                            text = "Data Inicial:",
+                            style = TextStyle(
+                                color = getTextColor(), fontSize = 14.sp,
+                            )
+                        )
+                    },
+                    enabled = false
                 )
+
+                TextButton(
+                    modifier = Modifier.padding(horizontal = 1.dp),
+                    onClick =
+                    {
+                        openStartDateDialog.value = true
+                    },
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.DateRange,
+                        contentDescription = "Alterar Data Inicial",
+                        tint = getTextColor(),
+                        modifier = Modifier
+                            .padding(horizontal = 1.dp)
+                            .size(24.dp)
+                    )
+                }
             }
 
 
-            OutlinedTextField(
-                modifier = Modifier
-                    .width(112.dp)
-                    .padding(horizontal = 3.dp),
-                value = filterEndDate,
-                onValueChange = {
-                },
-                textStyle = TextStyle(
-                    fontSize = 12.sp,
-                    color = getTextColor(),
-                    fontWeight = FontWeight.Normal
-                ),
+Row(){
+    OutlinedTextField(
+        modifier = Modifier
+            .width(120.dp)
+            .padding(horizontal = 3.dp)
+            .clickable {
+                openEndDateDialog.value = true
+            },
+        value = filterEndDate,
+        onValueChange = {
+        },
+        textStyle = TextStyle(
+            fontSize = 15.sp,
+            color = getTextColor(),
+            fontWeight = FontWeight.Normal
+        ),
 
-                label = {
-                    Text(
-                        text = "Data Final:",
-                        style = TextStyle(
-                            color = getTextColor(), fontSize = 12.sp,
-                        )
-                    )
-                },
-                enabled = false
-            )
-
-            TextButton(
-                modifier = Modifier.padding(horizontal = 5.dp),
-                onClick =
-                {
-                    openEndDateDialog.value = true
-                },
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.DateRange,
-                    contentDescription = "Alterar Data Final",
-                    tint = getTextColor(),
-                    modifier = Modifier
-                        .padding(horizontal = 5.dp)
-                        .size(24.dp)
+        label = {
+            Text(
+                text = "Data Final:",
+                style = TextStyle(
+                    color = getTextColor(), fontSize = 14.sp,
                 )
-            }
+            )
+        },
+        enabled = false
+    )
+
+    TextButton(
+        modifier = Modifier.padding(horizontal = 1.dp),
+        onClick =
+        {
+            openEndDateDialog.value = true
+        },
+    ) {
+        Icon(
+            imageVector = Icons.Filled.DateRange,
+            contentDescription = "Alterar Data Final",
+            tint = getTextColor(),
+            modifier = Modifier
+                .padding(horizontal = 1.dp)
+                .size(24.dp)
+        )
+    }
+}
+
 
         }
 
@@ -360,7 +397,7 @@ fun FinancialScreen(
 
                 ) {
                     var total: Double = 0.0
-                    var reportList = getFinancialReport(property.propertyId, expenseViewModel, receivingViewModel)
+                    var reportList = getFinancialReport(property.propertyId, expenseViewModel, receivingViewModel, fmt.parse(filterStartDate),fmt.parse(filterEndDate))
                     reportList.forEach { reportRecord ->
 
                         if (reportRecord.prefix == "(-)") {
@@ -397,14 +434,37 @@ fun FinancialScreen(
                                 shape = RoundedCornerShape(0.dp)
                             ){
                                 Row(){
+
+                                    if (reportRecord.type.equals("DONE"))
                                     Icon(
                                         imageVector = Icons.Filled.Check,
-                                        contentDescription = "Realizados",
+                                        contentDescription = "Realizado",
                                         tint = Color(0xFF08940E),
                                         modifier = Modifier
                                             .padding(end = 10.dp)
                                             .size(16.dp)
-                                    )
+                                    )else
+                                        if (reportRecord.type.equals("PENDING"))
+                                            Icon(
+                                                imageVector = ImageVector.vectorResource(R.drawable.warning_24px),
+                                                contentDescription = "Pendente",
+                                                tint = Color(0xFFD50000),
+                                                modifier = Modifier
+                                                    .padding(end = 10.dp)
+                                                    .size(16.dp)
+                                            )else
+                                            if (reportRecord.type.equals("PREVIEW"))
+                                                Icon(
+                                                    imageVector = ImageVector.vectorResource(R.drawable.schedule_24px),
+                                                    contentDescription = "Previsto",
+                                                    tint = Color(0xFF08940E),
+                                                    modifier = Modifier
+                                                        .padding(end = 10.dp)
+                                                        .size(16.dp)
+                                                )
+
+
+
                                     if (reportRecord.prefix == "(-)"){
                                         Text(
                                             text = reportRecord.prefix + " " + reportRecord.value.toScreen(),
@@ -543,7 +603,7 @@ fun FinancialScreen(
             Checkbox(checked = (true),
                 onCheckedChange = {})
             Text(
-                text = "Recebimentos de Aluguéis Atrasados",
+                text = "Recebimentos de Aluguéis Pendentes",
                 style = TextStyle(
                     color = getTextColor(),
                     fontSize = 16.sp,
@@ -552,7 +612,7 @@ fun FinancialScreen(
             )
             Icon(
                 imageVector = ImageVector.vectorResource(R.drawable.warning_24px),
-                contentDescription = "Recebimentos de Aluguéis Atrasados",
+                contentDescription = "Recebimentos de Aluguéis Pendentes",
                 tint = Color(0xFFD50000),
                 modifier = Modifier
                     .padding(end = 10.dp)
@@ -669,28 +729,29 @@ data class FinancialReportRecord(
     var date: Date,
     var value: Double,
     var description: String,
+    var type: String, //DONE,PREVIEW/PENDING
 ) {
 }
 
 @Composable
-fun getFinancialReport(propertyId: Long, expenseViewModel: ExpenseViewModel, receivingViewModel: ReceivingViewModel) : List<FinancialReportRecord>{
+fun getFinancialReport(propertyId: Long, expenseViewModel: ExpenseViewModel, receivingViewModel: ReceivingViewModel, startDate: Date, endDate: Date) : List<FinancialReportRecord>{
 
-    val expFlow = expenseViewModel.getExpensesByProperty(propertyId)
+    val expFlow = expenseViewModel.getExpensesByProperty(propertyId,startDate,endDate)
     val expenses = expFlow.collectAsStateWithLifecycle(initialValue = emptyList())
     val expensesList = expenses.value
 
-    val recFlow = receivingViewModel.getReceivingsByProperty(propertyId)
+    val recFlow = receivingViewModel.getReceivingsByProperty(propertyId,startDate,endDate)
     val receivings = recFlow.collectAsStateWithLifecycle(initialValue = emptyList())
     val receivingList = receivings.value
 
     var ret = ArrayList<FinancialReportRecord>()
 
     for (item in expensesList) {
-        ret.add(FinancialReportRecord("(-)",item.date,item.value,item.serviceDesc))
+        ret.add(FinancialReportRecord("(-)",item.date,item.value,item.serviceDesc,"DONE"))
     }
 
     for (item in receivingList) {
-        ret.add(FinancialReportRecord("(+)",item.receivingDate,item.totalValue,item.comments))
+        ret.add(FinancialReportRecord("(+)",item.receivingDate,item.totalValue,item.comments,"DONE"))
     }
 
     ret.sortByDescending { it.date }

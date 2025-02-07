@@ -10,6 +10,8 @@ import javax.inject.Singleton
 @Singleton
 class ReceivingRepository @Inject constructor(private val receivingDao: ReceivingDao) {
 
+    fun getReceivings(idProperty: Long, startDate: Date, endDate: Date) = receivingDao.getReceivings(idProperty,startDate,endDate)
+
     fun getReceivings(idProperty: Long) = receivingDao.getReceivings(idProperty)
 
     fun getRentReceivings(idProperty: Long, contractStartDate: Date) = receivingDao.getRentReceivings(idProperty,contractStartDate)

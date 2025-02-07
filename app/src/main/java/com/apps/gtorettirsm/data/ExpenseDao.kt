@@ -18,6 +18,9 @@ interface ExpenseDao {
     @Query("SELECT * FROM expense where id = :id")
     fun getExpense(id: Long): Flow<Expense>
 
+    @Query("SELECT * FROM expense where propertyId = :propertyId and date BETWEEN :startDate and :endDate ORDER BY date DESC")
+    fun getExpenses(propertyId: Long, startDate: Date, endDate: Date): Flow<List<Expense>>
+
     @Query("SELECT * FROM expense where propertyId = :propertyId ORDER BY date DESC")
     fun getExpenses(propertyId: Long): Flow<List<Expense>>
 
