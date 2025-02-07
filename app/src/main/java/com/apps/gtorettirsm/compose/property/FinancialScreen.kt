@@ -38,6 +38,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -52,6 +53,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.apps.gtorettirsm.R
+import com.apps.gtorettirsm.compose.utils.daysBetween
 import com.apps.gtorettirsm.compose.utils.getButtonColor
 import com.apps.gtorettirsm.compose.utils.getRedTextColor
 import com.apps.gtorettirsm.compose.utils.getTextColor
@@ -85,6 +87,11 @@ fun FinancialScreen(
     val context = LocalContext.current
     var openPropertyExpensesDialog = remember { mutableStateOf(false) }
     var openPropertyReceivingsDialog = remember { mutableStateOf(false) }
+
+    var filterStartDate by remember { mutableStateOf("") }
+    var filterEndDate by remember { mutableStateOf("") }
+    val openStartDateDialog = remember { mutableStateOf(false) }
+    val openEndDateDialog = remember { mutableStateOf(false) }
 
     val fmt = SimpleDateFormat("dd/MM/yyyy")
 
@@ -186,7 +193,7 @@ fun FinancialScreen(
                 modifier = Modifier
                     .width(112.dp)
                     .padding(horizontal = 3.dp),
-                value = "",
+                value = filterStartDate,
                 onValueChange = {
                 },
                 textStyle = TextStyle(
@@ -210,7 +217,7 @@ fun FinancialScreen(
                 modifier = Modifier.padding(horizontal = 5.dp),
                 onClick =
                 {
-                    //openStartDateDialog.value = true
+                    openStartDateDialog.value = true
                 },
             ) {
                 Icon(
@@ -228,7 +235,7 @@ fun FinancialScreen(
                 modifier = Modifier
                     .width(112.dp)
                     .padding(horizontal = 3.dp),
-                value = "",
+                value = filterEndDate,
                 onValueChange = {
                 },
                 textStyle = TextStyle(
@@ -252,7 +259,7 @@ fun FinancialScreen(
                 modifier = Modifier.padding(horizontal = 5.dp),
                 onClick =
                 {
-                    //openEndedDateDialog.value = true
+                    openEndDateDialog.value = true
                 },
             ) {
                 Icon(
@@ -629,6 +636,29 @@ fun FinancialScreen(
             PropertyReceivingsDialog(
                 openPropertyReceivingsDialog,
                 context)
+        }
+    }
+
+    when {
+        openStartDateDialog.value -> {
+            DatePickerModal(
+                onDateSelected = {
+                    if (it != null) {
+                        filterStartDate = SimpleDateFormat("dd/MM/yyyy").format(Date(it))
+                    }
+                }, openDialog = openStartDateDialog, title = "Data Inicial"
+            )
+        }
+    }
+    when {
+        openEndDateDialog.value -> {
+            DatePickerModal(
+                onDateSelected = {
+                    if (it != null) {
+                        filterEndDate = SimpleDateFormat("dd/MM/yyyy").format(Date(it))
+                    }
+                }, openDialog = openEndDateDialog, title = "Data Final"
+            )
         }
     }
 
