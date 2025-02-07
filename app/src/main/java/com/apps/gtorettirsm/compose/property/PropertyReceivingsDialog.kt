@@ -226,8 +226,14 @@ fun PropertyReceivingsDialog(
                                                     )
                                                 )
                                             }
+                                            var descr=""
+                                            if (item.type.equals("Aluguel")){
+                                                descr = "Aluguel Vencto: " + fmt.format(item.rentBillingDueDate)
+                                            }else{
+                                                descr = item.comments
+                                            }
                                             Text(
-                                                text = item.comments, style = TextStyle(
+                                                text = descr, style = TextStyle(
                                                     color = getTextColor(),
                                                     fontSize = 15.sp,
                                                 )

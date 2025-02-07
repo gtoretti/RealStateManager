@@ -164,7 +164,7 @@ fun PropertyReceivingsCreateDialog(
         if (dropDownSelectReceivingType.value == "Aluguel"){
 
                 //busco o proximo vencimento somente se for recebimento novo ou se esta alterando type Outros para Aluguel
-            if (rentBillingDueDate.trim().isEmpty())
+            if (receiving.rentBillingDueDate.time==0L)
                 rentBillingDueDate =getNextNewRentReceivingDescr(dropDownSelectPropertyId.value, properties, receivingViewModel,context,receivingsList)
 
             // se chegou vazio do getNextNewRentReceivingDescr nao deve receber aluguel.
