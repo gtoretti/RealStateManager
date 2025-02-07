@@ -176,7 +176,8 @@ fun PropertyExpensesCreateDialog(
                 )
             }, text = {
                 Column(
-                    modifier = Modifier.padding(horizontal = 10.dp),
+                    modifier = Modifier.padding(horizontal = 10.dp)
+                        .verticalScroll(rememberScrollState()),
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
 

@@ -19,4 +19,6 @@ data class Receiving(
     val rentBillingDueDate: Date,
     val fineValue: Double,
     val delayDays: Long,
+    val renterName: String,
+    val renterCPF: String,
 )

@@ -70,6 +70,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.apps.gtorettirsm.compose.utils.DrawScrollableView
 import com.apps.gtorettirsm.compose.utils.daysBetween
+import com.apps.gtorettirsm.compose.utils.defaultNaoInformado
 import com.apps.gtorettirsm.compose.utils.getButtonColor
 import com.apps.gtorettirsm.compose.utils.getProviderServicesList
 import com.apps.gtorettirsm.compose.utils.getRedTextColor
@@ -122,6 +123,8 @@ fun PropertyReceivingsCreateDialog(
     var rentBillingDueDate by remember { mutableStateOf("") }
     var fineValue by remember { mutableStateOf("") }
     var delayDays by remember { mutableStateOf("") }
+    var renterName by remember { mutableStateOf("") }
+    var renterCPF by remember { mutableStateOf("") }
 
     val openDateDialog = remember { mutableStateOf(false) }
 
@@ -156,6 +159,10 @@ fun PropertyReceivingsCreateDialog(
                     property = item
                 break
             }
+
+            renterName= defaultNaoInformado(property.contractRenterName)
+            renterCPF=property.contractRenterCPF
+
             var rentFlow = receivingViewModel.getRentReceivings(dropDownSelectPropertyId.value,property.contractStartDate)
             val receivings by rentFlow.collectAsStateWithLifecycle(initialValue = emptyList())
             receivingsList.addAll(receivings)
@@ -218,11 +225,32 @@ fun PropertyReceivingsCreateDialog(
                 )
             }, text = {
                 Column(
-                    modifier = Modifier.padding(horizontal = 10.dp),
+                    modifier = Modifier.padding(horizontal = 10.dp)
+                        .verticalScroll(rememberScrollState()),
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
 
                     PropertiesDropdownMenu(properties)
+
+                    OutlinedTextField(
+                        value = renterName,
+                        onValueChange = {
+
+                        },
+                        textStyle = TextStyle(
+                            fontSize = 16.sp,
+                            color = getTextColor(),
+                            fontWeight = FontWeight.Normal
+                        ),placeholder = {Text("")},
+                        label = {
+                            Text(
+                                text = "Nome do Inquilino:",
+                                style = TextStyle(
+                                    color = getTextColor(),fontSize = 12.sp,
+                                )
+                            )
+                        }, enabled = false
+                    )
 
                     ReceivingTypeDropdownMenu()
 
@@ -493,7 +521,9 @@ fun PropertyReceivingsCreateDialog(
                                             desc,
                                             rentBillingDueDateDt,
                                             fineValueDouble,
-                                            delayDaysLong
+                                            delayDaysLong,
+                                            renterName,
+                                            renterCPF
                                         )
                                     )
 

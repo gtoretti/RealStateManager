@@ -291,7 +291,7 @@ fun FinancialScreen(
                 .fillMaxWidth()
                 .padding(horizontal = 2.dp)
                 .border(1.dp, Color.Gray)
-                //.verticalScroll(rememberScrollState()),
+
         ) {
 
 
