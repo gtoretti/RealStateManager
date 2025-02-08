@@ -615,15 +615,29 @@ fun PropertyCurrentContractDialog(
                                             if (start.get(Calendar.DAY_OF_MONTH)==end.get(Calendar.DAY_OF_MONTH)){
                                                 qtdmonths = ((end.get(Calendar.YEAR) - start.get(Calendar.YEAR)) * 12 + end.get(Calendar.MONTH)) - start.get(Calendar.MONTH)
                                             }else{
+
+                                                //enddate 28 fevereiro = 30 dias
+                                                var endDateDayofMonth = end.get(Calendar.DAY_OF_MONTH)
+                                                if (end.get(Calendar.MONTH)==1 && end.get(Calendar.DAY_OF_MONTH)==28){
+                                                    endDateDayofMonth = 30
+                                                }
+
+
                                                 if (start.get(Calendar.DAY_OF_MONTH)<end.get(Calendar.DAY_OF_MONTH)){
                                                     qtdmonths = ((end.get(Calendar.YEAR) - start.get(Calendar.YEAR)) * 12 + end.get(Calendar.MONTH)) - start.get(Calendar.MONTH)
-                                                    qtdDays = end.get(Calendar.DAY_OF_MONTH) - start.get(Calendar.DAY_OF_MONTH)
+                                                    qtdDays = endDateDayofMonth - start.get(Calendar.DAY_OF_MONTH)
                                                 }else{
                                                     qtdmonths = ((end.get(Calendar.YEAR) - start.get(Calendar.YEAR)) * 12 + end.get(Calendar.MONTH)) - start.get(Calendar.MONTH) -1
-                                                    qtdDays = end.get(Calendar.DAY_OF_MONTH) + (30 - start.get(Calendar.DAY_OF_MONTH))
+                                                    qtdDays = endDateDayofMonth + (30 - start.get(Calendar.DAY_OF_MONTH))
                                                 }
                                                 qtdDays++
                                             }
+
+                                            if (qtdDays>=30){
+                                                qtdDays = 0
+                                                qtdmonths += 1
+                                            }
+
                                             if (qtdmonths>1){
                                                 monthsDaysDescr = "" + qtdmonths + " meses "
                                             }else
@@ -636,6 +650,7 @@ fun PropertyCurrentContractDialog(
                                                 if (qtdDays==1){
                                                     monthsDaysDescr = monthsDaysDescr +  qtdDays + " dia"
                                                 }
+
                                             months = qtdmonths.toString()
                                             days = qtdDays.toString()
                                         }

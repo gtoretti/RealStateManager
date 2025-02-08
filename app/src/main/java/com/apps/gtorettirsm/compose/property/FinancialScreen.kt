@@ -883,9 +883,13 @@ fun getFinancialReport(property: Property, expenseViewModel: ExpenseViewModel, r
         eachBilling.set(Calendar.DAY_OF_MONTH,property.contractPaymentDate)
         var totalBillingsQtd = property.contractMonths
         if (property.contractDays>0)
-            totalBillingsQtd + totalBillingsQtd + 1
+            totalBillingsQtd += 1
 
         var i=0
+        Log.w("xxxxtotalcontractMonths",property.contractMonths.toString())
+        Log.w("xxxxtotalcontractDays",property.contractDays.toString())
+        Log.w("xxxxtotalBillingsQtd",totalBillingsQtd.toString())
+
         while (i<totalBillingsQtd){
             eachBilling.add(Calendar.MONTH,1)
 
@@ -903,6 +907,8 @@ fun getFinancialReport(property: Property, expenseViewModel: ExpenseViewModel, r
                 }
 
                 if (!paid){
+
+
 
                     var billingValue = property.contractMonthlyBillingValue
                     if (i==(totalBillingsQtd-1)){

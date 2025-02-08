@@ -18,8 +18,6 @@ class PropertyViewModel @Inject internal constructor(
 
     var properties = repository.getProperties()
 
-    var activeProperties = repository.getActiveProperties()
-
     fun getProperty(id:Long) = repository.getProperty(id)
 
     init {

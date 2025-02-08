@@ -61,7 +61,7 @@ fun PropertiesScreen(
 ) {
     var propertyViewModel: PropertyViewModel = hiltViewModel()
 
-    val properties = propertyViewModel.activeProperties
+    val properties = propertyViewModel.properties
     PropertiesScreen(
         propertiesFlow = properties,
         propertyViewModel = propertyViewModel,

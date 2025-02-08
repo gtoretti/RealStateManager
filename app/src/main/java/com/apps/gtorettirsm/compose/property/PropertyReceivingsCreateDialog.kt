@@ -155,9 +155,10 @@ fun PropertyReceivingsCreateDialog(
         if (dropDownSelectPropertyId.value!=0L){
             var property = Property(0L,"", "", "", "", "", "", "", 0.0,0,"", "", "", "","","", "", "", 0.0, "" , 0,  "", "", "", "",  Date(0), Date(0), 0,0, "","", 0.0, "", "", "", "", "", "", "", "", 0,0.0)
             for (item in properties) {
-                if (item.propertyId == dropDownSelectPropertyId.value)
+                if (item.propertyId == dropDownSelectPropertyId.value){
                     property = item
-                break
+                    break
+                }
             }
 
             renterName= defaultNaoInformado(property.contractRenterName)
@@ -170,10 +171,25 @@ fun PropertyReceivingsCreateDialog(
 
         if (dropDownSelectReceivingType.value == "Aluguel"){
 
-                //busco o proximo vencimento somente se for recebimento novo ou se esta alterando type Outros para Aluguel
-            if (receiving.rentBillingDueDate.time==0L)
-                rentBillingDueDate =getNextNewRentReceivingDescr(dropDownSelectPropertyId.value, properties, receivingViewModel,context,receivingsList)
+            var receivingValueRemainingDaysDouble = 0.0
 
+                //busco o proximo vencimento somente se for recebimento novo ou se esta alterando type Outros para Aluguel
+            if (receiving.rentBillingDueDate.time==0L) {
+                rentBillingDueDate = getNextNewRentReceivingDescr(
+                    dropDownSelectPropertyId.value,
+                    properties,
+                    receivingViewModel,
+                    context,
+                    receivingsList
+                )
+
+                if (rentBillingDueDate.contains("*")){
+                    var billingDaysValue = rentBillingDueDate.substring(rentBillingDueDate.indexOf("*")+1,rentBillingDueDate.length)
+                    var dueDate = rentBillingDueDate.substring(0,rentBillingDueDate.indexOf("*"))
+                    rentBillingDueDate = dueDate
+                    receivingValueRemainingDaysDouble = billingDaysValue.screenToDouble()
+                }
+            }
             // se chegou vazio do getNextNewRentReceivingDescr nao deve receber aluguel.
             if (rentBillingDueDate.trim().isEmpty()){
                 dropDownSelectReceivingType.value = "Outros"
@@ -194,13 +210,18 @@ fun PropertyReceivingsCreateDialog(
                         "","","","","","",
                         "","",0,0.0)
                     for (item in properties) {
-                        if (item.propertyId == dropDownSelectPropertyId.value)
+                        if (item.propertyId == dropDownSelectPropertyId.value){
                             property = item
-                        break
+                            break
+                        }
                     }
                     fineValue = (property.contractFinePerDelayedDay * delayDaysLong).toScreen()
                     //acrescenta multa no valor a ser recebido
-                    receivingValue = (property.contractMonthlyBillingValue + (property.contractFinePerDelayedDay * delayDaysLong)).toScreen()
+
+                    if (receivingValueRemainingDaysDouble == 0.0){
+                        receivingValueRemainingDaysDouble = property.contractMonthlyBillingValue
+                    }
+                    receivingValue = (receivingValueRemainingDaysDouble + (property.contractFinePerDelayedDay * delayDaysLong)).toScreen()
                 }
             }
         }
@@ -638,9 +659,10 @@ fun getNextNewRentReceivingDescr(propertyId:Long, properties: List<Property>, re
     val fmt = SimpleDateFormat("dd/MM/yyyy")
     var property = Property(0L,"", "", "", "", "", "", "", 0.0,0,"", "", "", "","","", "", "", 0.0, "" , 0,  "", "", "", "",  Date(0), Date(0), 0,0, "","", 0.0, "", "", "", "", "", "", "", "", 0,0.0)
     for (item in properties) {
-        if (item.propertyId == propertyId)
+        if (item.propertyId == propertyId){
             property = item
-        break
+            break
+        }
     }
 
     if (property.contractPaymentDate==0){
@@ -673,6 +695,7 @@ fun getNextNewRentReceivingDescr(propertyId:Long, properties: List<Property>, re
 
         var i = 0
         var billing = Calendar.getInstance()
+        var lastBillingDays = ""
 
         //corre a lista de cobranças mensais e checa se houve pagamento
         while (i < totalBillingQtd) {
@@ -695,11 +718,18 @@ fun getNextNewRentReceivingDescr(propertyId:Long, properties: List<Property>, re
             if (!paid){
                 billing.time = startBillingDate.time
                 billing.set(Calendar.DAY_OF_MONTH,property.contractPaymentDate)
+                if (i==totalBillingQtd-1){
+                    //ultima cobrança: checar se valor é proporcional aos dias se nao for mes inteiro
+                    if (property.contractDays > 0){
+                        var v = property.contractMonthlyBillingValue * (property.contractDays/30.0)
+                        lastBillingDays = "*"+v.toScreen()
+                    }
+                }
                 break
             }
             i++
         }
-        ret = fmt.format(billing.time)
+        ret = fmt.format(billing.time) + lastBillingDays
     }
     return ret
 }

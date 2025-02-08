@@ -9,9 +9,7 @@ import javax.inject.Singleton
 @Singleton
 class PropertyRepository @Inject constructor(private val propertyDao: PropertyDao) {
 
-    fun getProperties() = propertyDao.getProperties()
-
-    fun getActiveProperties() = propertyDao.getActiveProperties()
+    fun getProperties() = propertyDao.getActiveProperties()
 
     fun getProperty(id: Long) = propertyDao.getProperty(id)
 
