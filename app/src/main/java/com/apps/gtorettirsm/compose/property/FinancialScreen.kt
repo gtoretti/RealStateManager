@@ -115,6 +115,9 @@ fun FinancialScreen(
         loaded.value = true
     }
 
+    var receivingsTotal: Double = 0.0
+    var expensesTotal: Double = 0.0
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -484,6 +487,7 @@ Row(){
 
 
                                         if (reportRecord.prefix == "(-)") {
+                                            expensesTotal += reportRecord.value
                                             Text(
                                                 text = reportRecord.prefix + " " + reportRecord.value.toScreen(),
                                                 style = TextStyle(
@@ -492,6 +496,7 @@ Row(){
                                                 )
                                             )
                                         } else {
+                                            receivingsTotal += reportRecord.value
                                             Text(
                                                 text = reportRecord.prefix + " " + reportRecord.value.toScreen(),
                                                 style = TextStyle(
@@ -675,7 +680,7 @@ Row(){
 
 
         Text(
-            text = "Total de Recebimentos (+): ",
+            text = "Total de Recebimentos (+): " + receivingsTotal.toScreen(),
             style = TextStyle(
                 color = getTextColor(),
                 fontSize = 16.sp,
@@ -683,7 +688,7 @@ Row(){
             )
         )
         Text(
-            text = "Total de Desenbolsos (-): ",
+            text = "Total de Desenbolsos (-): " + expensesTotal.toScreen(),
             style = TextStyle(
                 color = getTextColor(),
                 fontSize = 16.sp,
@@ -693,7 +698,7 @@ Row(){
 
 
         Text(
-            text = "Saldo: ",
+            text = "Saldo: " + (receivingsTotal - expensesTotal).toScreen(),
             style = TextStyle(
                 color = getTextColor(),
                 fontSize = 16.sp,
