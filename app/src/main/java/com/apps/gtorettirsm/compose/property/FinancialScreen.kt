@@ -474,7 +474,7 @@ Row(){
                                                     tint = Color(0xFFD50000),
                                                     modifier = Modifier
                                                         .padding(end = 10.dp)
-                                                        .size(16.dp)
+                                                        .size(18.dp)
                                                 ) else
                                                 if (reportRecord.type.equals("PREVIEW"))
                                                     Icon(
@@ -886,10 +886,6 @@ fun getFinancialReport(property: Property, expenseViewModel: ExpenseViewModel, r
             totalBillingsQtd += 1
 
         var i=0
-        Log.w("xxxxtotalcontractMonths",property.contractMonths.toString())
-        Log.w("xxxxtotalcontractDays",property.contractDays.toString())
-        Log.w("xxxxtotalBillingsQtd",totalBillingsQtd.toString())
-
         while (i<totalBillingsQtd){
             eachBilling.add(Calendar.MONTH,1)
 
@@ -907,8 +903,6 @@ fun getFinancialReport(property: Property, expenseViewModel: ExpenseViewModel, r
                 }
 
                 if (!paid){
-
-
 
                     var billingValue = property.contractMonthlyBillingValue
                     if (i==(totalBillingsQtd-1)){
