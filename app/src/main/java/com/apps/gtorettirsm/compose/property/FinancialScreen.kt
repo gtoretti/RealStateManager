@@ -5,6 +5,7 @@ package com.apps.gtorettirsm.compose.property
 
 
 import android.icu.util.Calendar
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -902,16 +903,25 @@ fun getFinancialReport(property: Property, expenseViewModel: ExpenseViewModel, r
                 }
 
                 if (!paid){
+
+                    var billingValue = property.contractMonthlyBillingValue
+                    if (i==(totalBillingsQtd-1)){
+                        //ultima parcela: checar se é proporcional aos dias caso seja menos de 1 mes
+                        if (property.contractDays > 0){
+                            billingValue *= (property.contractDays / 30.0)
+                        }
+                    }
+
                     if (eachBilling.before(today)){
                         //atrasado
                         if (filterRecordsPENDING){
-                            ret.add(FinancialReportRecord("(+)",eachBilling.time,property.contractMonthlyBillingValue,"Aluguel","PENDING"))
+                            ret.add(FinancialReportRecord("(+)",eachBilling.time,billingValue,"Aluguel","PENDING"))
                         }
 
                     }else{
                         //previsto
                         if (filterRecordsPREVIEW){
-                            ret.add(FinancialReportRecord("(+)",eachBilling.time,property.contractMonthlyBillingValue,"Aluguel","PREVIEW"))
+                            ret.add(FinancialReportRecord("(+)",eachBilling.time,billingValue,"Aluguel","PREVIEW"))
                         }
                     }
                 }
