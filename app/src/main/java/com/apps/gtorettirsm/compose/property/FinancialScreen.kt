@@ -59,6 +59,7 @@ import com.apps.gtorettirsm.compose.utils.daysBetween
 import com.apps.gtorettirsm.compose.utils.getButtonColor
 import com.apps.gtorettirsm.compose.utils.getRedTextColor
 import com.apps.gtorettirsm.compose.utils.getTextColor
+import com.apps.gtorettirsm.compose.utils.toCurrency
 import com.apps.gtorettirsm.compose.utils.toScreen
 import com.apps.gtorettirsm.data.Property
 import com.apps.gtorettirsm.viewmodels.ExpenseViewModel
@@ -489,7 +490,7 @@ Row(){
                                         if (reportRecord.prefix == "(-)") {
                                             expensesTotal += reportRecord.value
                                             Text(
-                                                text = reportRecord.prefix + " " + reportRecord.value.toScreen(),
+                                                text = reportRecord.prefix + " " + reportRecord.value.toCurrency(),
                                                 style = TextStyle(
                                                     color = getRedTextColor(),
                                                     fontSize = 14.sp,
@@ -498,7 +499,7 @@ Row(){
                                         } else {
                                             receivingsTotal += reportRecord.value
                                             Text(
-                                                text = reportRecord.prefix + " " + reportRecord.value.toScreen(),
+                                                text = reportRecord.prefix + " " + reportRecord.value.toCurrency(),
                                                 style = TextStyle(
                                                     color = getTextColor(),
                                                     fontSize = 14.sp,
@@ -532,7 +533,7 @@ Row(){
 
                             if (total < 0.0) {
                                 Text(
-                                    text = "(-) " + total.toScreen().replace("-", ""),
+                                    text = "(-) " + total.toCurrency().replace("-", ""),
                                     style = TextStyle(
                                         color = getRedTextColor(),
                                         fontSize = 14.sp,
@@ -541,7 +542,7 @@ Row(){
                                 )
                             } else {
                                 Text(
-                                    text = "(+) " + total.toScreen(),
+                                    text = "(+) " + total.toCurrency(),
                                     style = TextStyle(
                                         color = getTextColor(),
                                         fontSize = 14.sp,
@@ -677,35 +678,87 @@ Row(){
             )
         }
 
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.End,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Spacer(modifier = Modifier.height(10.dp))
+        }
 
-
-        Text(
-            text = "Total de Recebimentos (+): " + receivingsTotal.toScreen(),
-            style = TextStyle(
-                color = getTextColor(),
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
-            )
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp)
+    )
+    {
+    Text(
+        text = "Total de Recebimentos (+): ",
+        style = TextStyle(
+            color = getTextColor(),
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold,
         )
-        Text(
-            text = "Total de Desenbolsos (-): " + expensesTotal.toScreen(),
-            style = TextStyle(
-                color = getTextColor(),
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
-            )
+    )
+    Text(
+        text = receivingsTotal.toCurrency(),
+        style = TextStyle(
+            color = getTextColor(),
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold,
         )
+    )
+}
 
 
-        Text(
-            text = "Saldo: " + (receivingsTotal - expensesTotal).toScreen(),
-            style = TextStyle(
-                color = getTextColor(),
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
-            )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp)
         )
+        {
+            Text(
+                text = "Total de Desenbolsos (-): ",
+                style = TextStyle(
+                    color = getTextColor(),
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                )
+            )
+            Text(
+                text = expensesTotal.toCurrency(),
+                style = TextStyle(
+                    color = Color(0xFFD50000),
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                )
+            )
+        }
 
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp)
+        )
+        {
+            Text(
+                text = "Saldo: ",
+                style = TextStyle(
+                    color = getTextColor(),
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                )
+            )
+            Text(
+                text = (receivingsTotal - expensesTotal).toCurrency(),
+                style = TextStyle(
+                    color = getTextColor(),
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                )
+            )
+        }
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.End,

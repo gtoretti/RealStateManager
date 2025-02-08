@@ -36,6 +36,7 @@ import com.apps.gtorettirsm.viewmodels.ReceivingViewModel
 import java.io.File
 import java.io.FileOutputStream
 import java.math.RoundingMode
+import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -202,6 +203,12 @@ fun String.screenToDouble(): Double {
 
 fun Double.toScreen(): String {
     return this.toBigDecimal().setScale(2, RoundingMode.UP).toString().replace(".", ",")
+}
+
+fun Double.toCurrency(): String {
+    val locale: Locale = Locale("pt", "BR")
+    val formatter = NumberFormat.getCurrencyInstance(locale)
+    return formatter.format(this)
 }
 
 fun generateReceipt(
