@@ -4,8 +4,17 @@
 package com.apps.gtorettirsm.compose.property
 
 
+import android.content.Context
+import android.content.ContextWrapper
+import android.content.Intent
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.Typeface
+import android.graphics.pdf.PdfDocument
 import android.icu.util.Calendar
+import android.os.Environment
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -53,10 +62,12 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.FileProvider
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.apps.gtorettirsm.R
 import com.apps.gtorettirsm.compose.utils.daysBetween
+import com.apps.gtorettirsm.compose.utils.generatePDF
 import com.apps.gtorettirsm.compose.utils.getButtonColor
 import com.apps.gtorettirsm.compose.utils.getRedTextColor
 import com.apps.gtorettirsm.compose.utils.getTextColor
@@ -66,6 +77,8 @@ import com.apps.gtorettirsm.data.Property
 import com.apps.gtorettirsm.viewmodels.ExpenseViewModel
 import com.apps.gtorettirsm.viewmodels.PropertyViewModel
 import com.apps.gtorettirsm.viewmodels.ReceivingViewModel
+import java.io.File
+import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.time.YearMonth
 import java.util.Date
@@ -770,6 +783,7 @@ Row(){
 
         Button(
             onClick = {
+                generatePDFReport(context)
             },
             colors = ButtonDefaults.buttonColors(
                 containerColor = getButtonColor()
@@ -929,9 +943,80 @@ fun getFinancialReport(property: Property, expenseViewModel: ExpenseViewModel, r
             i++
         }
     }
-
-
     ret.sortByDescending { it.date }
     return ret
+}
+
+
+fun generatePDFReport(context: Context) {
+
+    val fmt = SimpleDateFormat("dd/MM/yyyy")
+    val fmtFileName = SimpleDateFormat("dd_MM_yyyy_HH_mm")
+
+    var filename = "relatorio_fluxo_de_caixa_"+fmtFileName.format(Calendar.getInstance().time)
+
+
+    var pdfDocument: PdfDocument = PdfDocument()
+    var title: Paint = Paint()
+    var headerStyle: Paint = Paint()
+
+    /**Dimension For A4 Size Paper**/
+    var pageHeight = 842
+    var pageWidth = 595
+
+    var myPageInfo: PdfDocument.PageInfo? =
+        PdfDocument.PageInfo.Builder(pageWidth, pageHeight, 1).create()
+    var myPage: PdfDocument.Page = pdfDocument.startPage(myPageInfo)
+    var canvas: Canvas = myPage.canvas
+
+    headerStyle.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
+    headerStyle.textSize = 12F
+    headerStyle.setColor(android.graphics.Color.BLACK)
+    canvas.drawText("teste", 50F, 50F, headerStyle)
+
+    title.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
+    title.textSize = 15F
+    title.setColor(android.graphics.Color.BLACK)
+    canvas.drawText("Recibo de Pagamento", 235F, 100F, title)
+
+
+    var words = ArrayList("teste".split(" "))
+    var y=150F
+    while (words.isNotEmpty()){
+        var body1stLine = ""
+        while (words.isNotEmpty() && body1stLine.length < 85){
+            body1stLine = body1stLine + words.removeAt(0) + " "
+            canvas.drawText(body1stLine, 50F, y, headerStyle)
+        }
+        y += 20
+    }
+
+    canvas.drawText("teste", 300F, 400F, headerStyle)
+    canvas.drawText("teste", 300F, 420F, headerStyle)
+
+    canvas.drawText("teste", 50F, 800F, headerStyle)
+
+    pdfDocument.finishPage(myPage)
+
+    val contextWrapper = ContextWrapper(context)
+    val documentDirectory = contextWrapper.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
+    val file = File(documentDirectory, "$filename.pdf")
+
+    try {
+        pdfDocument.writeTo(FileOutputStream(file))
+        val fileURI = FileProvider.getUriForFile(
+            context,
+            context.applicationContext.packageName + ".provider",
+            file
+        )
+
+        val browserIntent = Intent(Intent.ACTION_VIEW, fileURI)
+        browserIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        context.startActivity(browserIntent)
+
+    } catch (e: Exception) {
+        Toast.makeText(context, "Erro ao gerar arquivo PDF.", Toast.LENGTH_SHORT).show()
+    }
+    pdfDocument.close()
 
 }
