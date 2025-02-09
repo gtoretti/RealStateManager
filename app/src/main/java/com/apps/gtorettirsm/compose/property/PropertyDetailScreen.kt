@@ -42,7 +42,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.apps.gtorettirsm.compose.utils.DrawScrollableView
 import com.apps.gtorettirsm.compose.utils.defaultNaoInformado
-
 import com.apps.gtorettirsm.compose.utils.getButtonColor
 import com.apps.gtorettirsm.compose.utils.getTextColor
 import com.apps.gtorettirsm.compose.utils.showToast
@@ -87,8 +86,7 @@ fun PropertyDetailScreen(
     val displayPropertyContractManager = remember { mutableStateOf(false) }
     val openPropertyContractedInstallationsDialog = remember { mutableStateOf(false) }
     val displayPropertyContractedInstallations = remember { mutableStateOf(false) }
-
-    val openPropertyGDriveConf = remember { mutableStateOf(false) }
+    val openPropertyGDriveInputDialog = remember { mutableStateOf(false) }
     val displayPropertyGDriveConf = remember { mutableStateOf(false) }
 
     val property by propertyFlow.collectAsStateWithLifecycle(
@@ -1136,7 +1134,7 @@ if (!displayPropertyCurrentContract.value){
 
                                     Button(
                                         onClick = {
-
+                                            openPropertyGDriveInputDialog.value=true
                                         },
                                         colors = ButtonDefaults.buttonColors(
                                             containerColor = getButtonColor()
@@ -1268,8 +1266,16 @@ if (!displayPropertyCurrentContract.value){
                 )
             }
         }
-
-
+        when {
+            openPropertyGDriveInputDialog.value -> {
+                PropertyGDriveInputDialog(
+                    openPropertyGDriveInputDialog = openPropertyGDriveInputDialog,
+                    propertyViewModel = propertyViewModel,
+                    property = property,
+                    context = context
+                )
+            }
+        }
     }
 }
 
@@ -1282,3 +1288,4 @@ fun openGDriveFolder(context: Context, urlGDriveFolder: String){
    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
     context.startActivity(browserIntent)
 }
+
