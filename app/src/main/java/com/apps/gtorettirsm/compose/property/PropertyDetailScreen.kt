@@ -871,18 +871,6 @@ if (!displayPropertyCurrentContract.value){
     )
 
     Text(
-        text = "Período do Contrato em meses:",
-        style = TextStyle(
-            color = getTextColor(),
-            fontWeight = FontWeight.Bold,
-        )
-    )
-    Text(
-        text = defaultNaoInformado(property.contractMonthsDaysDescr)
-    )
-
-
-    Text(
         text = "Data de Término:",
         style = TextStyle(
             color = getTextColor(),
@@ -891,6 +879,17 @@ if (!displayPropertyCurrentContract.value){
     )
     Text(
         text = defaultNaoInformado(property.contractEndedDate)
+    )
+
+    Text(
+        text = "Período do Contrato em meses:",
+        style = TextStyle(
+            color = getTextColor(),
+            fontWeight = FontWeight.Bold,
+        )
+    )
+    Text(
+        text = defaultNaoInformado(property.contractMonthsDaysDescr)
     )
 
 
@@ -1280,12 +1279,18 @@ if (!displayPropertyCurrentContract.value){
 }
 
 fun openGDriveFolder(context: Context, urlGDriveFolder: String){
-    var url = urlGDriveFolder;
-    if (url.isEmpty()){
-        url = "https://drive.google.com/drive/my-drive"
-        showToast("A pasta do imóvel não está configurada. Abrindo Meu Drive.",context)
+
+    try{
+        var url = urlGDriveFolder;
+        if (url.isEmpty()){
+            url = "https://drive.google.com/drive/my-drive"
+            showToast("A pasta do imóvel não está configurada. Abrindo Meu Drive.",context)
+        }
+        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        context.startActivity(browserIntent)
+    }catch (e: Exception){
+        showToast("Por favor, verifique se a URL configurada está correta.",context)
     }
-   val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-    context.startActivity(browserIntent)
+
 }
 

@@ -49,6 +49,7 @@ import com.apps.gtorettirsm.compose.utils.getButtonColor
 import com.apps.gtorettirsm.compose.utils.getTextColor
 import com.apps.gtorettirsm.compose.utils.screenToDouble
 import com.apps.gtorettirsm.compose.utils.showToast
+import com.apps.gtorettirsm.compose.utils.toScreen
 import com.apps.gtorettirsm.data.Property
 import com.apps.gtorettirsm.viewmodels.PropertyViewModel
 import java.text.SimpleDateFormat
@@ -94,8 +95,9 @@ fun PropertyCurrentContractDialog(
             startDate = fmt.format(property.contractStartDate)
         if (property.contractEndedDate.time>0)
             endedDate = fmt.format(property.contractEndedDate)
-        monthlyBillingValue  = property.contractMonthlyBillingValue.toString()
+        monthlyBillingValue  = property.contractMonthlyBillingValue.toScreen()
         monthsDaysDescr  = property.contractMonthsDaysDescr
+        contractFinePerDelayedDay = property.contractFinePerDelayedDay.toScreen()
         months  = property.contractMonths.toString()
         days  = property.contractDays.toString()
         valueAdjustmentIndexName  = property.contractValueAdjustmentIndexName
@@ -547,10 +549,11 @@ fun PropertyCurrentContractDialog(
                         DatePickerModal(
                             onDateSelected = {
                                 if (it != null) {
+                                    monthsDaysDescr = ""
                                     startDate = SimpleDateFormat("dd/MM/yyyy").format(Date(it))
                                     if (endedDate.trim().isNotEmpty()){
                                         var daysbet = daysBetween(fmt.parse(startDate),fmt.parse(endedDate))
-                                        if (daysbet<=0){
+                                        if (daysbet<0){
                                             showToast("A Data de Término deve ser posterior à Data de Início do Contrato",context)
                                             startDate = ""
                                         }else{
@@ -559,31 +562,44 @@ fun PropertyCurrentContractDialog(
                                             var end = Calendar.getInstance()
                                             end.time = fmt.parse(endedDate)
                                             var qtdmonths =0
-                                            var qtddays = 0
+                                            var qtdDays = 0
 
                                             if (start.get(Calendar.DAY_OF_MONTH)==end.get(Calendar.DAY_OF_MONTH)){
                                                 qtdmonths = ((end.get(Calendar.YEAR) - start.get(Calendar.YEAR)) * 12 + end.get(Calendar.MONTH)) - start.get(Calendar.MONTH)
                                             }else{
+
+                                                //enddate 28 fevereiro = 30 dias
+                                                var endDateDayofMonth = end.get(Calendar.DAY_OF_MONTH)
+                                                if (end.get(Calendar.MONTH)==1 && end.get(Calendar.DAY_OF_MONTH)==28){
+                                                    endDateDayofMonth = 30
+                                                }
+
                                                 if (start.get(Calendar.DAY_OF_MONTH)<end.get(Calendar.DAY_OF_MONTH)){
                                                     qtdmonths = ((end.get(Calendar.YEAR) - start.get(Calendar.YEAR)) * 12 + end.get(Calendar.MONTH)) - start.get(Calendar.MONTH)
-                                                    qtddays = end.get(Calendar.DAY_OF_MONTH) - start.get(Calendar.DAY_OF_MONTH)
+                                                    qtdDays = endDateDayofMonth - start.get(Calendar.DAY_OF_MONTH)
                                                 }else{
                                                     qtdmonths = ((end.get(Calendar.YEAR) - start.get(Calendar.YEAR)) * 12 + end.get(Calendar.MONTH)) - start.get(Calendar.MONTH) -1
-                                                    qtddays = end.get(Calendar.DAY_OF_MONTH) + (30 - start.get(Calendar.DAY_OF_MONTH))
+                                                    qtdDays = endDateDayofMonth + (30 - start.get(Calendar.DAY_OF_MONTH))
                                                 }
-                                                qtddays++
+                                                qtdDays++
                                             }
+
+                                            if (qtdDays>=30){
+                                                qtdDays = 0
+                                                qtdmonths += 1
+                                            }
+
                                             if (qtdmonths>1){
                                                 monthsDaysDescr = "" + qtdmonths + " meses "
                                             }else
                                                 if (qtdmonths==1){
                                                     monthsDaysDescr = "" + qtdmonths + " mês "
                                                 }
-                                            if (qtddays>1){
-                                                monthsDaysDescr = monthsDaysDescr +  qtddays + " dias"
+                                            if (qtdDays>1){
+                                                monthsDaysDescr = monthsDaysDescr +  qtdDays + " dias"
                                             }else
-                                                if (qtddays==1){
-                                                    monthsDaysDescr = monthsDaysDescr +  qtddays + " dia"
+                                                if (qtdDays==1){
+                                                    monthsDaysDescr = monthsDaysDescr +  qtdDays + " dia"
                                                 }
                                         }
                                     }
@@ -598,10 +614,11 @@ fun PropertyCurrentContractDialog(
                         DatePickerModal(
                             onDateSelected = {
                                 if (it != null) {
+                                    monthsDaysDescr = ""
                                     endedDate = SimpleDateFormat("dd/MM/yyyy").format(Date(it))
                                     if (startDate.trim().isNotEmpty()){
                                         var daysbet = daysBetween(fmt.parse(startDate),fmt.parse(endedDate))
-                                        if (daysbet<=0){
+                                        if (daysbet<0){
                                             showToast("A Data de Término deve ser posterior à Data de Início do Contrato",context)
                                             endedDate = ""
                                         }else{

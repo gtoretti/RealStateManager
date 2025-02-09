@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.apps.gtorettirsm.compose.utils.getButtonColor
 import com.apps.gtorettirsm.compose.utils.getTextColor
+import com.apps.gtorettirsm.compose.utils.screenToDouble
 import com.apps.gtorettirsm.compose.utils.showToast
 import com.apps.gtorettirsm.data.Property
 import com.apps.gtorettirsm.viewmodels.PropertyViewModel
@@ -44,6 +45,12 @@ fun PropertyGDriveInputDialog(
 ) {
 
     var gdriveUrl by remember { mutableStateOf("") }
+    var loaded by remember { mutableStateOf("") }
+
+    if (loaded.trim().isEmpty()){
+        gdriveUrl = property.urlGDriveFolder
+        loaded = "true"
+    }
 
     if (openPropertyGDriveInputDialog.value) {
         AlertDialog(
@@ -100,9 +107,59 @@ fun PropertyGDriveInputDialog(
             confirmButton = {
                 Button(
                     onClick = {
-                        //propertyViewModel.save(property)
-                        openPropertyGDriveInputDialog.value = false
-                        showToast("GDrive configurado com sucesso!", context)
+                        if (gdriveUrl.trim().isEmpty()){
+                            showToast("Por favor, informe a URL da pasta do imóvel!", context)
+                        }else{
+                            propertyViewModel.saveProperty(
+                                Property(
+                                    propertyId = property.propertyId,
+                                    streetAddress = property.streetAddress,
+                                    state = property.state,
+                                    city = property.city,
+                                    district = property.district,
+                                    number = property.number,
+                                    complement = property.complement,
+                                    zipCode = property.zipCode,
+                                    rentalMonthlyPrice = property.rentalMonthlyPrice,
+                                    occupied = property.occupied,
+                                    cpflName = property.cpflName,
+                                    cpflCustomerId = property.cpflCustomerId,
+                                    cpflCurrentCPF = property.cpflCurrentCPF,
+                                    sanasaName = property.sanasaName,
+                                    sanasaCustomerId = property.sanasaCustomerId,
+                                    sanasaCurrentCPF = property.sanasaCurrentCPF,
+                                    iptuCartographicCode = property.iptuCartographicCode,
+                                    realEstateRegistration = property.realEstateRegistration,
+                                    totalMunicipalTaxes = property.totalMunicipalTaxes,
+                                    urlGDriveFolder = gdriveUrl,
+                                    deleted = 0,
+                                    contractManagerName= property.contractManagerName,
+                                    contractManagerUrl = property.contractManagerUrl,
+                                    contractManagerPhoneNumber= property.contractManagerPhoneNumber,
+                                    contractManagerEmail= property.contractManagerEmail,
+                                    contractStartDate= property.contractStartDate,
+                                    contractEndedDate= property.contractEndedDate,
+                                    contractMonths= property.contractMonths,
+                                    contractDays = property.contractDays,
+                                    contractMonthsDaysDescr = property.contractMonthsDaysDescr,
+                                    contractValueAdjustmentIndexName= property.contractValueAdjustmentIndexName,
+                                    contractMonthlyBillingValue= property.contractMonthlyBillingValue,
+                                    contractRenterName= property.contractRenterName,
+                                    contractRenterCPF= property.contractRenterCPF,
+                                    contractRenterPhone= property.contractRenterPhone,
+                                    contractRenterEmail= property.contractRenterEmail,
+                                    contractGuarantorName= property.contractGuarantorName,
+                                    contractGuarantorCPF= property.contractGuarantorCPF,
+                                    contractGuarantorPhone= property.contractGuarantorPhone,
+                                    contractGuarantorEmail= property.contractGuarantorEmail,
+                                    contractPaymentDate= property.contractPaymentDate,
+                                    contractFinePerDelayedDay = property.contractFinePerDelayedDay
+                                ))
+
+                            gdriveUrl = ""
+                            openPropertyGDriveInputDialog.value = false
+                            showToast("URL GDrive atualizada com sucesso!", context)
+                        }
                     }, colors = ButtonDefaults.buttonColors(
                         containerColor = getButtonColor()
                     ),modifier = Modifier.height(30.dp)
