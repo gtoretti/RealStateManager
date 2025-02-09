@@ -783,7 +783,7 @@ Row(){
 
         Button(
             onClick = {
-                generatePDFReport(context)
+                generatePDFReport(context,filterStartDate,filterEndDate)
             },
             colors = ButtonDefaults.buttonColors(
                 containerColor = getButtonColor()
@@ -948,7 +948,7 @@ fun getFinancialReport(property: Property, expenseViewModel: ExpenseViewModel, r
 }
 
 
-fun generatePDFReport(context: Context) {
+fun generatePDFReport(context: Context, startDateStr: String, endDateStr: String) {
 
     val fmt = SimpleDateFormat("dd/MM/yyyy")
     val fmtFileName = SimpleDateFormat("dd_MM_yyyy_HH_mm")
@@ -957,30 +957,60 @@ fun generatePDFReport(context: Context) {
 
 
     var pdfDocument: PdfDocument = PdfDocument()
-    var title: Paint = Paint()
-    var headerStyle: Paint = Paint()
+
+
 
     /**Dimension For A4 Size Paper**/
     var pageHeight = 842
     var pageWidth = 595
 
-    var myPageInfo: PdfDocument.PageInfo? =
-        PdfDocument.PageInfo.Builder(pageWidth, pageHeight, 1).create()
+    var myPageInfo: PdfDocument.PageInfo? = PdfDocument.PageInfo.Builder(pageWidth, pageHeight, 1).create()
     var myPage: PdfDocument.Page = pdfDocument.startPage(myPageInfo)
     var canvas: Canvas = myPage.canvas
 
+    var headerStyle: Paint = Paint()
     headerStyle.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
-    headerStyle.textSize = 12F
-    headerStyle.setColor(android.graphics.Color.BLACK)
-    canvas.drawText("teste", 50F, 50F, headerStyle)
+    headerStyle.textSize = 15F
+    headerStyle.setColor(android.graphics.Color.BLUE)
+    canvas.drawText("Relatório de Fluxo de Caixa de Aluguéis de Imóveis", 130F, 50F, headerStyle)
 
-    title.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
-    title.textSize = 15F
-    title.setColor(android.graphics.Color.BLACK)
-    canvas.drawText("Recibo de Pagamento", 235F, 100F, title)
+    var periodTitle: Paint = Paint()
+    periodTitle.setTypeface(Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD))
+    periodTitle.textSize = 12F
+    periodTitle.color = android.graphics.Color.BLACK
+    canvas.drawText("Período:", 285F, 100F, periodTitle)
 
+    var period: Paint = Paint()
+    period.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
+    period.textSize = 12F
+    period.color = android.graphics.Color.BLACK
+    canvas.drawText(startDateStr + " - " + endDateStr, 235F, 120F, period)
 
-    var words = ArrayList("teste".split(" "))
+    var legendTitle: Paint = Paint()
+    legendTitle.setTypeface(Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD))
+    legendTitle.textSize = 10F
+    legendTitle.color = android.graphics.Color.BLACK
+    canvas.drawText("Legenda:", 50F, 140F, legendTitle)
+
+    var receivingsExpensesTitle: Paint = Paint()
+    receivingsExpensesTitle.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
+    receivingsExpensesTitle.textSize = 10F
+    receivingsExpensesTitle.color = android.graphics.Color.BLACK
+    canvas.drawText("Recebimentos e Desenbolsos Realizados:", 50F, 160F, receivingsExpensesTitle)
+
+    var previewTitle: Paint = Paint()
+    previewTitle.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
+    previewTitle.textSize = 10F
+    previewTitle.color = android.graphics.Color.BLACK
+    canvas.drawText("Recebimentos de Aluguéis Previstos:", 50F, 180F, previewTitle)
+
+    var pendingTitle: Paint = Paint()
+    pendingTitle.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
+    pendingTitle.textSize = 10F
+    pendingTitle.color = android.graphics.Color.BLACK
+    canvas.drawText("Aluguéis Atrasados Pendentes:", 50F, 200F, pendingTitle)
+
+    var words = ArrayList(" ".split(" "))
     var y=150F
     while (words.isNotEmpty()){
         var body1stLine = ""
@@ -991,10 +1021,7 @@ fun generatePDFReport(context: Context) {
         y += 20
     }
 
-    canvas.drawText("teste", 300F, 400F, headerStyle)
-    canvas.drawText("teste", 300F, 420F, headerStyle)
 
-    canvas.drawText("teste", 50F, 800F, headerStyle)
 
     pdfDocument.finishPage(myPage)
 
