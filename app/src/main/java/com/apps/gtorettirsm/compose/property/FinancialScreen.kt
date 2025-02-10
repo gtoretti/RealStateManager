@@ -734,6 +734,7 @@ Row(){
             fontWeight = FontWeight.Bold,
         )
     )
+        financialReport.value.totalReceivings = "(+) " + receivingsTotal.toCurrency()
     Text(
         text = receivingsTotal.toCurrency(),
         style = TextStyle(
@@ -761,6 +762,7 @@ Row(){
                     fontWeight = FontWeight.Bold,
                 )
             )
+            financialReport.value.totalExpenses = "(-) " + expensesTotal.toCurrency()
             Text(
                 text = expensesTotal.toCurrency(),
                 style = TextStyle(
@@ -788,8 +790,13 @@ Row(){
                     fontWeight = FontWeight.Bold,
                 )
             )
+            if (receivingsTotal - expensesTotal <0){
+                financialReport.value.totalBalance = "(-) " + (receivingsTotal - expensesTotal).toCurrency()
+            }else{
+                financialReport.value.totalBalance = "(+) " + (receivingsTotal - expensesTotal).toCurrency()
+            }
             Text(
-                text = (receivingsTotal - expensesTotal).toCurrency(),
+                text = financialReport.value.totalBalance,
                 style = TextStyle(
                     color = getTextColor(),
                     fontSize = 16.sp,
@@ -1005,7 +1012,9 @@ fun generatePDFReport(context: Context,financialReport: FinancialReport) {
     var pageHeight = 842
     var pageWidth = 595
 
-    var myPageInfo: PdfDocument.PageInfo? = PdfDocument.PageInfo.Builder(pageWidth, pageHeight, 1).create()
+    var page = 1
+
+    var myPageInfo: PdfDocument.PageInfo? = PdfDocument.PageInfo.Builder(pageWidth, pageHeight, page).create()
     var myPage: PdfDocument.Page = pdfDocument.startPage(myPageInfo)
     var canvas: Canvas = myPage.canvas
 
@@ -1051,7 +1060,6 @@ fun generatePDFReport(context: Context,financialReport: FinancialReport) {
             vectorDrawable.setTint(0xFF08940E.toInt())
             vectorDrawable.draw(canvas);
         }
-
         y+=20
     }
 
@@ -1068,7 +1076,6 @@ fun generatePDFReport(context: Context,financialReport: FinancialReport) {
             vectorDrawable.setTint(0xFF08940E.toInt())
             vectorDrawable.draw(canvas);
         }
-
         y+=20
     }
 
@@ -1089,49 +1096,103 @@ fun generatePDFReport(context: Context,financialReport: FinancialReport) {
         y += 20
     }
 
-    //y max 200
-
     y+=20
+    if (pageHeight-y<50){
+        pdfDocument.finishPage(myPage)
+        myPageInfo = PdfDocument.PageInfo.Builder(pageWidth, pageHeight, page).create()
+        myPage = pdfDocument.startPage(myPageInfo)
+        canvas = myPage.canvas
+        y = 50F
+    }
 
     var line: Paint = Paint()
     canvas.drawLine(50F,y,550F,y,line)
     y+=20
+    if (pageHeight-y<50){
+        pdfDocument.finishPage(myPage)
+        myPageInfo = PdfDocument.PageInfo.Builder(pageWidth, pageHeight, page).create()
+        myPage = pdfDocument.startPage(myPageInfo)
+        canvas = myPage.canvas
+        y = 50F
+    }
+
 
     financialReport.properties.forEach { finProperty ->
 
-            var streetAddress = finProperty.property.streetAddress + ", " + finProperty.property.number
-            if (finProperty.property.complement.isNotEmpty())
-                streetAddress = streetAddress + " - " + finProperty.property.complement
+        var streetAddress = finProperty.property.streetAddress + ", " + finProperty.property.number
+        if (finProperty.property.complement.isNotEmpty())
+            streetAddress = streetAddress + " - " + finProperty.property.complement
 
-            var eachAddress: Paint = Paint()
-            eachAddress.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
-            eachAddress.textSize = 10F
-            eachAddress.color = android.graphics.Color.BLACK
-            canvas.drawText(streetAddress, 50F, y, eachAddress)
-            y+=20
-            var eachAddressComp: Paint = Paint()
-            eachAddressComp.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
-            eachAddressComp.textSize = 10F
-            eachAddressComp.color = android.graphics.Color.BLACK
-            canvas.drawText(finProperty.property.city + " - " + finProperty.property.state + " - CEP:" + finProperty.property.zipCode, 50F, y, eachAddressComp)
-            y+=20
+        var eachAddress: Paint = Paint()
+        eachAddress.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
+        eachAddress.textSize = 10F
+        eachAddress.color = android.graphics.Color.BLACK
+        canvas.drawText(streetAddress, 50F, y, eachAddress)
 
-            var monthlyBillingValue: Paint = Paint()
-            monthlyBillingValue.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
-            monthlyBillingValue.textSize = 10F
-            monthlyBillingValue.color = android.graphics.Color.BLACK
-            canvas.drawText("Valor do aluguel mensal: " +finProperty.property.contractMonthlyBillingValue.toCurrency(), 50F, y, monthlyBillingValue)
-            y+=20
+        y+=20
+        if (pageHeight-y<50){
+            pdfDocument.finishPage(myPage)
+            myPageInfo = PdfDocument.PageInfo.Builder(pageWidth, pageHeight, page).create()
+            myPage = pdfDocument.startPage(myPageInfo)
+            canvas = myPage.canvas
+            y = 50F
+        }
 
-            var renter: Paint = Paint()
-            renter.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
-            renter.textSize = 10F
-            renter.color = android.graphics.Color.BLACK
-            canvas.drawText("Inquilino: " +finProperty.property.contractRenterName + " - CPF/CNPJ: " + finProperty.property.contractRenterCPF, 50F, y, renter)
-            y+=20
+        var eachAddressComp: Paint = Paint()
+        eachAddressComp.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
+        eachAddressComp.textSize = 10F
+        eachAddressComp.color = android.graphics.Color.BLACK
+        canvas.drawText(finProperty.property.city + " - " + finProperty.property.state + " - CEP:" + finProperty.property.zipCode, 50F, y, eachAddressComp)
 
-            canvas.drawLine(50F,y,550F,y,line)
-            y+=20
+        y+=20
+        if (pageHeight-y<50){
+            pdfDocument.finishPage(myPage)
+            myPageInfo = PdfDocument.PageInfo.Builder(pageWidth, pageHeight, page).create()
+            myPage = pdfDocument.startPage(myPageInfo)
+            canvas = myPage.canvas
+            y = 50F
+        }
+
+        var monthlyBillingValue: Paint = Paint()
+        monthlyBillingValue.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
+        monthlyBillingValue.textSize = 10F
+        monthlyBillingValue.color = android.graphics.Color.BLACK
+        canvas.drawText("Valor do aluguel mensal: " +finProperty.property.contractMonthlyBillingValue.toCurrency(), 50F, y, monthlyBillingValue)
+
+        y+=20
+        if (pageHeight-y<50){
+            pdfDocument.finishPage(myPage)
+            myPageInfo = PdfDocument.PageInfo.Builder(pageWidth, pageHeight, page).create()
+            myPage = pdfDocument.startPage(myPageInfo)
+            canvas = myPage.canvas
+            y = 50F
+        }
+
+        var renter: Paint = Paint()
+        renter.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
+        renter.textSize = 10F
+        renter.color = android.graphics.Color.BLACK
+        canvas.drawText("Inquilino: " +finProperty.property.contractRenterName + " - CPF/CNPJ: " + finProperty.property.contractRenterCPF, 50F, y, renter)
+
+        y+=20
+        if (pageHeight-y<50){
+            pdfDocument.finishPage(myPage)
+            myPageInfo = PdfDocument.PageInfo.Builder(pageWidth, pageHeight, page).create()
+            myPage = pdfDocument.startPage(myPageInfo)
+            canvas = myPage.canvas
+            y = 50F
+        }
+
+        canvas.drawLine(50F,y,550F,y,line)
+
+        y+=20
+        if (pageHeight-y<50){
+            pdfDocument.finishPage(myPage)
+            myPageInfo = PdfDocument.PageInfo.Builder(pageWidth, pageHeight, page).create()
+            myPage = pdfDocument.startPage(myPageInfo)
+            canvas = myPage.canvas
+            y = 50F
+        }
 
         var total: Double = 0.0
         finProperty.records.forEach { finRecord ->
@@ -1202,7 +1263,16 @@ fun generatePDFReport(context: Context,financialReport: FinancialReport) {
                     vectorDrawable.draw(canvas);
                 }
             }
+
             y+=20
+            if (pageHeight-y<50){
+                pdfDocument.finishPage(myPage)
+                myPageInfo = PdfDocument.PageInfo.Builder(pageWidth, pageHeight, page).create()
+                myPage = pdfDocument.startPage(myPageInfo)
+                canvas = myPage.canvas
+                y = 50F
+            }
+
         }
         var propertyFooterAddress: Paint = Paint()
         propertyFooterAddress.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD))
@@ -1219,34 +1289,69 @@ fun generatePDFReport(context: Context,financialReport: FinancialReport) {
             propertyFooterAddress.color = android.graphics.Color.BLACK
         }
         canvas.drawText(t, 450F, y, propertyFooterAddress)
+
         y+=20
-        canvas.drawLine(50F,y,550F,y,line)
-        y+=20
-
-
-    }
-
-
-
-
-
-
-
-
-
-
-    var words = ArrayList(" ".split(" "))
-    //var y=150F
-    while (words.isNotEmpty()){
-        var body1stLine = ""
-        while (words.isNotEmpty() && body1stLine.length < 85){
-            body1stLine = body1stLine + words.removeAt(0) + " "
-            canvas.drawText(body1stLine, 50F, y, headerStyle)
+        if (pageHeight-y<50){
+            pdfDocument.finishPage(myPage)
+            myPageInfo = PdfDocument.PageInfo.Builder(pageWidth, pageHeight, page).create()
+            myPage = pdfDocument.startPage(myPageInfo)
+            canvas = myPage.canvas
+            y = 50F
         }
-        y += 20
+
+        canvas.drawLine(50F,y,550F,y,line)
+
+        y+=20
+        if (pageHeight-y<50){
+            pdfDocument.finishPage(myPage)
+            myPageInfo = PdfDocument.PageInfo.Builder(pageWidth, pageHeight, page).create()
+            myPage = pdfDocument.startPage(myPageInfo)
+            canvas = myPage.canvas
+            y = 50F
+        }
+
     }
 
+    var reportFooterTotalReceivings: Paint = Paint()
+    reportFooterTotalReceivings.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD))
+    reportFooterTotalReceivings.textSize = 10F
+    reportFooterTotalReceivings.color = android.graphics.Color.BLACK
+    canvas.drawText("Total de Recebimentos (+):", 50F, y, reportFooterTotalReceivings)
+    canvas.drawText(financialReport.totalReceivings, 450F, y, reportFooterTotalReceivings)
 
+    y+=20
+    if (pageHeight-y<50){
+        pdfDocument.finishPage(myPage)
+        myPageInfo = PdfDocument.PageInfo.Builder(pageWidth, pageHeight, page).create()
+        myPage = pdfDocument.startPage(myPageInfo)
+        canvas = myPage.canvas
+        y = 50F
+    }
+
+    var reportFooterTotalExpenses: Paint = Paint()
+    reportFooterTotalExpenses.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD))
+    reportFooterTotalExpenses.textSize = 10F
+    reportFooterTotalExpenses.color = android.graphics.Color.BLACK
+    canvas.drawText("Total de Desenbolsos (-):", 50F, y, reportFooterTotalExpenses)
+    reportFooterTotalExpenses.color = android.graphics.Color.RED
+    canvas.drawText(financialReport.totalExpenses, 450F, y, reportFooterTotalExpenses)
+
+    y+=20
+    if (pageHeight-y<50){
+        pdfDocument.finishPage(myPage)
+        myPageInfo = PdfDocument.PageInfo.Builder(pageWidth, pageHeight, page).create()
+        myPage = pdfDocument.startPage(myPageInfo)
+        canvas = myPage.canvas
+        y = 50F
+    }
+
+    var reportFooterTotalBalance: Paint = Paint()
+    reportFooterTotalBalance.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD))
+    reportFooterTotalBalance.textSize = 10F
+    reportFooterTotalBalance.color = android.graphics.Color.BLACK
+    canvas.drawText("Saldo:", 50F, y, reportFooterTotalBalance)
+    reportFooterTotalBalance.color = android.graphics.Color.BLACK
+    canvas.drawText(financialReport.totalBalance, 450F, y, reportFooterTotalBalance)
 
     pdfDocument.finishPage(myPage)
 
