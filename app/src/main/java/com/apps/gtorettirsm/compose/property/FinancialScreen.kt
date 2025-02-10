@@ -13,9 +13,7 @@ import android.graphics.Typeface
 import android.graphics.pdf.PdfDocument
 import android.icu.util.Calendar
 import android.os.Environment
-import android.util.Log
 import android.widget.Toast
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -33,7 +31,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -66,13 +63,10 @@ import androidx.core.content.FileProvider
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.apps.gtorettirsm.R
-import com.apps.gtorettirsm.compose.utils.daysBetween
-import com.apps.gtorettirsm.compose.utils.generatePDF
 import com.apps.gtorettirsm.compose.utils.getButtonColor
 import com.apps.gtorettirsm.compose.utils.getRedTextColor
 import com.apps.gtorettirsm.compose.utils.getTextColor
 import com.apps.gtorettirsm.compose.utils.toCurrency
-import com.apps.gtorettirsm.compose.utils.toScreen
 import com.apps.gtorettirsm.data.Property
 import com.apps.gtorettirsm.viewmodels.ExpenseViewModel
 import com.apps.gtorettirsm.viewmodels.PropertyViewModel
@@ -80,7 +74,6 @@ import com.apps.gtorettirsm.viewmodels.ReceivingViewModel
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
-import java.time.YearMonth
 import java.util.Date
 
 
@@ -372,9 +365,9 @@ Row(){
                         .selectable(
                             selected = (true),
                             onClick = {
-                                if (eachPropertyCheckbox.value){
+                                if (eachPropertyCheckbox.value) {
                                     eachPropertyCheckbox.value = false
-                                }else{
+                                } else {
                                     eachPropertyCheckbox.value = true
                                 }
                             },
@@ -584,13 +577,15 @@ Row(){
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start,
-            modifier = Modifier.fillMaxWidth().clickable {
-                if (filterRecordsDONE.value){
-                    filterRecordsDONE.value = false
-                }else{
-                    filterRecordsDONE.value = true
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable {
+                    if (filterRecordsDONE.value) {
+                        filterRecordsDONE.value = false
+                    } else {
+                        filterRecordsDONE.value = true
+                    }
                 }
-            }
         ) {
             Checkbox(checked = (filterRecordsDONE.value),
                 onCheckedChange = {
@@ -621,13 +616,15 @@ Row(){
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start,
-            modifier = Modifier.fillMaxWidth().clickable {
-                if (filterRecordsPREVIEW.value){
-                    filterRecordsPREVIEW.value = false
-                }else{
-                    filterRecordsPREVIEW.value = true
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable {
+                    if (filterRecordsPREVIEW.value) {
+                        filterRecordsPREVIEW.value = false
+                    } else {
+                        filterRecordsPREVIEW.value = true
+                    }
                 }
-            }
         ) {
             Checkbox(checked = (filterRecordsPREVIEW.value),
                 onCheckedChange = {
@@ -658,13 +655,15 @@ Row(){
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start,
-            modifier = Modifier.fillMaxWidth().clickable {
-                if (filterRecordsPENDING.value){
-                    filterRecordsPENDING.value = false
-                }else{
-                    filterRecordsPENDING.value = true
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable {
+                    if (filterRecordsPENDING.value) {
+                        filterRecordsPENDING.value = false
+                    } else {
+                        filterRecordsPENDING.value = true
+                    }
                 }
-            }
         ) {
             Checkbox(checked = (filterRecordsPENDING.value),
                 onCheckedChange = {
@@ -703,7 +702,9 @@ Row(){
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 10.dp)
     )
     {
     Text(
@@ -728,7 +729,9 @@ Row(){
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 10.dp)
         )
         {
             Text(
@@ -753,7 +756,9 @@ Row(){
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 10.dp)
         )
         {
             Text(
@@ -783,7 +788,7 @@ Row(){
 
         Button(
             onClick = {
-                generatePDFReport(context,filterStartDate,filterEndDate)
+                generatePDFReport(context,filterStartDate,filterEndDate,filterRecordsDONE.value,filterRecordsPREVIEW.value,filterRecordsPENDING.value, properties)
             },
             colors = ButtonDefaults.buttonColors(
                 containerColor = getButtonColor()
@@ -948,17 +953,14 @@ fun getFinancialReport(property: Property, expenseViewModel: ExpenseViewModel, r
 }
 
 
-fun generatePDFReport(context: Context, startDateStr: String, endDateStr: String) {
+fun generatePDFReport(context: Context, startDateStr: String, endDateStr: String,filterRecordsDONE: Boolean,filterRecordsPREVIEW:Boolean,filterRecordsPENDING: Boolean, properties: List<Property>) {
 
     val fmt = SimpleDateFormat("dd/MM/yyyy")
     val fmtFileName = SimpleDateFormat("dd_MM_yyyy_HH_mm")
 
     var filename = "relatorio_fluxo_de_caixa_"+fmtFileName.format(Calendar.getInstance().time)
 
-
     var pdfDocument: PdfDocument = PdfDocument()
-
-
 
     /**Dimension For A4 Size Paper**/
     var pageHeight = 842
@@ -986,32 +988,137 @@ fun generatePDFReport(context: Context, startDateStr: String, endDateStr: String
     period.color = android.graphics.Color.BLACK
     canvas.drawText(startDateStr + " - " + endDateStr, 235F, 120F, period)
 
-    var legendTitle: Paint = Paint()
-    legendTitle.setTypeface(Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD))
-    legendTitle.textSize = 10F
-    legendTitle.color = android.graphics.Color.BLACK
-    canvas.drawText("Legenda:", 50F, 140F, legendTitle)
+    var y = 140F
 
-    var receivingsExpensesTitle: Paint = Paint()
-    receivingsExpensesTitle.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
-    receivingsExpensesTitle.textSize = 10F
-    receivingsExpensesTitle.color = android.graphics.Color.BLACK
-    canvas.drawText("Recebimentos e Desenbolsos Realizados:", 50F, 160F, receivingsExpensesTitle)
+    if (filterRecordsDONE || filterRecordsPREVIEW || filterRecordsPENDING){
+        var legendTitle: Paint = Paint()
+        legendTitle.setTypeface(Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD))
+        legendTitle.textSize = 10F
+        legendTitle.color = android.graphics.Color.BLACK
+        canvas.drawText("Legenda:", 50F, 140F, legendTitle)
+        y+=20
+    }
 
-    var previewTitle: Paint = Paint()
-    previewTitle.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
-    previewTitle.textSize = 10F
-    previewTitle.color = android.graphics.Color.BLACK
-    canvas.drawText("Recebimentos de Aluguéis Previstos:", 50F, 180F, previewTitle)
+    if (filterRecordsDONE){
+        var receivingsExpensesTitle: Paint = Paint()
+        receivingsExpensesTitle.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
+        receivingsExpensesTitle.textSize = 10F
+        receivingsExpensesTitle.color = android.graphics.Color.BLACK
+        canvas.drawText("Recebimentos e Desenbolsos Realizados:", 80F, y, receivingsExpensesTitle)
 
-    var pendingTitle: Paint = Paint()
-    pendingTitle.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
-    pendingTitle.textSize = 10F
-    pendingTitle.color = android.graphics.Color.BLACK
-    canvas.drawText("Aluguéis Atrasados Pendentes:", 50F, 200F, pendingTitle)
+        val vectorDrawable = context.getDrawable(R.drawable.check_24px)
+        if (vectorDrawable != null) {
+            vectorDrawable.setBounds(50,(y-12).toInt(),66,(y+4).toInt())
+            vectorDrawable.setTint(0xFF08940E.toInt())
+            vectorDrawable.draw(canvas);
+        }
+
+        y+=20
+    }
+
+    if (filterRecordsPREVIEW){
+        var previewTitle: Paint = Paint()
+        previewTitle.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
+        previewTitle.textSize = 10F
+        previewTitle.color = android.graphics.Color.BLACK
+        canvas.drawText("Recebimentos de Aluguéis Previstos:", 80F, y, previewTitle)
+
+        val vectorDrawable = context.getDrawable(R.drawable.schedule_24px)
+        if (vectorDrawable != null) {
+            vectorDrawable.setBounds(50,(y-12).toInt(),66,(y+4).toInt())
+            vectorDrawable.setTint(0xFF08940E.toInt())
+            vectorDrawable.draw(canvas);
+        }
+
+        y+=20
+    }
+
+    if (filterRecordsPENDING) {
+        var pendingTitle: Paint = Paint()
+        pendingTitle.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
+        pendingTitle.textSize = 10F
+        pendingTitle.color = android.graphics.Color.BLACK
+        canvas.drawText("Aluguéis Atrasados Pendentes:", 80F, y, pendingTitle)
+
+        val vectorDrawable = context.getDrawable(R.drawable.warning_24px)
+        if (vectorDrawable != null) {
+            vectorDrawable.setBounds(50,(y-12).toInt(),66,(y+4).toInt())
+            vectorDrawable.setTint(0xFFD50000.toInt())
+            vectorDrawable.draw(canvas);
+        }
+
+        y += 20
+    }
+
+    //y max 200
+
+    y+=20
+
+    var line: Paint = Paint()
+    canvas.drawLine(50F,y,550F,y,line)
+    y+=20
+
+    properties.forEach { property ->
+
+
+        if (true){
+
+
+
+            var streetAddress = property.streetAddress + ", " + property.number
+            if (property.complement.isNotEmpty())
+                streetAddress = streetAddress + " - " + property.complement
+
+            var eachAddress: Paint = Paint()
+            eachAddress.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
+            eachAddress.textSize = 10F
+            eachAddress.color = android.graphics.Color.BLACK
+            canvas.drawText(streetAddress, 50F, y, eachAddress)
+            y+=20
+            var eachAddressComp: Paint = Paint()
+            eachAddressComp.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
+            eachAddressComp.textSize = 10F
+            eachAddressComp.color = android.graphics.Color.BLACK
+            canvas.drawText(property.city + " - " + property.state + " - CEP:" + property.zipCode, 50F, y, eachAddressComp)
+            y+=20
+
+            var monthlyBillingValue: Paint = Paint()
+            monthlyBillingValue.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
+            monthlyBillingValue.textSize = 10F
+            monthlyBillingValue.color = android.graphics.Color.BLACK
+            canvas.drawText("Valor do aluguel mensal: " +property.contractMonthlyBillingValue.toCurrency(), 50F, y, monthlyBillingValue)
+            y+=20
+
+            var renter: Paint = Paint()
+            renter.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
+            renter.textSize = 10F
+            renter.color = android.graphics.Color.BLACK
+            canvas.drawText("Inquilino: " +property.contractRenterName + " - CPF/CNPJ: " + property.contractRenterCPF, 50F, y, renter)
+            y+=20
+
+            canvas.drawLine(50F,y,550F,y,line)
+            y+=20
+        }
+
+
+
+
+
+
+
+    }
+
+
+
+
+
+
+
+
+
 
     var words = ArrayList(" ".split(" "))
-    var y=150F
+    //var y=150F
     while (words.isNotEmpty()){
         var body1stLine = ""
         while (words.isNotEmpty() && body1stLine.length < 85){
