@@ -108,6 +108,14 @@ fun FinancialScreen(
     val filterRecordsPREVIEW = remember { mutableStateOf(true) }
     val filterRecordsPENDING = remember { mutableStateOf(true) }
 
+    var financialReport = remember { mutableStateOf(FinancialReport("","",false,false,false,"","","",ArrayList<FinancialReportProperty>())) }
+    financialReport.value.filterRecordsDONE = filterRecordsDONE.value
+    financialReport.value.filterRecordsPREVIEW = filterRecordsPREVIEW.value
+    financialReport.value.filterRecordsPENDING = filterRecordsPENDING.value
+    financialReport.value.startDateStr = filterStartDate
+    financialReport.value.endDateStr = filterEndDate
+    financialReport.value.properties = ArrayList()
+
     val fmt = SimpleDateFormat("dd/MM/yyyy")
 
 
@@ -356,7 +364,15 @@ Row(){
 
             properties.forEach { property ->
 
+                var total: Double = 0.0
                 val eachPropertyCheckbox = remember { mutableStateOf(true) }
+                var reportList = getFinancialReport(property, expenseViewModel, receivingViewModel, fmt.parse(filterStartDate),fmt.parse(filterEndDate),filterRecordsDONE.value, filterRecordsPREVIEW.value, filterRecordsPENDING.value)
+
+                if (eachPropertyCheckbox.value){
+                    var finProp = FinancialReportProperty(property,reportList)
+                    financialReport.value.properties.add(finProp)
+                }
+
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Start,
@@ -422,8 +438,6 @@ Row(){
                     verticalArrangement = Arrangement.spacedBy(2.dp)
 
                 ) {
-                    var total: Double = 0.0
-                    var reportList = getFinancialReport(property, expenseViewModel, receivingViewModel, fmt.parse(filterStartDate),fmt.parse(filterEndDate),filterRecordsDONE.value, filterRecordsPREVIEW.value, filterRecordsPENDING.value)
                     reportList.forEach { reportRecord ->
 
                         if (eachPropertyCheckbox.value) {
@@ -524,6 +538,7 @@ Row(){
                     }
 
                     if (eachPropertyCheckbox.value) {
+
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween,
@@ -538,9 +553,11 @@ Row(){
                                 )
                             )
 
+                            var totalStr = ""
                             if (total < 0.0) {
+                                totalStr = "(-) " + total.toCurrency().replace("-", "")
                                 Text(
-                                    text = "(-) " + total.toCurrency().replace("-", ""),
+                                    text = totalStr,
                                     style = TextStyle(
                                         color = getRedTextColor(),
                                         fontSize = 14.sp,
@@ -548,6 +565,7 @@ Row(){
                                     )
                                 )
                             } else {
+                                totalStr = "(+) " + total.toCurrency()
                                 Text(
                                     text = "(+) " + total.toCurrency(),
                                     style = TextStyle(
@@ -557,6 +575,7 @@ Row(){
                                     )
                                 )
                             }
+
                         }
                     }
                 }
@@ -788,7 +807,7 @@ Row(){
 
         Button(
             onClick = {
-                generatePDFReport(context,filterStartDate,filterEndDate,filterRecordsDONE.value,filterRecordsPREVIEW.value,filterRecordsPENDING.value, properties)
+                generatePDFReport(context,financialReport.value)
             },
             colors = ButtonDefaults.buttonColors(
                 containerColor = getButtonColor()
@@ -862,6 +881,26 @@ data class FinancialReportRecord(
     var type: String, //DONE,PREVIEW/PENDING
 ) {
 }
+
+data class FinancialReport(
+    var startDateStr: String,
+    var endDateStr: String,
+    var filterRecordsDONE: Boolean,
+    var filterRecordsPREVIEW: Boolean,
+    var filterRecordsPENDING: Boolean,
+    var totalBalance: String,
+    var totalExpenses: String,
+    var totalReceivings: String,
+    var properties: ArrayList<FinancialReportProperty>,
+) {
+}
+
+data class FinancialReportProperty(
+    var property: Property,
+    var records: List<FinancialReportRecord>,
+) {
+}
+
 
 @Composable
 fun getFinancialReport(property: Property, expenseViewModel: ExpenseViewModel, receivingViewModel: ReceivingViewModel, startDate: Date, endDate: Date, filterRecordsDONE: Boolean, filterRecordsPREVIEW: Boolean, filterRecordsPENDING: Boolean) : List<FinancialReportRecord>{
@@ -953,7 +992,7 @@ fun getFinancialReport(property: Property, expenseViewModel: ExpenseViewModel, r
 }
 
 
-fun generatePDFReport(context: Context, startDateStr: String, endDateStr: String,filterRecordsDONE: Boolean,filterRecordsPREVIEW:Boolean,filterRecordsPENDING: Boolean, properties: List<Property>) {
+fun generatePDFReport(context: Context,financialReport: FinancialReport) {
 
     val fmt = SimpleDateFormat("dd/MM/yyyy")
     val fmtFileName = SimpleDateFormat("dd_MM_yyyy_HH_mm")
@@ -986,11 +1025,11 @@ fun generatePDFReport(context: Context, startDateStr: String, endDateStr: String
     period.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
     period.textSize = 12F
     period.color = android.graphics.Color.BLACK
-    canvas.drawText(startDateStr + " - " + endDateStr, 235F, 120F, period)
+    canvas.drawText(financialReport.startDateStr + " - " + financialReport.endDateStr, 235F, 120F, period)
 
     var y = 140F
 
-    if (filterRecordsDONE || filterRecordsPREVIEW || filterRecordsPENDING){
+    if (financialReport.filterRecordsDONE || financialReport.filterRecordsPREVIEW || financialReport.filterRecordsPENDING){
         var legendTitle: Paint = Paint()
         legendTitle.setTypeface(Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD))
         legendTitle.textSize = 10F
@@ -999,7 +1038,7 @@ fun generatePDFReport(context: Context, startDateStr: String, endDateStr: String
         y+=20
     }
 
-    if (filterRecordsDONE){
+    if (financialReport.filterRecordsDONE){
         var receivingsExpensesTitle: Paint = Paint()
         receivingsExpensesTitle.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
         receivingsExpensesTitle.textSize = 10F
@@ -1016,7 +1055,7 @@ fun generatePDFReport(context: Context, startDateStr: String, endDateStr: String
         y+=20
     }
 
-    if (filterRecordsPREVIEW){
+    if (financialReport.filterRecordsPREVIEW){
         var previewTitle: Paint = Paint()
         previewTitle.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
         previewTitle.textSize = 10F
@@ -1033,7 +1072,7 @@ fun generatePDFReport(context: Context, startDateStr: String, endDateStr: String
         y+=20
     }
 
-    if (filterRecordsPENDING) {
+    if (financialReport.filterRecordsPENDING) {
         var pendingTitle: Paint = Paint()
         pendingTitle.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
         pendingTitle.textSize = 10F
@@ -1058,16 +1097,16 @@ fun generatePDFReport(context: Context, startDateStr: String, endDateStr: String
     canvas.drawLine(50F,y,550F,y,line)
     y+=20
 
-    properties.forEach { property ->
-
-
-        if (true){
+    financialReport.properties.forEach { finProperty ->
 
 
 
-            var streetAddress = property.streetAddress + ", " + property.number
-            if (property.complement.isNotEmpty())
-                streetAddress = streetAddress + " - " + property.complement
+
+
+
+            var streetAddress = finProperty.property.streetAddress + ", " + finProperty.property.number
+            if (finProperty.property.complement.isNotEmpty())
+                streetAddress = streetAddress + " - " + finProperty.property.complement
 
             var eachAddress: Paint = Paint()
             eachAddress.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
@@ -1079,26 +1118,26 @@ fun generatePDFReport(context: Context, startDateStr: String, endDateStr: String
             eachAddressComp.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
             eachAddressComp.textSize = 10F
             eachAddressComp.color = android.graphics.Color.BLACK
-            canvas.drawText(property.city + " - " + property.state + " - CEP:" + property.zipCode, 50F, y, eachAddressComp)
+            canvas.drawText(finProperty.property.city + " - " + finProperty.property.state + " - CEP:" + finProperty.property.zipCode, 50F, y, eachAddressComp)
             y+=20
 
             var monthlyBillingValue: Paint = Paint()
             monthlyBillingValue.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
             monthlyBillingValue.textSize = 10F
             monthlyBillingValue.color = android.graphics.Color.BLACK
-            canvas.drawText("Valor do aluguel mensal: " +property.contractMonthlyBillingValue.toCurrency(), 50F, y, monthlyBillingValue)
+            canvas.drawText("Valor do aluguel mensal: " +finProperty.property.contractMonthlyBillingValue.toCurrency(), 50F, y, monthlyBillingValue)
             y+=20
 
             var renter: Paint = Paint()
             renter.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
             renter.textSize = 10F
             renter.color = android.graphics.Color.BLACK
-            canvas.drawText("Inquilino: " +property.contractRenterName + " - CPF/CNPJ: " + property.contractRenterCPF, 50F, y, renter)
+            canvas.drawText("Inquilino: " +finProperty.property.contractRenterName + " - CPF/CNPJ: " + finProperty.property.contractRenterCPF, 50F, y, renter)
             y+=20
 
             canvas.drawLine(50F,y,550F,y,line)
             y+=20
-        }
+
 
 
 
