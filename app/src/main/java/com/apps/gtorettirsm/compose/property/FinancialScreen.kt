@@ -1099,11 +1099,6 @@ fun generatePDFReport(context: Context,financialReport: FinancialReport) {
 
     financialReport.properties.forEach { finProperty ->
 
-
-
-
-
-
             var streetAddress = finProperty.property.streetAddress + ", " + finProperty.property.number
             if (finProperty.property.complement.isNotEmpty())
                 streetAddress = streetAddress + " - " + finProperty.property.complement
@@ -1138,11 +1133,95 @@ fun generatePDFReport(context: Context,financialReport: FinancialReport) {
             canvas.drawLine(50F,y,550F,y,line)
             y+=20
 
+        var total: Double = 0.0
+        finProperty.records.forEach { finRecord ->
 
+            if (finRecord.type=="DONE"){
+                var datePaint: Paint = Paint()
+                datePaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
+                datePaint.textSize = 10F
+                if (finRecord.prefix == "(+)"){
+                    total += finRecord.value
+                    datePaint.color = android.graphics.Color.BLACK
+                }
+                else{
+                    total -= finRecord.value
+                    datePaint.color = android.graphics.Color.RED
+                }
+                canvas.drawText(fmt.format(finRecord.date) + " - " + finRecord.description, 75F, y, datePaint)
+                canvas.drawText(finRecord.prefix + " " + finRecord.value.toCurrency(), 450F, y, datePaint)
 
+                val vectorDrawable = context.getDrawable(R.drawable.check_24px)
+                if (vectorDrawable != null) {
+                    vectorDrawable.setBounds(50,(y-12).toInt(),66,(y+4).toInt())
+                    vectorDrawable.setTint(0xFF08940E.toInt())
+                    vectorDrawable.draw(canvas);
+                }
+            }
+            if (finRecord.type=="PREVIEW"){
+                var datePaint: Paint = Paint()
+                datePaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
+                datePaint.textSize = 10F
+                if (finRecord.prefix == "(+)"){
+                    total += finRecord.value
+                    datePaint.color = android.graphics.Color.BLACK
+                }
+                else{
+                    total -= finRecord.value
+                    datePaint.color = android.graphics.Color.RED
+                }
+                canvas.drawText(fmt.format(finRecord.date) + " - " + finRecord.description, 75F, y, datePaint)
+                canvas.drawText(finRecord.prefix + " " + finRecord.value.toCurrency(), 450F, y, datePaint)
 
+                val vectorDrawable = context.getDrawable(R.drawable.schedule_24px)
+                if (vectorDrawable != null) {
+                    vectorDrawable.setBounds(50,(y-12).toInt(),66,(y+4).toInt())
+                    vectorDrawable.setTint(0xFF08940E.toInt())
+                    vectorDrawable.draw(canvas);
+                }
+            }
+            if (finRecord.type=="PENDING"){
+                var datePaint: Paint = Paint()
+                datePaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
+                datePaint.textSize = 10F
+                if (finRecord.prefix == "(+)"){
+                    total += finRecord.value
+                    datePaint.color = android.graphics.Color.BLACK
+                }
+                else{
+                    total -= finRecord.value
+                    datePaint.color = android.graphics.Color.RED
+                }
+                canvas.drawText(fmt.format(finRecord.date) + " - " + finRecord.description, 75F, y, datePaint)
+                canvas.drawText(finRecord.prefix + " " + finRecord.value.toCurrency(), 450F, y, datePaint)
 
-
+                val vectorDrawable = context.getDrawable(R.drawable.warning_24px)
+                if (vectorDrawable != null) {
+                    vectorDrawable.setBounds(50,(y-12).toInt(),66,(y+4).toInt())
+                    vectorDrawable.setTint(0xFFD50000.toInt())
+                    vectorDrawable.draw(canvas);
+                }
+            }
+            y+=20
+        }
+        var propertyFooterAddress: Paint = Paint()
+        propertyFooterAddress.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD))
+        propertyFooterAddress.textSize = 10F
+        propertyFooterAddress.color = android.graphics.Color.BLACK
+        canvas.drawText("Total:", 50F, y, propertyFooterAddress)
+        var t = total.toCurrency().replace("-","")
+        if (total<0.0){
+            t = "(-) $t"
+            propertyFooterAddress.color = android.graphics.Color.RED
+        }
+        else{
+            t = "(+) $t"
+            propertyFooterAddress.color = android.graphics.Color.BLACK
+        }
+        canvas.drawText(t, 450F, y, propertyFooterAddress)
+        y+=20
+        canvas.drawLine(50F,y,550F,y,line)
+        y+=20
 
 
     }
