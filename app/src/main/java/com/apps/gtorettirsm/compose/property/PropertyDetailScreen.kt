@@ -45,6 +45,7 @@ import com.apps.gtorettirsm.compose.profile.openContactDetails
 import com.apps.gtorettirsm.compose.utils.DrawScrollableView
 import com.apps.gtorettirsm.compose.utils.defaultNaoInformado
 import com.apps.gtorettirsm.compose.utils.getButtonColor
+import com.apps.gtorettirsm.compose.utils.getPhoneColor
 import com.apps.gtorettirsm.compose.utils.getProviderDesc
 import com.apps.gtorettirsm.compose.utils.getTextColor
 import com.apps.gtorettirsm.compose.utils.showToast
@@ -691,7 +692,7 @@ if (!displayPropertyContractManager.value){
                 Icon(
                     imageVector = Icons.Filled.Call,
                     contentDescription = "Chamar Imobiliária",
-                    tint = getTextColor(),
+                    tint = getPhoneColor(),
                     modifier = Modifier
                         .padding(end = 2.dp)
                         .size(16.dp)
@@ -935,7 +936,7 @@ if (!displayPropertyCurrentContract.value){
                 Icon(
                     imageVector = Icons.Filled.Call,
                     contentDescription = "Chamar Inquilino",
-                    tint = getTextColor(),
+                    tint = getPhoneColor(),
                     modifier = Modifier
                         .padding(end = 2.dp)
                         .size(16.dp)
@@ -993,7 +994,7 @@ if (!displayPropertyCurrentContract.value){
                 Icon(
                     imageVector = Icons.Filled.Call,
                     contentDescription = "Chamar Fiador",
-                    tint = getTextColor(),
+                    tint = getPhoneColor(),
                     modifier = Modifier
                         .padding(end = 2.dp)
                         .size(16.dp)

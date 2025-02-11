@@ -75,7 +75,7 @@ fun PropertyContractManagerDialog(
             openPropertyContractManagerDialog.value = false
         }, modifier = Modifier
             .width(550.dp)
-            .height(450.dp),
+            .height(220.dp),
 
             title = {
                 Text(
@@ -94,7 +94,8 @@ fun PropertyContractManagerDialog(
 
                         Column(
                             modifier = Modifier.padding(horizontal = 10.dp),
-                            verticalArrangement = Arrangement.spacedBy(10.dp)
+                            verticalArrangement = Arrangement.spacedBy(10.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
 
 

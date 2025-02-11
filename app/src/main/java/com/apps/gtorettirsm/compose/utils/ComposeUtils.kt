@@ -349,6 +349,14 @@ fun getTextColor(): androidx.compose.ui.graphics.Color {
 }
 
 @Composable
+fun getPhoneColor(): androidx.compose.ui.graphics.Color {
+    if (isDarkTheme())
+        return androidx.compose.ui.graphics.Color(0xFF66BB6A)
+    else
+        return androidx.compose.ui.graphics.Color(0xFF4CAF50)
+}
+
+@Composable
 fun getRedTextColor(): androidx.compose.ui.graphics.Color {
     if (isDarkTheme())
         return androidx.compose.ui.graphics.Color(0xFFF06292)

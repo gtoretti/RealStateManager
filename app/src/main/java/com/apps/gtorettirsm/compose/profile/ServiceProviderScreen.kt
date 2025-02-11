@@ -92,6 +92,7 @@ import com.apps.gtorettirsm.compose.property.searchServicesShowerStalls
 import com.apps.gtorettirsm.compose.property.searchServicesSteelGatesRailings
 import com.apps.gtorettirsm.compose.property.searchServicesSunshades
 import com.apps.gtorettirsm.compose.utils.getButtonColor
+import com.apps.gtorettirsm.compose.utils.getPhoneColor
 import com.apps.gtorettirsm.compose.utils.getRedTextColor
 import com.apps.gtorettirsm.compose.utils.getTextColor
 import com.apps.gtorettirsm.compose.utils.showToast
@@ -245,7 +246,7 @@ fun ServiceProviderScreen(
                             Icon(
                                 imageVector = Icons.Filled.Call,
                                 contentDescription = "Chamar Prestador",
-                                tint = getTextColor(),
+                                tint = getPhoneColor(),
                                 modifier = Modifier
                                     .padding(end = 12.dp)
                                     .size(24.dp)
