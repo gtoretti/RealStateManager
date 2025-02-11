@@ -107,6 +107,65 @@ fun PropertyReceivingsDialog(
 
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Button(onClick = {
+                            receiving.value = Receiving(0L, Date(0),0L,0.0,"","",Date(0),0.0,0L,"","")
+                            dropDownSelectPropertyId.value = 0L
+                            dropDownSelectPropertyDesc.value = ""
+                            dropDownSelectExpenseType.value = ""
+                            dropDownSelectProviderId.value = 0L
+                            dropDownSelectProviderName.value = ""
+                            dropDownSelectProviderServices.value = ArrayList<String>()
+                            dropDownSelectProviderServiceDesc.value = ""
+                            dropDownSelectReceivingType.value = ""
+                            openPropertyReceivingsDialog.value = false
+                        },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = getButtonColor()
+                            ),modifier = Modifier.height(30.dp)
+                        ) {
+                            Text(
+                                text = "Cancelar", style = TextStyle(
+                                    fontSize = 14.sp,
+                                )
+                            )
+                        }
+
+
+                        Button(
+                            modifier = Modifier.height(30.dp),
+                            onClick =
+                            {
+                                receiving.value =
+                                    Receiving(0L, Date(0), 0L, 0.0, "", "", Date(0), 0.0, 0L,"","")
+                                dropDownSelectPropertyId.value = 0L
+                                dropDownSelectPropertyDesc.value = ""
+                                dropDownSelectExpenseType.value = ""
+                                dropDownSelectProviderId.value = 0L
+                                dropDownSelectProviderName.value = ""
+                                dropDownSelectProviderServices.value = ArrayList<String>()
+                                dropDownSelectProviderServiceDesc.value = ""
+                                dropDownSelectReceivingType.value = ""
+                                openPropertyReceivingsCreateDialog.value = true
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = getButtonColor()
+                            ),
+                        ) {
+                            Text(
+                                text = "Adicionar", style = TextStyle(
+                                    fontSize = 14.sp,
+                                )
+                            )
+                        }
+
+                    }
+
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.End,
                         modifier = Modifier.fillMaxWidth()
                     ) {
@@ -143,6 +202,23 @@ fun PropertyReceivingsDialog(
                         modifier = Modifier.padding(horizontal = 10.dp),
                         content = {
                             Column {
+
+                                if (receivings.isEmpty() && dropDownSelectPropertyId.value !=0L){
+                                    Column(
+                                        modifier = Modifier.padding(horizontal = 10.dp),
+                                        verticalArrangement = Arrangement.spacedBy(10.dp),
+                                        horizontalAlignment = Alignment.CenterHorizontally
+                                    ) {
+                                        Text(
+                                            text = "Não há recebimentos registrados para o imóvel selecionado."
+                                            , style = TextStyle(
+                                                color = getTextColor(),
+                                                fontSize = 15.sp,
+                                            )
+                                        )
+                                    }
+                                }
+
 
                                 val fmt = SimpleDateFormat("dd/MM/yyyy")
                                 receivings.forEach { item ->
@@ -210,63 +286,7 @@ fun PropertyReceivingsDialog(
             }, confirmButton = {
 
             }, dismissButton = {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Button(onClick = {
-                        receiving.value = Receiving(0L, Date(0),0L,0.0,"","",Date(0),0.0,0L,"","")
-                        dropDownSelectPropertyId.value = 0L
-                        dropDownSelectPropertyDesc.value = ""
-                        dropDownSelectExpenseType.value = ""
-                        dropDownSelectProviderId.value = 0L
-                        dropDownSelectProviderName.value = ""
-                        dropDownSelectProviderServices.value = ArrayList<String>()
-                        dropDownSelectProviderServiceDesc.value = ""
-                        dropDownSelectReceivingType.value = ""
-                        openPropertyReceivingsDialog.value = false
-                    },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = getButtonColor()
-                        ),modifier = Modifier.height(30.dp)
-                    ) {
-                        Text(
-                            text = "Cancelar", style = TextStyle(
-                                fontSize = 14.sp,
-                            )
-                        )
-                    }
 
-
-                    Button(
-                        modifier = Modifier.height(30.dp),
-                        onClick =
-                        {
-                            receiving.value =
-                                Receiving(0L, Date(0), 0L, 0.0, "", "", Date(0), 0.0, 0L,"","")
-                            dropDownSelectPropertyId.value = 0L
-                            dropDownSelectPropertyDesc.value = ""
-                            dropDownSelectExpenseType.value = ""
-                            dropDownSelectProviderId.value = 0L
-                            dropDownSelectProviderName.value = ""
-                            dropDownSelectProviderServices.value = ArrayList<String>()
-                            dropDownSelectProviderServiceDesc.value = ""
-                            dropDownSelectReceivingType.value = ""
-                            openPropertyReceivingsCreateDialog.value = true
-                        },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = getButtonColor()
-                        ),
-                    ) {
-                        Text(
-                            text = "Adicionar", style = TextStyle(
-                                fontSize = 14.sp,
-                            )
-                        )
-                    }
-
-                }
             }
         )
 
