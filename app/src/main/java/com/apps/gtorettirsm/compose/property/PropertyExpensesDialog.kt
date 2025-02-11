@@ -105,7 +105,58 @@ fun PropertyExpensesDialog(
 
                 ) {
 
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Button(onClick = {
+                            expense.value = Expense(0L,Date(0),0L,0.0,"","","",0L,"")
+                            dropDownSelectPropertyId.value = 0L
+                            dropDownSelectPropertyDesc.value = ""
+                            dropDownSelectExpenseType.value = ""
+                            dropDownSelectProviderId.value = 0L
+                            dropDownSelectProviderName.value = ""
+                            dropDownSelectProviderServices.value = ArrayList<String>()
+                            dropDownSelectProviderServiceDesc.value = ""
+                            dropDownSelectReceivingType.value = ""
+                            openPropertyExpensesDialog.value = false
+                        },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = getButtonColor()
+                            ),modifier = Modifier.height(30.dp)
+                        ) {
+                            Text(
+                                text = "Cancelar", style = TextStyle(
+                                    fontSize = 14.sp,
+                                )
+                            )
+                        }
 
+
+                        Button(onClick = {
+                            expense.value = Expense(0L,Date(0),0L,0.0,"","","",0L,"")
+                            dropDownSelectPropertyId.value = 0L
+                            dropDownSelectPropertyDesc.value = ""
+                            dropDownSelectExpenseType.value = ""
+                            dropDownSelectProviderId.value = 0L
+                            dropDownSelectProviderName.value = ""
+                            dropDownSelectProviderServices.value = ArrayList<String>()
+                            dropDownSelectProviderServiceDesc.value = ""
+                            dropDownSelectReceivingType.value = ""
+                            openPropertyExpensesCreateDialog.value = true
+                        },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = getButtonColor()
+                            ),modifier = Modifier.height(30.dp)
+                        ) {
+                            Text(
+                                text = "Adicionar", style = TextStyle(
+                                    fontSize = 14.sp,
+                                )
+                            )
+                        }
+                    }
 
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
@@ -145,6 +196,23 @@ fun PropertyExpensesDialog(
                         modifier = Modifier.padding(horizontal = 10.dp),
                         content = {
                             Column {
+
+
+                                if (expenses.isEmpty() && dropDownSelectPropertyId.value !=0L){
+                                    Column(
+                                        modifier = Modifier.padding(horizontal = 10.dp),
+                                        verticalArrangement = Arrangement.spacedBy(10.dp),
+                                        horizontalAlignment = Alignment.CenterHorizontally
+                                    ) {
+                                        Text(
+                                            text = "Não há desenbolsos registrados para o imóvel selecionado."
+                                            , style = TextStyle(
+                                                color = getTextColor(),
+                                                fontSize = 15.sp,
+                                            )
+                                        )
+                                    }
+                                }
 
                                 val fmt = SimpleDateFormat("dd/MM/yyyy")
                             expenses.forEach { item ->
@@ -217,58 +285,7 @@ fun PropertyExpensesDialog(
             }, confirmButton = {
 
             }, dismissButton = {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Button(onClick = {
-                        expense.value = Expense(0L,Date(0),0L,0.0,"","","",0L,"")
-                        dropDownSelectPropertyId.value = 0L
-                        dropDownSelectPropertyDesc.value = ""
-                        dropDownSelectExpenseType.value = ""
-                        dropDownSelectProviderId.value = 0L
-                        dropDownSelectProviderName.value = ""
-                        dropDownSelectProviderServices.value = ArrayList<String>()
-                        dropDownSelectProviderServiceDesc.value = ""
-                        dropDownSelectReceivingType.value = ""
-                        openPropertyExpensesDialog.value = false
-                    },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = getButtonColor()
-                        ),modifier = Modifier.height(30.dp)
-                    ) {
-                        Text(
-                            text = "Cancelar", style = TextStyle(
-                                fontSize = 14.sp,
-                            )
-                        )
-                    }
 
-
-                    Button(onClick = {
-                        expense.value = Expense(0L,Date(0),0L,0.0,"","","",0L,"")
-                        dropDownSelectPropertyId.value = 0L
-                        dropDownSelectPropertyDesc.value = ""
-                        dropDownSelectExpenseType.value = ""
-                        dropDownSelectProviderId.value = 0L
-                        dropDownSelectProviderName.value = ""
-                        dropDownSelectProviderServices.value = ArrayList<String>()
-                        dropDownSelectProviderServiceDesc.value = ""
-                        dropDownSelectReceivingType.value = ""
-                        openPropertyExpensesCreateDialog.value = true
-                    },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = getButtonColor()
-                        ),modifier = Modifier.height(30.dp)
-                    ) {
-                        Text(
-                            text = "Adicionar", style = TextStyle(
-                                fontSize = 14.sp,
-                            )
-                        )
-                    }
-                }
             }
         )
 
