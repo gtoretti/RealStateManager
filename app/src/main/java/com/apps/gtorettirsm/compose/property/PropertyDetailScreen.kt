@@ -1188,6 +1188,7 @@ if (!displayPropertyCurrentContract.value){
                         )
                     }
 
+                    /*
                     Button(
                         onClick = {
                             openPropertyDetailDialog.value = false
@@ -1204,6 +1205,8 @@ if (!displayPropertyCurrentContract.value){
                             )
                         )
                     }
+                    */
+
 
                 }
             }
