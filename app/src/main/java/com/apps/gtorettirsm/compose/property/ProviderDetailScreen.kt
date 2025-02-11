@@ -108,6 +108,7 @@ val servicesCurtains = mutableIntStateOf(0)
 val servicesShowerStalls = mutableIntStateOf(0)
 val servicesSunshades = mutableIntStateOf(0)
 val servicesCabinetsJoinery = mutableIntStateOf(0)
+val servicesPestControl = mutableIntStateOf(0)
 
 
 @Composable
@@ -120,11 +121,11 @@ fun ProviderDetailScreen(
     if (providerId!=0L){
         var providerFlow = providerViewModel.getProvider(providerId)
         val provider by providerFlow.collectAsStateWithLifecycle(
-            initialValue = Provider(0L,"","","","",  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0,0,0,0)
+            initialValue = Provider(0L,"","","","",  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0, 0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0,0,0,0,0,0,0,0)
         )
         ProviderDetailScreen(openProviderDetailDialog,providerViewModel,context,provider)
     }else{
-        ProviderDetailScreen(openProviderDetailDialog,providerViewModel,context,Provider(0L,"","","","", 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0,0,0,0))
+        ProviderDetailScreen(openProviderDetailDialog,providerViewModel,context,Provider(0L,"","","","", 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0,0,0,0))
     }
 
 }
@@ -176,6 +177,7 @@ fun ProviderDetailScreen(
         servicesShowerStalls.value = provider.servicesShowerStalls
         servicesSunshades.value = provider.servicesSunshades
         servicesCabinetsJoinery.value = provider.servicesCabinetsJoinery
+        servicesPestControl.value = provider.servicesPestControl
     }
 
     if (openProviderDetailDialog.value) {
@@ -573,6 +575,38 @@ fun ProviderDetailScreen(
                                     )
                                 }
 
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.Start,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .selectable(
+                                            selected = servicesPestControl.value == 1,
+                                            onClick = {
+                                                if (servicesPestControl.value == 0) servicesPestControl.value=1
+                                                else servicesPestControl.value=0
+                                            },
+                                            role = Role.Checkbox
+                                        )
+                                ) {
+                                    Checkbox(checked = (servicesPestControl.value == 1),
+                                        onCheckedChange = {
+                                            if (it) servicesPestControl.value=1
+                                            else servicesPestControl.value=0
+                                        })
+                                    Text(
+                                        text = "Controle de Pragas",
+                                        style = TextStyle(
+                                            color = getTextColor(),
+                                            fontSize = 16.sp,
+                                            fontFamily = FontFamily.SansSerif,
+                                        ),
+                                        modifier = Modifier.padding(
+                                            start = 2.dp,
+                                            end = 6.dp
+                                        )
+                                    )
+                                }
 
 
                                 Row(
@@ -1498,6 +1532,7 @@ fun ProviderDetailScreen(
                             servicesShowerStalls.value = 0
                             servicesSunshades.value = 0
                             servicesCabinetsJoinery.value = 0
+                            servicesPestControl.value = 0
 
                         },
                         colors = ButtonDefaults.buttonColors(
@@ -1572,6 +1607,7 @@ fun ProviderDetailScreen(
                                 provider.servicesSunshades =servicesSunshades.value
                                 provider.servicesCurtains =servicesCurtains.value
                                 provider.servicesCabinetsJoinery =servicesCabinetsJoinery.value
+                                provider.servicesPestControl = servicesPestControl.value
 
                                 providerViewModel.saveProvider(provider)
 
@@ -1621,6 +1657,7 @@ fun ProviderDetailScreen(
                                 servicesShowerStalls.value = 0
                                 servicesSunshades.value = 0
                                 servicesCabinetsJoinery.value = 0
+                                servicesPestControl.value = 0
                             }
 
                         },

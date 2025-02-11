@@ -21,6 +21,7 @@ data class Provider(
     var servicesAutomation: Int, //automação residencial
     var servicesFireBrigade: Int, // brigada de incendio
     var servicesNotary: Int, //cartorio de imoveis
+    var servicesPestControl: Int, //controle de pragas
     var servicesAluminumFrames: Int, // esquadrias de aluminio
     var servicesMaterialSupplier: Int, // fornecedor de materiais
     var servicesPlasterer: Int,   // gesseiro

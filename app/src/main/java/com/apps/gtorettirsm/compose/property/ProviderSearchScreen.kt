@@ -112,6 +112,7 @@ val searchServicesCurtains = mutableIntStateOf(0)
 val searchServicesShowerStalls = mutableIntStateOf(0)
 val searchServicesSunshades = mutableIntStateOf(0)
 val searchServicesCabinetsJoinery = mutableIntStateOf(0)
+val searchServicesPestControl = mutableIntStateOf(0)
 
 @Composable
 fun ProviderSearchScreen(
@@ -192,6 +193,8 @@ fun ProviderSearchScreen(
             else if (item.servicesCurtains==1 && searchServicesCurtains.value==1)
                 tmp.add(item)
             else if (item.servicesCabinetsJoinery==1 && searchServicesCabinetsJoinery.value==1)
+                tmp.add(item)
+            else if (item.servicesPestControl==1 && searchServicesPestControl.value==1)
                 tmp.add(item)
         }
 
@@ -522,6 +525,40 @@ fun ProviderSearchScreen(
                                                 )
                                             }
 
+
+                                            Row(
+                                                verticalAlignment = Alignment.CenterVertically,
+                                                horizontalArrangement = Arrangement.Start,
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .selectable(
+                                                        selected = searchServicesPestControl.value == 1,
+                                                        onClick = {
+                                                            if (searchServicesPestControl.value == 0) searchServicesPestControl.value =
+                                                                1
+                                                            else searchServicesPestControl.value = 0
+                                                        },
+                                                        role = Role.Checkbox
+                                                    )
+                                            ) {
+                                                Checkbox(checked = (searchServicesPestControl.value == 1),
+                                                    onCheckedChange = {
+                                                        if (it) searchServicesPestControl.value = 1
+                                                        else searchServicesPestControl.value = 0
+                                                    })
+                                                Text(
+                                                    text = "Controle de Pragas",
+                                                    style = TextStyle(
+                                                        color = getTextColor(),
+                                                        fontSize = 16.sp,
+                                                        fontFamily = FontFamily.SansSerif,
+                                                    ),
+                                                    modifier = Modifier.padding(
+                                                        start = 2.dp,
+                                                        end = 6.dp
+                                                    )
+                                                )
+                                            }
 
 
                                             Row(

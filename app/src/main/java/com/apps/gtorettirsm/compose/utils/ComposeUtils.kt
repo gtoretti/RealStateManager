@@ -402,6 +402,8 @@ fun getProviderServicesList(p: Provider): ArrayList<String> {
         ret.add("Manutenção de Ar-Condicionado")
     if (p.servicesCabinetsJoinery==1)
         ret.add("Manutenção de Armários e Marcenaria")
+    if (p.servicesPestControl==1)
+        ret.add("Controle de Pragas")
     if (p.servicesShowerStalls==1)
         ret.add("Manutenção de Boxes para Banheiros")
     if (p.servicesRoofer==1)
@@ -472,6 +474,8 @@ fun getProviderDesc(p: Provider): String{
         r += "Manutenção de Ar-Condicionado, "
     if (p.servicesCabinetsJoinery==1)
         r += "Manutenção de Armários e Marcenaria, "
+    if (p.servicesPestControl==1)
+        r += "Controle de Pragas, "
     if (p.servicesShowerStalls==1)
         r += "Manutenção de Boxes para Banheiros, "
     if (p.servicesRoofer==1)

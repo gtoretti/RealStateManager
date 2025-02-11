@@ -119,6 +119,7 @@ fun ProviderDeleteDialog(
                         servicesShowerStalls.value = 0
                         servicesSunshades.value = 0
                         servicesCabinetsJoinery.value = 0
+                        servicesPestControl.value = 0
 
                         providerId.value = 0L
 

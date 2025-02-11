@@ -81,6 +81,7 @@ import com.apps.gtorettirsm.compose.property.searchServicesMaterialSupplier
 import com.apps.gtorettirsm.compose.property.searchServicesNotary
 import com.apps.gtorettirsm.compose.property.searchServicesOthers
 import com.apps.gtorettirsm.compose.property.searchServicesPainting
+import com.apps.gtorettirsm.compose.property.searchServicesPestControl
 import com.apps.gtorettirsm.compose.property.searchServicesPlasterer
 import com.apps.gtorettirsm.compose.property.searchServicesPlaygroundMaintenance
 import com.apps.gtorettirsm.compose.property.searchServicesPoolCleaning
@@ -311,6 +312,7 @@ fun ServiceProviderScreen(
                 searchServicesShowerStalls.value = 0
                 searchServicesSunshades.value = 0
                 searchServicesCabinetsJoinery.value = 0
+                searchServicesPestControl.value = 0
 
                 ProviderSearchScreen(
                     openProviderSearchDialog,
