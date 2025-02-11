@@ -196,12 +196,10 @@ fun PropertyCityHallRegistrationDialog(
                                 contractMonthlyBillingValue= property.contractMonthlyBillingValue,
                                 contractRenterName= property.contractRenterName,
                                 contractRenterCPF= property.contractRenterCPF,
-                                contractRenterPhone= property.contractRenterPhone,
-                                contractRenterEmail= property.contractRenterEmail,
+                                contractRenterContactId = property.contractRenterContactId,
                                 contractGuarantorName= property.contractGuarantorName,
                                 contractGuarantorCPF= property.contractGuarantorCPF,
-                                contractGuarantorPhone= property.contractGuarantorPhone,
-                                contractGuarantorEmail= property.contractGuarantorEmail,
+                                contractGuarantorContactId = property.contractGuarantorContactId,
                                 contractPaymentDate= property.contractPaymentDate,
                                 contractFinePerDelayedDay = property.contractFinePerDelayedDay
                             ))

@@ -90,7 +90,7 @@ fun PropertyDetailScreen(
     val displayPropertyGDriveConf = remember { mutableStateOf(false) }
 
     val property by propertyFlow.collectAsStateWithLifecycle(
-        initialValue = Property(0L,"", "", "", "", "", "", "", 0.0,0,"", "", "", "", "", "","","", 0.0, "" , 0,  "", "", "", "",  Date(0), Date(0), 0,0, "","", 0.0, "", "", "", "", "", "", "", "", 0,0.0)
+        initialValue = Property(0L,"", "", "", "", "", "", "", 0.0,0,"", "", "", "", "", "","","", 0.0, "" , 0,  "", "", "", "",  Date(0), Date(0), 0,0, "","", 0.0, "", "", "", "", "", "",  0,0.0)
     )
 
     if (openPropertyDetailDialog.value) {
@@ -917,32 +917,6 @@ if (!displayPropertyCurrentContract.value){
         text = defaultNaoInformado(property.contractRenterCPF)
     )
 
-
-    Text(
-        text = "Telefone do Inquilino:",
-        style = TextStyle(
-            color = getTextColor(),
-            fontWeight = FontWeight.Bold,
-        )
-    )
-    Text(
-        text = defaultNaoInformado(property.contractRenterPhone)
-    )
-
-
-
-    Text(
-        text = "E-mail do Inquilino:",
-        style = TextStyle(
-            color = getTextColor(),
-            fontWeight = FontWeight.Bold,
-        )
-    )
-    Text(
-        text = defaultNaoInformado(property.contractRenterEmail)
-    )
-
-
     Text(
         text = "Nome do Fiador:",
         style = TextStyle(
@@ -964,31 +938,6 @@ if (!displayPropertyCurrentContract.value){
     )
     Text(
         text = defaultNaoInformado(property.contractGuarantorCPF)
-    )
-
-
-
-    Text(
-        text = "Telefone do Fiador:",
-        style = TextStyle(
-            color = getTextColor(),
-            fontWeight = FontWeight.Bold,
-        )
-    )
-    Text(
-        text = defaultNaoInformado(property.contractGuarantorPhone)
-    )
-
-
-    Text(
-        text = "E-mail do Fiador:",
-        style = TextStyle(
-            color = getTextColor(),
-            fontWeight = FontWeight.Bold,
-        )
-    )
-    Text(
-        text = defaultNaoInformado(property.contractGuarantorEmail)
     )
 
     Row(

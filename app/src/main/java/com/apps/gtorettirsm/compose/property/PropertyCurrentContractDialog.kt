@@ -45,6 +45,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.apps.gtorettirsm.compose.utils.DrawScrollableView
 import com.apps.gtorettirsm.compose.utils.daysBetween
+import com.apps.gtorettirsm.compose.utils.defaultNaoInformado
 import com.apps.gtorettirsm.compose.utils.getButtonColor
 import com.apps.gtorettirsm.compose.utils.getTextColor
 import com.apps.gtorettirsm.compose.utils.screenToDouble
@@ -74,12 +75,10 @@ fun PropertyCurrentContractDialog(
     var valueAdjustmentIndexName by remember { mutableStateOf("") }
     var renterName by remember { mutableStateOf("") }
     var renterCPF by remember { mutableStateOf("") }
-    var renterPhone by remember { mutableStateOf("") }
-    var renterEmail by remember { mutableStateOf("") }
+    var renterContactId by remember { mutableStateOf("") }
     var guarantorName by remember { mutableStateOf("") }
     var guarantorCPF by remember { mutableStateOf("") }
-    var guarantorPhone by remember { mutableStateOf("") }
-    var guarantorEmail by remember { mutableStateOf("") }
+    var guarantorContactId by remember { mutableStateOf("") }
     var paymentDate by remember { mutableStateOf("") }
     var contractFinePerDelayedDay by remember { mutableStateOf("") }
 
@@ -103,12 +102,10 @@ fun PropertyCurrentContractDialog(
         valueAdjustmentIndexName  = property.contractValueAdjustmentIndexName
         renterName  = property.contractRenterName
         renterCPF  = property.contractRenterCPF
-        renterPhone = property.contractRenterPhone
-        renterEmail  = property.contractRenterEmail
+        renterContactId = property.contractRenterContactId
         guarantorName = property.contractGuarantorName
         guarantorCPF = property.contractGuarantorCPF
-        guarantorPhone = property.contractGuarantorPhone
-        guarantorEmail = property.contractGuarantorEmail
+        guarantorContactId = property.contractGuarantorContactId
         paymentDate = property.contractPaymentDate.toString()
         loaded = "true"
     }
@@ -333,50 +330,49 @@ fun PropertyCurrentContractDialog(
                                 }
                             }
 
-
-                            OutlinedTextField(
-                                value = monthsDaysDescr,
-                                onValueChange = {
-
-                                },
-                                textStyle = TextStyle(
-                                    fontSize = 16.sp,
-                                    color = getTextColor(),
-                                    fontWeight = FontWeight.Normal
-                                ),
-                                placeholder = { Text("") },
-                                keyboardOptions = KeyboardOptions(
-                                    keyboardType = KeyboardType.Number
-                                ),
-                                label = {
-                                    Text(
-                                        text = "Período do Contrato em Meses:",
-                                        style = TextStyle(
-                                            color = getTextColor(), fontSize = 12.sp,
-                                        )
-                                    )
-                                }, enabled = false
+                            Text(
+                                text = "Período do Contrato em Meses:",
+                                style = TextStyle(
+                                    color = getTextColor(), fontSize = 15.sp,
+                                    fontWeight = FontWeight.Bold,
+                                )
+                            )
+                            Text(
+                                text = defaultNaoInformado(monthsDaysDescr),
+                                style = TextStyle(
+                                    color = getTextColor(), fontSize = 15.sp,
+                                )
                             )
 
-                            OutlinedTextField(
-                                value = renterName,
-                                onValueChange = {
-                                    renterName = it
-                                },
-                                textStyle = TextStyle(
-                                    fontSize = 16.sp,
-                                    color = getTextColor(),
-                                    fontWeight = FontWeight.Normal
-                                ),
+                            Text(
+                                text = "Nome do Inquilino:",
+                                style = TextStyle(
+                                    color = getTextColor(), fontSize = 15.sp,
+                                    fontWeight = FontWeight.Bold,
+                                )
+                            )
 
-                                label = {
-                                    Text(
-                                        text = "Nome do Inquilino:",
-                                        style = TextStyle(
-                                            color = getTextColor(), fontSize = 12.sp,
-                                        )
+                            Button(
+                                onClick = {
+                                    openPropertyCurrentContractDialog.value = true
+                                },
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = getButtonColor()
+                                ),
+                                modifier = Modifier.height(30.dp)
+                            ) {
+                                Text(
+                                    text = "Selecionar Contato",
+                                    style = TextStyle(
+                                        fontSize = 14.sp,
                                     )
-                                }
+                                )
+                            }
+                            Text(
+                                text = defaultNaoInformado(renterName),
+                                style = TextStyle(
+                                    color = getTextColor(), fontSize = 15.sp,
+                                )
                             )
 
                             OutlinedTextField(
@@ -403,72 +399,35 @@ fun PropertyCurrentContractDialog(
                                 }
                             )
 
-
-
-                            OutlinedTextField(
-                                value = renterPhone,
-                                onValueChange = {
-                                    renterPhone = it
-                                },
-                                textStyle = TextStyle(
-                                    fontSize = 16.sp,
-                                    color = getTextColor(),
-                                    fontWeight = FontWeight.Normal
-                                ),
-                                placeholder = { Text("") },
-                                keyboardOptions = KeyboardOptions(
-                                    keyboardType = KeyboardType.Number
-                                ),
-                                label = {
-                                    Text(
-                                        text = "Telefone do Inquilino:",
-                                        style = TextStyle(
-                                            color = getTextColor(), fontSize = 12.sp,
-                                        )
-                                    )
-                                }
+                            Text(
+                                text = "Nome do Fiador:",
+                                style = TextStyle(
+                                    color = getTextColor(), fontSize = 15.sp,
+                                    fontWeight = FontWeight.Bold,
+                                )
                             )
 
-                            OutlinedTextField(
-                                value = renterEmail,
-                                onValueChange = {
-                                    renterEmail = it
+                            Button(
+                                onClick = {
+                                    openPropertyCurrentContractDialog.value = true
                                 },
-                                textStyle = TextStyle(
-                                    fontSize = 16.sp,
-                                    color = getTextColor(),
-                                    fontWeight = FontWeight.Normal
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = getButtonColor()
                                 ),
-
-                                label = {
-                                    Text(
-                                        text = "E-mail do Inquilino:",
-                                        style = TextStyle(
-                                            color = getTextColor(), fontSize = 12.sp,
-                                        )
+                                modifier = Modifier.height(30.dp)
+                            ) {
+                                Text(
+                                    text = "Selecionar Contato",
+                                    style = TextStyle(
+                                        fontSize = 14.sp,
                                     )
-                                }
-                            )
-
-                            OutlinedTextField(
-                                value = guarantorName,
-                                onValueChange = {
-                                    guarantorName = it
-                                },
-                                textStyle = TextStyle(
-                                    fontSize = 16.sp,
-                                    color = getTextColor(),
-                                    fontWeight = FontWeight.Normal
-                                ),
-
-                                label = {
-                                    Text(
-                                        text = "Nome do Fiador:",
-                                        style = TextStyle(
-                                            color = getTextColor(), fontSize = 12.sp,
-                                        )
-                                    )
-                                }
+                                )
+                            }
+                            Text(
+                                text = defaultNaoInformado(guarantorName),
+                                style = TextStyle(
+                                    fontSize = 15.sp,
+                                )
                             )
 
                             OutlinedTextField(
@@ -495,52 +454,6 @@ fun PropertyCurrentContractDialog(
                                 }
                             )
 
-
-
-                            OutlinedTextField(
-                                value = guarantorPhone,
-                                onValueChange = {
-                                    guarantorPhone = it
-                                },
-                                textStyle = TextStyle(
-                                    fontSize = 16.sp,
-                                    color = getTextColor(),
-                                    fontWeight = FontWeight.Normal
-                                ),
-                                placeholder = { Text("") },
-                                keyboardOptions = KeyboardOptions(
-                                    keyboardType = KeyboardType.Number
-                                ),
-                                label = {
-                                    Text(
-                                        text = "Telefone do Fiador:",
-                                        style = TextStyle(
-                                            color = getTextColor(), fontSize = 12.sp,
-                                        )
-                                    )
-                                }
-                            )
-
-                            OutlinedTextField(
-                                value = guarantorEmail,
-                                onValueChange = {
-                                    guarantorEmail = it
-                                },
-                                textStyle = TextStyle(
-                                    fontSize = 16.sp,
-                                    color = getTextColor(),
-                                    fontWeight = FontWeight.Normal
-                                ),
-
-                                label = {
-                                    Text(
-                                        text = "E-mail do Fiador:",
-                                        style = TextStyle(
-                                            color = getTextColor(), fontSize = 12.sp,
-                                        )
-                                    )
-                                }
-                            )
                         }
                     })
 
@@ -698,12 +611,10 @@ fun PropertyCurrentContractDialog(
                             valueAdjustmentIndexName=""
                             renterName=""
                             renterCPF=""
-                            renterPhone=""
-                            renterEmail=""
+                            renterContactId=""
                             guarantorName=""
                             guarantorCPF=""
-                            guarantorPhone=""
-                            guarantorEmail=""
+                            guarantorContactId=""
                             paymentDate=""
                             contractFinePerDelayedDay = ""
 
@@ -776,12 +687,10 @@ fun PropertyCurrentContractDialog(
                                 contractMonthlyBillingValue= monthlyBillingValue.screenToDouble(),
                                 contractRenterName= renterName,
                                 contractRenterCPF= renterCPF,
-                                contractRenterPhone= renterPhone,
-                                contractRenterEmail= renterEmail,
+                                contractRenterContactId = renterContactId,
                                 contractGuarantorName= guarantorName,
                                 contractGuarantorCPF= guarantorCPF,
-                                contractGuarantorPhone= guarantorPhone,
-                                contractGuarantorEmail= guarantorEmail,
+                                contractGuarantorContactId = guarantorContactId,
                                 contractPaymentDate= Integer.parseInt(paymentDate),
                                 contractFinePerDelayedDay = contractFinePerDelayedDay.screenToDouble()
                             ))
@@ -793,12 +702,10 @@ fun PropertyCurrentContractDialog(
                         valueAdjustmentIndexName=""
                         renterName=""
                         renterCPF=""
-                        renterPhone=""
-                        renterEmail=""
+                        renterContactId=""
                         guarantorName=""
                         guarantorCPF=""
-                        guarantorPhone=""
-                        guarantorEmail=""
+                        guarantorContactId=""
                         paymentDate=""
                         contractFinePerDelayedDay = ""
 

@@ -153,7 +153,7 @@ fun PropertyReceivingsCreateDialog(
         // carrega receivings para calculo do proximo recebimento de aluguel
         var receivingsList = ArrayList<Receiving>()
         if (dropDownSelectPropertyId.value!=0L){
-            var property = Property(0L,"", "", "", "", "", "", "", 0.0,0,"", "", "", "","","", "", "", 0.0, "" , 0,  "", "", "", "",  Date(0), Date(0), 0,0, "","", 0.0, "", "", "", "", "", "", "", "", 0,0.0)
+            var property = Property(0L,"", "", "", "", "", "", "", 0.0,0,"", "", "", "","","", "", "", 0.0, "" , 0,  "", "", "", "",  Date(0), Date(0), 0,0, "","", 0.0, "", "", "", "", "",  "", 0,0.0)
             for (item in properties) {
                 if (item.propertyId == dropDownSelectPropertyId.value){
                     property = item
@@ -207,8 +207,8 @@ fun PropertyReceivingsCreateDialog(
                         "","","","","","","","",
                         0.0,"",0,"","","","",
                         Date(0), Date(0), 0,0,"","",0.0,
-                        "","","","","","",
-                        "","",0,0.0)
+                        "","","","","",""
+                        ,0,0.0)
                     for (item in properties) {
                         if (item.propertyId == dropDownSelectPropertyId.value){
                             property = item
@@ -657,7 +657,7 @@ fun ReceivingTypeDropdownMenu() {
 fun getNextNewRentReceivingDescr(propertyId:Long, properties: List<Property>, receivingViewModel: ReceivingViewModel, context: Context, receivingsList: List<Receiving>): String{
     var ret = ""
     val fmt = SimpleDateFormat("dd/MM/yyyy")
-    var property = Property(0L,"", "", "", "", "", "", "", 0.0,0,"", "", "", "","","", "", "", 0.0, "" , 0,  "", "", "", "",  Date(0), Date(0), 0,0, "","", 0.0, "", "", "", "", "", "", "", "", 0,0.0)
+    var property = Property(0L,"", "", "", "", "", "", "", 0.0,0,"", "", "", "","","", "", "", 0.0, "" , 0,  "", "", "", "",  Date(0), Date(0), 0,0, "","", 0.0, "", "", "", "", "", "",  0,0.0)
     for (item in properties) {
         if (item.propertyId == propertyId){
             property = item
