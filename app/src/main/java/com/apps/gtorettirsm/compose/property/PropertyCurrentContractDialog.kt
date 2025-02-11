@@ -5,6 +5,8 @@ package com.apps.gtorettirsm.compose.property
 
 
 import android.content.Context
+import android.content.Intent
+import android.provider.ContactsContract
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -43,6 +45,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.ActivityCompat
 import com.apps.gtorettirsm.compose.utils.DrawScrollableView
 import com.apps.gtorettirsm.compose.utils.daysBetween
 import com.apps.gtorettirsm.compose.utils.defaultNaoInformado
@@ -57,6 +60,15 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 
+
+val pickContactNameInquilino = mutableStateOf("")
+val pickContactIdInquilino = mutableStateOf("")
+
+val pickContactNameFiador = mutableStateOf("")
+val pickContactIdFiador = mutableStateOf("")
+
+val pickContactNameImobiliaria = mutableStateOf("")
+val pickContactIdImobiliaria = mutableStateOf("")
 
 @Composable
 fun PropertyCurrentContractDialog(
@@ -82,6 +94,24 @@ fun PropertyCurrentContractDialog(
     var paymentDate by remember { mutableStateOf("") }
     var contractFinePerDelayedDay by remember { mutableStateOf("") }
 
+    if (pickContactNameInquilino.value.trim().isNotEmpty()){
+        renterName = pickContactNameInquilino.value
+        pickContactNameInquilino.value = ""
+    }
+    if (pickContactNameFiador.value.trim().isNotEmpty()){
+        guarantorName = pickContactNameFiador.value
+        pickContactNameFiador.value = ""
+    }
+
+    if (pickContactIdInquilino.value.trim().isNotEmpty()){
+        renterContactId = pickContactIdInquilino.value
+        pickContactIdInquilino.value = ""
+    }
+
+    if (pickContactIdFiador.value.trim().isNotEmpty()){
+        guarantorContactId = pickContactIdFiador.value
+        pickContactIdFiador.value = ""
+    }
 
     val openStartDateDialog = remember { mutableStateOf(false) }
     val openEndedDateDialog = remember { mutableStateOf(false) }
@@ -354,20 +384,31 @@ fun PropertyCurrentContractDialog(
 
                             Button(
                                 onClick = {
-                                    openPropertyCurrentContractDialog.value = true
-                                },
-                                colors = ButtonDefaults.buttonColors(
+                                    val activity = context.getActivity()
+                                    contactPickerScreen.value = "inquilino"
+                                    if (hasContactPermission(context)) {
+                                        val intent = Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI)
+
+                                        if (activity != null) {
+                                            ActivityCompat.startActivityForResult(activity, intent, 1, null)
+                                        }
+                                    } else {
+                                        if (activity != null) {
+                                            requestContactPermission(context, activity)
+                                        }
+                                    }
+                                },colors = ButtonDefaults.buttonColors(
                                     containerColor = getButtonColor()
-                                ),
-                                modifier = Modifier.height(30.dp)
+                                ),modifier = Modifier.height(30.dp)
                             ) {
                                 Text(
                                     text = "Selecionar Contato",
                                     style = TextStyle(
-                                        fontSize = 14.sp,
+                                        fontSize = 13.sp,
                                     )
                                 )
                             }
+
                             Text(
                                 text = defaultNaoInformado(renterName),
                                 style = TextStyle(
@@ -409,20 +450,31 @@ fun PropertyCurrentContractDialog(
 
                             Button(
                                 onClick = {
-                                    openPropertyCurrentContractDialog.value = true
-                                },
-                                colors = ButtonDefaults.buttonColors(
+                                    val activity = context.getActivity()
+                                    contactPickerScreen.value = "fiador"
+                                    if (hasContactPermission(context)) {
+                                        val intent = Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI)
+
+                                        if (activity != null) {
+                                            ActivityCompat.startActivityForResult(activity, intent, 1, null)
+                                        }
+                                    } else {
+                                        if (activity != null) {
+                                            requestContactPermission(context, activity)
+                                        }
+                                    }
+                                },colors = ButtonDefaults.buttonColors(
                                     containerColor = getButtonColor()
-                                ),
-                                modifier = Modifier.height(30.dp)
+                                ),modifier = Modifier.height(30.dp)
                             ) {
                                 Text(
                                     text = "Selecionar Contato",
                                     style = TextStyle(
-                                        fontSize = 14.sp,
+                                        fontSize = 13.sp,
                                     )
                                 )
                             }
+
                             Text(
                                 text = defaultNaoInformado(guarantorName),
                                 style = TextStyle(
@@ -675,9 +727,7 @@ fun PropertyCurrentContractDialog(
                                 urlGDriveFolder = property.urlGDriveFolder,
                                 deleted = 0,
                                 contractManagerName= property.contractManagerName,
-                                contractManagerUrl = property.contractManagerUrl,
-                                contractManagerPhoneNumber= property.contractManagerPhoneNumber,
-                                contractManagerEmail= property.contractManagerEmail,
+                                contractManagerContactId = property.contractManagerContactId,
                                 contractStartDate= startDt,
                                 contractEndedDate= endedDt,
                                 contractMonths= Integer.parseInt(months),

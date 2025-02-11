@@ -22,6 +22,13 @@ import androidx.core.content.ContextCompat
 //import com.google.android.gms.ads.MobileAds
 import com.apps.gtorettirsm.compose.ReceiptApp
 import com.apps.gtorettirsm.compose.property.contactId
+import com.apps.gtorettirsm.compose.property.contactPickerScreen
+import com.apps.gtorettirsm.compose.property.pickContactIdFiador
+import com.apps.gtorettirsm.compose.property.pickContactIdImobiliaria
+import com.apps.gtorettirsm.compose.property.pickContactIdInquilino
+import com.apps.gtorettirsm.compose.property.pickContactNameFiador
+import com.apps.gtorettirsm.compose.property.pickContactNameImobiliaria
+import com.apps.gtorettirsm.compose.property.pickContactNameInquilino
 
 import com.apps.gtorettirsm.ui.ReceiptTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -66,10 +73,33 @@ class ReceiptActivity : ComponentActivity() {
                 if (it.moveToFirst()) {
 
                     val name: String =  it.getString(it.getColumnIndexOrThrow(ContactsContract.Contacts.DISPLAY_NAME))
-                    com.apps.gtorettirsm.compose.property.name.value = name
+                    if (contactPickerScreen.value == "providers"){
+                        com.apps.gtorettirsm.compose.property.name.value = name
+                    }else
+                    if (contactPickerScreen.value == "inquilino"){
+                        pickContactNameInquilino.value = name
+                    }else
+                    if (contactPickerScreen.value == "fiador"){
+                        pickContactNameFiador.value = name
+                    }else
+                        if (contactPickerScreen.value == "imobiliaria"){
+                            pickContactNameImobiliaria.value = name
+                        }
 
                     val id = it.getString(it.getColumnIndexOrThrow(ContactsContract.Contacts._ID))
-                    contactId.value = id
+
+                    if (contactPickerScreen.value == "providers"){
+                        com.apps.gtorettirsm.compose.property.contactId.value = id
+                    }else
+                        if (contactPickerScreen.value == "inquilino"){
+                            pickContactIdInquilino.value = id
+                        }else
+                            if (contactPickerScreen.value == "fiador"){
+                                pickContactIdFiador.value = id
+                            }else
+                                if (contactPickerScreen.value == "imobiliaria"){
+                                    pickContactIdImobiliaria.value = id
+                                }
                 }
             }
         }

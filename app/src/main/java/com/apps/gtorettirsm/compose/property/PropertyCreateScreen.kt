@@ -413,10 +413,7 @@ fun PropertyCreateScreen(
                                                             deleted = 0,
 
                                                             contractManagerName= property.contractManagerName,
-                                                            contractManagerUrl = property.contractManagerUrl,
-                                                            contractManagerPhoneNumber= property.contractManagerPhoneNumber,
-                                                            contractManagerEmail= property.contractManagerEmail,
-
+                                                            contractManagerContactId = property.contractManagerContactId,
                                                             contractStartDate= property.contractStartDate,
                                                             contractEndedDate= property.contractEndedDate,
                                                             contractMonths= property.contractMonths,

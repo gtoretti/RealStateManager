@@ -1485,11 +1485,6 @@ fun ProviderSearchScreen(
                                                 end = 6.dp
                                             )
                                         )
-
-
-
-
-
                                     }
 
                                     Row(

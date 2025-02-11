@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.AlertDialog
@@ -40,9 +41,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.apps.gtorettirsm.compose.profile.openContactDetails
 import com.apps.gtorettirsm.compose.utils.DrawScrollableView
 import com.apps.gtorettirsm.compose.utils.defaultNaoInformado
 import com.apps.gtorettirsm.compose.utils.getButtonColor
+import com.apps.gtorettirsm.compose.utils.getProviderDesc
 import com.apps.gtorettirsm.compose.utils.getTextColor
 import com.apps.gtorettirsm.compose.utils.showToast
 import com.apps.gtorettirsm.data.Property
@@ -90,7 +93,7 @@ fun PropertyDetailScreen(
     val displayPropertyGDriveConf = remember { mutableStateOf(false) }
 
     val property by propertyFlow.collectAsStateWithLifecycle(
-        initialValue = Property(0L,"", "", "", "", "", "", "", 0.0,0,"", "", "", "", "", "","","", 0.0, "" , 0,  "", "", "", "",  Date(0), Date(0), 0,0, "","", 0.0, "", "", "", "", "", "",  0,0.0)
+        initialValue = Property(0L,"", "", "", "", "", "", "", 0.0,0,"", "", "", "", "", "","","", 0.0, "" , 0,  "",  "",  Date(0), Date(0), 0,0, "","", 0.0, "", "", "", "", "", "",  0,0.0)
     )
 
     if (openPropertyDetailDialog.value) {
@@ -650,51 +653,52 @@ if (!displayPropertyContractManager.value){
         Spacer(modifier = Modifier.height(20.dp))
     }
 
+
     Text(
-        text = "Nome:",
+        text = "Nome da Imobiliária:",
         style = TextStyle(
             color = getTextColor(),
             fontWeight = FontWeight.Bold,
         )
     )
-    Text(
-        text = defaultNaoInformado(property.contractManagerName)
-    )
 
-
-    Text(
-        text = "Telefone:",
-        style = TextStyle(
-            color = getTextColor(),
-            fontWeight = FontWeight.Bold,
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier
+            .fillMaxWidth()
+    ){
+        Text(
+            text = defaultNaoInformado(property.contractManagerName),
+            style = TextStyle(
+                color = getTextColor(),
+                fontSize = 16.sp,
+                fontFamily = FontFamily.SansSerif,
+            ),
+            modifier = Modifier.padding(
+                start = 2.dp,
+                end = 6.dp
+            )
         )
-    )
-    Text(
-        text = defaultNaoInformado(property.contractManagerPhoneNumber)
-    )
-
-    Text(
-        text = "E-mail:",
-        style = TextStyle(
-            color = getTextColor(),
-            fontWeight = FontWeight.Bold,
-        )
-    )
-    Text(
-        text = defaultNaoInformado(property.contractManagerEmail)
-    )
-
-
-    Text(
-        text = "Site:",
-        style = TextStyle(
-            color = getTextColor(),
-            fontWeight = FontWeight.Bold,
-        )
-    )
-    Text(
-        text = defaultNaoInformado(property.contractManagerUrl)
-    )
+        if (property.contractManagerName.trim().isNotEmpty()) {
+            TextButton(
+                modifier = Modifier.padding(5.dp),
+                onClick =
+                {
+                    openContactDetails(property.contractManagerContactId, context)
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Call,
+                    contentDescription = "Chamar Imobiliária",
+                    tint = getTextColor(),
+                    modifier = Modifier
+                        .padding(end = 2.dp)
+                        .size(16.dp)
+                )
+            }
+        }
+    }
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -900,11 +904,45 @@ if (!displayPropertyCurrentContract.value){
             fontWeight = FontWeight.Bold,
         )
     )
-    Text(
-        text = defaultNaoInformado(property.contractRenterName)
-    )
 
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier
+            .fillMaxWidth()
+    ){
+        Text(
+            text = defaultNaoInformado(property.contractRenterName),
+            style = TextStyle(
+                color = getTextColor(),
+                fontSize = 16.sp,
+                fontFamily = FontFamily.SansSerif,
+            ),
+            modifier = Modifier.padding(
+                start = 2.dp,
+                end = 6.dp
+            )
+        )
 
+        if (property.contractRenterName.trim().isNotEmpty()) {
+            TextButton(
+                modifier = Modifier.padding(5.dp),
+                onClick =
+                {
+                    openContactDetails(property.contractRenterContactId, context)
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Call,
+                    contentDescription = "Chamar Inquilino",
+                    tint = getTextColor(),
+                    modifier = Modifier
+                        .padding(end = 2.dp)
+                        .size(16.dp)
+                )
+            }
+        }
+    }
 
     Text(
         text = "CPF/CNPJ do Inquilino:",
@@ -924,10 +962,45 @@ if (!displayPropertyCurrentContract.value){
             fontWeight = FontWeight.Bold,
         )
     )
-    Text(
-        text = defaultNaoInformado(property.contractGuarantorName)
-    )
 
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier
+            .fillMaxWidth()
+    ){
+        Text(
+            text = defaultNaoInformado(property.contractGuarantorName),
+            style = TextStyle(
+                color = getTextColor(),
+                fontSize = 16.sp,
+                fontFamily = FontFamily.SansSerif,
+            ),
+            modifier = Modifier.padding(
+                start = 2.dp,
+                end = 6.dp
+            )
+        )
+
+        if (property.contractGuarantorName.trim().isNotEmpty()) {
+            TextButton(
+                modifier = Modifier.padding(5.dp),
+                onClick =
+                {
+                    openContactDetails(property.contractGuarantorContactId, context)
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Call,
+                    contentDescription = "Chamar Fiador",
+                    tint = getTextColor(),
+                    modifier = Modifier
+                        .padding(end = 2.dp)
+                        .size(16.dp)
+                )
+            }
+        }
+    }
 
     Text(
         text = "CPF/CNPJ do Fiador:",

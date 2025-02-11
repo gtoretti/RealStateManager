@@ -71,6 +71,7 @@ import android.content.ClipboardManager
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 
+val contactPickerScreen = mutableStateOf("")
 val name = mutableStateOf("")
 val contactId = mutableStateOf("")
 val pix = mutableStateOf("")
@@ -218,7 +219,7 @@ fun ProviderDetailScreen(
                 ) {
 
 
-                    contactPicker(context)
+                    contactPicker(context,"providers")
 
                     OutlinedTextField(
                         value = name.value,
@@ -1687,9 +1688,10 @@ fun ProviderDetailScreen(
 @Composable
 fun contactPicker(
     context: Context,
+    screen: String
 ) {
     val activity = context.getActivity()
-
+    contactPickerScreen.value = screen
     Button(
             onClick = {
                 if (hasContactPermission(context)) {

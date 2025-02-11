@@ -35,9 +35,7 @@ data class Property(
     val deleted: Int,
 
     val contractManagerName: String,
-    val contractManagerUrl: String,
-    val contractManagerPhoneNumber: String,
-    val contractManagerEmail: String,
+    val contractManagerContactId: String,
 
     val contractStartDate: Date,
     val contractEndedDate: Date,

@@ -5,6 +5,8 @@ package com.apps.gtorettirsm.compose.property
 
 
 import android.content.Context
+import android.content.Intent
+import android.provider.ContactsContract
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -31,7 +33,9 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.ActivityCompat
 import com.apps.gtorettirsm.compose.utils.DrawScrollableView
+import com.apps.gtorettirsm.compose.utils.defaultNaoInformado
 import com.apps.gtorettirsm.compose.utils.getButtonColor
 import com.apps.gtorettirsm.compose.utils.getTextColor
 import com.apps.gtorettirsm.compose.utils.showToast
@@ -48,16 +52,21 @@ fun PropertyContractManagerDialog(
 ) {
 
     var contractManagerName by remember { mutableStateOf("") }
-    var contractManagerUrl by remember { mutableStateOf("") }
-    var contractManagerPhoneNumber by remember { mutableStateOf("") }
-    var contractManagerEmail by remember { mutableStateOf("") }
+    var contractManagerContactId by remember { mutableStateOf("") }
+
+    if (pickContactNameImobiliaria.value.trim().isNotEmpty()){
+        contractManagerName = pickContactNameImobiliaria.value
+        pickContactNameImobiliaria.value = ""
+    }
+
+    if (pickContactIdImobiliaria.value.trim().isNotEmpty()){
+        contractManagerContactId = pickContactIdImobiliaria.value
+        pickContactIdImobiliaria.value = ""
+    }
 
     var loaded by remember { mutableStateOf(false) }
     if (!loaded) {
         contractManagerName = property.contractManagerName
-        contractManagerUrl = property.contractManagerUrl
-        contractManagerPhoneNumber = property.contractManagerPhoneNumber
-        contractManagerEmail = property.contractManagerEmail
         loaded = true
     }
 
@@ -89,90 +98,40 @@ fun PropertyContractManagerDialog(
                         ) {
 
 
-                            OutlinedTextField(
-                                value = contractManagerName,
-                                onValueChange = {
-                                    contractManagerName = it
-                                },
-                                textStyle = TextStyle(
-                                    fontSize = 16.sp,
-                                    color = getTextColor(),
-                                    fontWeight = FontWeight.Normal
-                                ),
+                            Button(
+                                onClick = {
+                                    val activity = context.getActivity()
+                                    contactPickerScreen.value = "imobiliaria"
+                                    if (hasContactPermission(context)) {
+                                        val intent = Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI)
 
-                                label = {
-                                    Text(
-                                        text = "Nome:",
-                                        style = TextStyle(
-                                            color = getTextColor(), fontSize = 12.sp,
-                                        )
+                                        if (activity != null) {
+                                            ActivityCompat.startActivityForResult(activity, intent, 1, null)
+                                        }
+                                    } else {
+                                        if (activity != null) {
+                                            requestContactPermission(context, activity)
+                                        }
+                                    }
+                                },colors = ButtonDefaults.buttonColors(
+                                    containerColor = getButtonColor()
+                                ),modifier = Modifier.height(30.dp)
+                            ) {
+                                Text(
+                                    text = "Selecionar Contato",
+                                    style = TextStyle(
+                                        fontSize = 13.sp,
                                     )
-                                }
+                                )
+                            }
+
+                            Text(
+                                text = defaultNaoInformado(contractManagerName),
+                                style = TextStyle(
+                                    color = getTextColor(), fontSize = 15.sp,
+                                )
                             )
 
-                            OutlinedTextField(
-                                value = contractManagerPhoneNumber,
-                                onValueChange = {
-                                    contractManagerPhoneNumber = it
-                                },
-                                textStyle = TextStyle(
-                                    fontSize = 16.sp,
-                                    color = getTextColor(),
-                                    fontWeight = FontWeight.Normal
-                                ),
-
-                                label = {
-                                    Text(
-                                        text = "Telefone / WhatsApp:",
-                                        style = TextStyle(
-                                            color = getTextColor(), fontSize = 12.sp,
-                                        )
-                                    )
-                                }
-                            )
-
-                            OutlinedTextField(
-                                value = contractManagerEmail,
-                                onValueChange = {
-                                    contractManagerEmail = it
-                                },
-                                   textStyle = TextStyle(
-                                    fontSize = 16.sp,
-                                    color = getTextColor(),
-                                    fontWeight = FontWeight.Normal
-                                ),
-
-                                label = {
-                                    Text(
-                                        text = "E-mail:",
-                                        style = TextStyle(
-                                            color = getTextColor(), fontSize = 12.sp,
-                                        )
-                                    )
-                                }
-                            )
-
-
-                            OutlinedTextField(
-                                value = contractManagerUrl,
-                                onValueChange = {
-                                    contractManagerUrl = it
-                                },
-                                textStyle = TextStyle(
-                                    fontSize = 16.sp,
-                                    color = getTextColor(),
-                                    fontWeight = FontWeight.Normal
-                                ),
-
-                                label = {
-                                    Text(
-                                        text = "Site:",
-                                        style = TextStyle(
-                                            color = getTextColor(), fontSize = 12.sp,
-                                        )
-                                    )
-                                }
-                            )
 
                         }
 
@@ -189,11 +148,8 @@ fun PropertyContractManagerDialog(
 
                     Button(
                         onClick = {
-
                             contractManagerName = ""
-                            contractManagerUrl = ""
-                            contractManagerPhoneNumber = ""
-                            contractManagerEmail = ""
+                            contractManagerContactId = ""
                             openPropertyContractManagerDialog.value = false
                     },
                         colors = ButtonDefaults.buttonColors(
@@ -233,9 +189,7 @@ fun PropertyContractManagerDialog(
                                 urlGDriveFolder = property.urlGDriveFolder,
                                 deleted = 0,
                                 contractManagerName= contractManagerName,
-                                contractManagerUrl = contractManagerUrl,
-                                contractManagerPhoneNumber= contractManagerPhoneNumber,
-                                contractManagerEmail= contractManagerEmail,
+                                contractManagerContactId = contractManagerContactId,
                                 contractStartDate= property.contractStartDate,
                                 contractEndedDate= property.contractEndedDate,
                                 contractMonths= property.contractMonths,
@@ -255,9 +209,7 @@ fun PropertyContractManagerDialog(
 
 
                         contractManagerName = ""
-                        contractManagerUrl = ""
-                        contractManagerPhoneNumber = ""
-                        contractManagerEmail = ""
+                        contractManagerContactId = ""
                         openPropertyContractManagerDialog.value = false
                         showToast("Imobiliária atualizada com sucesso!",context)
                     },
