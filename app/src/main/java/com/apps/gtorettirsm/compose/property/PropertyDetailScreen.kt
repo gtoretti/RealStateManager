@@ -230,6 +230,170 @@ fun PropertyDetailScreen(
                             HorizontalDivider(thickness = 1.dp)
 
 
+
+                            if (!displayPropertyContractManager.value){
+                                TextButton(
+                                    modifier = Modifier.padding(5.dp),
+                                    onClick =
+                                    {
+                                        displayPropertyContractManager.value=true
+                                    },
+                                ) {
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.Start,
+                                        modifier = Modifier.fillMaxWidth()
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Filled.KeyboardArrowRight,
+                                            contentDescription = "Imobiliária",
+                                            tint = getTextColor(),
+                                            modifier = Modifier
+                                                .padding(end = 12.dp)
+                                                .size(24.dp)
+                                        )
+                                        Text(
+                                            text = "Imobiliária:",
+                                            style = TextStyle(
+                                                color = getTextColor(),
+                                                fontSize = 16.sp,
+                                                fontWeight = FontWeight.Bold,
+                                            )
+                                        )
+                                    }
+                                }
+                            }else{
+                                TextButton(
+                                    modifier = Modifier.padding(5.dp),
+                                    onClick =
+                                    {
+                                        displayPropertyContractManager.value=false
+                                    },
+                                ) {
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.Start,
+                                        modifier = Modifier.fillMaxWidth()
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Filled.KeyboardArrowDown,
+                                            contentDescription = "Imobiliária",
+                                            tint = getTextColor(),
+                                            modifier = Modifier
+                                                .padding(end = 12.dp)
+                                                .size(24.dp)
+                                        )
+                                        Text(
+                                            text = "Imobiliária:",
+                                            style = TextStyle(
+                                                color = getTextColor(),
+                                                fontSize = 16.sp,
+                                                fontWeight = FontWeight.Bold,
+                                            )
+                                        )
+                                    }
+                                }
+
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.End,
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Spacer(modifier = Modifier.height(10.dp))
+                                }
+
+
+                                Text(
+                                    text = "Nome da Imobiliária:",
+                                    style = TextStyle(
+                                        color = getTextColor(),
+                                        fontWeight = FontWeight.Bold,
+                                    )
+                                )
+
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                ){
+                                    Text(
+                                        text = defaultNaoInformado(property.contractManagerName),
+                                        style = TextStyle(
+                                            color = getTextColor(),
+                                            fontSize = 16.sp,
+                                            fontFamily = FontFamily.SansSerif,
+                                        ),
+                                        modifier = Modifier.padding(
+                                            start = 2.dp,
+                                            end = 6.dp
+                                        )
+                                    )
+                                    if (property.contractManagerName.trim().isNotEmpty()) {
+                                        TextButton(
+                                            modifier = Modifier.padding(5.dp),
+                                            onClick =
+                                            {
+                                                openContactDetails(property.contractManagerContactId, context)
+                                            }
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.Filled.Call,
+                                                contentDescription = "Chamar Imobiliária",
+                                                tint = getPhoneColor(),
+                                                modifier = Modifier
+                                                    .padding(end = 2.dp)
+                                                    .size(16.dp)
+                                            )
+                                        }
+                                    }
+                                }
+
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.End,
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Spacer(modifier = Modifier.height(20.dp))
+                                }
+
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.Center,
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Button(
+                                        onClick = {
+                                            openPropertyContractManagerDialog.value = true
+                                        },
+                                        colors = ButtonDefaults.buttonColors(
+                                            containerColor = getButtonColor()
+                                        ),
+                                        modifier = Modifier.height(30.dp)
+                                    ) {
+                                        Text(
+                                            text = "Alterar Imobiliária",
+                                            style = TextStyle(
+                                                fontSize = 14.sp,
+                                            )
+                                        )
+                                    }
+                                }
+
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.End,
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Spacer(modifier = Modifier.height(20.dp))
+                                }
+                                HorizontalDivider(thickness = 1.dp)
+
+                            }
+
+
+
+
                             if (!displayPropertyCityHallRegistration.value) {
                                 TextButton(
                                     modifier = Modifier.padding(5.dp),
@@ -295,14 +459,12 @@ fun PropertyDetailScreen(
         }
     }
 
-
-
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.End,
         modifier = Modifier.fillMaxWidth()
     ) {
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(10.dp))
     }
 
     Text(
@@ -436,14 +598,12 @@ if (!displayPropertyContractedInstallations.value){
         }
     }
 
-
-
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.End,
         modifier = Modifier.fillMaxWidth()
     ) {
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(10.dp))
     }
 
     Text(
@@ -583,166 +743,6 @@ if (!displayPropertyContractedInstallations.value){
 
 
 
-if (!displayPropertyContractManager.value){
-    TextButton(
-        modifier = Modifier.padding(5.dp),
-        onClick =
-        {
-            displayPropertyContractManager.value=true
-        },
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Icon(
-                imageVector = Icons.Filled.KeyboardArrowRight,
-                contentDescription = "Imobiliária",
-                tint = getTextColor(),
-                modifier = Modifier
-                    .padding(end = 12.dp)
-                    .size(24.dp)
-            )
-            Text(
-                text = "Imobiliária:",
-                style = TextStyle(
-                    color = getTextColor(),
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
-                )
-            )
-        }
-    }
-}else{
-    TextButton(
-        modifier = Modifier.padding(5.dp),
-        onClick =
-        {
-            displayPropertyContractManager.value=false
-        },
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Icon(
-                imageVector = Icons.Filled.KeyboardArrowDown,
-                contentDescription = "Imobiliária",
-                tint = getTextColor(),
-                modifier = Modifier
-                    .padding(end = 12.dp)
-                    .size(24.dp)
-            )
-            Text(
-                text = "Imobiliária:",
-                style = TextStyle(
-                    color = getTextColor(),
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
-                )
-            )
-        }
-    }
-
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.End,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Spacer(modifier = Modifier.height(20.dp))
-    }
-
-
-    Text(
-        text = "Nome da Imobiliária:",
-        style = TextStyle(
-            color = getTextColor(),
-            fontWeight = FontWeight.Bold,
-        )
-    )
-
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier
-            .fillMaxWidth()
-    ){
-        Text(
-            text = defaultNaoInformado(property.contractManagerName),
-            style = TextStyle(
-                color = getTextColor(),
-                fontSize = 16.sp,
-                fontFamily = FontFamily.SansSerif,
-            ),
-            modifier = Modifier.padding(
-                start = 2.dp,
-                end = 6.dp
-            )
-        )
-        if (property.contractManagerName.trim().isNotEmpty()) {
-            TextButton(
-                modifier = Modifier.padding(5.dp),
-                onClick =
-                {
-                    openContactDetails(property.contractManagerContactId, context)
-                }
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Call,
-                    contentDescription = "Chamar Imobiliária",
-                    tint = getPhoneColor(),
-                    modifier = Modifier
-                        .padding(end = 2.dp)
-                        .size(16.dp)
-                )
-            }
-        }
-    }
-
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.End,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Spacer(modifier = Modifier.height(20.dp))
-    }
-
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Button(
-            onClick = {
-                openPropertyContractManagerDialog.value = true
-            },
-            colors = ButtonDefaults.buttonColors(
-                containerColor = getButtonColor()
-            ),
-            modifier = Modifier.height(30.dp)
-        ) {
-            Text(
-                text = "Alterar Imobiliária",
-                style = TextStyle(
-                    fontSize = 14.sp,
-                )
-            )
-        }
-    }
-
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.End,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Spacer(modifier = Modifier.height(20.dp))
-    }
-    HorizontalDivider(thickness = 1.dp)
-
-}
-
 
 
 
@@ -815,7 +815,7 @@ if (!displayPropertyCurrentContract.value){
         horizontalArrangement = Arrangement.End,
         modifier = Modifier.fillMaxWidth()
     ) {
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(10.dp))
     }
 
     Text(
@@ -1123,7 +1123,7 @@ if (!displayPropertyCurrentContract.value){
                                     horizontalArrangement = Arrangement.End,
                                     modifier = Modifier.fillMaxWidth()
                                 ) {
-                                    Spacer(modifier = Modifier.height(20.dp))
+                                    Spacer(modifier = Modifier.height(10.dp))
                                 }
 
                                 Row(
