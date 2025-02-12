@@ -308,6 +308,7 @@ fun PropertyDetailScreen(
                                     style = TextStyle(
                                         color = getTextColor(),
                                         fontWeight = FontWeight.Bold,
+                                        fontSize = 16.sp,
                                     )
                                 )
 
@@ -322,7 +323,6 @@ fun PropertyDetailScreen(
                                         style = TextStyle(
                                             color = getTextColor(),
                                             fontSize = 16.sp,
-                                            fontFamily = FontFamily.SansSerif,
                                         ),
                                         modifier = Modifier.padding(
                                             start = 2.dp,
@@ -472,10 +472,15 @@ fun PropertyDetailScreen(
         style = TextStyle(
             color = getTextColor(),
             fontWeight = FontWeight.Bold,
+            fontSize = 16.sp,
         )
     )
     Text(
-        text = defaultNaoInformado(property.realEstateRegistration)
+        text = defaultNaoInformado(property.realEstateRegistration),
+        style = TextStyle(
+            color = getTextColor(),
+            fontSize = 16.sp,
+        )
     )
 
     Text(
@@ -483,10 +488,15 @@ fun PropertyDetailScreen(
         style = TextStyle(
             color = getTextColor(),
             fontWeight = FontWeight.Bold,
+            fontSize = 16.sp,
         )
     )
     Text(
-        text = defaultNaoInformado(property.iptuCartographicCode)
+        text = defaultNaoInformado(property.iptuCartographicCode),
+        style = TextStyle(
+            color = getTextColor(),
+            fontSize = 16.sp,
+        )
     )
 
     Row(
@@ -610,7 +620,7 @@ if (!displayPropertyContractedInstallations.value){
         text = "Energia Elétrica:",
         style = TextStyle(
             color = getTextColor(),
-            fontSize = 14.sp,
+            fontSize = 16.sp,
             fontWeight = FontWeight.Bold,
         )
     )
@@ -618,11 +628,16 @@ if (!displayPropertyContractedInstallations.value){
         text = "Empresa Fornecedora:",
         style = TextStyle(
             color = getTextColor(),
+            fontSize = 16.sp,
             fontWeight = FontWeight.Bold,
         )
     )
     Text(
-        text = defaultNaoInformado(property.cpflName)
+        text = defaultNaoInformado(property.cpflName),
+        style = TextStyle(
+            color = getTextColor(),
+            fontSize = 16.sp,
+        )
     )
 
     Text(
@@ -630,21 +645,31 @@ if (!displayPropertyContractedInstallations.value){
         style = TextStyle(
             color = getTextColor(),
             fontWeight = FontWeight.Bold,
+            fontSize = 16.sp,
         )
     )
     Text(
-        text = defaultNaoInformado(property.cpflCurrentCPF)
+        text = defaultNaoInformado(property.cpflCurrentCPF),
+        style = TextStyle(
+            color = getTextColor(),
+            fontSize = 16.sp,
+        )
     )
 
     Text(
-        text = "Identificação do Consumidor/Instalação:",
+        text = "Identificação do Consumidor/ Instalação:",
         style = TextStyle(
             color = getTextColor(),
             fontWeight = FontWeight.Bold,
+            fontSize = 16.sp,
         )
     )
     Text(
-        text = defaultNaoInformado(property.cpflCustomerId)
+        text = defaultNaoInformado(property.cpflCustomerId),
+        style = TextStyle(
+            color = getTextColor(),
+            fontSize = 16.sp,
+        )
     )
 
     Row(
@@ -659,7 +684,7 @@ if (!displayPropertyContractedInstallations.value){
         text = "Água e Esgoto:",
         style = TextStyle(
             color = getTextColor(),
-            fontSize = 14.sp,
+            fontSize = 16.sp,
             fontWeight = FontWeight.Bold,
         )
     )
@@ -668,10 +693,15 @@ if (!displayPropertyContractedInstallations.value){
         style = TextStyle(
             color = getTextColor(),
             fontWeight = FontWeight.Bold,
+            fontSize = 16.sp,
         )
     )
     Text(
-        text = defaultNaoInformado(property.sanasaName)
+        text = defaultNaoInformado(property.sanasaName),
+        style = TextStyle(
+            color = getTextColor(),
+            fontSize = 16.sp,
+        )
     )
 
 
@@ -680,22 +710,32 @@ if (!displayPropertyContractedInstallations.value){
         style = TextStyle(
             color = getTextColor(),
             fontWeight = FontWeight.Bold,
+            fontSize = 16.sp,
         )
     )
     Text(
-        text = defaultNaoInformado(property.sanasaCurrentCPF)
+        text = defaultNaoInformado(property.sanasaCurrentCPF),
+        style = TextStyle(
+            color = getTextColor(),
+            fontSize = 16.sp,
+        )
     )
 
 
     Text(
-        text = "Identificação do Consumidor/Instalação:",
+        text = "Identificação do Consumidor/ Instalação:",
         style = TextStyle(
             color = getTextColor(),
             fontWeight = FontWeight.Bold,
+            fontSize = 16.sp,
         )
     )
     Text(
-        text = defaultNaoInformado(property.sanasaCustomerId)
+        text = defaultNaoInformado(property.sanasaCustomerId),
+        style = TextStyle(
+            color = getTextColor(),
+            fontSize = 16.sp,
+        )
     )
 
     Row(
@@ -823,20 +863,30 @@ if (!displayPropertyCurrentContract.value){
         style = TextStyle(
             color = getTextColor(),
             fontWeight = FontWeight.Bold,
+            fontSize = 16.sp,
         )
     )
     Text(
-        text = defaultNaoInformado(property.contractMonthlyBillingValue)
+        text = defaultNaoInformado(property.contractMonthlyBillingValue),
+        style = TextStyle(
+            color = getTextColor(),
+            fontSize = 16.sp,
+        )
     )
     Text(
         text = "Dia de Pagamento no Mês:",
         style = TextStyle(
             color = getTextColor(),
             fontWeight = FontWeight.Bold,
+            fontSize = 16.sp,
         )
     )
     Text(
-        text = defaultNaoInformado(property.contractPaymentDate)
+        text = defaultNaoInformado(property.contractPaymentDate),
+        style = TextStyle(
+            color = getTextColor(),
+            fontSize = 16.sp,
+        )
     )
 
     Text(
@@ -844,10 +894,15 @@ if (!displayPropertyCurrentContract.value){
         style = TextStyle(
             color = getTextColor(),
             fontWeight = FontWeight.Bold,
+            fontSize = 16.sp,
         )
     )
     Text(
-        text = defaultNaoInformado(property.contractFinePerDelayedDay)
+        text = defaultNaoInformado(property.contractFinePerDelayedDay),
+        style = TextStyle(
+            color = getTextColor(),
+            fontSize = 16.sp,
+        )
     )
 
 
@@ -857,10 +912,15 @@ if (!displayPropertyCurrentContract.value){
         style = TextStyle(
             color = getTextColor(),
             fontWeight = FontWeight.Bold,
+            fontSize = 16.sp,
         )
     )
     Text(
-        text = defaultNaoInformado(property.contractValueAdjustmentIndexName)
+        text = defaultNaoInformado(property.contractValueAdjustmentIndexName),
+        style = TextStyle(
+            color = getTextColor(),
+            fontSize = 16.sp,
+        )
     )
 
 
@@ -869,10 +929,15 @@ if (!displayPropertyCurrentContract.value){
         style = TextStyle(
             color = getTextColor(),
             fontWeight = FontWeight.Bold,
+            fontSize = 16.sp,
         )
     )
     Text(
-        text = defaultNaoInformado(property.contractStartDate)
+        text = defaultNaoInformado(property.contractStartDate),
+        style = TextStyle(
+            color = getTextColor(),
+            fontSize = 16.sp,
+        )
     )
 
     Text(
@@ -880,10 +945,15 @@ if (!displayPropertyCurrentContract.value){
         style = TextStyle(
             color = getTextColor(),
             fontWeight = FontWeight.Bold,
+            fontSize = 16.sp,
         )
     )
     Text(
-        text = defaultNaoInformado(property.contractEndedDate)
+        text = defaultNaoInformado(property.contractEndedDate),
+        style = TextStyle(
+            color = getTextColor(),
+            fontSize = 16.sp,
+        )
     )
 
     Text(
@@ -891,10 +961,15 @@ if (!displayPropertyCurrentContract.value){
         style = TextStyle(
             color = getTextColor(),
             fontWeight = FontWeight.Bold,
+            fontSize = 16.sp,
         )
     )
     Text(
-        text = defaultNaoInformado(property.contractMonthsDaysDescr)
+        text = defaultNaoInformado(property.contractMonthsDaysDescr),
+        style = TextStyle(
+            color = getTextColor(),
+            fontSize = 16.sp,
+        )
     )
 
 
@@ -903,6 +978,7 @@ if (!displayPropertyCurrentContract.value){
         style = TextStyle(
             color = getTextColor(),
             fontWeight = FontWeight.Bold,
+            fontSize = 16.sp,
         )
     )
 
@@ -917,7 +993,6 @@ if (!displayPropertyCurrentContract.value){
             style = TextStyle(
                 color = getTextColor(),
                 fontSize = 16.sp,
-                fontFamily = FontFamily.SansSerif,
             ),
             modifier = Modifier.padding(
                 start = 2.dp,
@@ -950,10 +1025,15 @@ if (!displayPropertyCurrentContract.value){
         style = TextStyle(
             color = getTextColor(),
             fontWeight = FontWeight.Bold,
+            fontSize = 16.sp,
         )
     )
     Text(
-        text = defaultNaoInformado(property.contractRenterCPF)
+        text = defaultNaoInformado(property.contractRenterCPF),
+        style = TextStyle(
+            color = getTextColor(),
+            fontSize = 16.sp,
+        )
     )
 
     Text(
@@ -961,6 +1041,7 @@ if (!displayPropertyCurrentContract.value){
         style = TextStyle(
             color = getTextColor(),
             fontWeight = FontWeight.Bold,
+            fontSize = 16.sp,
         )
     )
 
@@ -975,7 +1056,6 @@ if (!displayPropertyCurrentContract.value){
             style = TextStyle(
                 color = getTextColor(),
                 fontSize = 16.sp,
-                fontFamily = FontFamily.SansSerif,
             ),
             modifier = Modifier.padding(
                 start = 2.dp,
@@ -1008,10 +1088,15 @@ if (!displayPropertyCurrentContract.value){
         style = TextStyle(
             color = getTextColor(),
             fontWeight = FontWeight.Bold,
+            fontSize = 16.sp,
         )
     )
     Text(
-        text = defaultNaoInformado(property.contractGuarantorCPF)
+        text = defaultNaoInformado(property.contractGuarantorCPF),
+        style = TextStyle(
+            color = getTextColor(),
+            fontSize = 16.sp,
+        )
     )
 
     Row(
