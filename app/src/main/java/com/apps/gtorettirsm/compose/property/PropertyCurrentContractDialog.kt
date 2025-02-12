@@ -137,6 +137,10 @@ fun PropertyCurrentContractDialog(
         guarantorCPF = property.contractGuarantorCPF
         guarantorContactId = property.contractGuarantorContactId
         paymentDate = property.contractPaymentDate.toString()
+        if (property.contractPaymentDate==0){
+            paymentDate=""
+        }
+
         loaded = "true"
     }
 

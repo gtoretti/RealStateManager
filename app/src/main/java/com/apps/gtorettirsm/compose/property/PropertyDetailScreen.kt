@@ -49,6 +49,7 @@ import com.apps.gtorettirsm.compose.utils.getPhoneColor
 import com.apps.gtorettirsm.compose.utils.getProviderDesc
 import com.apps.gtorettirsm.compose.utils.getTextColor
 import com.apps.gtorettirsm.compose.utils.showToast
+import com.apps.gtorettirsm.compose.utils.toCurrency
 import com.apps.gtorettirsm.data.Property
 import com.apps.gtorettirsm.viewmodels.PropertyViewModel
 import kotlinx.coroutines.flow.Flow
@@ -389,6 +390,501 @@ fun PropertyDetailScreen(
                                 }
                                 HorizontalDivider(thickness = 1.dp)
 
+                            }
+
+
+
+                            if (!displayPropertyCurrentContract.value){
+                                TextButton(
+                                    modifier = Modifier.padding(5.dp),
+                                    onClick =
+                                    {
+                                        displayPropertyCurrentContract.value=true
+                                    },
+                                ) {
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.Start,
+                                        modifier = Modifier.fillMaxWidth()
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Filled.KeyboardArrowRight,
+                                            contentDescription = "Contrato",
+                                            tint = getTextColor(),
+                                            modifier = Modifier
+                                                .padding(end = 12.dp)
+                                                .size(24.dp)
+                                        )
+                                        Text(
+                                            text = "Contrato:",
+                                            style = TextStyle(
+                                                color = getTextColor(),
+                                                fontSize = 16.sp,
+                                                fontWeight = FontWeight.Bold,
+                                            )
+                                        )
+                                    }
+                                }
+
+                            }else{
+                                TextButton(
+                                    modifier = Modifier.padding(5.dp),
+                                    onClick =
+                                    {
+                                        displayPropertyCurrentContract.value=false
+                                    },
+                                ) {
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.Start,
+                                        modifier = Modifier.fillMaxWidth()
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Filled.KeyboardArrowDown,
+                                            contentDescription = "Contrato",
+                                            tint = getTextColor(),
+                                            modifier = Modifier
+                                                .padding(end = 12.dp)
+                                                .size(24.dp)
+                                        )
+                                        Text(
+                                            text = "Contrato:",
+                                            style = TextStyle(
+                                                color = getTextColor(),
+                                                fontSize = 16.sp,
+                                                fontWeight = FontWeight.Bold,
+                                            )
+                                        )
+                                    }
+                                }
+
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.End,
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Spacer(modifier = Modifier.height(10.dp))
+                                }
+
+                                Text(
+                                    text = "Valor Atual de Aluguel Mensal:",
+                                    style = TextStyle(
+                                        color = getTextColor(),
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 16.sp,
+                                    )
+                                )
+
+                                var billing = defaultNaoInformado(property.contractMonthlyBillingValue)
+                                if (property.contractMonthlyBillingValue >0.0)
+                                    billing = property.contractMonthlyBillingValue.toCurrency()
+                                Text(
+                                    text = billing,
+                                    style = TextStyle(
+                                        color = getTextColor(),
+                                        fontSize = 16.sp,
+                                    )
+                                )
+                                Text(
+                                    text = "Dia de Pagamento no Mês:",
+                                    style = TextStyle(
+                                        color = getTextColor(),
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 16.sp,
+                                    )
+                                )
+                                var payDate = defaultNaoInformado(property.contractPaymentDate)
+                                if (property.contractPaymentDate==0)
+                                    payDate = defaultNaoInformado("")
+
+                                Text(
+                                    text = defaultNaoInformado(payDate),
+                                    style = TextStyle(
+                                        color = getTextColor(),
+                                        fontSize = 16.sp,
+                                    )
+                                )
+
+                                Text(
+                                    text = "Valor da Multa por Dia de Atraso:",
+                                    style = TextStyle(
+                                        color = getTextColor(),
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 16.sp,
+                                    )
+                                )
+                                var fine = defaultNaoInformado(property.contractFinePerDelayedDay)
+                                if (property.contractFinePerDelayedDay >0.0)
+                                    fine = property.contractFinePerDelayedDay.toCurrency()
+                                Text(
+                                    text = fine,
+                                    style = TextStyle(
+                                        color = getTextColor(),
+                                        fontSize = 16.sp,
+                                    )
+                                )
+
+
+
+                                Text(
+                                    text = "Índice de Reajuste Anual:",
+                                    style = TextStyle(
+                                        color = getTextColor(),
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 16.sp,
+                                    )
+                                )
+                                Text(
+                                    text = defaultNaoInformado(property.contractValueAdjustmentIndexName),
+                                    style = TextStyle(
+                                        color = getTextColor(),
+                                        fontSize = 16.sp,
+                                    )
+                                )
+
+
+                                Text(
+                                    text = "Data de Início:",
+                                    style = TextStyle(
+                                        color = getTextColor(),
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 16.sp,
+                                    )
+                                )
+                                Text(
+                                    text = defaultNaoInformado(property.contractStartDate),
+                                    style = TextStyle(
+                                        color = getTextColor(),
+                                        fontSize = 16.sp,
+                                    )
+                                )
+
+                                Text(
+                                    text = "Data de Término:",
+                                    style = TextStyle(
+                                        color = getTextColor(),
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 16.sp,
+                                    )
+                                )
+                                Text(
+                                    text = defaultNaoInformado(property.contractEndedDate),
+                                    style = TextStyle(
+                                        color = getTextColor(),
+                                        fontSize = 16.sp,
+                                    )
+                                )
+
+                                Text(
+                                    text = "Período do Contrato em meses:",
+                                    style = TextStyle(
+                                        color = getTextColor(),
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 16.sp,
+                                    )
+                                )
+                                Text(
+                                    text = defaultNaoInformado(property.contractMonthsDaysDescr),
+                                    style = TextStyle(
+                                        color = getTextColor(),
+                                        fontSize = 16.sp,
+                                    )
+                                )
+
+
+                                Text(
+                                    text = "Nome do Inquilino:",
+                                    style = TextStyle(
+                                        color = getTextColor(),
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 16.sp,
+                                    )
+                                )
+
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                ){
+                                    Text(
+                                        text = defaultNaoInformado(property.contractRenterName),
+                                        style = TextStyle(
+                                            color = getTextColor(),
+                                            fontSize = 16.sp,
+                                        ),
+                                        modifier = Modifier.padding(
+                                            start = 2.dp,
+                                            end = 6.dp
+                                        )
+                                    )
+
+                                    if (property.contractRenterName.trim().isNotEmpty()) {
+                                        TextButton(
+                                            modifier = Modifier.padding(5.dp),
+                                            onClick =
+                                            {
+                                                openContactDetails(property.contractRenterContactId, context)
+                                            }
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.Filled.Call,
+                                                contentDescription = "Chamar Inquilino",
+                                                tint = getPhoneColor(),
+                                                modifier = Modifier
+                                                    .padding(end = 2.dp)
+                                                    .size(16.dp)
+                                            )
+                                        }
+                                    }
+                                }
+
+                                Text(
+                                    text = "CPF/CNPJ do Inquilino:",
+                                    style = TextStyle(
+                                        color = getTextColor(),
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 16.sp,
+                                    )
+                                )
+                                Text(
+                                    text = defaultNaoInformado(property.contractRenterCPF),
+                                    style = TextStyle(
+                                        color = getTextColor(),
+                                        fontSize = 16.sp,
+                                    )
+                                )
+
+                                Text(
+                                    text = "Nome do Fiador:",
+                                    style = TextStyle(
+                                        color = getTextColor(),
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 16.sp,
+                                    )
+                                )
+
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                ){
+                                    Text(
+                                        text = defaultNaoInformado(property.contractGuarantorName),
+                                        style = TextStyle(
+                                            color = getTextColor(),
+                                            fontSize = 16.sp,
+                                        ),
+                                        modifier = Modifier.padding(
+                                            start = 2.dp,
+                                            end = 6.dp
+                                        )
+                                    )
+
+                                    if (property.contractGuarantorName.trim().isNotEmpty()) {
+                                        TextButton(
+                                            modifier = Modifier.padding(5.dp),
+                                            onClick =
+                                            {
+                                                openContactDetails(property.contractGuarantorContactId, context)
+                                            }
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.Filled.Call,
+                                                contentDescription = "Chamar Fiador",
+                                                tint = getPhoneColor(),
+                                                modifier = Modifier
+                                                    .padding(end = 2.dp)
+                                                    .size(16.dp)
+                                            )
+                                        }
+                                    }
+                                }
+
+                                Text(
+                                    text = "CPF/CNPJ do Fiador:",
+                                    style = TextStyle(
+                                        color = getTextColor(),
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 16.sp,
+                                    )
+                                )
+                                Text(
+                                    text = defaultNaoInformado(property.contractGuarantorCPF),
+                                    style = TextStyle(
+                                        color = getTextColor(),
+                                        fontSize = 16.sp,
+                                    )
+                                )
+
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.End,
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Spacer(modifier = Modifier.height(20.dp))
+                                }
+
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.Center,
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Button(
+                                        onClick = {
+                                            openPropertyCurrentContractDialog.value = true
+                                        },
+                                        colors = ButtonDefaults.buttonColors(
+                                            containerColor = getButtonColor()
+                                        ),
+                                        modifier = Modifier.height(30.dp)
+                                    ) {
+                                        Text(
+                                            text = "Alterar Contrato",
+                                            style = TextStyle(
+                                                fontSize = 14.sp,
+                                            )
+                                        )
+                                    }
+                                }
+
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.End,
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Spacer(modifier = Modifier.height(20.dp))
+                                }
+                                HorizontalDivider(thickness = 1.dp)
+                            }
+
+                            if (!displayPropertyGDriveConf.value) {
+                                TextButton(
+                                    modifier = Modifier.padding(5.dp),
+                                    onClick =
+                                    {
+                                        displayPropertyGDriveConf.value = true
+                                    },
+                                ) {
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.Start,
+                                        modifier = Modifier.fillMaxWidth()
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Filled.KeyboardArrowRight,
+                                            contentDescription = "Registro Municipal",
+                                            tint = getTextColor(),
+                                            modifier = Modifier
+                                                .padding(end = 12.dp)
+                                                .size(24.dp)
+                                        )
+                                        Text(
+                                            text = "Documentos no GDrive:",
+                                            style = TextStyle(
+                                                color = getTextColor(),
+                                                fontSize = 16.sp,
+                                                fontWeight = FontWeight.Bold,
+                                            )
+                                        )
+                                    }
+                                }
+                            }else{
+                                TextButton(
+                                    modifier = Modifier.padding(5.dp),
+                                    onClick =
+                                    {
+                                        displayPropertyGDriveConf.value=false
+                                    },
+                                ) {
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.Start,
+                                        modifier = Modifier.fillMaxWidth()
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Filled.KeyboardArrowDown,
+                                            contentDescription = "Documentos no GDrive",
+                                            tint = getTextColor(),
+                                            modifier = Modifier
+                                                .padding(end = 12.dp)
+                                                .size(24.dp)
+                                        )
+                                        Text(
+                                            text = "Documentos no GDrive:",
+                                            style = TextStyle(
+                                                color = getTextColor(),
+                                                fontSize = 16.sp,
+                                                fontWeight = FontWeight.Bold,
+                                            )
+                                        )
+                                    }
+                                }
+
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.End,
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Spacer(modifier = Modifier.height(10.dp))
+                                }
+
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.Center,
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Button(
+                                        onClick = {
+                                            openGDriveFolder(context, property.urlGDriveFolder)
+                                        },
+                                        colors = ButtonDefaults.buttonColors(
+                                            containerColor = getButtonColor()
+                                        ),
+                                        modifier = Modifier.height(30.dp)
+                                    ) {
+                                        Text(
+                                            text = "Abrir URL",
+                                            style = TextStyle(
+                                                fontSize = 14.sp,
+                                            )
+                                        )
+                                    }
+                                }
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.Center,
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+
+                                    Button(
+                                        onClick = {
+                                            openPropertyGDriveInputDialog.value=true
+                                        },
+                                        colors = ButtonDefaults.buttonColors(
+                                            containerColor = getButtonColor()
+                                        ),
+                                        modifier = Modifier.height(30.dp)
+                                    ) {
+                                        Text(
+                                            text = "Configurar URL",
+                                            style = TextStyle(
+                                                fontSize = 14.sp,
+                                            )
+                                        )
+                                    }
+                                }
+
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.End,
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Spacer(modifier = Modifier.height(20.dp))
+                                }
+
+                                HorizontalDivider(thickness = 1.dp)
                             }
 
 
@@ -786,487 +1282,12 @@ if (!displayPropertyContractedInstallations.value){
 
 
 
-if (!displayPropertyCurrentContract.value){
-    TextButton(
-        modifier = Modifier.padding(5.dp),
-        onClick =
-        {
-            displayPropertyCurrentContract.value=true
-        },
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Icon(
-                imageVector = Icons.Filled.KeyboardArrowRight,
-                contentDescription = "Contrato",
-                tint = getTextColor(),
-                modifier = Modifier
-                    .padding(end = 12.dp)
-                    .size(24.dp)
-            )
-            Text(
-                text = "Contrato:",
-                style = TextStyle(
-                    color = getTextColor(),
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
-                )
-            )
-        }
-    }
-
-}else{
-    TextButton(
-        modifier = Modifier.padding(5.dp),
-        onClick =
-        {
-            displayPropertyCurrentContract.value=false
-        },
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Icon(
-                imageVector = Icons.Filled.KeyboardArrowDown,
-                contentDescription = "Contrato",
-                tint = getTextColor(),
-                modifier = Modifier
-                    .padding(end = 12.dp)
-                    .size(24.dp)
-            )
-            Text(
-                text = "Contrato:",
-                style = TextStyle(
-                    color = getTextColor(),
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
-                )
-            )
-        }
-    }
-
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.End,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Spacer(modifier = Modifier.height(10.dp))
-    }
-
-    Text(
-        text = "Valor Atual de Aluguel Mensal:",
-        style = TextStyle(
-            color = getTextColor(),
-            fontWeight = FontWeight.Bold,
-            fontSize = 16.sp,
-        )
-    )
-    Text(
-        text = defaultNaoInformado(property.contractMonthlyBillingValue),
-        style = TextStyle(
-            color = getTextColor(),
-            fontSize = 16.sp,
-        )
-    )
-    Text(
-        text = "Dia de Pagamento no Mês:",
-        style = TextStyle(
-            color = getTextColor(),
-            fontWeight = FontWeight.Bold,
-            fontSize = 16.sp,
-        )
-    )
-    Text(
-        text = defaultNaoInformado(property.contractPaymentDate),
-        style = TextStyle(
-            color = getTextColor(),
-            fontSize = 16.sp,
-        )
-    )
-
-    Text(
-        text = "Valor da Multa por Dia de Atraso:",
-        style = TextStyle(
-            color = getTextColor(),
-            fontWeight = FontWeight.Bold,
-            fontSize = 16.sp,
-        )
-    )
-    Text(
-        text = defaultNaoInformado(property.contractFinePerDelayedDay),
-        style = TextStyle(
-            color = getTextColor(),
-            fontSize = 16.sp,
-        )
-    )
 
 
 
-    Text(
-        text = "Índice de Reajuste Anual:",
-        style = TextStyle(
-            color = getTextColor(),
-            fontWeight = FontWeight.Bold,
-            fontSize = 16.sp,
-        )
-    )
-    Text(
-        text = defaultNaoInformado(property.contractValueAdjustmentIndexName),
-        style = TextStyle(
-            color = getTextColor(),
-            fontSize = 16.sp,
-        )
-    )
 
 
-    Text(
-        text = "Data de Início:",
-        style = TextStyle(
-            color = getTextColor(),
-            fontWeight = FontWeight.Bold,
-            fontSize = 16.sp,
-        )
-    )
-    Text(
-        text = defaultNaoInformado(property.contractStartDate),
-        style = TextStyle(
-            color = getTextColor(),
-            fontSize = 16.sp,
-        )
-    )
 
-    Text(
-        text = "Data de Término:",
-        style = TextStyle(
-            color = getTextColor(),
-            fontWeight = FontWeight.Bold,
-            fontSize = 16.sp,
-        )
-    )
-    Text(
-        text = defaultNaoInformado(property.contractEndedDate),
-        style = TextStyle(
-            color = getTextColor(),
-            fontSize = 16.sp,
-        )
-    )
-
-    Text(
-        text = "Período do Contrato em meses:",
-        style = TextStyle(
-            color = getTextColor(),
-            fontWeight = FontWeight.Bold,
-            fontSize = 16.sp,
-        )
-    )
-    Text(
-        text = defaultNaoInformado(property.contractMonthsDaysDescr),
-        style = TextStyle(
-            color = getTextColor(),
-            fontSize = 16.sp,
-        )
-    )
-
-
-    Text(
-        text = "Nome do Inquilino:",
-        style = TextStyle(
-            color = getTextColor(),
-            fontWeight = FontWeight.Bold,
-            fontSize = 16.sp,
-        )
-    )
-
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier
-            .fillMaxWidth()
-    ){
-        Text(
-            text = defaultNaoInformado(property.contractRenterName),
-            style = TextStyle(
-                color = getTextColor(),
-                fontSize = 16.sp,
-            ),
-            modifier = Modifier.padding(
-                start = 2.dp,
-                end = 6.dp
-            )
-        )
-
-        if (property.contractRenterName.trim().isNotEmpty()) {
-            TextButton(
-                modifier = Modifier.padding(5.dp),
-                onClick =
-                {
-                    openContactDetails(property.contractRenterContactId, context)
-                }
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Call,
-                    contentDescription = "Chamar Inquilino",
-                    tint = getPhoneColor(),
-                    modifier = Modifier
-                        .padding(end = 2.dp)
-                        .size(16.dp)
-                )
-            }
-        }
-    }
-
-    Text(
-        text = "CPF/CNPJ do Inquilino:",
-        style = TextStyle(
-            color = getTextColor(),
-            fontWeight = FontWeight.Bold,
-            fontSize = 16.sp,
-        )
-    )
-    Text(
-        text = defaultNaoInformado(property.contractRenterCPF),
-        style = TextStyle(
-            color = getTextColor(),
-            fontSize = 16.sp,
-        )
-    )
-
-    Text(
-        text = "Nome do Fiador:",
-        style = TextStyle(
-            color = getTextColor(),
-            fontWeight = FontWeight.Bold,
-            fontSize = 16.sp,
-        )
-    )
-
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier
-            .fillMaxWidth()
-    ){
-        Text(
-            text = defaultNaoInformado(property.contractGuarantorName),
-            style = TextStyle(
-                color = getTextColor(),
-                fontSize = 16.sp,
-            ),
-            modifier = Modifier.padding(
-                start = 2.dp,
-                end = 6.dp
-            )
-        )
-
-        if (property.contractGuarantorName.trim().isNotEmpty()) {
-            TextButton(
-                modifier = Modifier.padding(5.dp),
-                onClick =
-                {
-                    openContactDetails(property.contractGuarantorContactId, context)
-                }
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Call,
-                    contentDescription = "Chamar Fiador",
-                    tint = getPhoneColor(),
-                    modifier = Modifier
-                        .padding(end = 2.dp)
-                        .size(16.dp)
-                )
-            }
-        }
-    }
-
-    Text(
-        text = "CPF/CNPJ do Fiador:",
-        style = TextStyle(
-            color = getTextColor(),
-            fontWeight = FontWeight.Bold,
-            fontSize = 16.sp,
-        )
-    )
-    Text(
-        text = defaultNaoInformado(property.contractGuarantorCPF),
-        style = TextStyle(
-            color = getTextColor(),
-            fontSize = 16.sp,
-        )
-    )
-
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.End,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Spacer(modifier = Modifier.height(20.dp))
-    }
-
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Button(
-            onClick = {
-                openPropertyCurrentContractDialog.value = true
-            },
-            colors = ButtonDefaults.buttonColors(
-                containerColor = getButtonColor()
-            ),
-            modifier = Modifier.height(30.dp)
-        ) {
-            Text(
-                text = "Alterar Contrato",
-                style = TextStyle(
-                    fontSize = 14.sp,
-                )
-            )
-        }
-    }
-
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.End,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Spacer(modifier = Modifier.height(20.dp))
-    }
-    HorizontalDivider(thickness = 1.dp)
-}
-
-                            if (!displayPropertyGDriveConf.value) {
-                                TextButton(
-                                    modifier = Modifier.padding(5.dp),
-                                    onClick =
-                                    {
-                                        displayPropertyGDriveConf.value = true
-                                    },
-                                ) {
-                                    Row(
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        horizontalArrangement = Arrangement.Start,
-                                        modifier = Modifier.fillMaxWidth()
-                                    ) {
-                                        Icon(
-                                            imageVector = Icons.Filled.KeyboardArrowRight,
-                                            contentDescription = "Registro Municipal",
-                                            tint = getTextColor(),
-                                            modifier = Modifier
-                                                .padding(end = 12.dp)
-                                                .size(24.dp)
-                                        )
-                                        Text(
-                                            text = "Documentos no GDrive:",
-                                            style = TextStyle(
-                                                color = getTextColor(),
-                                                fontSize = 16.sp,
-                                                fontWeight = FontWeight.Bold,
-                                            )
-                                        )
-                                    }
-                                }
-                            }else{
-                                TextButton(
-                                    modifier = Modifier.padding(5.dp),
-                                    onClick =
-                                    {
-                                        displayPropertyGDriveConf.value=false
-                                    },
-                                ) {
-                                    Row(
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        horizontalArrangement = Arrangement.Start,
-                                        modifier = Modifier.fillMaxWidth()
-                                    ) {
-                                        Icon(
-                                            imageVector = Icons.Filled.KeyboardArrowDown,
-                                            contentDescription = "Documentos no GDrive",
-                                            tint = getTextColor(),
-                                            modifier = Modifier
-                                                .padding(end = 12.dp)
-                                                .size(24.dp)
-                                        )
-                                        Text(
-                                            text = "Documentos no GDrive:",
-                                            style = TextStyle(
-                                                color = getTextColor(),
-                                                fontSize = 16.sp,
-                                                fontWeight = FontWeight.Bold,
-                                            )
-                                        )
-                                    }
-                                }
-
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.End,
-                                    modifier = Modifier.fillMaxWidth()
-                                ) {
-                                    Spacer(modifier = Modifier.height(10.dp))
-                                }
-
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.Center,
-                                    modifier = Modifier.fillMaxWidth()
-                                ) {
-                                    Button(
-                                        onClick = {
-                                            openGDriveFolder(context, property.urlGDriveFolder)
-                                        },
-                                        colors = ButtonDefaults.buttonColors(
-                                            containerColor = getButtonColor()
-                                        ),
-                                        modifier = Modifier.height(30.dp)
-                                    ) {
-                                        Text(
-                                            text = "Abrir URL",
-                                            style = TextStyle(
-                                                fontSize = 14.sp,
-                                            )
-                                        )
-                                    }
-                                }
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.Center,
-                                    modifier = Modifier.fillMaxWidth()
-                                ) {
-
-                                    Button(
-                                        onClick = {
-                                            openPropertyGDriveInputDialog.value=true
-                                        },
-                                        colors = ButtonDefaults.buttonColors(
-                                            containerColor = getButtonColor()
-                                        ),
-                                        modifier = Modifier.height(30.dp)
-                                    ) {
-                                        Text(
-                                            text = "Configurar URL",
-                                            style = TextStyle(
-                                                fontSize = 14.sp,
-                                            )
-                                        )
-                                    }
-                                }
-
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.End,
-                                    modifier = Modifier.fillMaxWidth()
-                                ) {
-                                    Spacer(modifier = Modifier.height(20.dp))
-                                }
-
-                                HorizontalDivider(thickness = 1.dp)
-                            }
                         }
                     })
             },
