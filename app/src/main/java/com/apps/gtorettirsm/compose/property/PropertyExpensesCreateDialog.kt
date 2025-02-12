@@ -300,7 +300,7 @@ if (dropDownSelectExpenseType.value == "Serviços Prestados") {
                         DatePickerModal(
                             onDateSelected = {
                                 if (it != null) {
-                                    paymentDate = SimpleDateFormat("dd/MM/yyyy").format(Date(it))
+                                    paymentDate = SimpleDateFormat("dd/MM/yyyy").format(Date(it+86400000))
                                 }
                             }, openDialog = openDateDialog, title = "Data do Desenbolso"
                         )

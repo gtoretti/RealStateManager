@@ -860,7 +860,7 @@ Row(){
             DatePickerModal(
                 onDateSelected = {
                     if (it != null) {
-                        filterStartDate = SimpleDateFormat("dd/MM/yyyy").format(Date(it))
+                        filterStartDate = SimpleDateFormat("dd/MM/yyyy").format(Date(it+86400000))
                     }
                 }, openDialog = openStartDateDialog, title = "Data Inicial"
             )
@@ -871,7 +871,7 @@ Row(){
             DatePickerModal(
                 onDateSelected = {
                     if (it != null) {
-                        filterEndDate = SimpleDateFormat("dd/MM/yyyy").format(Date(it))
+                        filterEndDate = SimpleDateFormat("dd/MM/yyyy").format(Date(it+86400000))
                     }
                 }, openDialog = openEndDateDialog, title = "Data Final"
             )

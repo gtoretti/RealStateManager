@@ -440,9 +440,9 @@ fun PropertyReceivingsCreateDialog(
                         DatePickerModal(
                             onDateSelected = {
                                 if (it != null) {
-                                    receivingDate = SimpleDateFormat("dd/MM/yyyy").format(Date(it))
+                                    receivingDate = SimpleDateFormat("dd/MM/yyyy").format(Date(it+86400000))
                                     if (dropDownSelectReceivingType.value.equals("Aluguel") && rentBillingDueDate.trim().isNotEmpty()){
-                                        delayDays = daysBetween(fmt.parse(rentBillingDueDate),Date(it)).toString()
+                                        delayDays = daysBetween(fmt.parse(rentBillingDueDate),Date(it+86400000)).toString()
 
 
                                     }

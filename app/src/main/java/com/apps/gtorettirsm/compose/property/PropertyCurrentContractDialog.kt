@@ -519,7 +519,7 @@ fun PropertyCurrentContractDialog(
                             onDateSelected = {
                                 if (it != null) {
                                     monthsDaysDescr = ""
-                                    startDate = SimpleDateFormat("dd/MM/yyyy").format(Date(it))
+                                    startDate = SimpleDateFormat("dd/MM/yyyy").format(Date(it+86400000))
                                     if (endedDate.trim().isNotEmpty()){
                                         var daysbet = daysBetween(fmt.parse(startDate),fmt.parse(endedDate))
                                         if (daysbet<0){
@@ -584,7 +584,7 @@ fun PropertyCurrentContractDialog(
                             onDateSelected = {
                                 if (it != null) {
                                     monthsDaysDescr = ""
-                                    endedDate = SimpleDateFormat("dd/MM/yyyy").format(Date(it))
+                                    endedDate = SimpleDateFormat("dd/MM/yyyy").format(Date(it+86400000))
                                     if (startDate.trim().isNotEmpty()){
                                         var daysbet = daysBetween(fmt.parse(startDate),fmt.parse(endedDate))
                                         if (daysbet<0){
