@@ -8,8 +8,6 @@ import androidx.lifecycle.viewModelScope
 import com.apps.gtorettirsm.data.Expense
 import com.apps.gtorettirsm.data.Receiving
 import com.apps.gtorettirsm.data.ReceivingRepository
-import com.apps.gtorettirsm.data.ReceiptPDF
-import com.apps.gtorettirsm.data.ReceiptPDFRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.util.Date

@@ -31,7 +31,6 @@ import com.apps.gtorettirsm.data.Receiving
 import com.apps.gtorettirsm.data.Property
 import com.apps.gtorettirsm.data.Profile
 import com.apps.gtorettirsm.data.Provider
-import com.apps.gtorettirsm.data.ReceiptPDF
 import com.apps.gtorettirsm.viewmodels.ReceivingViewModel
 import java.io.File
 import java.io.FileOutputStream
@@ -209,76 +208,6 @@ fun Double.toCurrency(): String {
     val locale: Locale = Locale("pt", "BR")
     val formatter = NumberFormat.getCurrencyInstance(locale)
     return formatter.format(this)
-}
-
-fun generateReceipt(
-    profile: Profile,
-    patient: Property,
-    list: List<Receiving>,
-    selected: List<Long>,
-    receiptDate: Calendar,
-    context: Context,
-    receivingViewModel: ReceivingViewModel,
-) {
-
-    var receiptTotalValue: Double = 0.0
-    var sessionValue: Double = 0.0
-
-    val sdfDay = SimpleDateFormat("dd")
-
-
-
-    var receiptDateDescr =
-       sdfDay.format(receiptDate.time) + " de " + " de " + receiptDate.get(Calendar.YEAR)
-
-
-    var daysDescr = ""
-    var qtdMonthlyBillings = 0
-
-    var month:Int = 0
-    var year:Int = 0
-    list.forEach { monthlyBilling ->
-
-
-    }
-
-    if (daysDescr.length > 0) {
-        daysDescr = daysDescr.substring(
-            0, daysDescr.length - 3
-        ) + " de " + " de " + year
-        daysDescr = daysDescr.replaceLast(",", "e")
-    }
-
-    var sessao = "sessão"
-    var dia = ""
-    if (qtdMonthlyBillings > 1) {
-        sessao = "sessões"
-        dia = "s"
-    }
-
-    var header = profile.city + ", " + receiptDateDescr
-    var body = "Declaro, para os devidos fins, que recebi de  a quantia de R$ " + receiptTotalValue.toBigDecimal()
-    .setScale(2, RoundingMode.UP).toString()
-        .replace(".", ",") + " (" + receiptTotalValue.toWords(
-        "pt",
-        "BR"
-    ) + " reais) referente a " + qtdMonthlyBillings + " " + sessao + " de  para o(a) paciente " + patient.streetAddress +", no valor de R$ " + sessionValue.toBigDecimal()
-        .setScale(2, RoundingMode.UP).toString().replace(
-            ".",
-            ","
-        ) + " por sessão, realizada" + dia + " no" + dia + " dia" + dia + " " + daysDescr + "."
-
-    var signingName = profile.name
-    var signingCPF =  "CPF:" + profile.cpfCnpj
-    var footer = profile.address + ". Telefone: " + profile.phoneNumber
-    var pdfFileName = patient.streetAddress.replace(" ","_") + "_" + (receiptDate.get(Calendar.MONTH)+1) + "_" + receiptDate.get(Calendar.YEAR) + "-" + Date().time.milliseconds
-
-    //setting received date same as receiptDate just because received date is not null
-     var receiptPDF = ReceiptPDF(0,0,header,body,signingName,signingCPF,footer,pdfFileName)
-
-
-    showToast("Recibo registrado com sucesso! Criando arquivo PDF para assinatura...", context)
-    generatePDF(header,body,signingName, signingCPF, footer, context, pdfFileName)
 }
 
 

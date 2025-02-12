@@ -9,7 +9,6 @@ import com.apps.gtorettirsm.data.ExpenseDao
 import com.apps.gtorettirsm.data.ReceivingDao
 import com.apps.gtorettirsm.data.PropertyDao
 import com.apps.gtorettirsm.data.ProviderDao
-import com.apps.gtorettirsm.data.ReceiptPDFDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -34,12 +33,7 @@ class DatabaseModule {
 
     @Provides
     fun providePropertyDao(appDatabase: AppDatabase): PropertyDao {
-        return appDatabase.patientDao()
-    }
-
-    @Provides
-    fun provideReceiptPDFDao(appDatabase: AppDatabase): ReceiptPDFDao {
-        return appDatabase.receiptPDFDao()
+        return appDatabase.propertyDao()
     }
 
     @Provides

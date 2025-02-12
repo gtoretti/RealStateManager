@@ -17,8 +17,8 @@ class PropertyRepository @Inject constructor(private val propertyDao: PropertyDa
         propertyDao.upsert(property)
     }
 
-    suspend fun deleteProperty(patient: Property){
-        propertyDao.delete(patient.propertyId)
+    suspend fun deleteProperty(property: Property){
+        propertyDao.delete(property.propertyId)
     }
 
     companion object {
@@ -26,9 +26,9 @@ class PropertyRepository @Inject constructor(private val propertyDao: PropertyDa
         // For Singleton instantiation
         @Volatile private var instance: PropertyRepository? = null
 
-        fun getInstance(patientDao: PropertyDao) =
+        fun getInstance(propertyDao: PropertyDao) =
             instance ?: synchronized(this) {
-                instance ?: PropertyRepository(patientDao).also { instance = it }
+                instance ?: PropertyRepository(propertyDao).also { instance = it }
             }
     }
 }
