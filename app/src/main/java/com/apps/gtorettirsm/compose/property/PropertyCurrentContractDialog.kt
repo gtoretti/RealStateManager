@@ -690,83 +690,95 @@ fun PropertyCurrentContractDialog(
                     }
 
                     Button(onClick = {
-                        if (monthlyBillingValue.trim().isEmpty()){
-                            monthlyBillingValue="0"
+
+                        if ((startDate.isNotEmpty() || endedDate.isNotEmpty()) && paymentDate.trim().isEmpty()){
+                            showToast("Por favor, informe o Dia de Pagamento no Mês.",context)
+                        }else
+                            if ((startDate.isNotEmpty() && endedDate.isEmpty())){
+                                showToast("Por favor, informe a Data de Término.",context)
+                            }else
+                                if ((startDate.isEmpty() && endedDate.isNotEmpty())){
+                                    showToast("Por favor, informe a Data de Início.",context)
+                                }else
+                        {
+                            if (monthlyBillingValue.trim().isEmpty()){
+                                monthlyBillingValue="0"
+                            }
+
+                            if (months.trim().isEmpty())
+                                months = "0"
+
+                            if (paymentDate.trim().isEmpty())
+                                paymentDate = "0"
+
+                            var startDt = property.contractStartDate
+                            if (startDate.isNotEmpty())
+                                startDt = fmt.parse(startDate)
+                            var endedDt = property.contractEndedDate
+                            if (endedDate.isNotEmpty())
+                                endedDt = fmt.parse(endedDate)
+
+                            propertyViewModel.saveProperty(
+                                Property(
+                                    propertyId = property.propertyId,
+                                    streetAddress = property.streetAddress,
+                                    state = property.state,
+                                    city = property.city,
+                                    district = property.district,
+                                    number = property.number,
+                                    complement = property.complement,
+                                    zipCode = property.zipCode,
+                                    rentalMonthlyPrice = property.rentalMonthlyPrice,
+                                    occupied = property.occupied,
+                                    cpflName = property.cpflName,
+                                    cpflCustomerId = property.cpflCustomerId,
+                                    cpflCurrentCPF = property.cpflCurrentCPF,
+                                    sanasaName = property.sanasaName,
+                                    sanasaCustomerId = property.sanasaCustomerId,
+                                    sanasaCurrentCPF = property.sanasaCurrentCPF,
+                                    iptuCartographicCode = property.iptuCartographicCode,
+                                    realEstateRegistration = property.realEstateRegistration,
+                                    totalMunicipalTaxes = property.totalMunicipalTaxes,
+                                    urlGDriveFolder = property.urlGDriveFolder,
+                                    deleted = 0,
+                                    contractManagerName= property.contractManagerName,
+                                    contractManagerContactId = property.contractManagerContactId,
+                                    contractStartDate= startDt,
+                                    contractEndedDate= endedDt,
+                                    contractMonths= Integer.parseInt(months),
+                                    contractDays = Integer.parseInt(days),
+                                    contractMonthsDaysDescr = monthsDaysDescr,
+                                    contractValueAdjustmentIndexName= valueAdjustmentIndexName,
+                                    contractMonthlyBillingValue= monthlyBillingValue.screenToDouble(),
+                                    contractRenterName= renterName,
+                                    contractRenterCPF= renterCPF,
+                                    contractRenterContactId = renterContactId,
+                                    contractGuarantorName= guarantorName,
+                                    contractGuarantorCPF= guarantorCPF,
+                                    contractGuarantorContactId = guarantorContactId,
+                                    contractPaymentDate= Integer.parseInt(paymentDate),
+                                    contractFinePerDelayedDay = contractFinePerDelayedDay.screenToDouble()
+                                ))
+
+                            startDate=""
+                            endedDate=""
+                            monthlyBillingValue=""
+                            months=""
+                            valueAdjustmentIndexName=""
+                            renterName=""
+                            renterCPF=""
+                            renterContactId=""
+                            guarantorName=""
+                            guarantorCPF=""
+                            guarantorContactId=""
+                            paymentDate=""
+                            contractFinePerDelayedDay = ""
+
+                            openStartDateDialog.value = false
+                            openEndedDateDialog.value = false
+                            openPropertyCurrentContractDialog.value = false
+                            showToast("Contrato atualizado com sucesso!",context)
                         }
-
-                        if (months.trim().isEmpty())
-                            months = "0"
-
-                        if (paymentDate.trim().isEmpty())
-                            paymentDate = "0"
-
-                        var startDt = property.contractStartDate
-                        if (startDate.isNotEmpty())
-                            startDt = fmt.parse(startDate)
-                        var endedDt = property.contractEndedDate
-                        if (endedDate.isNotEmpty())
-                            endedDt = fmt.parse(endedDate)
-
-                        propertyViewModel.saveProperty(
-                            Property(
-                                propertyId = property.propertyId,
-                                streetAddress = property.streetAddress,
-                                state = property.state,
-                                city = property.city,
-                                district = property.district,
-                                number = property.number,
-                                complement = property.complement,
-                                zipCode = property.zipCode,
-                                rentalMonthlyPrice = property.rentalMonthlyPrice,
-                                occupied = property.occupied,
-                                cpflName = property.cpflName,
-                                cpflCustomerId = property.cpflCustomerId,
-                                cpflCurrentCPF = property.cpflCurrentCPF,
-                                sanasaName = property.sanasaName,
-                                sanasaCustomerId = property.sanasaCustomerId,
-                                sanasaCurrentCPF = property.sanasaCurrentCPF,
-                                iptuCartographicCode = property.iptuCartographicCode,
-                                realEstateRegistration = property.realEstateRegistration,
-                                totalMunicipalTaxes = property.totalMunicipalTaxes,
-                                urlGDriveFolder = property.urlGDriveFolder,
-                                deleted = 0,
-                                contractManagerName= property.contractManagerName,
-                                contractManagerContactId = property.contractManagerContactId,
-                                contractStartDate= startDt,
-                                contractEndedDate= endedDt,
-                                contractMonths= Integer.parseInt(months),
-                                contractDays = Integer.parseInt(days),
-                                contractMonthsDaysDescr = monthsDaysDescr,
-                                contractValueAdjustmentIndexName= valueAdjustmentIndexName,
-                                contractMonthlyBillingValue= monthlyBillingValue.screenToDouble(),
-                                contractRenterName= renterName,
-                                contractRenterCPF= renterCPF,
-                                contractRenterContactId = renterContactId,
-                                contractGuarantorName= guarantorName,
-                                contractGuarantorCPF= guarantorCPF,
-                                contractGuarantorContactId = guarantorContactId,
-                                contractPaymentDate= Integer.parseInt(paymentDate),
-                                contractFinePerDelayedDay = contractFinePerDelayedDay.screenToDouble()
-                            ))
-
-                        startDate=""
-                        endedDate=""
-                        monthlyBillingValue=""
-                        months=""
-                        valueAdjustmentIndexName=""
-                        renterName=""
-                        renterCPF=""
-                        renterContactId=""
-                        guarantorName=""
-                        guarantorCPF=""
-                        guarantorContactId=""
-                        paymentDate=""
-                        contractFinePerDelayedDay = ""
-
-                        openStartDateDialog.value = false
-                        openEndedDateDialog.value = false
-                        openPropertyCurrentContractDialog.value = false
-                        showToast("Contrato atualizado com sucesso!",context)
 
                     },
                         colors = ButtonDefaults.buttonColors(
