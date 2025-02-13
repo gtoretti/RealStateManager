@@ -161,49 +161,57 @@ fun FinancialScreen(
             Spacer(modifier = Modifier.height(10.dp))
         }
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 5.dp)
-        ) {
 
-            Button(
-                onClick = {
-                    openPropertyExpensesDialog.value = true
-                },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = getButtonColor()
-                ), modifier = Modifier.height(33.dp)
+
+        if (properties.isNotEmpty()) {
+
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 5.dp)
             ) {
-                Text(
-                    text = "Desenbolsos",
-                    style = TextStyle(
-                        fontSize = 14.sp,
+
+                Button(
+                    onClick = {
+                        openPropertyExpensesDialog.value = true
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = getButtonColor()
+                    ), modifier = Modifier.height(33.dp)
+                ) {
+                    Text(
+                        text = "Desenbolsos",
+                        style = TextStyle(
+                            fontSize = 14.sp,
+                        )
                     )
-                )
-            }
+                }
 
 
 
-            Button(
-                onClick = {
-                    openPropertyReceivingsDialog.value = true
-                },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = getButtonColor()
-                ), modifier = Modifier.height(33.dp)
-            ) {
-                Text(
-                    text = "Recebimentos",
-                    style = TextStyle(
-                        fontSize = 14.sp,
+                Button(
+                    onClick = {
+                        openPropertyReceivingsDialog.value = true
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = getButtonColor()
+                    ), modifier = Modifier.height(33.dp)
+                ) {
+                    Text(
+                        text = "Recebimentos",
+                        style = TextStyle(
+                            fontSize = 14.sp,
+                        )
                     )
-                )
-            }
+                }
 
+            }
         }
+
+
 
 
         Row(
@@ -350,6 +358,22 @@ Row(){
             )
         )
 
+
+        if (properties.isEmpty()){
+            Column(
+                modifier = Modifier.padding(horizontal = 10.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "Não há imóveis cadastrados."
+                    , style = TextStyle(
+                        color = getTextColor(),
+                        fontSize = 15.sp,
+                    )
+                )
+            }
+        }
 
 
         Column(
@@ -615,7 +639,7 @@ Row(){
                     }
                 })
             Text(
-                text = "Recebimentos e Desenbolsos Realizados",
+                text = "Recebimentos e Desenbolsos",
                 style = TextStyle(
                     color = getTextColor(),
                     fontSize = 16.sp,
@@ -860,7 +884,7 @@ Row(){
             DatePickerModal(
                 onDateSelected = {
                     if (it != null) {
-                        filterStartDate = SimpleDateFormat("dd/MM/yyyy").format(Date(it+86400000))
+                        filterStartDate = SimpleDateFormat("dd/MM/yyyy").format(Date(it))
                     }
                 }, openDialog = openStartDateDialog, title = "Data Inicial"
             )
@@ -871,7 +895,7 @@ Row(){
             DatePickerModal(
                 onDateSelected = {
                     if (it != null) {
-                        filterEndDate = SimpleDateFormat("dd/MM/yyyy").format(Date(it+86400000))
+                        filterEndDate = SimpleDateFormat("dd/MM/yyyy").format(Date(it))
                     }
                 }, openDialog = openEndDateDialog, title = "Data Final"
             )

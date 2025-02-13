@@ -26,8 +26,6 @@ class ReceivingViewModel @Inject internal constructor(
 
     fun getRentReceivingsByDateFilter(id:Long, contractStartDate: Date, startDateFilter: Date, endDateFilter: Date) = receivingRepository.getRentReceivingsByDateFilter(id,contractStartDate,startDateFilter,endDateFilter)
 
-
-
     fun saveReceiving(receiving: Receiving) {
         viewModelScope.launch {
             receivingRepository.saveReceiving(receiving)

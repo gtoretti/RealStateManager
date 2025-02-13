@@ -519,7 +519,7 @@ fun PropertyCurrentContractDialog(
                             onDateSelected = {
                                 if (it != null) {
                                     monthsDaysDescr = ""
-                                    startDate = SimpleDateFormat("dd/MM/yyyy").format(Date(it+86400000))
+                                    startDate = SimpleDateFormat("dd/MM/yyyy").format(Date(it))
                                     if (endedDate.trim().isNotEmpty()){
                                         var daysbet = daysBetween(fmt.parse(startDate),fmt.parse(endedDate))
                                         if (daysbet<0){
@@ -584,7 +584,7 @@ fun PropertyCurrentContractDialog(
                             onDateSelected = {
                                 if (it != null) {
                                     monthsDaysDescr = ""
-                                    endedDate = SimpleDateFormat("dd/MM/yyyy").format(Date(it+86400000))
+                                    endedDate = SimpleDateFormat("dd/MM/yyyy").format(Date(it))
                                     if (startDate.trim().isNotEmpty()){
                                         var daysbet = daysBetween(fmt.parse(startDate),fmt.parse(endedDate))
                                         if (daysbet<0){
@@ -801,7 +801,10 @@ fun DatePickerModal(
         confirmButton={
             TextButton(onClick = {
                 openDialog.value = false
-                onDateSelected(datePickerState.selectedDateMillis)
+
+                var prod = 86400000
+                //var prod = 0
+                onDateSelected(datePickerState.selectedDateMillis?.plus(prod))
             }) {
                 Text("Ok")
             }
