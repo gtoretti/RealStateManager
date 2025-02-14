@@ -55,6 +55,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import com.apps.gtorettirsm.R
 import com.apps.gtorettirsm.compose.utils.getButtonColor
+import com.apps.gtorettirsm.compose.utils.getPhoneColor
+import com.apps.gtorettirsm.compose.utils.screenToDouble
+import java.text.SimpleDateFormat
 
 @Composable
 fun PropertiesScreen(
@@ -77,6 +80,8 @@ fun PropertiesScreen(
     var openPropertyCreateDialog = remember { mutableStateOf(false) }
     var openPropertyDetailDialog = remember { mutableStateOf(false) }
     var propertyId = remember { mutableLongStateOf(0L) }
+
+    val fmt = SimpleDateFormat("dd/MM/yyyy")
 
     val context = LocalContext.current
     val properties by propertiesFlow.collectAsStateWithLifecycle(initialValue = emptyList())
@@ -223,16 +228,57 @@ fun PropertiesScreen(
                                         fontSize = 14.sp,
                                     )
                                 )
+
+
                                 Text(
                                     text = "CEP: " + item.zipCode, style = TextStyle(
                                         color = getTextColor(),
                                         fontSize = 14.sp,
                                         fontWeight = FontWeight.Bold,
                                     )
-
                                 )
-
                             }
+
+                                    if (item.contractEndedDate.time>0){
+                                        Column(
+                                            horizontalAlignment = Alignment.End,
+                                            verticalArrangement = Arrangement.Bottom,
+                                            modifier = Modifier.fillMaxWidth()
+                                        ){
+                                            Row(
+                                                verticalAlignment = Alignment.CenterVertically,
+                                                horizontalArrangement = Arrangement.End,
+                                                modifier = Modifier.fillMaxWidth()
+                                            ) {
+                                                Spacer(modifier = Modifier.height(20.dp))
+                                            }
+                                            var color = getTextColor()
+                                            if (item.contractMonthlyBillingValue>0.0){
+                                                color = getPhoneColor()
+                                            }
+                                            Icon(
+                                                imageVector = ImageVector.vectorResource(R.drawable.sensor_occupied_24px),
+                                                contentDescription = "Imóvel Alugado",
+                                                tint = color,
+                                                modifier = Modifier
+                                                    .padding(horizontal = 10.dp)
+                                                    .size(24.dp)
+                                            )
+                                            Text(
+                                                text = fmt.format(item.contractEndedDate), style = TextStyle(
+                                                    color = getTextColor(),
+                                                    fontSize = 14.sp,
+                                                )
+                                            )
+                                        }
+
+
+
+                                    }
+
+
+
+
 
                         }
                         HorizontalDivider(thickness = 1.dp)

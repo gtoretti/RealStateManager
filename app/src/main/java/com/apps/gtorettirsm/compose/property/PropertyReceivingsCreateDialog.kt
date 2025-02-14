@@ -288,7 +288,7 @@ fun PropertyReceivingsCreateDialog(
                             ),placeholder = {Text("")},
                             label = {
                                 Text(
-                                    text = "Vencimento do Próximo Aluguel a Receber:",
+                                    text = "Data de Vencimento:",
                                     style = TextStyle(
                                         color = getTextColor(),fontSize = 12.sp,
                                     )

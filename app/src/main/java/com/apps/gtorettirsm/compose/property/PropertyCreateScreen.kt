@@ -697,11 +697,7 @@ fun fillCEPByAddress(openCEPListDialog: MutableState<Boolean>) {
                     openCEPListDialog.value = true
                 }
             }catch (e: Exception){
-
                 e.printStackTrace()
-
-
-
                 e.message?.let { Log.w("fillAddressByCEP", it) }
                 toastThis.value = "O site dos Correios está indisponível. Você pode salvar as informações e tentar mais tarde."
             }

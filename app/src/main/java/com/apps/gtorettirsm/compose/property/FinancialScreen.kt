@@ -148,7 +148,7 @@ fun FinancialScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    text = "Fluxo de Caixa e Relatórios:"
+                    text = "Demonstração dos Fluxos de Caixa e Relatórios:"
                 )
             }
         }
@@ -223,7 +223,7 @@ fun FinancialScreen(
         }
 
         Text(
-            text = "Previsões e Extratos:",
+            text = "Período da Competência:",
             style = TextStyle(
                 color = getTextColor(),
                 fontSize = 16.sp,
@@ -569,7 +569,7 @@ Row(){
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             Text(
-                                text = "Total:",
+                                text = "Saldo:",
                                 style = TextStyle(
                                     color = getTextColor(),
                                     fontSize = 14.sp,
@@ -807,7 +807,7 @@ Row(){
         )
         {
             Text(
-                text = "Saldo: ",
+                text = "Saldo Total:",
                 style = TextStyle(
                     color = getTextColor(),
                     fontSize = 16.sp,
@@ -1046,13 +1046,13 @@ fun generatePDFReport(context: Context,financialReport: FinancialReport) {
     headerStyle.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
     headerStyle.textSize = 15F
     headerStyle.setColor(android.graphics.Color.BLUE)
-    canvas.drawText("Relatório de Fluxo de Caixa de Aluguéis de Imóveis", 130F, 50F, headerStyle)
+    canvas.drawText("Demonstração dos Fluxos de Caixa de Aluguéis de Imóveis", 98F, 50F, headerStyle)
 
     var periodTitle: Paint = Paint()
     periodTitle.setTypeface(Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD))
     periodTitle.textSize = 12F
     periodTitle.color = android.graphics.Color.BLACK
-    canvas.drawText("Período:", 285F, 100F, periodTitle)
+    canvas.drawText("Período da Competência:", 238F, 100F, periodTitle)
 
     var period: Paint = Paint()
     period.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))

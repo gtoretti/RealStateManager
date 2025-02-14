@@ -7,6 +7,7 @@ package com.apps.gtorettirsm.compose.property
 import android.content.Context
 import android.content.Intent
 import android.provider.ContactsContract
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,6 +24,7 @@ import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -39,6 +41,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -46,10 +50,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
+import com.apps.gtorettirsm.R
 import com.apps.gtorettirsm.compose.utils.DrawScrollableView
 import com.apps.gtorettirsm.compose.utils.daysBetween
 import com.apps.gtorettirsm.compose.utils.defaultNaoInformado
 import com.apps.gtorettirsm.compose.utils.getButtonColor
+import com.apps.gtorettirsm.compose.utils.getPhoneColor
 import com.apps.gtorettirsm.compose.utils.getTextColor
 import com.apps.gtorettirsm.compose.utils.screenToDouble
 import com.apps.gtorettirsm.compose.utils.showToast
@@ -93,6 +99,8 @@ fun PropertyCurrentContractDialog(
     var guarantorContactId by remember { mutableStateOf("") }
     var paymentDate by remember { mutableStateOf("") }
     var contractFinePerDelayedDay by remember { mutableStateOf("") }
+
+    var occupied by remember { mutableStateOf(false) }
 
     if (pickContactNameInquilino.value.trim().isNotEmpty()){
         renterName = pickContactNameInquilino.value
@@ -140,9 +148,17 @@ fun PropertyCurrentContractDialog(
         if (property.contractPaymentDate==0){
             paymentDate=""
         }
-
         loaded = "true"
     }
+
+
+    if (startDate.isEmpty() && endedDate.isEmpty() && paymentDate.isEmpty()){
+        occupied = false
+        monthsDaysDescr = ""
+    }else if (startDate.isNotEmpty() || endedDate.isNotEmpty() || paymentDate.isNotEmpty()){
+        occupied = true
+    }
+
 
     if (openPropertyCurrentContractDialog.value) {
         AlertDialog(shape = RoundedCornerShape(10.dp), onDismissRequest = {
@@ -171,6 +187,44 @@ fun PropertyCurrentContractDialog(
                             verticalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
 
+
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Start,
+                                modifier = Modifier.fillMaxWidth()
+                            ){
+                                Checkbox(checked = (occupied),
+                                    onCheckedChange = {
+                                        if (it){
+                                            occupied = true
+                                        }else{
+                                            occupied = false
+                                            startDate = ""
+                                            endedDate = ""
+                                            paymentDate = ""
+                                            monthsDaysDescr = ""
+                                        }
+                                    })
+                                Text(
+                                    text = "Imóvel Alugado",
+                                    style = TextStyle(
+                                        color = getTextColor(),
+                                        fontSize = 16.sp,
+                                    )
+                                )
+                                var color = getTextColor()
+                                if (occupied && monthlyBillingValue.screenToDouble()>0.0){
+                                    color = getPhoneColor()
+                                }
+                                Icon(
+                                    imageVector = ImageVector.vectorResource(R.drawable.sensor_occupied_24px),
+                                    contentDescription = "Imóvel Alugado",
+                                    tint = color,
+                                    modifier = Modifier
+                                        .padding(horizontal = 10.dp)
+                                        .size(24.dp)
+                                )
+                            }
 
                             OutlinedTextField(
                                 value = monthlyBillingValue,
@@ -691,94 +745,111 @@ fun PropertyCurrentContractDialog(
 
                     Button(onClick = {
 
-                        if ((startDate.isNotEmpty() || endedDate.isNotEmpty()) && paymentDate.trim().isEmpty()){
-                            showToast("Por favor, informe o Dia de Pagamento no Mês.",context)
-                        }else
-                            if ((startDate.isNotEmpty() && endedDate.isEmpty())){
-                                showToast("Por favor, informe a Data de Término.",context)
+                        var startDt = property.contractStartDate
+                        var endedDt = property.contractEndedDate
+
+                        if (!occupied){
+                            startDate = ""
+                            endedDate = ""
+                            startDt = Date(0)
+                            endedDt = Date(0)
+                            paymentDate = ""
+                        }
+
+
+                            if (occupied && paymentDate.trim().isEmpty()){
+                                showToast("Por favor, informe o Dia de Pagamento no Mês.",context)
                             }else
-                                if ((startDate.isEmpty() && endedDate.isNotEmpty())){
+                                if (occupied && startDate.trim().isEmpty()){
                                     showToast("Por favor, informe a Data de Início.",context)
                                 }else
-                        {
-                            if (monthlyBillingValue.trim().isEmpty()){
-                                monthlyBillingValue="0"
-                            }
+                                    if (occupied && endedDate.trim().isEmpty()){
+                                        showToast("Por favor, informe a Data de Término.",context)
+                                }else
+                                     {
 
-                            if (months.trim().isEmpty())
-                                months = "0"
+                                        if (startDate.isNotEmpty())
+                                            startDt = fmt.parse(startDate)
 
-                            if (paymentDate.trim().isEmpty())
-                                paymentDate = "0"
+                                        if (endedDate.isNotEmpty())
+                                            endedDt = fmt.parse(endedDate)
 
-                            var startDt = property.contractStartDate
-                            if (startDate.isNotEmpty())
-                                startDt = fmt.parse(startDate)
-                            var endedDt = property.contractEndedDate
-                            if (endedDate.isNotEmpty())
-                                endedDt = fmt.parse(endedDate)
+                                        if (monthlyBillingValue.trim().isEmpty()) {
+                                            monthlyBillingValue = "0"
+                                        }
 
-                            propertyViewModel.saveProperty(
-                                Property(
-                                    propertyId = property.propertyId,
-                                    streetAddress = property.streetAddress,
-                                    state = property.state,
-                                    city = property.city,
-                                    district = property.district,
-                                    number = property.number,
-                                    complement = property.complement,
-                                    zipCode = property.zipCode,
-                                    rentalMonthlyPrice = property.rentalMonthlyPrice,
-                                    occupied = property.occupied,
-                                    cpflName = property.cpflName,
-                                    cpflCustomerId = property.cpflCustomerId,
-                                    cpflCurrentCPF = property.cpflCurrentCPF,
-                                    sanasaName = property.sanasaName,
-                                    sanasaCustomerId = property.sanasaCustomerId,
-                                    sanasaCurrentCPF = property.sanasaCurrentCPF,
-                                    iptuCartographicCode = property.iptuCartographicCode,
-                                    realEstateRegistration = property.realEstateRegistration,
-                                    totalMunicipalTaxes = property.totalMunicipalTaxes,
-                                    urlGDriveFolder = property.urlGDriveFolder,
-                                    deleted = 0,
-                                    contractManagerName= property.contractManagerName,
-                                    contractManagerContactId = property.contractManagerContactId,
-                                    contractStartDate= startDt,
-                                    contractEndedDate= endedDt,
-                                    contractMonths= Integer.parseInt(months),
-                                    contractDays = Integer.parseInt(days),
-                                    contractMonthsDaysDescr = monthsDaysDescr,
-                                    contractValueAdjustmentIndexName= valueAdjustmentIndexName,
-                                    contractMonthlyBillingValue= monthlyBillingValue.screenToDouble(),
-                                    contractRenterName= renterName,
-                                    contractRenterCPF= renterCPF,
-                                    contractRenterContactId = renterContactId,
-                                    contractGuarantorName= guarantorName,
-                                    contractGuarantorCPF= guarantorCPF,
-                                    contractGuarantorContactId = guarantorContactId,
-                                    contractPaymentDate= Integer.parseInt(paymentDate),
-                                    contractFinePerDelayedDay = contractFinePerDelayedDay.screenToDouble()
-                                ))
+                                        if (months.trim().isEmpty())
+                                            months = "0"
 
-                            startDate=""
-                            endedDate=""
-                            monthlyBillingValue=""
-                            months=""
-                            valueAdjustmentIndexName=""
-                            renterName=""
-                            renterCPF=""
-                            renterContactId=""
-                            guarantorName=""
-                            guarantorCPF=""
-                            guarantorContactId=""
-                            paymentDate=""
-                            contractFinePerDelayedDay = ""
+                                        if (paymentDate.trim().isEmpty())
+                                            paymentDate = "0"
 
-                            openStartDateDialog.value = false
-                            openEndedDateDialog.value = false
-                            openPropertyCurrentContractDialog.value = false
-                            showToast("Contrato atualizado com sucesso!",context)
-                        }
+
+
+
+
+                                        propertyViewModel.saveProperty(
+                                            Property(
+                                                propertyId = property.propertyId,
+                                                streetAddress = property.streetAddress,
+                                                state = property.state,
+                                                city = property.city,
+                                                district = property.district,
+                                                number = property.number,
+                                                complement = property.complement,
+                                                zipCode = property.zipCode,
+                                                rentalMonthlyPrice = property.rentalMonthlyPrice,
+                                                occupied = property.occupied,
+                                                cpflName = property.cpflName,
+                                                cpflCustomerId = property.cpflCustomerId,
+                                                cpflCurrentCPF = property.cpflCurrentCPF,
+                                                sanasaName = property.sanasaName,
+                                                sanasaCustomerId = property.sanasaCustomerId,
+                                                sanasaCurrentCPF = property.sanasaCurrentCPF,
+                                                iptuCartographicCode = property.iptuCartographicCode,
+                                                realEstateRegistration = property.realEstateRegistration,
+                                                totalMunicipalTaxes = property.totalMunicipalTaxes,
+                                                urlGDriveFolder = property.urlGDriveFolder,
+                                                deleted = 0,
+                                                contractManagerName = property.contractManagerName,
+                                                contractManagerContactId = property.contractManagerContactId,
+                                                contractStartDate = startDt,
+                                                contractEndedDate = endedDt,
+                                                contractMonths = Integer.parseInt(months),
+                                                contractDays = Integer.parseInt(days),
+                                                contractMonthsDaysDescr = monthsDaysDescr,
+                                                contractValueAdjustmentIndexName = valueAdjustmentIndexName,
+                                                contractMonthlyBillingValue = monthlyBillingValue.screenToDouble(),
+                                                contractRenterName = renterName,
+                                                contractRenterCPF = renterCPF,
+                                                contractRenterContactId = renterContactId,
+                                                contractGuarantorName = guarantorName,
+                                                contractGuarantorCPF = guarantorCPF,
+                                                contractGuarantorContactId = guarantorContactId,
+                                                contractPaymentDate = Integer.parseInt(paymentDate),
+                                                contractFinePerDelayedDay = contractFinePerDelayedDay.screenToDouble()
+                                            )
+                                        )
+
+                                        startDate = ""
+                                        endedDate = ""
+                                        monthlyBillingValue = ""
+                                        months = ""
+                                        valueAdjustmentIndexName = ""
+                                        renterName = ""
+                                        renterCPF = ""
+                                        renterContactId = ""
+                                        guarantorName = ""
+                                        guarantorCPF = ""
+                                        guarantorContactId = ""
+                                        paymentDate = ""
+                                        contractFinePerDelayedDay = ""
+
+                                        openStartDateDialog.value = false
+                                        openEndedDateDialog.value = false
+                                        openPropertyCurrentContractDialog.value = false
+                                        showToast("Contrato atualizado com sucesso!", context)
+                                    }
 
                     },
                         colors = ButtonDefaults.buttonColors(

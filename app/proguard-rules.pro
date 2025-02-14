@@ -32,7 +32,7 @@
 -keepclassmembernames class kotlinx.** {
     volatile <fields>;
 }
--keepclassmembers class com.apps.reciboterapia.** { <fields>; }
+-keepclassmembers class com.apps.gtorettirsm.** { <fields>; }
 
 
  # Keep annotation default values (e.g., retrofit2.http.Field.encoded).
