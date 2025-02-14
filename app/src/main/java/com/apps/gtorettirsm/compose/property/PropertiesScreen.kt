@@ -54,10 +54,12 @@ import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import com.apps.gtorettirsm.R
+import com.apps.gtorettirsm.compose.utils.daysBetween
 import com.apps.gtorettirsm.compose.utils.getButtonColor
 import com.apps.gtorettirsm.compose.utils.getPhoneColor
 import com.apps.gtorettirsm.compose.utils.screenToDouble
 import java.text.SimpleDateFormat
+import java.util.Calendar
 
 @Composable
 fun PropertiesScreen(
@@ -150,7 +152,8 @@ fun PropertiesScreen(
         Column(
             horizontalAlignment = Alignment.Start,
             modifier = Modifier
-                .fillMaxWidth().padding(horizontal = 5.dp)
+                .fillMaxWidth()
+                .padding(horizontal = 5.dp)
                 .verticalScroll(rememberScrollState()),
         ) {
 
@@ -252,42 +255,37 @@ fun PropertiesScreen(
                                             ) {
                                                 Spacer(modifier = Modifier.height(20.dp))
                                             }
-                                            var color = getTextColor()
+                                            var occupiedColor = getTextColor()
                                             if (item.contractMonthlyBillingValue>0.0){
-                                                color = getPhoneColor()
+                                                occupiedColor = getPhoneColor()
                                             }
                                             Icon(
                                                 imageVector = ImageVector.vectorResource(R.drawable.sensor_occupied_24px),
                                                 contentDescription = "Imóvel Alugado",
-                                                tint = color,
+                                                tint = occupiedColor,
                                                 modifier = Modifier
                                                     .padding(horizontal = 10.dp)
                                                     .size(24.dp)
                                             )
+
+                                            var occupiedDateColor = getTextColor()
+                                            var warningDate= Calendar.getInstance()
+                                            if (daysBetween(warningDate.time,item.contractEndedDate) < 30){
+                                                occupiedDateColor = getRedTextColor()
+                                            }
                                             Text(
                                                 text = fmt.format(item.contractEndedDate), style = TextStyle(
-                                                    color = getTextColor(),
+                                                    color = occupiedDateColor,
                                                     fontSize = 14.sp,
                                                 )
                                             )
                                         }
-
-
-
                                     }
-
-
-
-
-
                         }
                         HorizontalDivider(thickness = 1.dp)
                     }
-
                 }
             }
-
-
         }
         Spacer(modifier = Modifier.weight(1f))
         //AndroidViewAdView()
