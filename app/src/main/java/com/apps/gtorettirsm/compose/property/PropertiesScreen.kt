@@ -245,34 +245,49 @@ fun PropertiesScreen(
                                         fontWeight = FontWeight.Bold,
                                     )
                                 )
-                            }
 
-                                    if (item.contractEndedDate.time>0){
-                                        Column(
-                                            horizontalAlignment = Alignment.End,
-                                            verticalArrangement = Arrangement.Bottom,
-                                            modifier = Modifier.fillMaxWidth()
-                                        ){
-                                            Row(
-                                                verticalAlignment = Alignment.CenterVertically,
-                                                horizontalArrangement = Arrangement.End,
-                                                modifier = Modifier.fillMaxWidth()
-                                            ) {
-                                                Spacer(modifier = Modifier.height(20.dp))
+                                if (item.contractEndedDate.time>0){
+
+                                        var occupiedColor = getTextColor()
+                                        if (item.contractMonthlyBillingValue>0.0){
+                                            occupiedColor = getPhoneColor()
+                                        }
+
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.Start,
+                                        modifier = Modifier.fillMaxWidth()
+                                    ) {
+                                        Spacer(modifier = Modifier.height(3.dp))
+                                    }
+
+                                        Row(verticalAlignment = Alignment.CenterVertically,
+                                            horizontalArrangement = Arrangement.spacedBy(20.dp),
+                                            modifier = Modifier.fillMaxWidth()){
+
+                                            Row(){
+                                                Icon(
+                                                    imageVector = ImageVector.vectorResource(R.drawable.sensor_occupied_24px),
+                                                    contentDescription = "Imóvel Alugado",
+                                                    tint = occupiedColor,
+                                                    modifier = Modifier
+                                                        .padding(horizontal = 5.dp)
+                                                        .size(24.dp)
+                                                )
+                                                var occupiedDateColor = getTextColor()
+                                                var warningDate= Calendar.getInstance()
+                                                if (daysBetween(warningDate.time,item.contractEndedDate) < 30){
+                                                    occupiedDateColor = getRedTextColor()
+                                                }
+                                                Text(
+                                                    text = fmt.format(item.contractEndedDate), style = TextStyle(
+                                                        color = occupiedDateColor,
+                                                        fontSize = 14.sp,
+                                                    )
+                                                )
                                             }
 
-
-
-
-                                            var occupiedColor = getTextColor()
-                                            if (item.contractMonthlyBillingValue>0.0){
-                                                occupiedColor = getPhoneColor()
-                                            }
-
-
-                                            Row(verticalAlignment = Alignment.CenterVertically,
-                                                horizontalArrangement = Arrangement.End,
-                                                modifier = Modifier.fillMaxWidth()){
+                                            Row(){
                                                 var hasDebit = hasDebit(item,receivingViewModel)
                                                 if (hasDebit.time!=0L) {
                                                     Icon(
@@ -283,31 +298,24 @@ fun PropertiesScreen(
                                                             .padding(end = 5.dp)
                                                             .size(22.dp)
                                                     )
+                                                    Text(
+                                                        text = fmt.format(hasDebit.time), style = TextStyle(
+                                                            color = Color(0xFFD50000),
+                                                            fontSize = 14.sp,
+                                                        )
+                                                    )
                                                 }
-                                                Icon(
-                                                    imageVector = ImageVector.vectorResource(R.drawable.sensor_occupied_24px),
-                                                    contentDescription = "Imóvel Alugado",
-                                                    tint = occupiedColor,
-                                                    modifier = Modifier
-                                                        .padding(horizontal = 5.dp)
-                                                        .size(24.dp)
-                                                )
                                             }
-
-
-                                            var occupiedDateColor = getTextColor()
-                                            var warningDate= Calendar.getInstance()
-                                            if (daysBetween(warningDate.time,item.contractEndedDate) < 30){
-                                                occupiedDateColor = getRedTextColor()
-                                            }
-                                            Text(
-                                                text = fmt.format(item.contractEndedDate), style = TextStyle(
-                                                    color = occupiedDateColor,
-                                                    fontSize = 14.sp,
-                                                )
-                                            )
                                         }
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.Start,
+                                        modifier = Modifier.fillMaxWidth()
+                                    ) {
+                                        Spacer(modifier = Modifier.height(3.dp))
                                     }
+                                }
+                            }
                         }
                         HorizontalDivider(thickness = 1.dp)
                     }
