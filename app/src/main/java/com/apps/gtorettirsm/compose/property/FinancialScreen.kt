@@ -1022,7 +1022,6 @@ fun getFinancialReport(property: Property, expenseViewModel: ExpenseViewModel, r
     return ret
 }
 
-
 fun generatePDFReport(context: Context,financialReport: FinancialReport) {
 
     val fmt = SimpleDateFormat("dd/MM/yyyy")

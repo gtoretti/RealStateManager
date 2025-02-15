@@ -17,8 +17,8 @@ android {
     minSdk = libs.versions.minSdk.get().toInt()
     targetSdk = libs.versions.targetSdk.get().toInt()
     testInstrumentationRunner = "com.apps.gtorettirsm.utilities.MainTestRunner"
-    versionCode = 6
-    versionName = "0.0.6"
+    versionCode = 8
+    versionName = "0.0.8"
     vectorDrawables.useSupportLibrary = true
 
     // Consult the README on instructions for setting up Unsplash API key
@@ -31,7 +31,7 @@ android {
   }
   buildTypes {
     release {
-      isMinifyEnabled = true
+      isMinifyEnabled = false
       proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
     }
     create("benchmark") {
