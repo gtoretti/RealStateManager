@@ -51,6 +51,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import com.apps.gtorettirsm.R
@@ -58,6 +59,7 @@ import com.apps.gtorettirsm.compose.utils.daysBetween
 import com.apps.gtorettirsm.compose.utils.getButtonColor
 import com.apps.gtorettirsm.compose.utils.getPhoneColor
 import com.apps.gtorettirsm.compose.utils.screenToDouble
+import com.apps.gtorettirsm.viewmodels.ReceivingViewModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
 
@@ -65,11 +67,13 @@ import java.util.Calendar
 fun PropertiesScreen(
 ) {
     var propertyViewModel: PropertyViewModel = hiltViewModel()
+    var receivingViewModel: ReceivingViewModel = hiltViewModel()
 
     val properties = propertyViewModel.properties
     PropertiesScreen(
         propertiesFlow = properties,
         propertyViewModel = propertyViewModel,
+        receivingViewModel = receivingViewModel
     )
 }
 
@@ -77,6 +81,7 @@ fun PropertiesScreen(
 fun PropertiesScreen(
     propertiesFlow: Flow<List<Property>>,
     propertyViewModel: PropertyViewModel,
+    receivingViewModel: ReceivingViewModel
 ) {
 
     var openPropertyCreateDialog = remember { mutableStateOf(false) }
@@ -255,18 +260,40 @@ fun PropertiesScreen(
                                             ) {
                                                 Spacer(modifier = Modifier.height(20.dp))
                                             }
+
+
+
+
                                             var occupiedColor = getTextColor()
                                             if (item.contractMonthlyBillingValue>0.0){
                                                 occupiedColor = getPhoneColor()
                                             }
-                                            Icon(
-                                                imageVector = ImageVector.vectorResource(R.drawable.sensor_occupied_24px),
-                                                contentDescription = "Imóvel Alugado",
-                                                tint = occupiedColor,
-                                                modifier = Modifier
-                                                    .padding(horizontal = 10.dp)
-                                                    .size(24.dp)
-                                            )
+
+
+                                            Row(verticalAlignment = Alignment.CenterVertically,
+                                                horizontalArrangement = Arrangement.End,
+                                                modifier = Modifier.fillMaxWidth()){
+                                                var hasDebit = hasDebit(item,receivingViewModel)
+                                                if (hasDebit.time!=0L) {
+                                                    Icon(
+                                                        imageVector = ImageVector.vectorResource(R.drawable.warning_24px),
+                                                        contentDescription = "Débito Pendente",
+                                                        tint = Color(0xFFD50000),
+                                                        modifier = Modifier
+                                                            .padding(end = 5.dp)
+                                                            .size(22.dp)
+                                                    )
+                                                }
+                                                Icon(
+                                                    imageVector = ImageVector.vectorResource(R.drawable.sensor_occupied_24px),
+                                                    contentDescription = "Imóvel Alugado",
+                                                    tint = occupiedColor,
+                                                    modifier = Modifier
+                                                        .padding(horizontal = 5.dp)
+                                                        .size(24.dp)
+                                                )
+                                            }
+
 
                                             var occupiedDateColor = getTextColor()
                                             var warningDate= Calendar.getInstance()

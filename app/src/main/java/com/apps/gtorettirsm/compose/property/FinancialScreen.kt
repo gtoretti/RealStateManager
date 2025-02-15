@@ -1401,3 +1401,64 @@ fun generatePDFReport(context: Context,financialReport: FinancialReport) {
     pdfDocument.close()
 
 }
+
+
+
+
+@Composable
+fun hasDebit(property: Property, receivingViewModel: ReceivingViewModel) : Date {
+
+    var ret = Date(0)
+
+    var today = Calendar.getInstance()
+
+        val recFlow = receivingViewModel.getRentReceivingsByDateFilter(property.propertyId,property.contractStartDate, property.contractStartDate,today.time)
+        val receivedListFlow = recFlow.collectAsStateWithLifecycle(initialValue = emptyList())
+        val receivedList = receivedListFlow.value
+
+
+        var eachBilling = Calendar.getInstance()
+        eachBilling.time = property.contractStartDate
+        eachBilling.set(Calendar.DAY_OF_MONTH,property.contractPaymentDate)
+        var totalBillingsQtd = property.contractMonths
+        if (property.contractDays>0)
+            totalBillingsQtd += 1
+
+        var i=0
+        while (i<totalBillingsQtd){
+            eachBilling.add(Calendar.MONTH,1)
+
+            if (eachBilling.before(today)){
+                var paid = false
+                //checa se foi pago. se nao foi é pendente ou previsto
+
+                for (received in receivedList) {
+                    var eachReceived = Calendar.getInstance()
+                    eachReceived.time = received.rentBillingDueDate
+                    if (eachReceived.get(Calendar.YEAR) == eachBilling.get(Calendar.YEAR) && eachReceived.get(Calendar.MONTH) == eachBilling.get(Calendar.MONTH)){
+                        paid = true
+                        break
+                    }
+                }
+
+                if (!paid){
+
+                    var billingValue = property.contractMonthlyBillingValue
+                    if (i==(totalBillingsQtd-1)){
+                        //ultima parcela: checar se é proporcional aos dias caso seja menos de 1 mes
+                        if (property.contractDays > 0){
+                            billingValue *= (property.contractDays / 30.0)
+                        }
+                    }
+
+                    if (eachBilling.before(today)){
+                        //atrasado
+                        return eachBilling.time
+                }
+            }
+
+        }
+            i++
+    }
+    return ret
+}
