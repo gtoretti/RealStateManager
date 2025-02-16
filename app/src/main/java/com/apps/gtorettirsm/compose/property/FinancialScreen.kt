@@ -64,6 +64,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.apps.gtorettirsm.R
 import com.apps.gtorettirsm.compose.utils.getButtonColor
+import com.apps.gtorettirsm.compose.utils.getPhoneColor
 import com.apps.gtorettirsm.compose.utils.getRedTextColor
 import com.apps.gtorettirsm.compose.utils.getTextColor
 import com.apps.gtorettirsm.compose.utils.toCurrency
@@ -148,7 +149,7 @@ fun FinancialScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    text = "Demonstração dos Fluxos de Caixa e Relatórios:"
+                    text = "Demonstração dos Fluxos de Caixa:"
                 )
             }
         }
@@ -815,18 +816,27 @@ Row(){
                 )
             )
             if (receivingsTotal - expensesTotal <0){
-                financialReport.value.totalBalance = "(-) " + (receivingsTotal - expensesTotal).toCurrency()
+                financialReport.value.totalBalance = "(-) " + (receivingsTotal - expensesTotal).toCurrency().replace("-","")
+                Text(
+                    text = financialReport.value.totalBalance,
+                    style = TextStyle(
+                        color = getRedTextColor(),
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                    )
+                )
             }else{
                 financialReport.value.totalBalance = "(+) " + (receivingsTotal - expensesTotal).toCurrency()
-            }
-            Text(
-                text = financialReport.value.totalBalance,
-                style = TextStyle(
-                    color = getTextColor(),
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
+                Text(
+                    text = financialReport.value.totalBalance,
+                    style = TextStyle(
+                        color = getPhoneColor(),
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                    )
                 )
-            )
+            }
+
         }
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -1045,7 +1055,7 @@ fun generatePDFReport(context: Context,financialReport: FinancialReport) {
     headerStyle.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
     headerStyle.textSize = 15F
     headerStyle.setColor(android.graphics.Color.BLUE)
-    canvas.drawText("Demonstração dos Fluxos de Caixa de Aluguéis de Imóveis", 98F, 50F, headerStyle)
+    canvas.drawText("Demonstração dos Fluxos de Caixa", 185F, 50F, headerStyle)
 
     var periodTitle: Paint = Paint()
     periodTitle.setTypeface(Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD))
@@ -1301,7 +1311,7 @@ fun generatePDFReport(context: Context,financialReport: FinancialReport) {
         propertyFooterAddress.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD))
         propertyFooterAddress.textSize = 10F
         propertyFooterAddress.color = android.graphics.Color.BLACK
-        canvas.drawText("Total:", 50F, y, propertyFooterAddress)
+        canvas.drawText("Saldo:", 50F, y, propertyFooterAddress)
         var t = total.toCurrency().replace("-","")
         if (total<0.0){
             t = "(-) $t"
@@ -1372,9 +1382,15 @@ fun generatePDFReport(context: Context,financialReport: FinancialReport) {
     reportFooterTotalBalance.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD))
     reportFooterTotalBalance.textSize = 10F
     reportFooterTotalBalance.color = android.graphics.Color.BLACK
-    canvas.drawText("Saldo:", 50F, y, reportFooterTotalBalance)
-    reportFooterTotalBalance.color = android.graphics.Color.BLACK
-    canvas.drawText(financialReport.totalBalance, 450F, y, reportFooterTotalBalance)
+    canvas.drawText("Saldo Total:", 50F, y, reportFooterTotalBalance)
+    if (financialReport.totalBalance.contains("-")){
+        reportFooterTotalBalance.color = android.graphics.Color.RED
+        canvas.drawText(financialReport.totalBalance.replace("-R","R"), 450F, y, reportFooterTotalBalance)
+    }else{
+        reportFooterTotalBalance.color = android.graphics.Color.GREEN
+        canvas.drawText(financialReport.totalBalance, 450F, y, reportFooterTotalBalance)
+    }
+
 
     pdfDocument.finishPage(myPage)
 
