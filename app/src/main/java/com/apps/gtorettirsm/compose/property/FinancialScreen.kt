@@ -919,6 +919,7 @@ data class FinancialReportRecord(
     var date: Date,
     var value: Double,
     var description: String,
+    var comments: String,
     var type: String, //DONE,PREVIEW/PENDING
 ) {
 }
@@ -958,14 +959,12 @@ fun getFinancialReport(property: Property, expenseViewModel: ExpenseViewModel, r
         val receivingList = receivings.value
 
         for (item in expensesList) {
-            ret.add(FinancialReportRecord("(-)",item.date,item.value,item.serviceDesc,"DONE"))
+            ret.add(FinancialReportRecord("(-)",item.date,item.value,item.serviceDesc,item.comments,"DONE"))
         }
 
         for (item in receivingList) {
             var descr = item.type
-            if (descr == "Outros")
-                descr = descr + ":" + item.comments
-            ret.add(FinancialReportRecord("(+)",item.receivingDate,item.totalValue,descr,"DONE"))
+            ret.add(FinancialReportRecord("(+)",item.receivingDate,item.totalValue,descr,item.comments,"DONE"))
         }
     }
 
@@ -1014,13 +1013,13 @@ fun getFinancialReport(property: Property, expenseViewModel: ExpenseViewModel, r
                     if (eachBilling.before(today)){
                         //atrasado
                         if (filterRecordsPENDING){
-                            ret.add(FinancialReportRecord("(+)",eachBilling.time,billingValue,"Aluguel","PENDING"))
+                            ret.add(FinancialReportRecord("(+)",eachBilling.time,billingValue,"Aluguel", "","PENDING"))
                         }
 
                     }else{
                         //previsto
                         if (filterRecordsPREVIEW){
-                            ret.add(FinancialReportRecord("(+)",eachBilling.time,billingValue,"Aluguel","PREVIEW"))
+                            ret.add(FinancialReportRecord("(+)",eachBilling.time,billingValue,"Aluguel","","PREVIEW"))
                         }
                     }
                 }
@@ -1242,7 +1241,7 @@ fun generatePDFReport(context: Context,financialReport: FinancialReport) {
                     total -= finRecord.value
                     datePaint.color = android.graphics.Color.RED
                 }
-                canvas.drawText(fmt.format(finRecord.date) + " - " + finRecord.description, 75F, y, datePaint)
+                canvas.drawText(fmt.format(finRecord.date) + " - " + finRecord.description + " - " + finRecord.comments, 75F, y, datePaint)
                 canvas.drawText(finRecord.prefix + " " + finRecord.value.toCurrency(), 450F, y, datePaint)
 
                 val vectorDrawable = context.getDrawable(R.drawable.check_24px)

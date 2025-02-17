@@ -17,8 +17,8 @@ android {
     minSdk = libs.versions.minSdk.get().toInt()
     targetSdk = libs.versions.targetSdk.get().toInt()
     testInstrumentationRunner = "com.apps.gtorettirsm.utilities.MainTestRunner"
-    versionCode = 9
-    versionName = "0.0.9"
+    versionCode = 11
+    versionName = "0.1.1"
     vectorDrawables.useSupportLibrary = true
 
     // Consult the README on instructions for setting up Unsplash API key
