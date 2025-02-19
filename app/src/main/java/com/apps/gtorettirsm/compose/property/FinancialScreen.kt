@@ -1130,6 +1130,13 @@ fun generatePDFReport(context: Context,financialReport: FinancialReport) {
 
     y+=20
     if (pageHeight-y<50){
+        var pageNumberPaint: Paint = Paint()
+        pageNumberPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD))
+        pageNumberPaint.textSize = 10F
+        pageNumberPaint.color = android.graphics.Color.BLACK
+        canvas.drawText("página $page", (pageWidth-100).toFloat(), (pageHeight-20).toFloat(), pageNumberPaint)
+
+        page++
         pdfDocument.finishPage(myPage)
         myPageInfo = PdfDocument.PageInfo.Builder(pageWidth, pageHeight, page).create()
         myPage = pdfDocument.startPage(myPageInfo)
@@ -1141,6 +1148,13 @@ fun generatePDFReport(context: Context,financialReport: FinancialReport) {
     canvas.drawLine(50F,y,550F,y,line)
     y+=20
     if (pageHeight-y<50){
+        var pageNumberPaint: Paint = Paint()
+        pageNumberPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD))
+        pageNumberPaint.textSize = 10F
+        pageNumberPaint.color = android.graphics.Color.BLACK
+        canvas.drawText("página $page", (pageWidth-100).toFloat(), (pageHeight-20).toFloat(), pageNumberPaint)
+
+        page++
         pdfDocument.finishPage(myPage)
         myPageInfo = PdfDocument.PageInfo.Builder(pageWidth, pageHeight, page).create()
         myPage = pdfDocument.startPage(myPageInfo)
@@ -1163,6 +1177,13 @@ fun generatePDFReport(context: Context,financialReport: FinancialReport) {
 
         y+=20
         if (pageHeight-y<50){
+            var pageNumberPaint: Paint = Paint()
+            pageNumberPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD))
+            pageNumberPaint.textSize = 10F
+            pageNumberPaint.color = android.graphics.Color.BLACK
+            canvas.drawText("página $page", (pageWidth-100).toFloat(), (pageHeight-20).toFloat(), pageNumberPaint)
+
+            page++
             pdfDocument.finishPage(myPage)
             myPageInfo = PdfDocument.PageInfo.Builder(pageWidth, pageHeight, page).create()
             myPage = pdfDocument.startPage(myPageInfo)
@@ -1178,6 +1199,13 @@ fun generatePDFReport(context: Context,financialReport: FinancialReport) {
 
         y+=20
         if (pageHeight-y<50){
+            var pageNumberPaint: Paint = Paint()
+            pageNumberPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD))
+            pageNumberPaint.textSize = 10F
+            pageNumberPaint.color = android.graphics.Color.BLACK
+            canvas.drawText("página $page", (pageWidth-100).toFloat(), (pageHeight-20).toFloat(), pageNumberPaint)
+
+            page++
             pdfDocument.finishPage(myPage)
             myPageInfo = PdfDocument.PageInfo.Builder(pageWidth, pageHeight, page).create()
             myPage = pdfDocument.startPage(myPageInfo)
@@ -1193,6 +1221,13 @@ fun generatePDFReport(context: Context,financialReport: FinancialReport) {
 
         y+=20
         if (pageHeight-y<50){
+            var pageNumberPaint: Paint = Paint()
+            pageNumberPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD))
+            pageNumberPaint.textSize = 10F
+            pageNumberPaint.color = android.graphics.Color.BLACK
+            canvas.drawText("página $page", (pageWidth-100).toFloat(), (pageHeight-20).toFloat(), pageNumberPaint)
+
+            page++
             pdfDocument.finishPage(myPage)
             myPageInfo = PdfDocument.PageInfo.Builder(pageWidth, pageHeight, page).create()
             myPage = pdfDocument.startPage(myPageInfo)
@@ -1208,6 +1243,13 @@ fun generatePDFReport(context: Context,financialReport: FinancialReport) {
 
         y+=20
         if (pageHeight-y<50){
+            var pageNumberPaint: Paint = Paint()
+            pageNumberPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD))
+            pageNumberPaint.textSize = 10F
+            pageNumberPaint.color = android.graphics.Color.BLACK
+            canvas.drawText("página $page", (pageWidth-100).toFloat(), (pageHeight-20).toFloat(), pageNumberPaint)
+
+            page++
             pdfDocument.finishPage(myPage)
             myPageInfo = PdfDocument.PageInfo.Builder(pageWidth, pageHeight, page).create()
             myPage = pdfDocument.startPage(myPageInfo)
@@ -1219,6 +1261,13 @@ fun generatePDFReport(context: Context,financialReport: FinancialReport) {
 
         y+=20
         if (pageHeight-y<50){
+            var pageNumberPaint: Paint = Paint()
+            pageNumberPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD))
+            pageNumberPaint.textSize = 10F
+            pageNumberPaint.color = android.graphics.Color.BLACK
+            canvas.drawText("página $page", (pageWidth-100).toFloat(), (pageHeight-20).toFloat(), pageNumberPaint)
+
+            page++
             pdfDocument.finishPage(myPage)
             myPageInfo = PdfDocument.PageInfo.Builder(pageWidth, pageHeight, page).create()
             myPage = pdfDocument.startPage(myPageInfo)
@@ -1298,6 +1347,13 @@ fun generatePDFReport(context: Context,financialReport: FinancialReport) {
 
             y+=20
             if (pageHeight-y<50){
+                var pageNumberPaint: Paint = Paint()
+                pageNumberPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD))
+                pageNumberPaint.textSize = 10F
+                pageNumberPaint.color = android.graphics.Color.BLACK
+                canvas.drawText("página $page", (pageWidth-100).toFloat(), (pageHeight-20).toFloat(), pageNumberPaint)
+
+                page++
                 pdfDocument.finishPage(myPage)
                 myPageInfo = PdfDocument.PageInfo.Builder(pageWidth, pageHeight, page).create()
                 myPage = pdfDocument.startPage(myPageInfo)
@@ -1324,6 +1380,13 @@ fun generatePDFReport(context: Context,financialReport: FinancialReport) {
 
         y+=20
         if (pageHeight-y<50){
+            var pageNumberPaint: Paint = Paint()
+            pageNumberPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD))
+            pageNumberPaint.textSize = 10F
+            pageNumberPaint.color = android.graphics.Color.BLACK
+            canvas.drawText("página $page", (pageWidth-100).toFloat(), (pageHeight-20).toFloat(), pageNumberPaint)
+
+            page++
             pdfDocument.finishPage(myPage)
             myPageInfo = PdfDocument.PageInfo.Builder(pageWidth, pageHeight, page).create()
             myPage = pdfDocument.startPage(myPageInfo)
@@ -1335,6 +1398,13 @@ fun generatePDFReport(context: Context,financialReport: FinancialReport) {
 
         y+=20
         if (pageHeight-y<50){
+            var pageNumberPaint: Paint = Paint()
+            pageNumberPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD))
+            pageNumberPaint.textSize = 10F
+            pageNumberPaint.color = android.graphics.Color.BLACK
+            canvas.drawText("página $page", (pageWidth-100).toFloat(), (pageHeight-20).toFloat(), pageNumberPaint)
+
+            page++
             pdfDocument.finishPage(myPage)
             myPageInfo = PdfDocument.PageInfo.Builder(pageWidth, pageHeight, page).create()
             myPage = pdfDocument.startPage(myPageInfo)
@@ -1353,6 +1423,13 @@ fun generatePDFReport(context: Context,financialReport: FinancialReport) {
 
     y+=20
     if (pageHeight-y<50){
+        var pageNumberPaint: Paint = Paint()
+        pageNumberPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD))
+        pageNumberPaint.textSize = 10F
+        pageNumberPaint.color = android.graphics.Color.BLACK
+        canvas.drawText("página $page", (pageWidth-100).toFloat(), (pageHeight-20).toFloat(), pageNumberPaint)
+
+        page++
         pdfDocument.finishPage(myPage)
         myPageInfo = PdfDocument.PageInfo.Builder(pageWidth, pageHeight, page).create()
         myPage = pdfDocument.startPage(myPageInfo)
@@ -1370,6 +1447,13 @@ fun generatePDFReport(context: Context,financialReport: FinancialReport) {
 
     y+=20
     if (pageHeight-y<50){
+        var pageNumberPaint: Paint = Paint()
+        pageNumberPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD))
+        pageNumberPaint.textSize = 10F
+        pageNumberPaint.color = android.graphics.Color.BLACK
+        canvas.drawText("página $page", (pageWidth-100).toFloat(), (pageHeight-20).toFloat(), pageNumberPaint)
+
+        page++
         pdfDocument.finishPage(myPage)
         myPageInfo = PdfDocument.PageInfo.Builder(pageWidth, pageHeight, page).create()
         myPage = pdfDocument.startPage(myPageInfo)
@@ -1390,6 +1474,11 @@ fun generatePDFReport(context: Context,financialReport: FinancialReport) {
         canvas.drawText(financialReport.totalBalance, 450F, y, reportFooterTotalBalance)
     }
 
+    var pageNumberPaint: Paint = Paint()
+    pageNumberPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD))
+    pageNumberPaint.textSize = 10F
+    pageNumberPaint.color = android.graphics.Color.BLACK
+    canvas.drawText("página $page", (pageWidth-100).toFloat(), (pageHeight-20).toFloat(), pageNumberPaint)
 
     pdfDocument.finishPage(myPage)
 
