@@ -1060,13 +1060,7 @@ fun generatePDFReport(context: Context,financialReport: FinancialReport) {
     periodTitle.setTypeface(Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD))
     periodTitle.textSize = 12F
     periodTitle.color = android.graphics.Color.BLACK
-    canvas.drawText("Período da Competência:", 238F, 100F, periodTitle)
-
-    var period: Paint = Paint()
-    period.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
-    period.textSize = 12F
-    period.color = android.graphics.Color.BLACK
-    canvas.drawText(financialReport.startDateStr + " - " + financialReport.endDateStr, 235F, 120F, period)
+    canvas.drawText("Período da Competência: "+ financialReport.startDateStr + " - " + financialReport.endDateStr, 50F, 100F, periodTitle)
 
     var y = 140F
 
@@ -1217,7 +1211,7 @@ fun generatePDFReport(context: Context,financialReport: FinancialReport) {
         monthlyBillingValue.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
         monthlyBillingValue.textSize = 10F
         monthlyBillingValue.color = android.graphics.Color.BLACK
-        canvas.drawText("Valor do aluguel mensal: " +finProperty.property.contractMonthlyBillingValue.toCurrency(), 50F, y, monthlyBillingValue)
+        canvas.drawText("Valor do aluguel mensal líquido: " +finProperty.property.contractMonthlyBillingValue.toCurrency(), 50F, y, monthlyBillingValue)
 
         y+=20
         if (pageHeight-y<50){

@@ -596,7 +596,39 @@ fun ProviderSearchScreen(
                                                 )
                                             }
 
-
+                                            Row(
+                                                verticalAlignment = Alignment.CenterVertically,
+                                                horizontalArrangement = Arrangement.Start,
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .selectable(
+                                                        selected = searchServicesMaterialSupplier.value == 1,
+                                                        onClick = {
+                                                            if (searchServicesMaterialSupplier.value == 0) searchServicesMaterialSupplier.value =
+                                                                1
+                                                            else searchServicesMaterialSupplier.value = 0
+                                                        },
+                                                        role = Role.Checkbox
+                                                    )
+                                            ) {
+                                                Checkbox(checked = (searchServicesMaterialSupplier.value == 1),
+                                                    onCheckedChange = {
+                                                        if (it) searchServicesMaterialSupplier.value = 1
+                                                        else searchServicesMaterialSupplier.value = 0
+                                                    })
+                                                Text(
+                                                    text = "Fornecedor de Materiais",
+                                                    style = TextStyle(
+                                                        color = getTextColor(),
+                                                        fontSize = 16.sp,
+                                                        fontFamily = FontFamily.SansSerif,
+                                                    ),
+                                                    modifier = Modifier.padding(
+                                                        start = 2.dp,
+                                                        end = 6.dp
+                                                    )
+                                                )
+                                            }
 
                                             Row(
                                                 verticalAlignment = Alignment.CenterVertically,
@@ -1235,7 +1267,39 @@ fun ProviderSearchScreen(
                                                 )
                                             }
 
-
+                                            Row(
+                                                verticalAlignment = Alignment.CenterVertically,
+                                                horizontalArrangement = Arrangement.Start,
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .selectable(
+                                                        selected = searchServicesOthers.value == 1,
+                                                        onClick = {
+                                                            if (searchServicesOthers.value == 0) searchServicesOthers.value =
+                                                                1
+                                                            else searchServicesOthers.value = 0
+                                                        },
+                                                        role = Role.Checkbox
+                                                    )
+                                            ) {
+                                                Checkbox(checked = (searchServicesOthers.value == 1),
+                                                    onCheckedChange = {
+                                                        if (it) searchServicesOthers.value = 1
+                                                        else searchServicesOthers.value = 0
+                                                    })
+                                                Text(
+                                                    text = "Outros",
+                                                    style = TextStyle(
+                                                        color = getTextColor(),
+                                                        fontSize = 16.sp,
+                                                        fontFamily = FontFamily.SansSerif,
+                                                    ),
+                                                    modifier = Modifier.padding(
+                                                        start = 2.dp,
+                                                        end = 6.dp
+                                                    )
+                                                )
+                                            }
 
                                             Row(
                                                 verticalAlignment = Alignment.CenterVertically,

@@ -467,7 +467,7 @@ fun PropertyDetailScreen(
                                 }
 
                                 Text(
-                                    text = "Valor Atual de Aluguel Mensal:",
+                                    text = "Valor do Aluguel Mensal Líquido:",
                                     style = TextStyle(
                                         color = getTextColor(),
                                         fontWeight = FontWeight.Bold,
