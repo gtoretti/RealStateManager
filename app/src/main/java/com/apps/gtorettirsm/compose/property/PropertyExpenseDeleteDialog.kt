@@ -55,7 +55,7 @@ fun PropertyExpenseDeleteDialog(
 
             title = {
                 Text(
-                    text = "Excluir Desenbolso:",
+                    text = "Excluir Desembolso:",
                     style = TextStyle(
                         color = getTextColor(),
                         fontSize = 20.sp,
@@ -124,7 +124,7 @@ fun PropertyExpenseDeleteDialog(
 
                         openPropertyExpenseDeleteDialog.value = false
                         openPropertyExpensesCreateDialog.value = false
-                        showToast("Desenbolso excluído com sucesso!", context)
+                        showToast("Desembolso excluído com sucesso!", context)
                     }, colors = ButtonDefaults.buttonColors(
                         containerColor = getButtonColor()
                     ),modifier = Modifier.height(30.dp)

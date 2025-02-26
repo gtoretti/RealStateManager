@@ -46,6 +46,7 @@ import com.apps.gtorettirsm.compose.utils.DrawScrollableView
 import com.apps.gtorettirsm.compose.utils.getButtonColor
 import com.apps.gtorettirsm.compose.utils.getRedTextColor
 import com.apps.gtorettirsm.compose.utils.getTextColor
+import com.apps.gtorettirsm.compose.utils.toCurrency
 import com.apps.gtorettirsm.compose.utils.toScreen
 import com.apps.gtorettirsm.data.Expense
 import com.apps.gtorettirsm.data.Property
@@ -257,7 +258,7 @@ fun PropertyReceivingsDialog(
                                                 )
 
                                                 Text(
-                                                    text = item.totalValue.toScreen(), style = TextStyle(
+                                                    text = item.totalValue.toCurrency(), style = TextStyle(
                                                         color = getTextColor(),
                                                         fontSize = 15.sp,
                                                     )

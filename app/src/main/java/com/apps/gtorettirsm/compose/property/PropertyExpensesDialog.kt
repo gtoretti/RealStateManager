@@ -46,6 +46,7 @@ import com.apps.gtorettirsm.compose.utils.DrawScrollableView
 import com.apps.gtorettirsm.compose.utils.getButtonColor
 import com.apps.gtorettirsm.compose.utils.getRedTextColor
 import com.apps.gtorettirsm.compose.utils.getTextColor
+import com.apps.gtorettirsm.compose.utils.toCurrency
 import com.apps.gtorettirsm.compose.utils.toScreen
 import com.apps.gtorettirsm.data.Expense
 import com.apps.gtorettirsm.data.Property
@@ -91,7 +92,7 @@ fun PropertyExpensesDialog(
 
             title = {
                 Text(
-                    text = "Desenbolsos:", style = TextStyle(
+                    text = "Desembolsos:", style = TextStyle(
                         color = getTextColor(),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
@@ -166,7 +167,7 @@ fun PropertyExpensesDialog(
                         Spacer(modifier = Modifier.height(10.dp))
                     }
                     Text(
-                        text = "Desenbolsos Realizados:",
+                        text = "Desembolsos Realizados:",
                         style = TextStyle(
                             color = getTextColor(),
                             fontSize = 16.sp,
@@ -205,7 +206,7 @@ fun PropertyExpensesDialog(
                                         horizontalAlignment = Alignment.CenterHorizontally
                                     ) {
                                         Text(
-                                            text = "Não há desenbolsos registrados para o imóvel selecionado."
+                                            text = "Não há desembolsos registrados para o imóvel selecionado."
                                             , style = TextStyle(
                                                 color = getTextColor(),
                                                 fontSize = 15.sp,
@@ -250,7 +251,7 @@ fun PropertyExpensesDialog(
                                             )
 
                                             Text(
-                                                text = item.value.toScreen(), style = TextStyle(
+                                                text = item.value.toCurrency(), style = TextStyle(
                                                     color = getTextColor(),
                                                     fontSize = 15.sp,
                                                 )

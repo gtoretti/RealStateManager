@@ -184,7 +184,7 @@ fun FinancialScreen(
                     ), modifier = Modifier.height(33.dp)
                 ) {
                     Text(
-                        text = "Desenbolsos",
+                        text = "Desembolsos",
                         style = TextStyle(
                             fontSize = 14.sp,
                         )
@@ -640,7 +640,7 @@ Row(){
                     }
                 })
             Text(
-                text = "Recebimentos e Desenbolsos",
+                text = "Recebimentos e Desembolsos",
                 style = TextStyle(
                     color = getTextColor(),
                     fontSize = 16.sp,
@@ -649,7 +649,7 @@ Row(){
             )
             Icon(
                 imageVector = Icons.Filled.Check,
-                contentDescription = "Recebimentos e Desenbolsos Realizados",
+                contentDescription = "Recebimentos e Desembolsos Realizados",
                 tint = Color(0xFF08940E),
                 modifier = Modifier
                     .padding(end = 10.dp)
@@ -780,7 +780,7 @@ Row(){
         )
         {
             Text(
-                text = "Total de Desenbolsos (-): ",
+                text = "Total de Desembolsos (-): ",
                 style = TextStyle(
                     color = getTextColor(),
                     fontSize = 16.sp,
@@ -1078,7 +1078,7 @@ fun generatePDFReport(context: Context,financialReport: FinancialReport) {
         receivingsExpensesTitle.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
         receivingsExpensesTitle.textSize = 10F
         receivingsExpensesTitle.color = android.graphics.Color.BLACK
-        canvas.drawText("Recebimentos e Desenbolsos Realizados:", 80F, y, receivingsExpensesTitle)
+        canvas.drawText("Recebimentos e Desembolsos Realizados:", 80F, y, receivingsExpensesTitle)
 
         val vectorDrawable = context.getDrawable(R.drawable.check_24px)
         if (vectorDrawable != null) {
@@ -1435,7 +1435,7 @@ fun generatePDFReport(context: Context,financialReport: FinancialReport) {
     reportFooterTotalExpenses.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD))
     reportFooterTotalExpenses.textSize = 10F
     reportFooterTotalExpenses.color = android.graphics.Color.BLACK
-    canvas.drawText("Total de Desenbolsos (-):", 50F, y, reportFooterTotalExpenses)
+    canvas.drawText("Total de Desembolsos (-):", 50F, y, reportFooterTotalExpenses)
     reportFooterTotalExpenses.color = android.graphics.Color.RED
     canvas.drawText(financialReport.totalExpenses, 450F, y, reportFooterTotalExpenses)
 

@@ -120,11 +120,28 @@ fun PropertiesScreen(
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.End,
+            horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 5.dp)
         ) {
+
+            Button(
+                onClick = {
+                    openPropertyCreateDialog.value = true
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = getButtonColor()
+                ), modifier = Modifier.height(33.dp)
+            ) {
+                Text(
+                    text = "Ajuda",
+                    style = TextStyle(
+                        fontSize = 14.sp,
+                    )
+                )
+            }
+
 
             Button(
                 onClick = {
