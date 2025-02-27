@@ -4,6 +4,7 @@
 package com.apps.gtorettirsm.compose.property
 
 import android.content.Context
+import android.content.ContextWrapper
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -47,6 +48,8 @@ import java.util.Date
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Environment
+import android.util.Log
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -54,12 +57,15 @@ import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.core.content.FileProvider
 import com.apps.gtorettirsm.R
 import com.apps.gtorettirsm.compose.utils.daysBetween
 import com.apps.gtorettirsm.compose.utils.getButtonColor
 import com.apps.gtorettirsm.compose.utils.getPhoneColor
 import com.apps.gtorettirsm.compose.utils.screenToDouble
 import com.apps.gtorettirsm.viewmodels.ReceivingViewModel
+import java.io.File
+import java.io.FileInputStream
 import java.text.SimpleDateFormat
 import java.util.Calendar
 
@@ -128,7 +134,7 @@ fun PropertiesScreen(
 
             Button(
                 onClick = {
-                    openPropertyCreateDialog.value = true
+                    openHelp(context)
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = getButtonColor()
@@ -366,4 +372,27 @@ fun openMapWithAddress(address: String, context: Context) {
     val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
     mapIntent.setPackage("com.google.android.apps.maps")
     context.startActivity(mapIntent)
+}
+
+fun openHelp(context: Context){
+
+    val contextWrapper = ContextWrapper(context)
+    val documentDirectory = contextWrapper.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
+    val file = File(documentDirectory, "Gestão_de_Aluguel_de_Imoveis_Manual_do_Usuario.pdf")
+    val src = context.assets.open("Gestão_de_Aluguel_de_Imoveis_Manual_do_Usuario.pdf")
+
+    src.use { input ->
+        file.outputStream().use { output ->
+            input.copyTo(output)
+        }
+    }
+
+    val fileURI = FileProvider.getUriForFile(
+        context,
+        context.applicationContext.packageName + ".provider",
+        file
+    )
+    val browserIntent = Intent(Intent.ACTION_VIEW, fileURI)
+    browserIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+    context.startActivity(browserIntent)
 }
