@@ -679,7 +679,7 @@ Row(){
                     }
                 })
             Text(
-                text = "Recebimentos de Aluguéis Previstos",
+                text = "Recebimentos de Alugueis Previstos",
                 style = TextStyle(
                     color = getTextColor(),
                     fontSize = 16.sp,
@@ -688,7 +688,7 @@ Row(){
             )
             Icon(
                 imageVector = ImageVector.vectorResource(R.drawable.schedule_24px),
-                contentDescription = "Recebimentos de Aluguéis Previstos",
+                contentDescription = "Recebimentos de Alugueis Previstos",
                 tint = Color(0xFF08940E),
                 modifier = Modifier
                     .padding(end = 10.dp)
@@ -718,7 +718,7 @@ Row(){
                     }
                 })
             Text(
-                text = "Aluguéis Atrasados Pendentes",
+                text = "Alugueis Atrasados Pendentes",
                 style = TextStyle(
                     color = getTextColor(),
                     fontSize = 16.sp,
@@ -727,7 +727,7 @@ Row(){
             )
             Icon(
                 imageVector = ImageVector.vectorResource(R.drawable.warning_24px),
-                contentDescription = "Aluguéis Atrasados Pendentes",
+                contentDescription = "Alugueis Atrasados Pendentes",
                 tint = Color(0xFFD50000),
                 modifier = Modifier
                     .padding(end = 10.dp)
@@ -1094,7 +1094,7 @@ fun generatePDFReport(context: Context,financialReport: FinancialReport) {
         previewTitle.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
         previewTitle.textSize = 10F
         previewTitle.color = android.graphics.Color.BLACK
-        canvas.drawText("Recebimentos de Aluguéis Previstos:", 80F, y, previewTitle)
+        canvas.drawText("Recebimentos de Alugueis Previstos:", 80F, y, previewTitle)
 
         val vectorDrawable = context.getDrawable(R.drawable.schedule_24px)
         if (vectorDrawable != null) {
@@ -1110,7 +1110,7 @@ fun generatePDFReport(context: Context,financialReport: FinancialReport) {
         pendingTitle.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
         pendingTitle.textSize = 10F
         pendingTitle.color = android.graphics.Color.BLACK
-        canvas.drawText("Aluguéis Atrasados Pendentes:", 80F, y, pendingTitle)
+        canvas.drawText("Alugueis Atrasados Pendentes:", 80F, y, pendingTitle)
 
         val vectorDrawable = context.getDrawable(R.drawable.warning_24px)
         if (vectorDrawable != null) {

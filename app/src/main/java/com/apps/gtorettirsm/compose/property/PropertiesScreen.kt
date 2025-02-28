@@ -378,8 +378,8 @@ fun openHelp(context: Context){
 
     val contextWrapper = ContextWrapper(context)
     val documentDirectory = contextWrapper.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
-    val file = File(documentDirectory, "Gestão_de_Aluguel_de_Imoveis_Manual_do_Usuario.pdf")
-    val src = context.assets.open("Gestão_de_Aluguel_de_Imoveis_Manual_do_Usuario.pdf")
+    val file = File(documentDirectory, "Gestao_de_Aluguel_de_Imoveis_Manual_do_Usuario.pdf")
+    val src = context.assets.open("Gestao_de_Aluguel_de_Imoveis_Manual_do_Usuario.pdf")
 
     src.use { input ->
         file.outputStream().use { output ->
